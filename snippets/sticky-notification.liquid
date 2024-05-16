@@ -1,0 +1,270 @@
+{%- if request.page_type != 'product' -%}
+    <link rel="stylesheet" href="{{ 'component-sticky-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript>{{ 'component-sticky-notification.css' | asset_url | stylesheet_tag }}</noscript>
+    {% liquid 
+        assign show_on_desktop = settings.enable_sticky_notification
+        assign show_on_mobile = settings.enable_sticky_notification_mb
+        assign show_notification_again_when = settings.show_notification_again_when
+        assign time_interval = settings.time_interval
+        assign vertical_padding = settings.notification_vertical_padding | append: 'px'
+        assign horizontal_padding = settings.notification_horizontal_padding | append: 'px'
+        assign background = settings.notification_background_color
+        assign background_gradient = settings.notification_background_gradient
+        assign background_hover = settings.notification_background_color_hover 
+        assign background_gradient_hover = settings.notification_background_gradient_hover
+        assign background_image = settings.notification_background_image
+        assign intro_text_desktop = settings.notification_intro_text_desktop
+        assign intro_text_mobile = settings.notification_intro_text_mobile
+        assign intro_text_color = settings.notification_intro_text_color
+        assign intro_text_color_hover = settings.notification_intro_text_color_hover
+        assign intro_text_font_size = settings.notification_intro_text_font_size | append: 'px'
+        assign intro_text_font_size_mb = settings.notification_intro_text_font_size_mb | append: 'px'
+        assign intro_text_font_weight = settings.notification_intro_text_font_weight
+        assign link_text_desktop = settings.notification_link_text_desktop
+        assign link_text_mobile = settings.notification_link_text_mobile
+        assign link = settings.notification_link    
+        assign link_text_color = settings.notification_link_text_color
+        assign link_text_color_hover = settings.notification_link_text_color_hover
+        assign link_text_font_size = settings.notification_link_text_font_size | append: 'px'
+        assign link_text_font_size_mb = settings.notification_link_text_font_size_mb | append: 'px'
+        assign link_text_font_weight = settings.notification_link_text_font_weight
+        assign link_action = settings.notification_link_click_action 
+        assign popup_title = settings.notification_popup_title 
+        assign popup_description = settings.notfication_popup_description
+        assign popup_image = settings.notification_popup_image
+        assign popup_link_text = settings.notification_popup_link_text
+        assign popup_link = settings.notification_popup_link
+        assign arrow_right_size = settings.notification_link_desktop_arrow_size | append: 'px'
+        assign icon_image_size = settings.notification_link_mobile_icons_size | append: 'px'
+        assign mobile_icon_image_1 = settings.notification_mobile_icon_1
+        assign mobile_icon_image_2 = settings.notification_mobile_icon_2
+    -%}
+    {%- if background_image != blank -%}
+        <style type="text/css"> 
+            #sticky-notification.sticky-notification {background: url({{ background_image | image_url }});background-repeat: no-repeat;background-size: cover}   
+        </style>    
+    {%- endif -%}
+    <sticky-notification data-display-type="{{ show_notification_again_when }}" data-hide-interval="{{ time_interval }}" class="sticky-notification notification-shaking{% unless show_on_desktop %} hide-on-desktop{% endunless %}{% unless show_on_mobile %} hide-on-mobile{% endunless %}" id="sticky-notification" data-link-action="{{ link_action }}" style="display: none;--vertical-padding: {{ vertical_padding }};--horizontal-padding: {{ horizontal_padding }};--background: {% if background_gradient != blank %}{{ background_gradient }}{% elsif background != blank %}{{ background }}{% endif %};--background-hover: {% if background_gradient_hover != blank %}{{ background_gradient_hover }}{% elsif background_hover != blank %}{{ background_hover }}{% endif %};--intro-text-color: {% if intro_text_color != blank %}{{ intro_text_color }}{% endif %};--intro-text-color-hover: {% if intro_text_color_hover != blank %}{{ intro_text_color_hover }}{% endif %};--intro-text-font-size: {{ intro_text_font_size }};--intro-text-font-size-mb: {{ intro_text_font_size_mb }};--intro-text-font-weight: {{ intro_text_font_weight }};--link-text-color: {% if link_text_color != blank %}{{ link_text_color }}{% endif %};--link-text-color-hover: {% if link_text_color_hover != blank %}{{ link_text_color_hover }}{% endif %};--link-text-font-size: {{ link_text_font_size }};--link-text-font-size-mb: {{ link_text_font_size_mb }};--link-text-font-weight: {{ link_text_font_weight }};--right-arrow-size: {{ arrow_right_size }};--mobile-icon-size: {{ icon_image_size }}">
+        {%- if mobile_icon_image_1 != blank -%}
+            <span class="adaptive_height image-zoom mobile-image-icon"class="fancybox" rel="gallery1" href="{{ mobile_icon_image_1 | img_url: 'master' }}" data-fancybox="images"> 
+                <img srcset="{{ mobile_icon_image_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ mobile_icon_image_1 | img_url: 'master' }}"{% endunless %} alt="{{ mobile_icon_image_1.alt | default: shop.name | escape }}" loading="lazy"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%-endif -%}
+            </span>
+        {%- endif -%}
+        <div class="text-wrapper" data-text-wrapper>
+            <div class="intro-text intro-text-desktop">{{ intro_text_desktop }}</div>
+            <div class="intro-text intro-text-mobile">{{ intro_text_mobile }}</div>
+            <{% if link != blank and link_action != 'popup' %}a href="{{ link }}"{% else %}div{% endif %}{% if link_action == 'new_tab' and link != blank %} target="_blank"{% elsif link_action == 'popup' %} data-popup-opener{% endif %} data-main-link>                   
+                <span class="link-text link-text-desktop"><span class="text">{{ link_text_desktop }}</span> {% render 'icon-short-right-arrow' %}</span>     
+                <span class="link-text link-text-mobile">{{ link_text_mobile }}</span>
+            </{% if link != blank and link_action != 'popup' %}a{% else %}div{% endif %}>
+        </div>
+        {%- if mobile_icon_image_2 != blank -%}
+            <span class="adaptive_height image-zoom mobile-image-icon"class="fancybox" rel="gallery1" href="{{ mobile_icon_image_2 | img_url: 'master' }}" data-fancybox="images"> 
+                <img srcset="{{ mobile_icon_image_2 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ mobile_icon_image_2 | img_url: 'master' }}"{% endunless %} alt="{{ mobile_icon_image_2.alt | default: shop.name | escape }}" loading="lazy"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+            </span>  
+        {%- endif -%}
+        <span class="close-btn" data-close-notification-btn>{% render 'icon-close-thin' %}</span>    
+    </sticky-notification>
+
+    {%- if link_action == 'popup' -%}
+        {%- liquid 
+            assign popup_title = settings.notification_popup_title
+            assign popup_title_font_size = settings.notification_popup_title_font_size | append: 'px'
+            assign popup_title_font_size_mb = settings.notification_popup_title_font_size_mb | append: 'px'
+            assign popup_title_font_weight = settings.notification_popup_title_font_weight
+            assign popup_title_color = settings.notification_popup_title_color
+            assign popup_title_alignment = settings.notification_popup_title_alignment
+
+            assign popup_description = settings.notfication_popup_description
+            assign popup_description_font_size = settings.notification_popup_description_font_size | append: 'px'
+            assign popup_description_font_size_mb = settings.notification_popup_description_font_size_mb | append: 'px'
+            assign popup_description_font_weight = settings.notification_popup_description_font_weight
+            assign popup_description_color = settings.notification_popup_description_title_color
+
+            assign popup_image = settings.notification_popup_image
+
+            assign popup_link_text = settings.notification_popup_link_text
+            assign popup_link = settings.notification_popup_link
+            assign popup_link_font_size = settings.notification_popup_link_font_size | append: 'px'
+            assign popup_link_font_size_mb = settings.notification_popup_link_font_size_mb | append: 'px'
+            assign popup_link_font_weight = settings.notification_popup_link_font_weight
+            assign popup_link_color = settings.notification_popup_link_title_color
+            assign popup_link_alignment = settings.notification_popup_link_alignment
+        -%}
+        <div id="notification-popup" style="display: none;">
+            {%- if popup_image != blank -%}
+                <a class="adaptive_height image-zoom notification-popup-image"class="fancybox" rel="gallery1" href="{{ popup_image | img_url: 'master' }}" data-fancybox="images" style="padding-top: {{ 1 | divided_by: popup_image.aspect_ratio | times: 100 }}%"> 
+                    <img srcset="{{ popup_image | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ popup_image | img_url: 'master' }}"{% endunless %} alt="{{ image.alt | default: shop.name | escape }}" loading="lazy"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                    {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                </a>                       
+            {%- endif -%}
+            {%- if popup_title != blank -%}
+                <h2 class="notification-popup-title text-{{ popup_title_alignment }}" style="--title-font-size: {{ popup_title_font_size  }};--title-font-size-mb: {{ popup_title_font_size_mb }};--title-font-weight: {{ popup_title_font_weight }};--title-color: {% if popup_title_color != blank %}{{ popup_title_color }}{% endif %}">{{ popup_title }}</h2> 
+            {%- endif -%} 
+            {%- if popup_description != blank -%}
+                <div class="notification-popup-description" style="--description-font-size: {{ popup_description_font_size  }};--description-font-size-mb: {{ popup_description_font_size_mb }};--description-font-weight: {{ popup_description_font_weight }};--description-color: {% if popup_description_color != blank %}{{ popup_description_color }}{% endif %}">{{ popup_description }}</div>
+            {%- endif -%}
+            {%- if popup_link_text != blank -%}   
+                <{% if popup_link != blank %}a href="{{ popup_link }}"{% else %}div{% endif %} class="notification-popup-link text-{{ popup_link_alignment }}" style="--link-font-size: {{ popup_link_font_size }};--link-font-size-mb: {{ popup_link_font_size_mb }};--link-font-weight: {{ popup_link_font_weight }};--link-color: {% if popup_link_color != blank %}{{ popup_link_color }}{% endif %}"><span class="text">{{ popup_link_text }}</span> {% render 'icon-link-arrow-right' %}
+                </{% if popup_link != blank %}a{{ popup_link }}"{% else %}div{% endif %}>
+            {%- endif -%} 
+        </div>
+    {%- endif -%}
+    <script type="text/javascript">
+        class StickyNotification extends HTMLElement {
+            constructor() {
+                super()
+            }
+            connectedCallback() {
+                this.NOTIFICATION_COOKIE = 'notification'
+                this.popupOpener = this.querySelector('[data-popup-opener]')
+                this.popup = document.getElementById('notification-popup')
+                this.closeBtn = this.querySelector('[data-close-notification-btn]')
+                this.closeBtn.addEventListener('click', this.hideNotification.bind(this))
+                this.currentScroll = 0;
+                this.displayType = this.dataset.displayType 
+                this.hideInterval = parseInt(this.dataset.hideInterval)
+                if (this.displayType === 'refresh') {
+                    this.style.removeProperty('display')
+                } else {
+                    const isClosedNotification = this.getCookie(this.NOTIFICATION_COOKIE) === 'closed'
+                    if (!isClosedNotification || window.innerWidth < 768) {
+                        this.style.removeProperty('display')
+                    }
+                }
+                if (this.popupOpener && this.popup) {
+                    this.popupOpener.addEventListener('click', this.showNotificationPopup.bind(this))
+                    this.popup.style.removeProperty('display')
+                }
+                document.addEventListener('click', this.handleDocumentClick.bind(this))
+                document.addEventListener('scroll', this.scrollHandler.bind(this))
+                this.addEventListener('click', this.handleSelfClick.bind(this))
+                this.calculateNotificationBottomPosition()
+                this.showNotificationWithTime(1500)
+                this.setTextHeightOnMobile()
+                this.setPositionIfPreview()
+                this.initIframeHandler()
+            }     
+            handleSelfClick(e) {
+                if (e.target.matches('[data-close-notification-btn]') || e.target.closest('[data-close-notification-btn]')) return 
+                const link = this.querySelector('[data-main-link]')
+                if (!link) return;
+                link.click()
+            }
+            showNotificationWithTime(time) {
+                setTimeout(() => {
+                    this.showNotification()
+                }, time)
+            }
+            showNotification() {
+                this.dataset.show = true
+            }
+            hideNotification() {
+                delete this.dataset.show
+                if (this.displayType === 'time') {
+                    this.setCookie(this.NOTIFICATION_COOKIE, 'closed', this.hideInterval)
+                }
+            }
+            showNotificationPopup() {
+                this.popup.dataset.showPopup = true
+            }
+            hideNotificationPopup() {
+                delete this.popup.dataset.showPopup
+            }
+            handleDocumentClick(e) {
+                if (e.target.matches('.background-overlay') && this.popup?.dataset.showPopup) {
+                    this.hideNotificationPopup()
+                }
+            }
+            scrollHandler() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+                this.setPositionIfPreview();
+                if (scrollTop <= 100) {
+                    this.currentScroll = scrollTop;
+                    return;
+                }
+                if (scrollTop < this.currentScroll) {
+                    requestAnimationFrame(() => {
+                        this.classList.remove('temporary-hide')
+                    })
+                    this.currentScroll = scrollTop  
+                    return 
+                }
+                if (scrollTop > this.currentScroll) {
+                    requestAnimationFrame(() => {
+                        this.classList.add('temporary-hide')
+                    })
+                    this.currentScroll = scrollTop  
+                    return 
+                }
+                this.currentScroll = scrollTop  
+            }
+
+            calculateNotificationBottomPosition() {
+                const toolbar = document.getElementById('shopify-section-halo-toolbar-mobile');
+                if (!toolbar || !toolbar.querySelector('.halo-sticky-toolbar-mobile')) return;
+                const totalToolbarHeight = toolbar.querySelector('.halo-sticky-toolbar-mobile').getBoundingClientRect().height + 'px';
+                this.style.setProperty('--bottom-position', totalToolbarHeight)
+            } 
+            getCookie(cname) {
+                let name = cname + "=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+                }
+                return "";
+            }
+            setCookie(cname, cvalue, exMinutes) {
+                const d = new Date();
+                d.setTime(d.getTime() + (exMinutes * 60 * 1000));
+                const expires = 'expires=' + d.toUTCString();
+                document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+            }
+            setTextHeightOnMobile() {
+                if (window.innerWidth > 767) return;
+                this.textWrapper = this.querySelector('[data-text-wrapper]')
+                const mainLink = this.textWrapper.querySelector('[data-main-link]')  
+                this.textWrapper.style.setProperty('--height', mainLink.scrollHeight + 'px')
+                this.startTextSlideOnMobile();
+            }
+            startTextSlideOnMobile() {
+                setInterval(() => {
+                    this.textWrapper.classList.toggle('slide-down')
+                }, 4000)
+            }
+            setPositionIfPreview() {
+                const previewBar = document.getElementById('preview-bar-iframe');
+                if (window.innerWidth < 767 || !previewBar) return;
+                let bottom = 15; 
+                const previewBarVisible = getComputedStyle(previewBar).display === 'block';
+                if (previewBar && previewBarVisible) {
+                    bottom = bottom + 60
+                }
+                this.style.bottom = bottom + 'px'
+            }
+            initIframeHandler() {
+                if (window.innerWidth < 767) return;
+                const iframe = document.getElementById('preview-bar-iframe')
+                if (!iframe) return 
+                const hidePreviewBarButton = iframe.contentDocument.body.querySelectorAll('[data-hide-bar-button]')
+                hidePreviewBarButton.forEach((element) => {
+                    element.addEventListener('click', () => {
+                        this.style.bottom = '15px'
+                    })
+                })
+            }
+        }
+        window.addEventListener('load', () => {
+            customElements.define('sticky-notification', StickyNotification)
+        })
+    </script>
+{% endif %}

@@ -1,0 +1,803 @@
+<link rel="stylesheet" href="{{ 'component-contact.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-contact.css' | asset_url | stylesheet_tag }}</noscript>
+
+<link rel="stylesheet" href="{{ 'component-contact-form.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-contact-form.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_color = section.settings.breadcrumb_color
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign content_alignment = section.settings.content_alignment
+    assign content_max_width = section.settings.content_max_width
+    assign header_text_color = section.settings.header_text_color
+    assign container = section.settings.container
+    assign form_container = section.settings.form_container
+    assign contact_form_text = section.settings.contact_form_text
+    assign contact_form_title = section.settings.contact_form_title
+    assign contact_form_title_alignment = section.settings.contact_form_title_alignment
+    assign contact_form_heading = section.settings.contact_form_heading
+    assign contact_form_description = section.settings.contact_form_description
+    assign show_contact_info = section.settings.show_contact_info
+    assign bg_image = section.settings.contact_bg_image
+    assign bg_image_height = section.settings.contact_bg_image_height
+    assign bg_image_height_mb = section.settings.contact_bg_image_height_mb
+    assign enable_parallax = section.settings.enable_parallax
+
+    if show_contact_info
+        assign has_contact_info = false
+        assign contact_info_title = section.settings.contact_info_title
+        assign contact_info_text = section.settings.contact_info_text
+        assign contact_info_address = section.settings.contact_info_address
+        assign contact_info_content_1 = section.settings.contact_info_content_1
+        assign contact_info_content_2 = section.settings.contact_info_content_2
+
+        assign btn_text = section.settings.btn_text
+        assign btn_text_color = section.settings.btn_text_color
+        assign btn_bg_color = section.settings.btn_bg_color
+        assign btn_bg_color_gradient = section.settings.btn_bg_color_gradient
+        assign btn_border_color = section.settings.btn_border_color
+        assign btn_text_color_hover = section.settings.btn_text_color_hover
+        assign btn_bg_color_hover = section.settings.btn_bg_color_hover
+        assign btn_bg_color_hover_gradient = section.settings.btn_bg_color_hover_gradient
+        assign btn_border_color_hover = section.settings.btn_border_color_hover
+        assign btn_max_width = section.settings.btn_max_width
+        assign btn_link = section.settings.btn_link
+
+        if contact_info_title != blank or contact_info_text != blank or contact_info_address != blank or contact_info_content_1 != blank or contact_info_content_2 != blank or btn_text != blank
+            assign has_contact_info = true
+        endif
+    endif
+-%}
+
+<div data-section-id="{{ section.id }}" data-section-type="contact" id="ContactSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="contact-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        {% if bg_image != blank %}
+            <div class="image-container{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        {% endif %}
+            {%- if show_breadcrumb -%}
+                {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+            {%- endif -%}
+            {% if bg_image != blank %}
+                <div class="contact-text-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+            {% endif %}
+                {%- if show_page_title -%}
+                    <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {{ page.title | escape }}
+                    </h1>
+                {%- endif -%}
+                {%- if contact_form_text != blank -%}
+                    <div class="contact-text text-{{ content_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {{ contact_form_text }}
+                    </div>
+                {%- endif %}
+            {% if bg_image != blank %}
+                </div>
+            {% endif %}
+        {% if bg_image != blank %}
+            </div>
+        {% endif %}
+    </div>
+    {% if linklists[section.settings.menu].links.size > 0 %}
+        <div class="contact-navigation-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %} scroll-snap-mobile{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+            <ul class="contact-page-nav disable-srollbar">
+                {% for link in linklists[section.settings.menu].links %}
+                    <li class="item {% if link.active %}active{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <style>
+            {% liquid
+                assign menu_bar_background = section.settings.menu_bar_background
+                assign menu_bar_border = section.settings.menu_bar_border
+                assign menu_item_background = section.settings.menu_item_background
+                assign menu_item_text_color = section.settings.menu_item_text_color
+                assign menu_item_background_color_h = section.settings.menu_item_background_color_h
+                assign menu_item_text_color_h = section.settings.menu_item_text_color_h
+            %}
+
+            .contact-navigation-container {
+                --menu_bar_background: {{ menu_bar_background }};
+                --menu_bar_border: {{ menu_bar_border }};
+            }
+
+            .contact-page-nav .item {
+                --menu_item_background: {{ menu_item_background }};
+            }
+
+            .contact-page-nav .item:hover {
+                --menu_item_background_color_h: {{ menu_item_background_color_h }};
+            }
+
+            .contact-page-nav .item a {
+                --menu_item_text_color: {{ menu_item_text_color }};
+            }
+
+            .contact-page-nav .item a:hover {
+                --menu_item_text_color_h: {{ menu_item_text_color_h }};
+            }
+
+            .contact-page-nav .item::after {
+                --menu_item_text_color_h: {{ menu_item_text_color_h }};
+                --menu_item_text_color: {{ menu_item_text_color }};
+            }
+        </style>
+    {% endif %}
+    <div class="contact-content-container {% if form_container == '1170'%}container-1170{% elsif form_container == '1770'%}container-1770{% elsif form_container == 'fullwidth' %}container-full{% else %}container{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="page-content contact-content">
+            <div class="contact contact-2">
+                {%- if contact_form_title != blank -%}
+                    <h2 class="contact-main-title text-{{ contact_form_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {{ contact_form_title | escape }}
+                    </h2>
+                {%- endif %}
+                <div class="contact-item{% if show_contact_info %}{% if has_contact_info %} contact-itemLeft{% endif %}{% endif %}">
+                    {% if contact_form_heading != blank %}
+                        <h3 class="contact-form-heading page-subheader{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {{ contact_form_heading }}
+                        </h3>
+                    {% endif %}
+                    {% if contact_form_description != blank %}
+                        <p class="contact-form-description contact-text{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{{ contact_form_description }}</p>
+                    {% endif %}
+                    {% render 'contact-form',
+                        section: section
+                    %}
+                </div>
+                {%- if show_contact_info -%}
+                    {%- if has_contact_info -%}
+                        <div class="contact-item contact-itemRight">
+                            {%- if contact_info_title != blank -%}
+                                <h2 class="page-subheader contact-title{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {{ contact_info_title | escape }}
+                                </h2>
+                            {%- endif %}
+                            {%- if contact_info_text != blank -%}
+                                <div class="contact-text{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {{ contact_info_text | escape }}
+                                </div>
+                            {%- endif %}
+                            {%- if btn_text != blank -%}
+                                <{% if btn_link != blank %}a href={{ btn_link.url }} {%else%}button{%endif%} class="contact-btn button{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {{ btn_text | escape }}
+                                </{% if btn_link != blank %}a{%else%}button{%endif%}>
+                            {% endif %}
+                            {%- if contact_info_address != blank or contact_info_content_1 != blank or contact_info_content_2 != blank -%}
+                                <div class="contact-info{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {%- if contact_info_content_1 != blank -%}
+                                        <div class="contact-store">
+                                            {{ contact_info_content_1 }}
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if contact_info_address != blank -%}
+                                        <div class="contact-address">
+                                            <address>
+                                                {{ contact_info_address }}
+                                            </address>
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if contact_info_content_2 != blank -%}
+                                        <div class="contact-store">
+                                            {{ contact_info_content_2 }}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            {%- endif %}
+                        </div>
+                    {%- endif %}
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css" media="screen">
+    #ContactSection-{{ section.id }}{
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+    
+    #ContactSection-{{ section.id }} .image-container {
+        background-image: url({{ bg_image | image_url: width: 1860, height: 970 }});
+        background-size: cover;
+        background-repeat: repeat-x;
+        background-position: center top;
+        height: {{ bg_image_height | append: 'px' }};
+        {% if enable_parallax %}
+            background-attachment: fixed;
+        {% endif %}
+    }
+    
+    #ContactSection-{{ section.id }} .image-container {
+        position: relative;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .breadcrumb {
+        margin-bottom: 40px;
+        padding-top: 17px;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .contact-text-content {
+        position: absolute;
+        top: calc(50% - 17px);
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .page-header {
+        padding-bottom: 15px;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .contact-text {
+        margin-top: 5px;
+        max-width: {{ content_max_width | append: 'px' }};
+    }
+
+    #ContactSection-{{ section.id }} .image-container .contact-text.text-center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .contact-text.text-left {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    #ContactSection-{{ section.id }} .image-container .contact-text.text-right {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    #ContactSection-{{ section.id }} .contact-item.contact-itemRight .contact-btn {
+        --button-max-width: {{ btn_max_width | append: 'px' }};
+        {% if  btn_text_color != blank or btn_bg_color != 'rgba(0,0,0,0)' %}
+            --btn-text-color: {{ btn_text_color }};
+        {% endif %}
+
+        {% if  btn_bg_color != blank or btn_bg_color != 'rgba(0,0,0,0)' %}
+            --btn-bg-color: {% if btn_bg_color_gradient != blank %}{{ btn_bg_color_gradient }}{% else %}{{ btn_bg_color }}{% endif %};
+        {% endif %}
+
+        {% if  btn_border_color != blank or btn_border_color != 'rgba(0,0,0,0)' %}
+            --btn-border-color: {{ btn_border_color }};
+        {% endif %}
+
+        {% if  btn_text_color_hover != blank or btn_text_color_hover != 'rgba(0,0,0,0)' %}
+            --btn-text-color-hover: {{ btn_text_color_hover }};
+        {% endif %}
+
+        {% if  btn_bg_color_hover != blank or btn_bg_color_hover != 'rgba(0,0,0,0)' %}
+            --btn-bg-color-hover: {% if btn_bg_color_hover_gradient != blank %}{{ btn_bg_color_hover_gradient }}{% else %}{{ btn_bg_color_hover }}{% endif %};
+        {% endif %}
+
+        {% if  btn_border_color_hover != blank or btn_border_color_hover != 'rgba(0,0,0,0)' %}
+            --btn-border-color-hover: {{ btn_border_color_hover }};
+        {% endif %}
+    }
+
+    {% if breadcrumb_color != blank and breadcrumb_color != 'rgba(0,0,0,0)' %}
+        #ContactSection-{{ section.id }} .breadcrumb *  {
+            --color-breadcrumb: {{ breadcrumb_color }};
+        }
+    {% endif %}
+
+    {% if header_text_color != blank and header_text_color != 'rgba(0,0,0,0)' %}
+        #ContactSection-{{ section.id }} .contact-text-content * {
+            color: {{ header_text_color }};
+        }
+    {% endif %}
+
+    @media (max-width: 1024px) {
+        #ContactSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+    }
+
+    @media (max-width: 650px) {
+        #ContactSection-{{ section.id }} .image-container {
+            height: {{ bg_image_height_mb | append: 'px' }};
+        }
+
+        #ContactSection-{{ section.id }} .contact-text-content {
+            width: 90%;
+        }
+    }
+
+    @media (max-width: 767px) {
+        {% if breadcrumb_color != blank and breadcrumb_color != 'rgba(0,0,0,0)' %} 
+            #ContactSection-{{ section.id }} .breadcrumb .home-link {
+                color: {{ breadcrumb_color }};
+            }
+        {% endif %}
+    }
+
+    @media (max-width: 550px) {
+        #ContactSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    window.addEventListener('load', () => {
+        const collectionLinksElement = document.querySelector('.contact-navigation-container')
+        const collectionLinksList = [...collectionLinksElement.querySelectorAll('ul li.item')]
+        const firstLink = collectionLinksList[0]
+        const lastLink = collectionLinksList.pop()
+        
+        collectionLinksElement.classList.add('initialized')
+
+        const scrollToLastObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                collectionLinksElement.classList.add('disable-last')
+            } else {
+                collectionLinksElement.classList.remove('disable-last')
+            }
+        }, {
+            threshold: 0.6
+        })
+
+        const scrollToFirstObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                collectionLinksElement.classList.add('disable-first')
+            } else {
+                collectionLinksElement.classList.remove('disable-first')
+            }
+        }, {
+            threshold: 0.6
+        })
+
+        scrollToLastObserver.observe(lastLink)
+        scrollToFirstObserver.observe(firstLink)
+    })
+</script>
+
+{% schema %}
+	{
+		"name": "t:sections.main_contact.name",
+        "settings": [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.breadcrumb.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.breadcrumb.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.breadcrumb.options__3"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "color",
+                "id": "breadcrumb_color",
+                "label": "t:sections.general.settings.breadcrumb.breadcrumb_color"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_form_text",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+            },
+            {
+                "type": "color",
+                "id": "header_text_color",
+                "label": "t:settings_schema.typography.settings.typography.text_color"
+            },
+            {
+                "type": "range",
+                "id": "content_max_width",
+                "label": "t:sections.main_contact.settings.label__6",
+                "min": 100,
+                "max": 1000,
+                "step": 10,
+                "default": 540,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "select",
+                "id": "content_alignment",
+                "label": "t:sections.main_contact.settings.label__5",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "fullwidth",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_contact.settings.pages_menu.name"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_heading"
+            },
+            {
+                "type": "color",
+                "id": "menu_bar_background",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_bar_bg"
+            },
+            {
+                "type": "color",
+                "id": "menu_bar_border",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_bar_border_color"
+            },
+            {
+                "type": "color",
+                "id": "menu_item_background",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_item_bg"
+            },
+            {
+                "type": "color",
+                "id": "menu_item_text_color",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_item_text_color"
+            },
+            {
+                "type": "color",
+                "id": "menu_item_background_color_h",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_item_bg_hover"
+            },
+            {
+                "type": "color",
+                "id": "menu_item_text_color_h",
+                "label": "t:sections.main_contact.settings.pages_menu.menu_item_text_color_hover"
+            },
+            {
+                "type": "image_picker",
+                "id": "contact_bg_image",
+                "label": "t:settings_schema.colors.settings.colors_name.background_image"
+            },
+            {
+                "type": "range",
+                "id": "contact_bg_image_height",
+                "label": "t:sections.main_contact.settings.label__2",
+                "default": 270,
+                "min": 200,
+                "max": 700,
+                "step": 10,
+                "unit": "t:sections.general.settings.padding.unit",
+                "info": "t:sections.main_contact.settings.info"
+            },
+            {
+                "type": "range",
+                "id": "contact_bg_image_height_mb",
+                "label": "t:sections.main_contact.settings.label__8",
+                "default": 270,
+                "min": 200,
+                "max": 700,
+                "step": 10,
+                "unit": "t:sections.general.settings.padding.unit",
+                "info": "t:sections.main_contact.settings.info"
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_parallax",
+                "label": "t:sections.main_contact.settings.label__3",
+                "default": true
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_contact.settings.header__2"
+            },
+            {
+                "type": "select",
+                "id": "form_container",
+                "label": "t:sections.main_contact.settings.label__4",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ],
+                "info": "t:sections.general.settings.container.info"
+            },
+            {
+                "type": "text",
+                "id": "contact_form_title",
+                "label": "t:sections.main_contact.settings.contact_form.label__3",
+                "default": "Get In Touch"
+            },
+            {
+                "type": "select",
+                "id": "contact_form_title_alignment",
+                "label": "t:sections.main_contact.settings.contact_form.label__6",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:settings_schema.typography.settings.typography.left"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:settings_schema.typography.settings.typography.center"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:settings_schema.typography.settings.typography.right"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "id": "contact_form_heading",
+                "label": "t:sections.main_contact.settings.contact_form.label__4",
+                "default": "Send us an email"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_form_description",
+                "label": "t:sections.main_contact.settings.contact_form.label__5",
+                "default": "Ask us anything! We're here to help."
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_contact.settings.header__3"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_contact_info",
+                "label": "t:sections.main_contact.settings.contact_info.label__1",
+                "default": true 
+            },
+            {
+                "type": "text",
+                "id": "contact_info_title",
+                "label": "t:sections.main_contact.settings.contact_info.label__7",
+                "default": "Live Help"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_text",
+                "label": "t:sections.main_contact.settings.contact_info.label__8",
+                "default": "If you have an issue or question that requires immediate assistance, you can click the button below to chat live with a Customer Service representative. If we aren’t available, drop us an email to the left and we will get back to you within 20-36 hours!"
+            },
+            {
+                "type": "text",
+                "id": "btn_text",
+                "label": "t:settings_schema.typography.settings.typography.button_text",
+                "default": "Message us"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color",
+                "label": "t:settings_schema.colors.settings.colors_name.color"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg_color",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_bg_color_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.color_hover"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.border_hover"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_bg_color_hover_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+            },
+            {
+                "type": "range",
+                "id": "btn_max_width",
+                "label": "t:sections.main_contact.settings.contact_info.button.label__8",
+                "default": 205,
+                "min": 100,
+                "max": 500,
+                "step": 5,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "url",
+                "id": "btn_link",
+                "label": "t:sections.main_contact.settings.contact_info.button.label__9"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_address",
+                "label": "t:sections.main_contact.settings.contact_info.label__4"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_content_1",
+                "label": "t:sections.main_contact.settings.contact_info.label__5"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_content_2",
+                "label": "t:sections.main_contact.settings.contact_info.label__6"
+            }
+        ]
+	}
+{% endschema %}

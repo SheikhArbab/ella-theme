@@ -1,0 +1,8 @@
+<style>
+	.arrow-icon-scroll {position: fixed;bottom: 55px;right: 65px;z-index: 99;background-color: transparent;cursor: pointer;mix-blend-mode: difference;animation: scrollArrow 1.5s 0.8s infinite}
+	.arrow-icon-scroll svg {width: 31px;height: 84px;fill: {{ settings.icon_scroll_down_color }};stroke: transparent;transition: all 0.4s ease-out}
+	.arrow-icon-scroll.rotate svg {transform: rotate(180deg)}
+	@media screen and (max-width: 1024px) {.arrow-icon-scroll {bottom: 100px;right: 30px}.arrow-icon-scroll svg {width: 26px;height: 79px}}
+	@media screen and (max-width: 551px) {.arrow-icon-scroll {bottom: 100px;right: 15px}.arrow-icon-scroll svg {width: 24px;height: 70px}}
+</style>
+<div class="arrow-icon-scroll"><svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125.04 280.66" class="icon icon-arrow-scroll-down"><g id="Layer_2-2" data-name="Layer 2"><polygon points="119.85 219.82 69.39 270.27 69.39 0 69.39 0 69.37 0 62.05 0 62.05 0 0 0 0 7.34 62.05 7.34 62.05 270.27 11.59 219.82 6.4 225.01 62.05 280.66 62.05 280.66 69.39 280.66 69.39 280.66 125.04 225.01 119.85 219.82"/></g></svg></div>

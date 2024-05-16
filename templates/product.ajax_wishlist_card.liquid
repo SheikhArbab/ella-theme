@@ -1,0 +1,54 @@
+{% layout none %}
+
+<div class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+  {% if settings.product_card_layout == '02' %}
+    {% render 'product-card-02'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% elsif settings.product_card_layout == '03' %}
+    {% render 'product-card-03'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% elsif settings.product_card_layout == '04' %}
+    {% render 'product-card-04'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% elsif settings.product_card_layout == '05' %}
+    {% render 'product-card-05'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% elsif settings.product_card_layout == '06' %}
+    {% render 'product-card-06'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% elsif settings.product_card_layout == '07' %}
+    {% render 'product-card-07'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% else %}
+    {% render 'product-card'
+     , product_card_product: product
+     , portrait_aspect_ratio: '125'
+     , serial: forloop.index
+     , sectionId: 'list-result'
+     %}
+  {% endif %}
+</div>

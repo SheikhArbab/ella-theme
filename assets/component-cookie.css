@@ -1,0 +1,108 @@
+.halo-cookie{
+	display: block;
+    z-index: 98;
+    width: 100%;
+    text-align: center;
+}
+
+.halo-cookie__block{
+	padding: 20px 0;
+    position: relative;
+}
+
+.halo-cookie__text{
+	display: block;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: var(--body-line-height);
+    color: var(--color-white);
+}
+
+.halo-cookie__action{
+    font-size: 0;
+    letter-spacing: 0;
+    margin: 10px 0 0 0;
+	text-align: center;
+}
+
+.halo-cookie__action .button + .button{
+	margin-top: 10px;
+}
+
+.halo-cookie__action .link{
+	font-size: var(--font-body-size);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-white);
+    text-transform: uppercase;
+}
+
+.halo-cookie__action .link .icon{
+	margin-left: 5px;
+}
+
+.halo-cookie__action .privacy_policy_link{
+	font-weight: 100;
+}
+
+.halo-cookie__action .accept_cookies_link{
+	letter-spacing: .05em;
+    background: none;
+    border: none;
+}
+
+.halo-cookie__action .link + .link{
+	margin-left: 16px;
+}
+
+.halo-cookie{
+	padding: 10px 15px;
+}
+
+.halo-cookie .halo-cookie__block{
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.halo-cookie .halo-cookie__text{
+	font-size: var(--font-body-size);
+	letter-spacing: 0;
+	font-weight: 100;
+	line-height: 26px;
+}
+
+.halo-cookie .halo-cookie__action{
+	margin-top: 8px;
+}
+
+@media (min-width: 551px){
+	.halo-cookie{
+		text-align: left;
+		margin-top: 15px;
+	}
+
+	.halo-cookie__text{
+		font-size: calc(var(--font-body-size) + 2px);
+	}
+
+	.halo-cookie__action .button{
+		display: inline-block;
+	    vertical-align: top;
+	    width: auto;
+	    min-width: 190px;
+	}
+
+	.halo-cookie__action .button + .button{
+		margin-top: 0;
+		margin-left: 10px;
+	}
+
+	.halo-cookie{
+		max-width: 368px;
+	}
+
+	.halo-cookie__action{
+		text-align: right;
+	}
+	
+}

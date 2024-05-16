@@ -1,0 +1,1038 @@
+<link rel="stylesheet" href="{{ 'component-tiktok-embedder.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-tiktok-embedder.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign mg_top_desktop = section.settings.mg_top_desktop | append: 'px' 
+    assign mg_top_tablet = section.settings.mg_top_tablet | append: 'px' 
+    assign mg_top_mobile = section.settings.mg_top_mobile | append: 'px' 
+
+    assign mg_bottom_desktop = section.settings.mg_bottom_desktop | append: 'px' 
+    assign mg_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px' 
+    assign mg_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px' 
+    assign container = section.settings.container
+    assign padding_full_width = section.settings.padding_full_width | append: 'px' 
+
+    assign section_title = section.settings.section_title   
+    assign section_title_font_size = section.settings.section_title_font_size | append: 'px'
+    assign section_title_font_size_mb = section.settings.section_title_font_size_mb | append: 'px'
+    assign section_title_color = section.settings.section_title_color 
+    assign section_title_font_weight = section.settings.section_title_font_weight 
+    assign section_title_margin_top = section.settings.section_title_margin_top | append: 'px'
+
+    assign section_description = section.settings.section_description
+    assign section_description_font_size = section.settings.section_description_font_size | append: 'px'
+    assign section_description_font_size_mb = section.settings.section_description_font_size_mb | append: 'px'
+    assign section_description_font_weight = section.settings.section_description_font_weight
+    assign section_description_color = section.settings.section_description_color
+    assign section_description_margin_top = section.settings.section_description_margin_top | append: 'px'
+    assign section_description_max_width = section.settings.section_description_max_width | append: 'px'
+
+    assign link_text = section.settings.link_text
+    assign link_image = section.settings.link_image
+    assign link_image_width = section.settings.link_image_width | append: 'px'
+    assign link_to_instagram = section.settings.link_to_instagram
+    assign link_text_font_size = section.settings.link_text_font_size | append: 'px'
+    assign link_text_font_size_mb = section.settings.link_text_font_size_mb | append: 'px'
+    assign link_text_font_weight = section.settings.link_text_font_weight
+    assign link_text_color = section.settings.link_text_color
+    assign link_text_color_hover = section.settings.link_text_color_hover
+    assign link_text_font_style = section.settings.link_text_font_style 
+    assign link_margin_top = section.settings.link_margin_top | append: 'px'
+    assign section_title_font_style = section.settings.section_title_font_style
+    assign section_title_enable_underline = section.settings.section_title_enable_underline
+    if section_title_enable_underline
+        assign section_title_underline_style = section.settings.section_title_underline_style
+        assign section_title_underline_color = section.settings.section_title_underline_color
+    endif 
+    assign text_align = section.settings.text_align
+
+    assign column_per_row = section.settings.column_per_row
+    assign videos_margin_top = section.settings.videos_margin_top | append: 'px'
+    assign swipe_on_mobile = section.settings.swipe_on_mobile
+
+    assign section_bg = section.settings.section_bg
+    assign section_gradient = section.settings.section_gradient
+
+    assign button_type = section.settings.button_type
+    assign button_text = section.settings.button_text
+    assign button_font_size = section.settings.button_font_size | append: 'px'
+    assign button_width = section.settings.button_width | append: 'px'
+    assign button_text_color = section.settings.button_text_color  
+    assign button_border_color = section.settings.button_border_color  
+    assign button_background_color = section.settings.button_background_color  
+    assign button_gradient_color = section.settings.button_gradient_color  
+    assign button_text_color_hover = section.settings.button_text_color_hover  
+    assign button_border_color_hover = section.settings.button_border_color_hover  
+    assign button_background_color_hover = section.settings.button_background_color_hover  
+    assign button_gradient_color_hover = section.settings.button_gradient_color_hover  
+    assign button_text_transform = section.settings.button_text_transform  
+    assign button_font_weight = section.settings.button_font_weight
+    assign button_link = section.settings.button_link
+    assign button_margin_top = section.settings.button_margin_top | append: 'px'
+
+    assign arrow_color = section.settings.arrow_color
+    assign arrow_bg_color = section.settings.arrow_bg_color
+    assign arrow_border_color = section.settings.arrow_border_color
+    assign arrow_button_size = section.settings.arrow_button_size | append: 'px'
+    assign number_color = section.settings.number_color
+    assign number_font_size = section.settings.number_font_size
+-%} 
+
+<style>
+    .section-video-wrapper .tiktok-video-wrap {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 350ms ease-in-out;
+    }
+
+    .section-video-wrapper.loaded .tiktok-video-wrap {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    @media (min-width: 1200px) {
+        .section-block-{{section.id}} {
+            padding-top: {{ mg_top_desktop }};
+            padding-bottom: {{ mg_bottom_desktop }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        {% if section.settings.container == 'fullwidth' %}
+            .section-block-{{section.id}} .container-full {
+                padding-left: {{ padding_full_width }};
+                padding-right: {{ padding_full_width }};
+            }
+        {% endif %}
+    }
+
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .section-block-{{ section.id }} {
+            padding-top: {{ mg_top_tablet }};
+            padding-bottom: {{ mg_bottom_tablet }};
+        }
+    }
+
+    @media (max-width: 767px) {
+        .section-block-{{ section.id }} {
+            padding-top: {{ mg_top_mobile }};
+            padding-bottom: {{ mg_bottom_mobile }};
+        }
+    }
+</style>
+    
+<div class="tiktok-embedder-section section-block-{{section.id}}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="tiktok-embedder-section-{{section.id}}"
+    style="
+        --section-bg: {% if section_gradient != blank %}{{ section_gradient }}{% elsif section_bg != blank %}{{ section_bg }}{% endif %};
+    "
+>       
+  <div class="{% if container == 'fullwidth' %}container-full{% elsif container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% else %}container{% endif %}">
+    <div class="section-content">
+        {% if section_title != blank %}
+            <h3 class="title text-{{ text_align }} {% if section_title_enable_underline %}underlined underline-style-{{ section_title_underline_style }}{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
+                style="
+                {% if settings.banner_animation == 'effect_fade_up' %}--animation-order: 1;{% endif %}
+                --title-font-size: {{ section_title_font_size }};
+                --title-font-size-mb: {{ section_title_font_size_mb }}; 
+                --title-font-weight: {{ section_title_font_weight }};
+                --title-color: {% if section_title_color != blank %}{{ section_title_color }}{% endif %};
+                --title-margin-top: {{ section_title_margin_top }};
+                --title-font-style: {{ section_title_font_style }};
+                {% if section_title_enable_underline %}
+                    --title-underline-color: {{ section_title_underline_color }};
+                {% endif %}
+                ">      
+                <span class="text">
+                    {{ section_title }}
+                </span>
+            </h3>
+        {% endif %}
+        {% if section_description != blank %}
+            <div class="description text-{{ text_align }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
+                style="
+                    {% if settings.banner_animation == 'effect_fade_up' %}--animation-order: 2;{% endif %}
+                    --description-font-size: {{ section_description_font_size }};
+                    --description-font-size-mb: {{ section_description_font_size_mb }};
+                    --description-color: {% if section_description_color != blank %}{{ section_description_color }}{% endif %};
+                    --description-font-weight: {{ section_description_font_weight }}; 
+                    --description-margin-top: {{ section_description_margin_top }};   
+                    --description-max-width: {{ section_description_max_width }};
+                "
+            >       
+                {{ section_description }}
+            </div>          
+        {% endif %}     
+        {% if button_text != blank %}
+            {% if settings.banner_animation == 'effect_fade_up' %}
+            <div class="scroll-trigger animate--slide-in" style="--animation-order: 3;">
+            {% endif %}
+                <a {% if button_link != blank %}href="{{ button_link }}"{% else %}role="link" aria-disabled="true" disabled="true"{% endif %}
+                        class="view-all text-{{ text_align }} {% if button_type == 'button' %}button{% else %}link{% endif %}" 
+                        style=" 
+                            --button-font-size: {{ button_font_size }};
+                            --button-text-color: {% if button_text_color != blank %}{{ button_text_color }}{% endif %};
+                            --button-border-color: {% if button_border_color != blank %}{{ button_border_color }}{% endif %};
+                            --button-text-color-hover: {% if button_text_color_hover != blank %}{{ button_text_color_hover }}{% endif %};
+                            --button-border-color-hover: {% if button_border_color_hover != blank %}{{ button_border_color_hover }}{% endif %};
+                            --button-text-transform: {{ button_text_transform }};
+                            --button-font-weight: {{ button_font_weight }};
+                            --button-margin-top: {{ button_margin_top }};
+                            {% if button_type == 'button' %}    
+                                --button-width: {{ button_width }};
+                                --button-background: {% if button_gradient_color != blank %}{{ button_gradient_color }}{% elsif button_background_color != blank %}{{ button_background_color }}{% endif %};
+                                --button-background-hover: {% if button_gradient_color_hover != blank %}{{ button_gradient_color_hover }}{% elsif button_background_color_hover != blank %}{{ button_background_color_hover }}{% endif %};
+                            {% endif %}
+                        ">      
+                    {{ button_text }}
+                    </a>
+                {% if settings.banner_animation == 'effect_fade_up' %}
+                </div>
+                {% endif %}
+        {% endif %} 
+
+        {%- if swipe_on_mobile == 'slider' -%}
+        <tiktok-slider-component data-tiktok-slider="true">  
+            {%- if section.blocks.size > 1 -%}
+            <div class="slider-buttons no-js-hidden" style="
+                    --arrow-color: {{ arrow_color }};
+                    --arrow-bg-color: {{ arrow_bg_color }};
+                    --arrow-border-color: {{ arrow_border_color }};
+                    --arrow-button-size: {{ arrow_button_size }};
+                    --page-number-color: {{ number_color }};
+                    --page-number-font-size: {{ number_font_size }};
+                ">  
+                <div class="slider-counter">
+                    <span class="slider-counter--current">1</span>
+                    <span aria-hidden="true"> / </span>
+                    <span class="visually-hidden">{{ 'accessibility.of' | t }}</span>
+                    <span class="slider-counter--total" data-total-pages-display>{{ section.blocks.size }}</span>
+                </div>      
+                <div class="slider-action">
+                    <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'accessibility.previous_slide' | t }}">
+                        {% render 'icon-caret' %}
+                    </button>
+                    <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'accessibility.next_slide' | t }}">
+                        {% render 'icon-caret' %}
+                    </button>
+                </div>
+            </div>
+            {%- endif -%}   
+        {%- endif -%}
+            <tiktok-videos-component class="section-video-wrapper halo-row column-{{ column_per_row }} {%- if swipe_on_mobile == 'slider' -%}slider slider--tablet{%- endif -%}{% if swipe_on_mobile == 'scroll' %} scroll-snap-mobile disable-srollbar{% endif %}" style=" --column-per-row: {{ column_per_row }}; --videos-top-margin: {{ videos_margin_top }}" data-column-per-row="{{ column_per_row }}">
+                {% for block in section.blocks %}
+                    {% if block.type == 'tiktok_video' %}
+                        <div class="halo-item tiktok-video-column{% if swipe_on_mobile == 'slider' %} slider__slide{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                            {% if block.settings.tiktok_video_embede_code != blank %}
+                                <div class="tiktok-video-wrap" data-tiktok-video-wrapper>
+                                    {{ block.settings.tiktok_video_embede_code }}
+                                </div>
+                            {% else %}
+                                <div class="not_img tiktok-video-wrap-no-image" style="--height_not_img: 751x">
+                                    327 x 751px
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </tiktok-videos-component>  
+           
+        {%- if swipe_on_mobile == 'slider' -%}
+        </tiktok-slider-component>    
+        {%- endif -%}   
+
+        {% if link_text != blank or link_to_instagram != blank or link_image %}
+            <div class="link-to-instagram text-{{ text_align }}"
+                style="
+                    --link-text-font-size: {{ link_text_font_size }};
+                    --link-text-font-size-mb: {{ link_text_font_size_mb }};
+                    --link-text-font-weight: {{ link_text_font_weight }};
+                    --link-text-color: {{ link_text_color }};
+                    --link-text-color-hover: {{ link_text_color_hover }};
+                    --link-text-margin-top: {{ link_margin_top }};
+                    --link-text-font-style: {{ link_text_font_style }};
+                    --link-image-width: {{ link_image_width }};
+                "
+            >   
+                <{% if link_to_instagram != blank %}a href="{{ link_to_instagram }}"{% else %}button{% endif %}>
+                    {% if link_text != blank %}
+                        {{ link_text }}
+                    {% else %}
+                        {{ link_to_instagram }}
+                    {% endif %}
+                </{% if link_to_instagram != blank %}a{% else %}button{% endif %}>
+                {% if section.settings.link_image %}
+                    <div class="image-wrapper">
+                        {% assign img_size = '100x' %}
+                        {% assign preview_img = section.settings.link_image %}
+                        <div class="adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%;">
+                            <img {% render 'lazyload', preview_img: preview_img %} />
+                            {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                        </div>
+                    </div> 
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+    class TiktokVideosComponent extends HTMLElement {
+        constructor() {
+            super();
+
+            setTimeout(() => {
+                this.classList.add('loaded');
+            }, 100) 
+        }
+    }
+
+    window.addEventListener('load', () => customElements.define('tiktok-videos-component', TiktokVideosComponent));
+</script>
+
+{% schema %}
+{
+    "name": "t:sections.tiktok_embedder.name",
+    "class": "section-tiktok-embedder",
+    "settings": [
+        {
+            "type": "header",
+            "content": "t:settings_schema.general.name"
+        },
+        { 
+            "type": "select",
+            "id": "container",
+            "label": "t:sections.layout.container.option",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "t:sections.layout.container.option1"
+                },
+                {
+                    "value": "1170",
+                    "label": "t:sections.layout.container.option4"
+                },
+                {
+                    "value": "1770",
+                    "label": "t:sections.layout.container.option3"
+                },
+                {
+                    "value": "fullwidth",
+                    "label": "t:sections.layout.container.option2"
+                }
+            ],  
+            "info": "t:sections.tiktok_embedder.settings.container_info"
+        },
+        {
+            "type": "range",
+            "id": "padding_full_width",
+            "label": "t:sections.layout.container.padding_full_width",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0,
+            "info": "t:sections.layout.container.info_full_width"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.layout.margin_top"
+        },
+        {
+            "type": "range",
+            "id": "mg_top_desktop",
+            "label": "t:sections.layout.mg_desktop.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_top_tablet",
+            "label": "t:sections.layout.mg_tablet.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_top_mobile",
+            "label": "t:sections.layout.mg_mobile.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type": "header",
+            "content": "t:sections.layout.margin_bottom"
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_desktop",
+            "label": "t:sections.layout.mg_desktop.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_tablet",
+            "label": "t:sections.layout.mg_tablet.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_mobile",
+            "label": "t:sections.layout.mg_mobile.label",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 50
+        },
+        {
+            "type" : "color",
+            "id" : "section_bg",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#fafafa"
+        },
+        {
+            "type" : "color_background",
+            "id" : "section_gradient",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type": "text",
+            "id": "section_title",
+            "label": "t:settings_schema.newsletter_popup.settings.general.label__6",
+            "default": "Shop with us"
+        },
+        {
+            "type": "range",
+            "id": "section_title_font_size",
+            "label": "t:settings_schema.typography.settings.typography.title_font_size",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 32,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "section_title_font_size_mb",
+            "label": "t:settings_schema.typography.settings.typography.title_font_size_mb",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 18,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "section_title_font_weight",
+            "label": "t:settings_schema.typography.settings.typography.title_font_weight",
+            "default": "600",
+            "options": [
+                {   
+                    "value": "400",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                },
+                {
+                    "value": "500",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                },
+                {
+                    "value": "600",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                },
+                {
+                    "value": "700",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                },
+                {
+                    "value": "800",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                },
+                {
+                    "value": "900",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                }]
+        },
+        {
+            "type": "color",
+            "id": "section_title_color",
+            "label": "t:settings_schema.typography.settings.typography.title_color",
+            "default": "#191919"
+        },
+        {
+            "type": "range",
+            "id": "section_title_margin_top",
+            "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.margin_top_title",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "section_title_font_style",
+            "label": "t:settings_schema.typography.settings.font_style.label",
+            "default": "italic",
+            "options": [
+            {   
+                "value": "normal",
+                "label": "t:settings_schema.typography.settings.font_style.options__1"
+            },
+            {
+                "value": "italic",
+                "label": "t:settings_schema.typography.settings.font_style.options__2"
+            },
+            {
+                "value": "oblique",
+                "label": "t:settings_schema.typography.settings.font_style.options__3"
+            }]
+        },
+        {
+            "type": "checkbox",
+            "id": "section_title_enable_underline",
+            "label": "t:settings_schema.typography.settings.typography.title_enable_border",
+            "default": true
+        },
+        {   
+            "type": "select",
+            "id": "section_title_underline_style",
+            "label": "t:settings_schema.typography.settings.typography.title_underline_style",
+            "default": "2",
+            "options": [
+                {
+                    "value": "1",
+                    "label": "1"
+                },
+                {
+                    "value": "2",
+                    "label": "2"
+                }
+            ]
+        },
+        {
+            "type": "color",
+            "id": "section_title_underline_color",
+            "label": "t:settings_schema.typography.settings.typography.title_underline_color"
+        },
+        {
+            "type": "textarea",
+            "id": "section_description",
+            "label": "t:sections.rich-text.blocks.text.settings.text.label",
+            "default": "Join us on TikTok for exclusive releases, unboxing and try-on videos, reviews, and more from our top brands and stylists."
+        },  
+        {
+            "type": "range",
+            "id": "section_description_font_size",
+            "label": "t:settings_schema.typography.settings.typography.des_font_size",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 16,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "section_description_font_size_mb",
+            "label": "t:settings_schema.typography.settings.typography.des_font_size_mb",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 14,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "section_description_font_weight",
+            "label": "t:sections.newsletter.description_font_weight",
+            "default": "500",   
+            "options": [
+                {       
+                    "value": "400",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                },
+                {
+                    "value": "500",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                },
+                {
+                    "value": "600",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                },
+                {
+                    "value": "700",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                },
+                {
+                    "value": "800",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                },
+                {
+                    "value": "900",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                }]
+        },
+        {
+            "type": "color",    
+            "id": "section_description_color",
+            "label": "t:sections.layout.color.color_des",
+            "default": "#191919"
+        },  
+        {
+            "type": "range",
+            "id": "section_description_margin_top",
+            "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.margin_top_des",
+            "default": 25,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "section_description_max_width",
+            "label": "t:sections.main_contact.settings.label__6",
+            "min": 100, 
+            "max": 1000,
+            "step": 10,
+            "unit": "px",
+            "default": 530
+        },
+        {
+            "type": "select",
+            "id": "button_type",
+            "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__2",
+            "default": "button",
+            "options": [
+                {
+                    "value": "button",
+                    "label": "t:settings_schema.typography.settings.typography.button"
+                },
+                {
+                    "value": "link",
+                    "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                }
+            ]
+        },
+        {   
+            "type": "url",
+            "id": "button_link",
+            "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+        },  
+        {
+            "type" : "text",
+            "id" : "button_text",
+            "label" : "t:sections.spotlight_block.blocks.image.button",
+            "default" : "Shop now"
+        },
+        {   
+            "type": "range",
+            "id": "button_font_size",
+            "label": "t:settings_schema.typography.settings.typography.button_font_size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "button_width",
+            "label": "t:settings_schema.typography.settings.typography.button_width",
+            "min": 100,
+            "max": 600,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 190
+        },
+        {
+            "type": "range",
+            "id": "button_margin_top",
+            "label": "t:settings_schema.typography.settings.typography.button_margin_top",
+            "default": 50,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type" : "color",
+            "id" : "button_text_color",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "button_border_color",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "button_background_color",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "button_gradient_color",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "button_text_color_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "button_border_color_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "button_background_color_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "button_gradient_color_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "select",
+            "id": "button_text_transform",
+            "label": "t:settings_schema.typography.settings.typography.button_text_transform",
+            "default": "capitalize",
+            "options": [
+            {
+                "value": "none",
+                "label": "t:settings_schema.typography.settings.text_transform.options__1"
+            },
+            {
+                "value": "capitalize",
+                "label": "t:settings_schema.typography.settings.text_transform.options__2"
+            },
+            {
+                "value": "uppercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__3"
+            },
+            {   
+                "value": "lowercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__4"
+            }]
+        },
+        {
+            "type": "select",
+            "id": "button_font_weight",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_font_weight",
+            "default": "600",
+            "options": [
+            {   
+                "value": "400",
+                "label": "t:settings_schema.typography.settings.font_weight.options__1"
+            },
+            {
+                "value": "500",
+                "label": "t:settings_schema.typography.settings.font_weight.options__2"
+            },
+            {
+                "value": "600",
+                "label": "t:settings_schema.typography.settings.font_weight.options__3"
+            },
+            {
+                "value": "700",
+                "label": "t:settings_schema.typography.settings.font_weight.options__4"
+            },
+            {
+                "value": "800",
+                "label": "t:settings_schema.typography.settings.font_weight.options__5"
+            },
+            {
+                "value": "900",
+                "label": "t:settings_schema.typography.settings.font_weight.options__6"
+            }]
+        },
+        {   
+            "type": "text",
+            "id": "link_text",
+            "label": "t:sections.tiktok_embedder.settings.instagram_link_text"
+        },  
+        {
+            "type": "image_picker",
+            "id": "link_image",
+            "label": "t:sections.header.settings.header__4.content"
+        },
+        {
+            "type": "range",
+            "id": "link_image_width",
+            "label": "t:sections.header.settings.logo_width.label__1",
+            "min": 10,
+            "max": 200,
+            "default": 100,
+            "step": 5,
+            "unit": "px"
+        },
+        {       
+            "type": "url",
+            "id": "link_to_instagram",
+            "label": "t:sections.tiktok_embedder.settings.link_to_instagram"
+        },
+        {
+            "type": "range",
+            "id": "link_text_font_size",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__15",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 16,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "link_text_font_size_mb",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__16",
+            "min": 10,
+            "max": 80,
+            "step": 1,
+            "default": 14,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "link_text_font_weight",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__17",
+            "default": "500",   
+            "options": [
+                {       
+                    "value": "400",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                },
+                {
+                    "value": "500",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                },
+                {
+                    "value": "600",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                },
+                {
+                    "value": "700",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                },
+                {
+                    "value": "800",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                },
+                {
+                    "value": "900",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                }]
+        },
+        {
+            "type": "select",
+            "id": "link_text_font_style",
+            "label": "t:settings_schema.typography.settings.font_style.label",
+            "default": "italic",
+            "options": [
+            {   
+                "value": "normal",
+                "label": "t:settings_schema.typography.settings.font_style.options__1"
+            },
+            {
+                "value": "italic",
+                "label": "t:settings_schema.typography.settings.font_style.options__2"
+            },
+            {
+                "value": "oblique",
+                "label": "t:settings_schema.typography.settings.font_style.options__3"
+            }]
+        },
+        {
+            "type": "range",
+            "id": "link_margin_top",
+            "label": "t:sections.collection_lookbook.blocks.collection.link.link_mg_top",
+            "default": 50,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "color",    
+            "id": "link_text_color",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__18",
+            "default": "#191919"
+        },
+        {
+            "type": "color",    
+            "id": "link_text_color_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default": "#191919"
+        },
+        {   
+            "type": "select",
+            "id": "text_align",
+            "label": "t:settings_schema.typography.settings.type_button_font.text_align",
+            "options": [
+            {
+                "value": "left",
+                "label": "t:sections.product_block.settings.general.options__7"
+            },
+            {
+                "value": "center",
+                "label": "t:sections.product_block.settings.general.options__8"
+            },
+            {
+                "value": "right",
+                "label": "t:sections.product_block.settings.general.options__9"
+            }],
+            "default": "center"
+        },
+        {
+            "type": "select",
+            "id": "column_per_row",
+            "label": "t:sections.tiktok_embedder.settings.columns_per_row",
+            "default": "3",
+            "options": [
+                {   
+                    "value": "2",
+                    "label": "2"
+                },
+                {
+                    "value": "3",
+                    "label": "3"
+                },
+                {
+                    "value": "4",
+                    "label": "4"
+                },
+                {
+                    "value": "5",
+                    "label": "5"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "videos_margin_top",
+            "label": "t:sections.tiktok_embedder.settings.videos_margin_top",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "default": 35,
+            "unit": "px"
+        },
+        {   
+            "type": "select",
+            "id": "swipe_on_mobile",
+            "label": "t:settings_schema.typography.settings.typography.layout_mobile",
+            "default": "slider",
+            "options": [
+            {
+                "value": "list",
+                "label": "t:settings_schema.typography.settings.typography.list"
+            },
+            {
+                "value": "scroll",
+                "label": "t:settings_schema.typography.settings.typography.scroll"
+            },
+            {
+                "value": "slider",
+                "label": "t:settings_schema.typography.settings.typography.slider"
+            }]
+        },
+        {
+            "type": "header",
+            "content": "t:sections.product_block.settings.slider.content"
+        },
+        {
+            "type": "color",
+            "id": "arrow_color",
+            "default": "#333",
+            "label": "t:settings_schema.general.settings.pagination.arrow_color"
+        },
+        {
+            "type": "color",
+            "id": "arrow_bg_color",
+            "label": "t:settings_schema.general.settings.pagination.arrow_bg_color"
+        },
+        {
+            "type": "color",
+            "id": "arrow_border_color",
+            "default": "#333",
+            "label": "t:settings_schema.general.settings.pagination.arrow_border_color"
+        },
+        {
+            "type": "range",
+            "id": "arrow_button_size",
+            "label": "t:sections.tiktok_embedder.settings.arrow_button_size",
+            "min": 1,
+            "max": 60,
+            "step": 1,
+            "unit": "px",
+            "default": 35
+        },   
+        {
+            "type": "color",
+            "id": "number_color",
+            "default": "#333",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__14"
+        },
+        {
+            "type": "range",
+            "id": "number_font_size",
+            "label": "t:sections.main-list-collections.blocks.collection.settings.general.label__12",
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "default": 16
+        }   
+        ],
+    "blocks": [
+        {
+            "type": "tiktok_video",
+            "name": "t:sections.tiktok_embedder.blocks.tiktok_video.name",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "tiktok_video_embede_code",
+                    "label": "t:sections.tiktok_embedder.blocks.tiktok_video.embed_code"
+                }
+            ]   
+        }
+    ],
+    "presets": [    
+    {
+        "name": "t:sections.tiktok_embedder.name"
+    }],
+    "disabled_on": {
+        "groups": ["header"]
+    }
+}
+{% endschema %}

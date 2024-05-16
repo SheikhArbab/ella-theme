@@ -1,0 +1,310 @@
+.about-title{
+    text-transform: unset;
+    font-size: 40px;
+    font-weight: var(--font-weight-semibold);
+    padding-bottom: 24px;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-content{
+    padding: 0 0 20px 0;
+}
+
+.about-content > span{
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.about-content > span + span{
+    margin-top: 15px;
+}
+
+.about-row{
+    font-size: 0;
+    letter-spacing: 0;
+    margin: 0 -8px;
+}
+
+.about-row-item{
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% + 16px);
+    padding: 0 8px;
+    margin: 0 -8px;
+}
+
+.halo-about-content .halo-text-format ol {
+    list-style: square;
+}
+
+.about-row-item .item{
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    padding: 0 8px;
+}
+
+.about-row-item .image {
+    display: block;
+}
+
+.about-row-item .image img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    object-fit: cover;
+    object-position: center;
+}
+
+.about-row-item .item + .item{
+    margin-top: 15px;
+}
+
+.about-row-itemFirst{
+    margin-bottom: 15px;
+}
+
+.about-row.style-2 {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.about-row.style-2 .about-row-itemFirst{
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.about-row.style-2 .about-row-itemSecond{
+    order: -1;
+}
+
+.about-item + .about-item{
+    margin-top: 64px;
+}
+
+.about-navigation-container {
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: var(--menu_bar_background);
+    border: 1px solid;
+    border-color: var(--menu_bar_border);
+    display: flex;
+    place-items: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.about-navigation-container.container-1170 {
+    max-width: 1170px;
+}
+
+.about-navigation-container.container-1770 {
+    max-width: 1770px;
+}
+
+.about-page-nav {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    column-gap: 47px;
+    scroll-snap-type: x mandatory;
+}
+
+.about-page-nav .item {
+    background-color: var(--menu_item_background);
+    transition: background-color 350ms ease-in-out;
+    position: relative;
+    width: max-content;
+    scroll-snap-align: start;
+}
+
+.about-page-nav .item:first-child{
+    scroll-snap-align: end;
+}
+
+.about-page-nav .item:hover {
+    background-color: var(--menu_item_background);
+}
+
+.about-page-nav .item a {
+    color: var(--menu_item_text_color);
+    font-weight: 500;
+    transition: color 350ms ease-in-out;
+}
+
+.about-page-nav .item:not(.active) a:hover {
+    color: var(--menu_item_text_color_h);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+}
+
+/*.about-page-nav .item::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    left: -1%;
+    width: 102%;
+    height: 1px;
+    background-color: var(--menu_item_text_color_h);
+    transform-origin: right;
+    transform: scale(0);
+    transition: transform 550ms ease-in-out;
+}
+
+.about-page-nav .item.active::after {
+    background-color: var(--menu_item_text_color);
+}
+
+.about-page-nav .item.active::after, .about-page-nav .item:hover::after {
+    transform-origin: left;
+    transform: scale(1);
+}*/
+
+@media (max-width: 1024px) {
+    .about-navigation-container {
+        position: relative;
+    }
+
+    .about-navigation-container.initialized.disable-first::before {
+        opacity: 0;
+    }
+
+    .about-navigation-container.initialized::before {
+        opacity: 1;
+    }
+
+    .about-navigation-container::before {
+        left: 0;
+        background: linear-gradient(to right,white,transparent);
+        z-index: 1;
+        opacity: 0;
+    }
+
+    .about-navigation-container::after {
+        right: 0;
+        opacity: 1;
+        background: linear-gradient(to left,white,transparent);
+    }
+
+    .about-navigation-container.disable-last::after {
+        opacity: 0;
+    }
+
+    .about-navigation-container::after,
+    .about-navigation-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100px;
+        transition: opacity .2s ease-in-out;
+        pointer-events: none;
+    }
+
+    .about-page-nav {
+        overflow: auto;
+        justify-content: flex-start;
+    }
+
+    .about-page-nav .item {
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 551px) and (max-width: 991px){
+    .about-row-itemSecond .item{
+        width: 50%;
+    }
+
+    .about-row-itemSecond .item + .item{
+        margin-top: 0;
+    }
+}
+
+@media (min-width: 551px) and (max-width: 1024px) {
+    .template-page .breadcrumb-container.style--line_clamp_1 .breadcrumb {
+        padding-left: 15px;
+    }   
+}
+
+@media (min-width: 767px) and (max-width: 1024px){
+    .custom-service-block .slider-arrows .slider-button.slider-button--next {
+        right: -15px;
+        top: calc(50% - 30px);
+    }
+
+    .custom-service-block .slider-arrows .slider-button.slider-button--prev {
+        left: -15px;
+        top: calc(50% - 30px);
+    }
+}
+
+@media (min-width: 992px){
+    .about-row{
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .about-row-item{
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .about-row-itemFirst{
+        width: calc(100% - 440px);
+        margin-top: 0!important;
+        margin-bottom: 0;
+    }
+
+    .about-row-itemSecond{
+        width: 440px;
+    }
+
+    .about-row-item .item{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .about-row-itemFirst .item,
+    .about-row-itemFirst .image,
+    .about-row-itemSecond .image{
+        height: 100%;
+    }
+
+    .about-row-itemSecond .item{
+        height: calc(50% - 8px);
+    }
+}
+
+@media (min-width: 1025px){
+    .about-row{
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .about-row-item{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .about-row-item .item + .item{
+        margin-top: 20px;
+    }
+
+    .about-row-itemSecond .item{
+        height: calc(50% - 10px);
+    }
+}

@@ -1,0 +1,117 @@
+<newsletter-popup class="halo-popup halo-newsletter-popup {% if settings.show_newsletter_popup_image %} customPopup-banner custom-scrollbar{% endif %}" data-newsletter-popup data-delay="{{ settings.newsletter_popup_delay | times:1000 }}" data-expire="{{ settings.newsletter_popup_expire }}" id="halo-newsletter-popup">
+    {%- if settings.show_newsletter_popup_image -%}
+        <div class="halo-popup-banner">
+            {%- if settings.newsletter_popup_image != blank -%}
+                {%- assign image =  settings.newsletter_popup_image -%}
+                {%- if settings.popup_newsletter_link_image != blank -%}
+                    <a {% if settings.popup_newsletter_link_image == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.popup_newsletter_link_image }}"{% endif %} target="_blank">
+                {%- endif -%}
+                    <img srcset="{{ image | img_url: 'master' }}" src="{{ image | img_url: 'master' }}" loading="lazy" alt="{{ image.alt | default: shop.name | escape }}">
+                {%- if settings.popup_newsletter_link_image != blank -%}    
+                    </a>
+                {%- endif -%}
+            {%- else -%}
+                <div class="not_img" style="--height_not_img: 470px">470 x 470px</div>
+            {%- endif -%}
+        </div>
+    {%- endif -%}
+    <div class="halo-popup-wrapper">
+        <button type="button" class="halo-popup-close clearfix" data-close-newsletter-popup aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+        <div class="overflow">
+            <div class="halo-popup-header">
+                {%- if settings.newsletter_popup_title != blank -%}
+                    <h3 class="newsletter-popup-title text-center">{{ settings.newsletter_popup_title }}</h3>
+                {%- endif -%}
+                {%- if settings.newsletter_popup_desc != blank -%}
+                    <span class="halo-popup-desc text-center">{{ settings.newsletter_popup_desc }}</span>
+                {%- endif -%}
+            </div>
+            <div class="halo-popup-content">
+                <div class="newsletter">
+                    {%- form 'customer', id: 'ContactPopup', class: 'newsletter-form' -%}
+                        <input type="hidden" name="contact[tags]" value="newsletter">
+                        <div class="newsletter-form__field-wrapper">
+                            <div class="form-field field"> 
+                                <input id="NewsletterForm--Popup" type="email" name="contact[email]" class="field__input form-input-placeholder" value="{{ form.email }}" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email"{% if form.errors %} autofocus aria-invalid="true" aria-describedby="ContactFooter-error"{% elsif form.posted_successfully? %} aria-describedby="ContactFooter-success"{% endif %} placeholder="{% if settings.select_button_submit == 'default' %}{{ 'newsletter.placeholder' | t }}{% else %}{{ 'newsletter.dont_miss_out_this_sale' | t }}{% endif %}">
+                                <label class="field__label hiddenLabels" for="NewsletterForm--Popup">{{ 'newsletter.label' | t }}</label>
+                            </div>
+                            {%- if form.posted_successfully? -%}
+                                <script>
+                                    window.onload = (event) => {
+                                        var newsletterMessagePopup = (function(){
+                                            var popup = document.getElementById('halo-newsletter-message-popup'),
+                                            message = popup.getElementsByClassName('newsletter-message')[0],
+                                            messageText = "{{ 'newsletter.success' | t }}";
+
+                                            document.body.classList.add('newsletter-message-show');
+
+                                            message.innerHTML = '<div class="alertBox alertBox--success">\
+                                                <p class="alertBox-message">'+ messageText +'</p>\
+                                            </div>';
+
+                                            setCookie('newsletter-popup', 'closed', {{ settings.newsletter_popup_expire }});
+                                        })();
+                                    };
+
+                                    var newURL = location.href.split("?")[0];
+                                        window.history.pushState('object', document.title, newURL);
+
+                                    function setCookie(cname, cvalue, exdays) {
+                                        const d = new Date();
+                                        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                                        const expires = 'expires=' + d.toUTCString();
+                                        document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+                                    }
+                                </script>
+                            {%- else -%}
+                                <script>
+                                    window.onload = (event) => {
+                                        if (window.location.href.indexOf('newsletter&form_type=customer') > -1) {
+                                            var newsletterMessagePopup = (function(){
+                                                var popup = document.getElementById('halo-newsletter-message-popup'),
+                                                message = popup.getElementsByClassName('newsletter-message')[0],
+                                                messageText = "{{ 'newsletter.error' | t }}"
+                                                document.body.classList.add('newsletter-message-show');
+                                                message.innerHTML = '<div class="alertBox alertBox--error">\
+                                                        <p class="alertBox-message">'+ messageText +'</p>\
+                                                    </div>';
+                                                setCookie('newsletter-popup', 'closed', {{ settings.newsletter_popup_expire }});
+                                            })();
+                                            var newURL = location.href.split("?")[0];
+                                            window.history.pushState('object', document.title, newURL);
+                                            function setCookie(cname, cvalue, exdays) {
+                                                const d = new Date();
+                                                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                                                const expires = 'expires=' + d.toUTCString();
+                                                document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+                                            }
+                                        }
+                                    };
+                                </script>
+                            {%- endif -%}
+                            {%- if settings.select_button_submit == 'default' -%}
+                                <button type="submit" class="button button--primary newsletter-form__button" name="commit" id="Subscribe">{{ 'newsletter.button_label' | t }}</button>
+                            {%- else -%}
+                                <a class="button button--primary newsletter-form__button"{% if settings.button_newsletter_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.button_newsletter_link }}"{% endif %} target="_blank">{{ 'newsletter.start_now' | t }}</a>
+                            {%- endif -%}
+                        </div>
+                    {%- endform -%}
+                </div>
+                {% render 'halo-social-media-icons' %}
+                {%- if settings.newsletter_popup_note != blank -%}
+                    <div class="newsletter--checked text-center">
+                        <input id="dismiss" type="checkbox" name="dismiss">
+                        <label for="dismiss" class="form-label--checkbox" role="text">{{ settings.newsletter_popup_note }}</label>
+                    </div>
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+</newsletter-popup>
+<newsletter-message-popup class="halo-popup halo-newsletter-message-popup customPopup-small" data-newsletter-message-popup id="halo-newsletter-message-popup">
+    <div class="halo-popup-wrapper">
+        <button type="button" class="halo-popup-close customPopup-close clearfix" data-close-newsletter-message-popup aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+        <div class="halo-popup-content custom-scrollbar"><div class="newsletter-message"></div></div>
+    </div>
+</newsletter-message-popup>
+<script src="{{ 'halo-newsletter-popup.js' | asset_url }}" defer="defer"></script>

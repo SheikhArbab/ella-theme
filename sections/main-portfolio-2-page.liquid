@@ -1,0 +1,806 @@
+<link rel="stylesheet" href="{{ 'component-portfolio.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-fancybox.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-portfolio.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-fancybox.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+    assign header_bg_image = section.settings.header_bg_image
+    assign parallax = section.settings.enable_parallax
+    assign side_padding_full_width = section.settings.side_padding_full_width | append: 'px'
+    assign page_title_color = section.settings.page_title_color
+    assign breadcrumb_color = section.settings.breadcrumb_color
+    assign page_heading = section.settings.page_heading
+    assign page_des = section.settings.page_des
+    assign page_des_width = section.settings.page_des_width | append: 'px'
+    assign content_alignment = section.settings.content_alignment
+    assign item_per_row = section.settings.item_per_row
+    assign show_filter = section.settings.show_filter
+    assign align = section.settings.align
+    assign filter_text_color = section.settings.filter_text_color
+    assign filter_bg_color = section.settings.filter_bg_color
+    assign filter_border_color = section.settings.filter_border_color
+    assign filter_text_color_h = section.settings.filter_text_color_hover
+    assign filter_bg_color_h = section.settings.filter_bg_color_hover
+    assign infinite_scroll = section.settings.enabled_infinite_scrolling
+    assign limit = section.settings.gallery_limit
+    assign button_text = section.settings.btn_text
+    assign button_text_color = section.settings.btn_text_color
+    assign button_background_color = section.settings.btn_bg
+    assign button_background_gradient = section.settings.btn_gradient
+    assign button_border_color = section.settings.btn_border_color
+    assign button_text_color_hover = section.settings.btn_text_color_hover
+    assign button_background_color_hover = section.settings.btn_bg_hover
+    assign button_background_gradient_hover = section.settings.btn_gradient_hover
+    assign button_border_color_hover = section.settings.btn_border_color_hover
+    assign button_max_width = section.settings.btn_max_width
+    assign icon_color = section.settings.icon_color
+    assign icon_background_color = section.settings.icon_bg_color
+    assign count = 0
+-%}
+
+<portfolio-item data-section-id="{{ section.id }}" data-section-type="portfolio" id="PortfolioSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="portfolio-2 {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+        <div class="portfolio-header {% if header_bg_image != blank %}has-bg-image{% endif %} {% if parallax %}parallax{% endif %}">
+            {%- if show_breadcrumb -%}
+                {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+            {%- endif -%}
+            <div class="portfolio-header-and-filter page-header-{{ page_title_alignment }}">
+                {%- if show_page_title -%}
+                    <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {{ page.title | escape }}
+                    </h1>
+                {%- endif -%}
+                {% if show_filter %}
+                    <div class="filter-icon-container{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="filter-icon">
+                        {% render 'icon-sidebar' %}
+                        <span class="filter-text">{{ 'portfolio.filter' | t }}</span>
+                        <span class="filter-close">{{ 'portfolio.close' | t }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="portfolio-intro{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+            {% if page_heading != blank %}
+                <h2 class="page-subheader portfolio-title text-{{ content_alignment }}">
+                    {{ page_heading | escape }}
+                </h2>
+            {% endif %}
+            {% if page_des != blank %}
+                <p class="page-des text-{{ content_alignment }}" style="--description-max-width: {{ page_des_width }};">
+                    {{ page_des | escape }}
+                </p>
+            {% endif %}
+        </div>
+        <div class="portfolio-body" id="portfolio-body">
+            {% if show_filter %}
+                <div class="portfolio-tabs" id="filter-sidebar"
+                    style="--menu_bar_background: {% if filter_bg_color != blank %}{{filter_bg_color}}{% endif %};
+                        --menu_bar_border: {% if filter_border_color != blank %}{{ filter_border_color }}{% endif %};
+                        --menu_item_background: {% if filter_bg_color != blank %}{{filter_bg_color}}{% endif %};
+                        --menu_item_text_color: {% if filter_text_color != blank %}{{filter_text_color}}{% endif %};
+                        --menu_item_background_color_hover: {% if filter_bg_color_h != blank %}{{filter_bg_color_h}}{% endif %};
+                        --menu_item_text_color_hover: {% if filter_text_color_h != blank %}{{filter_text_color_h}}{% endif %};
+                    "
+                >
+                    {%- if show_filter -%}
+                        <ul class="tabs list-unstyled clearfix" data-gallery-tab id="haloPortfolioTabs" role="list" 
+                            data-gallery-names= "
+                                {%- for block in section.blocks -%}
+                                    {%- if block.settings.gallery_name != blank -%}
+                                        {%- unless forloop.first -%},{%- endunless -%}{{ block.settings.gallery_name }}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            "
+                        >
+                            <li class="tab tab-all is-active{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-gallery="all">
+                                <a class="tab-title" href="#portfolio-tab-all" role="button" title="{{ 'portfolio.tab_all' | t }}">
+                                    {{ 'portfolio_page.general.all' | t }}
+                                </a>
+                            </li>
+                        </ul>
+                    {%- endif -%}
+                </div>
+            {% endif %}
+            <div class="tabs-contents{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" 
+                data-gallery-tab-content id="haloPortfolioTabContents"
+                data-limit="{{ limit }}"
+                data-infinite="{{ infinite_scroll }}"
+            >
+                <div class="tab-content is-active" id="portfolio-tab-all">
+                    <div class="masonry-row shuffle-container column-{{ item_per_row }}">
+                        {%- for block in section.blocks -%}
+                            {%- liquid
+                                assign gallery_name = block.settings.gallery_name
+                                assign thumbnail = block.settings.thumbnail
+                                    assign gallery_title = block.settings.gallery_title
+                                    assign gallery_description = block.settings.gallery_description
+                                    assign text_color = block.settings.gallery_text_color
+                                    assign background_color = block.settings.gallery_content_background_color
+                                    assign thumbnail_action = block.settings.thumbnail_action
+                                    if block.settings.thumbnail_link != blank
+                                        assign thumbnail_link = block.settings.thumbnail_link
+                                    else 
+                                        assign thumbnail_link = '#'
+                                    endif 
+                                assign count = count | plus: 1
+                            -%}
+                            {%- if thumbnail != blank -%}
+                                <div class="masonry-item portfolio-item {% if count > limit and infinite_scroll %}d-none{% endif %}" data-gallery-item="{{ gallery_name | downcase | strip }}" data-gallery-name="{{ gallery_name | downcase | strip }}">
+                                    <div class="item image-zoom">
+                                        <div class="img-box"
+                                            data-action="{{ thumbnail_action }}"
+                                            data-link="{{ thumbnail_link }}"
+                                            data-href="
+                                            {%- for j in (1..5) -%}
+                                                {%- capture subImage %}thumbnail_image_{{j}}{% endcapture -%}
+                                                {%- if block.settings[subImage] != blank -%}
+                                                    {%- unless forloop.first -%},{%- endunless -%}{{block.settings[subImage] | img_url:'master'}}
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                            "
+                                        >
+                                            <div class="image" style="padding-top: {{ 1 | divided_by: thumbnail.aspect_ratio | times: 100 | append: '%' }}">
+                                                <img srcset="{{ thumbnail | img_url: 'master' }}"
+                                                    src="{{ thumbnail | img_url: 'master' }}"
+                                                    loading="lazy"
+                                                    alt="{{ thumbnail.alt | default: shop.name | escape }}"
+                                                    width="{{ thumbnail.width }}"
+                                                    height="{{ thumbnail.height }}"
+                                                >   
+                                                <div class="hover-icon-container" style="--icon-color: {{ icon_color }}; --icon-background-color: {{ icon_background_color }}">
+                                                    {% render 'icon-gallery' %}
+                                                </div>
+                                            </div>
+                                            {%- if gallery_title != blank or gallery_description != blank -%}
+                                                <div class="content-box text-{{ align }}" style="--content-bg: {{ background_color }};">
+                                                    {%- if gallery_title != blank -%}
+                                                        <h4 class="heading" style="--color-text: {{ text_color }};">
+                                                            {{ gallery_title | escape }}
+                                                        </h4>
+                                                    {%- endif -%}
+                                                    {%- if gallery_description != blank -%}
+                                                        <span class="desc" style="--color-text: {{ text_color }};">
+                                                            {{ gallery_description | escape }}
+                                                        </span>
+                                                    {%- endif -%}
+                                                </div>
+                                            {%- endif -%}
+                                        </div>
+                                    </div>
+                                </div>
+                            {%- endif -%}
+                        {%- endfor -%}
+                        <div class="masonry-item sizer-element"></div>
+                    </div>
+                </div>
+                {%- if infinite_scroll -%}
+                    <div class="portfolio-infinite-scroll text-center{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-collection-infinite >
+                        <a class="button"
+                            id="portfolio-showmore-btn" 
+                            title="Show more button"
+                            href="javascript:void(0)"
+                            style="
+                            --button-text-color: {% if button_text_color != blank %}{{button_text_color}}{% endif %};
+                            --button-background-color: {% if button_background_gradient != blank %}{{button_background_gradient}}{% elsif button_background_color != blank %}{{ button_background_color }}{% endif %};
+                            --button-border-color: {% if button_border_color != blank %}{{ button_border_color }}{% endif %};
+                            --button-text-color-hover: {% if button_text_color_hover != blank  %}{{ button_text_color_hover }}{% endif %};
+                            --button-background-color-hover: {% if button_background_gradient_hover != blank %}{{button_background_gradient_hover}}{% elsif button_background_color_hover != blank %}{{ button_background_color_hover }}{% endif %};
+                            --button-border-color-hover: {% if button_border_color_hover != blank %}{{ button_border_color_hover }}{% endif %};
+                            --button-max-width: {{ button_max_width | append: 'px' }};
+                        ">
+                            <span>{{ button_text }}</span>
+                        </a>
+                    </div>
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+</portfolio-item>
+
+<style type="text/css" media="screen">
+    #PortfolioSection-{{ section.id }} .container-full {
+        max-width: calc(100% - calc({{ side_padding_full_width }} * 2));
+    }
+
+    #PortfolioSection-{{ section.id }} .breadcrumb span,
+    #PortfolioSection-{{ section.id }} .breadcrumb a,
+    #PortfolioSection-{{ section.id }} .breadcrumb .seperate svg {
+        {% if breadcrumb_color != blank or breadcrumb_color != 'rgba(0,0,0,0)' %}
+            --color-breadcrumb: {{ breadcrumb_color }};
+        {% endif %}
+    }
+
+    #PortfolioSection-{{ section.id }} .page-header {
+        {% if page_title_color != blank or page_title_color != 'rgba(0,0,0,0)' %}
+            color: {{ page_title_color }};
+        {% endif %}
+    }
+
+    #PortfolioSection-{{ section.id }} {
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+
+    #filter-icon .filter-text {
+        display: block;
+    }
+
+    #filter-icon .filter-close {
+        display: none;
+    }
+
+    #filter-icon.is-showing .filter-text {
+        display: none;
+    }
+
+    #filter-icon.is-showing .filter-close {
+        display: block;
+    }
+
+    @media (max-width: 1024px) {
+        #PortfolioSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+
+        #PortfolioSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+    
+    @media (max-width: 550px) {
+        #PortfolioSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #PortfolioSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+
+        #PortfolioSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+<script src="{{ 'halo-masonry.js' | asset_url }}" defer></script>
+<script src="{{ 'halo-portfolio.js' | asset_url }}" defer></script>
+<script src="{{ 'fancybox.js' | asset_url }}" defer></script>
+
+
+<script type="text/javascript">
+    // Additional JS for portfolio 2
+    const filterIcon = document.getElementById('filter-icon')
+    const portfolioBody = document.getElementById('portfolio-body') 
+    
+    // waiting for tabs to be rendered before adding listeners
+    setTimeout(() => {
+        const tabs = document.querySelectorAll('.tab-title')
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                setTimeout(() => {
+                    portfolioBody.classList.remove('filter-bar-shown');
+                }, 350)
+            })
+        })
+    }, 500)
+    
+    
+    if (filterIcon) {
+        filterIcon.addEventListener('click', () => {
+            portfolioBody.classList.toggle('filter-bar-shown');
+            filterIcon.classList.toggle('is-showing')
+            // document.querySelector('.filter-icon-container .filter-text').style.display = 'none';
+            // document.querySelector('.filter-icon-container .filter-close').style.display = 'block';
+        }) 
+    }
+    
+    // window.addEventListener('click', (e) => {
+    //     if (e.target.closest('.portfolio-tabs') == null && e.target.closest('.filter-icon-container') == null && e.target.closest('.tab') == null) {
+    //         portfolioBody.classList.remove('filter-bar-shown');
+    //         document.querySelector('.filter-icon-container .filter-text').style.display = 'block';
+    //         document.querySelector('.filter-icon-container .filter-close').style.display = 'none';
+    //     }
+    // })
+</script>
+
+{% schema %}
+    {
+        "name": "t:sections.main_portfolio_page.name",
+        "settings":
+        [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": false
+            },
+            {
+                "type": "color",
+                "id": "breadcrumb_color",
+                "label": "t:sections.general.settings.breadcrumb.breadcrumb_color"
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.breadcrumb.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.breadcrumb.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.breadcrumb.options__3"
+                }],
+                "default": "center"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": false
+            },
+            {
+                "type": "color",
+                "id": "page_title_color",
+                "label": "t:settings_schema.typography.settings.typography.title_color"
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.page-title.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.page-title.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.page-title.options__3"
+                }],
+                "default": "center"
+            }, 
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "side_padding_full_width",
+                "label": "t:sections.general.settings.container.padding_full",
+                "info": "t:sections.general.settings.container.padding_full_info",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "default": 0,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "text",
+                "id": "page_heading",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__19"
+            },
+            {
+                "type": "textarea",
+                "id": "page_des",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__2"
+            },
+            {
+                "type": "range",
+                "id": "page_des_width",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__8",
+                "min": 300,
+                "max": 700,
+                "step": 5,
+                "default": 475,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "select",
+                "id": "content_alignment",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__7",
+                "default": "left",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:settings_schema.typography.settings.typography.left"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:settings_schema.typography.settings.typography.center"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:settings_schema.typography.settings.typography.right"
+                    }
+
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_portfolio_page.settings.header__3"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_filter",
+                "label": "t:sections.main_portfolio_page.settings.label__1",
+                "default": true
+            },
+            {
+                "type": "paragraph",
+                "content": "t:sections.main_portfolio_page.settings.header__4"
+            },
+            {
+                "type": "color",
+                "id": "filter_text_color",
+                "label": "t:settings_schema.colors.settings.colors_name.color"
+            },
+            {
+                "type": "color",
+                "id": "filter_bg_color",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color",
+                "id": "filter_border_color",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            {
+                "type": "color",
+                "id": "filter_text_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.color_hover"
+            },
+            {
+                "type": "color",
+                "id": "filter_bg_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_portfolio_page.settings.header__2"
+            },
+            {
+                "type": "select",
+                "id": "item_per_row",
+                "label": "t:sections.general.settings.grid.label__1",
+                "options": [
+                    {
+                        "value": "2",
+                        "label": "2"
+                    },
+                    {
+                        "value": "3",
+                        "label": "3"
+                    }
+                ],
+                "default": "2"
+            },
+            {
+                "type": "checkbox",
+                "id": "enabled_infinite_scrolling",
+                "label": "t:sections.general.settings.grid.label__2",
+                "default": true
+            },
+            {
+                "type": "range",
+                "id": "gallery_limit",
+                "label": "t:sections.main_portfolio_page.settings.grid.label__1",
+                "min": 5,
+                "max": 20,
+                "step": 1,
+                "default": 12,
+                "info": "t:sections.main_portfolio_page.settings.grid.info"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_portfolio_page.settings.hover_icon.header__1"
+            },
+            {
+                "type": "color", 
+                "id": "icon_color",
+                "label": "t:settings_schema.colors.settings.colors_name.color"
+            },
+            {
+                "type": "color", 
+                "id": "icon_bg_color",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "header", 
+                "content": "t:sections.main_portfolio_page.settings.show_more_button.header__1"
+            },
+            {
+                "type": "text",
+                "id": "btn_text",
+                "label": "t:settings_schema.typography.settings.typography.button_text",
+                "default": "Show more"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color",
+                "label": "t:settings_schema.typography.settings.typography.text_color"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color_hover",
+                "label": "t:settings_schema.typography.settings.typography.text_color_hover"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_gradient_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.border_hover"
+            },
+            {
+                "type": "range",
+                "id": "btn_max_width",
+                "label": "t:settings_schema.typography.settings.typography.button_width",
+                "min": 100,
+                "max": 500,
+                "step": 5,
+                "default": 290,
+                "unit": "t:sections.general.settings.padding.unit"
+            }
+        ],
+        "blocks": [
+            {
+                "type" : "gallery",
+                "name" : "t:sections.main_portfolio_page.blocks.name",
+                "settings":[
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_portfolio_page.blocks.settings.header__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "gallery_name",
+                        "label": "t:sections.main_portfolio_page.blocks.settings.label__1"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail",
+                        "label": "t:sections.main_portfolio_page.blocks.settings.groups.label_1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "gallery_title",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "gallery_description",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__2"
+                    },
+                    {
+                        "type": "color",
+                        "id": "gallery_text_color",
+                        "label": "t:settings_schema.typography.settings.typography.text_color"
+                    },
+                    {
+                        "type": "color",
+                        "id": "gallery_content_background_color",
+                        "label": "t:settings_schema.colors.settings.colors_name.background_color"
+                    },
+                    {
+                        "type": "select",
+                        "id": "thumbnail_action",
+                        "label": "t:sections.main_portfolio_page.blocks.settings.groups.label_2",
+                        "default": "show_images",
+                        "options": [
+                            {
+                                "value": "to_link",
+                                "label": "t:sections.main_portfolio_page.blocks.settings.groups.label_3"
+                            },
+                            {
+                                "value": "show_images",
+                                "label": "t:sections.main_portfolio_page.blocks.settings.groups.label_4"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "url",
+                        "id": "thumbnail_link",
+                        "label": "t:sections.main_portfolio_page.blocks.settings.groups.label_3",
+                        "info": "t:sections.main_portfolio_page.blocks.settings.groups.link_info"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail_image_1",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__15"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail_image_2",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__15"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail_image_3",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__15"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail_image_4",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__15"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "thumbnail_image_5",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__15"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

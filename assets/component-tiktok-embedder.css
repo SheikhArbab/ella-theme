@@ -1,0 +1,354 @@
+.tiktok-embedder-section {
+    background: var(--section-bg);
+    --column-gap: 10px;
+}
+
+.tiktok-embedder-section .section-video-wrapper {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;    
+    margin-top: var(--videos-top-margin);
+    gap: var(--column-gap, 1.25rem);
+}
+
+.tiktok-embedder-section .tiktok-video-column {
+    width: calc(100% / var(--column-per-row, 3));
+    min-width: 325px;
+    max-width: 347px;
+    padding-bottom: 1.25rem;
+}   
+    
+.tiktok-embedder-section .tiktok-video-wrap {
+    border-radius: 9px;
+    overflow: hidden;
+    position: relative;
+    
+}
+
+.tiktok-embedder-section .tiktok-video-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.tiktok-embedder-section .title {
+    color: var(--title-color);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);
+    font-style: var(--title-font-style);
+
+    margin: 0;
+    margin-top: var(--title-margin-top);
+    line-height: 1.5;
+}
+
+.tiktok-embedder-section .title.underlined .text {
+    position: relative;
+    z-index: 1;
+}
+
+.tiktok-embedder-section .title.underlined .text::after {
+    content: "";
+    position: absolute;
+    background-color: var(--title-underline-color);
+    z-index: -1;
+}
+
+.tiktok-embedder-section .title.underlined.underline-style-1 .text::after {
+    height: 1px;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+}
+
+.tiktok-embedder-section .title.underlined.underline-style-2 .text::after {
+    height: 40%;
+    bottom: 5%;
+    width: 110%;
+    left: -5%;
+}
+
+.tiktok-embedder-section .description {
+    color: var(--description-color);
+    font-size: var(--description-font-size);
+    font-weight: var(--description-font-weight);
+
+    margin-top: var(--description-margin-top);
+    max-width: var(--description-max-width);
+}
+
+.tiktok-embedder-section .description.text-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+    
+.tiktok-embedder-section .description.text-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.tiktok-embedder-section .description.text-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.tiktok-embedder-section .link-to-instagram {
+    color: var(--link-text-color);
+    font-size: var(--link-text-font-size);
+    font-weight: var(--link-text-font-weight);
+    font-style: var(--link-text-font-style);
+
+    margin: 0;
+    margin-top: var(--link-text-margin-top);
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+}   
+
+.tiktok-embedder-section .link-to-instagram a {
+    flex-shrink: 0;
+}
+
+.tiktok-embedder-section .link-to-instagram a:hover {
+    color: var(--link-text-color-hover);
+}
+
+.tiktok-embedder-section .link-to-instagram a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 100%;
+    z-index: 2;
+}
+
+.tiktok-embedder-section .link-to-instagram .image-wrapper {
+    max-width: var(--link-image-width);
+    flex: 0 0 var(--link-image-width);
+}
+
+.tiktok-embedder-section .link-to-instagram.text-center {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tiktok-embedder-section .link-to-instagram.text-left {
+    justify-content: flex-start;
+}
+
+.tiktok-embedder-section .link-to-instagram.text-right {
+    justify-content: flex-end;
+}
+
+
+.tiktok-embedder-section .halo-row .halo-item {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.tiktok-embedder-section blockquote {
+    padding: 0;
+    border-radius: 0;
+    overflow: hidden;
+    border: none;
+    margin: 0;
+}
+
+.tiktok-embedder-section blockquote [data-testid="embed-video"] {
+    border: none;
+}
+
+.tiktok-embedder-section .view-all {
+    font-size: var(--button-font-size);
+    color: var(--button-text-color);
+    text-transform: var(--button-text-transform);
+    font-weight: var(--button-font-weight);
+
+    margin-top: var(--button-margin-top);
+}
+
+.tiktok-embedder-section .view-all:hover {
+    color: var(--button-text-color-hover);
+}
+
+.tiktok-embedder-section .view-all.button {
+    width: var(--button-width);
+    background: var(--button-background);
+}
+
+.tiktok-embedder-section .view-all.button:hover {
+    background: var(--button-background-hover);
+    border: 1px solid var(--button-border-color-hover);
+}
+
+.tiktok-embedder-section .view-all.link {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--button-border-color);
+    display: block;
+}
+
+.tiktok-embedder-section .view-all.link:hover {
+    text-decoration-color: var(--button-border-color-hover);
+}
+
+.tiktok-embedder-section .view-all.link.text-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tiktok-embedder-section .view-all.link.text-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.tiktok-embedder-section .view-all.link.text-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.tiktok-embedder-section .slider-counter span {
+    color: var(--page-number-color);
+    font-size: var(--page-number-font-size);
+}
+
+.tiktok-embedder-section .slider-buttons .slider-button {
+    border-color: var(--arrow-border-color);
+    background-color: var(--arrow-bg-color);
+    height: var(--arrow-button-size);
+    width: var(--arrow-button-size);
+}
+    
+.tiktok-embedder-section .slider-buttons .slider-button .icon {
+    fill: var(--arrow-color);
+}
+
+.tiktok-embedder-section .tiktok-video-wrap-no-image {
+    height: 751px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 1435px) {
+    .tiktok-embedder-section {
+        --column-gap: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+    .tiktok-embedder-section .section-video-wrapper {
+        max-width: calc(347px * var(--column-per-row));
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 1024px) {
+    .tiktok-embedder-section .section-video-wrapper.slider {
+        margin-right: calc(var(--column-gap) * -1);
+        padding-right: 5px;
+    }
+
+    .tiktok-embedder-section .section-video-wrapper.slider {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        margin-top: 15px;
+    }
+
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile:not(:has(.tiktok-video-column:nth-child(4))) {
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+
+    .tiktok-embedder-section banner-slider-component {
+        position: relative;
+    }
+
+    .tiktok-embedder-section .slider-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .tiktok-embedder-section .slider-buttons .slider-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .tiktok-embedder-section .slider-buttons .slider-button--prev {
+        right: 58px;
+        left: unset;
+    }
+}
+
+@media (max-width: 992px) {
+    .tiktok-embedder-section .title {
+        font-size: var(--title-font-size-mb);
+    }
+
+    .tiktok-embedder-section .description {
+        font-size: var(--description-font-size-mb);
+    }
+
+    .tiktok-embedder-section .link-to-instagram {
+        font-size: var(--link-text-font-size-mb);
+    }
+
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile:not(:has(.tiktok-video-column:nth-child(4))),
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile:not(:has(.tiktok-video-column:nth-child(3))) {
+        justify-content: flex-start;
+    }
+
+    .tiktok-embedder-section .tiktok-video-column.slider__slide.last-item {
+        scroll-snap-align: start;
+        margin-right: 5px;
+    }
+}
+
+@media (max-width: 551px) {
+    .tiktok-embedder-section .scroll-snap-mobile .halo-item {
+        margin-right: 0;
+    }
+
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile {
+        --column-gap: 0;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .tiktok-embedder-section .section-video-wrapper.slider.halo-row .slider__slide,
+    .tiktok-embedder-section .section-video-wrapper.scroll-snap-mobile.halo-row .slider__slide {
+        width: unset;
+    }
+}   
+    
+/* For slider that has 4 items from 1024 to 1435px */
+@media (min-width: 1025px) and (max-width: 1435px) {
+    .tiktok-embedder-section .section-video-wrapper:has(.tiktok-video-column:nth-child(4)) {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+}
+/* For slider that has 4 items from 1024 to 1435px */

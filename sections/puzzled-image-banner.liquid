@@ -1,0 +1,1042 @@
+<link rel="stylesheet" href="{{ 'component-puzzled-image-banner.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-puzzled-image-banner.css' | asset_url | stylesheet_tag }}</noscript>
+{%- liquid 
+    assign mg_top_desktop = section.settings.mg_top_desktop | append: 'px' 
+    assign mg_top_tablet = section.settings.mg_top_tablet | append: 'px' 
+    assign mg_top_mobile = section.settings.mg_top_mobile | append: 'px' 
+
+    assign mg_bottom_desktop = section.settings.mg_bottom_desktop | append: 'px' 
+    assign mg_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px' 
+    assign mg_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px' 
+    assign container = section.settings.container
+    assign padding_full_width = section.settings.padding_full_width | append: 'px' 
+
+    assign section_heading = section.settings.section_heading
+    assign section_heading_font_size = section.settings.section_heading_font_size | append: 'px'
+    assign section_heading_font_size_mb = section.settings.section_heading_font_size_mb | append: 'px'
+    assign section_heading_font_weight = section.settings.section_heading_font_weight
+    assign section_heading_color = section.settings.section_heading_color
+    assign section_heading_margin_bottom = section.settings.section_heading_margin_bottom | append: 'px'
+
+    assign section_view_all = section.settings.section_view_all
+    assign section_view_all_link = section.settings.section_view_all_link
+    assign section_view_all_font_size = section.settings.section_view_all_font_size | append: 'px'
+    assign section_view_all_font_weight = section.settings.section_view_all_font_weight
+    assign section_view_all_color = section.settings.section_view_all_color
+    assign section_view_all_margin_top = section.settings.section_view_all_margin_top | append: 'px'
+
+    assign image_1 = section.settings.image_1 
+    assign image_text_1 = section.settings.image_text_1 
+    assign image_text_1_font_size = section.settings.image_text_1_font_size | append: 'px' 
+    assign image_text_1_font_size_mb = section.settings.image_text_1_font_size_mb | append: 'px' 
+    assign image_text_1_font_weight = section.settings.image_text_1_font_weight
+    assign image_text_1_color = section.settings.image_text_1_color
+    assign image_link_1 = section.settings.image_link_1 
+    assign image_link_text_1 = section.settings.image_link_text_1 
+    assign image_link_1_font_size = section.settings.image_link_1_font_size | append: 'px'
+    assign image_link_1_font_size_mb = section.settings.image_link_1_font_size_mb | append: 'px'
+    assign image_link_1_font_weight = section.settings.image_link_1_font_weight 
+    assign image_link_1_color = section.settings.image_link_1_color
+
+    assign image_2 = section.settings.image_2 
+    assign image_text_2 = section.settings.image_text_2 
+    assign image_text_2_font_size = section.settings.image_text_2_font_size | append: 'px' 
+    assign image_text_2_font_size_mb = section.settings.image_text_2_font_size_mb | append: 'px' 
+    assign image_text_2_font_weight = section.settings.image_text_2_font_weight
+    assign image_text_2_color = section.settings.image_text_2_color
+    assign image_link_2 = section.settings.image_link_2 
+    assign image_link_text_2 = section.settings.image_link_text_2 
+    assign image_link_2_font_size = section.settings.image_link_2_font_size | append: 'px'
+    assign image_link_2_font_size_mb = section.settings.image_link_2_font_size_mb | append: 'px'
+    assign image_link_2_font_weight = section.settings.image_link_2_font_weight 
+    assign image_link_2_color = section.settings.image_link_2_color
+
+    assign image_3 = section.settings.image_3 
+    assign image_text_3 = section.settings.image_text_3 
+    assign image_text_3_font_size = section.settings.image_text_3_font_size | append: 'px' 
+    assign image_text_3_font_size_mb = section.settings.image_text_3_font_size_mb | append: 'px' 
+    assign image_text_3_font_weight = section.settings.image_text_3_font_weight
+    assign image_text_3_color = section.settings.image_text_3_color
+    assign image_link_3 = section.settings.image_link_3 
+    assign image_link_text_3 = section.settings.image_link_text_3 
+    assign image_link_3_font_size = section.settings.image_link_3_font_size | append: 'px'
+    assign image_link_3_font_size_mb = section.settings.image_link_3_font_size_mb | append: 'px'
+    assign image_link_3_font_weight = section.settings.image_link_3_font_weight 
+    assign image_link_3_color = section.settings.image_link_3_color
+
+    assign image_4 = section.settings.image_4 
+    assign image_text_4 = section.settings.image_text_4 
+    assign image_text_4_font_size = section.settings.image_text_4_font_size | append: 'px' 
+    assign image_text_4_font_size_mb = section.settings.image_text_4_font_size_mb | append: 'px' 
+    assign image_text_4_font_weight = section.settings.image_text_4_font_weight
+    assign image_text_4_color = section.settings.image_text_4_color
+    assign image_link_4 = section.settings.image_link_4 
+    assign image_link_text_4 = section.settings.image_link_text_4 
+    assign image_link_4_font_size = section.settings.image_link_4_font_size | append: 'px'
+    assign image_link_4_font_size_mb = section.settings.image_link_4_font_size_mb | append: 'px'
+    assign image_link_4_font_weight = section.settings.image_link_4_font_weight 
+    assign image_link_4_color = section.settings.image_link_4_color
+-%}
+<div class="puzzled-image-banner section-block-{{section.id}}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="puzzled-image-banner-{{section.id}}">
+  <div class="{% if container == 'fullwidth' %}container-full{% elsif container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% else %}container{% endif %}">
+    {%- if section_heading != blank -%}
+        <h2 class="section-heading title text-center{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--heading-font-size: {{ section_heading_font_size }};--heading-font-size-mb: {{ section_heading_font_size_mb }};--heading-font-weight: {{ section_heading_font_weight }};--heading-color: {{ section_heading_color }};--heading-margin-bottom: {{ section_heading_margin_bottom }}">{{ section_heading }}</h2>
+    {%- endif -%}
+    <div class="puzzled-image-banner-wrapper">
+        <div class="content-block content-block-left">
+            <image-to-flip class="section-block-banner-image{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: 1;"{% endif %}>
+                <div class="img-box{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }} o-hidden{% endif %}">
+                    {%- if image_1 != blank -%}
+                        <a title="{{ image_1.alt | default: shop.name | escape }}" {% if image_link_1 != blank %}href="{{ image_link_1 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless image_1.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image_1.aspect_ratio | times: 120 | append: '%' }}{% else %}{{ 1 | divided_by: image_1.aspect_ratio | times: 100 | append: '%' }}{% endunless %}"><img {% render 'lazyload',preview_img: image_1 %}{% unless image_1.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ image_1.presentation.focal_point }}"{% endunless %} />{%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%-endif -%}</a>
+                    {%- else -%}
+                        <a {% if image_link_1 != blank %}href="{{ image_link_1 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom"><div class="not_img" style="--height_not_img: 1070px;">865px x 1070px</div></a>
+                    {%- endif -%}
+                </div>      
+                {%- if image_text_1 != blank or image_link_1 != blank -%}
+                    <div class="block-image-content text-center">
+                        {%- if image_text_1 != blank -%}
+                            <h2 class="title image-title" style="--image-title-font-size: {{ image_text_1_font_size }};--image-title-font-size-mb: {{ image_text_1_font_size_mb }};--image-title-font-weight: {{ image_text_1_font_weight }};--image-title-color: {% if image_text_1_color != blank %}{{ image_text_1_color }}{% endif %}">{{ image_text_1 }}</h2>
+                        {%- endif -%}
+                        {%- if image_link_text_1 != blank -%}
+                            <{% if image_link_1 != blank %}a href="{{ image_link_1 }}"{% else %}button type="button"{% endif %} class="link text-underline image-link" style="--link-color: {% if image_link_1_color != blank %}{{ image_link_1_color }}{% endif %};--link-font-size: {{ image_link_1_font_size }};--link-font-size-mb: {{ image_link_1_font_size_mb }}; --link-font-weight: {{ image_link_1_font_weight }}"><span class="text">{{ image_link_text_1 }} </span></{% if image_link_1 != blank %}a{% else %}button{% endif %}>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </image-to-flip>
+            <image-to-flip class="section-block-banner-image{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: 2;"{% endif %}>
+                <div class="img-box{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }} o-hidden{% endif %}">
+                    {%- if image_2 != blank -%}
+                        <a title="{{ image_2.alt | default: shop.name | escape }}" {% if image_link_2 != blank %}href="{{ image_link_2 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless image_2.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image_2.aspect_ratio | times: 120 | append: '%' }}{% else %}{{ 1 | divided_by: image_2.aspect_ratio | times: 100 | append: '%' }}{% endunless %}"><img {% render 'lazyload',preview_img: image_2 %}{% unless image_2.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ image_2.presentation.focal_point }}"{% endunless %} />{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}</a>
+                    {%- else -%}
+                        <a {% if image_link_2 != blank %}href="{{ image_link_2 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom"><div class="not_img" style="--height_not_img: 1070px;">865px x 1070px</div></a>
+                    {%- endif -%}
+                </div>   
+                {%- if image_text_2 != blank or image_link_2 != blank -%}
+                    <div class="block-image-content text-center">
+                        {%- if image_text_2 != blank -%}
+                            <h2 class="title image-title" style="--image-title-font-size: {{ image_text_2_font_size }};--image-title-font-size-mb: {{ image_text_2_font_size_mb }};--image-title-font-weight: {{ image_text_2_font_weight }};--image-title-color: {% if image_text_2_color != blank %}{{ image_text_2_color }}{% endif %}">{{ image_text_2 }}</h2>
+                        {%- endif -%}
+                        {%- if image_link_text_2 != blank -%}
+                            <{% if image_link_2 != blank %}a href="{{ image_link_2 }}"{% else %}button type="button"{% endif %} class="link text-underline image-link" style="--link-color: {% if image_link_2_color != blank %}{{ image_link_2_color }}{% endif %};--link-font-size: {{ image_link_2_font_size }};--link-font-size-mb: {{ image_link_2_font_size_mb }};--link-font-weight: {{ image_link_2_font_weight }}"><span class="text">{{ image_link_text_2 }} </span></{% if image_link_2 != blank %}a{% else %}button{% endif %}>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </image-to-flip>
+        </div>
+        <div class="content-block content-block-right" style="--padding-right: {{  }};">
+            <image-to-flip class="section-block-banner-image{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: 1;"{% endif %}>
+                <div class="img-box{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }} o-hidden{% endif %}">
+                    {%- if image_3 != blank -%}
+                        <a title="{{ image_3.alt | default: shop.name | escape }}" {% if image_link_3 != blank %}href="{{ image_link_3 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless image_3.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image_3.aspect_ratio | times: 120 | append: '%' }}{% else %}{{ 1 | divided_by: image_3.aspect_ratio | times: 100 | append: '%' }}{% endunless %}"><img {% render 'lazyload',preview_img: image_3 %}{% unless image_3.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ image_3.presentation.focal_point }}"{% endunless %} />{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}</a>
+                    {%- else -%}
+                        <a {% if image_link_3 != blank %}href="{{ image_link_3 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom"><div class="not_img" style="--height_not_img: 1070px;">865px x 1070px</div></a>
+                    {%- endif -%}
+                </div>   
+                {%- if image_text_3 != blank or image_link_3 != blank -%}
+                    <div class="block-image-content text-center">
+                        {%- if image_text_3 != blank -%}
+                            <h2 class="title image-title" style="--image-title-font-size: {{ image_text_3_font_size }};--image-title-font-size-mb: {{ image_text_3_font_size_mb }};--image-title-font-weight: {{ image_text_3_font_weight }};--image-title-color: {% if image_text_3_color != blank %}{{ image_text_3_color }}{% endif %}">{{ image_text_3 }}</h2>
+                        {%- endif -%}
+                        {%- if image_link_text_3 != blank -%}
+                            <{% if image_link_3 != blank %}a href="{{ image_link_3 }}"{% else %}button type="button"{% endif %} class="link text-underline image-link" style="--link-color: {% if image_link_3_color != blank %}{{ image_link_3_color }}{% endif %};--link-font-size: {{ image_link_3_font_size }};--link-font-size-mb: {{ image_link_3_font_size_mb }};--link-font-weight: {{ image_link_3_font_weight }}"><span class="text">{{ image_link_text_3 }} </span></{% if image_link_3 != blank %}a{% else %}button{% endif %}>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </image-to-flip>
+            <image-to-flip class="section-block-banner-image{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: 2;"{% endif %}>
+                <div class="img-box{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }} o-hidden{% endif %}">
+                    {%- if image_4 != blank -%}
+                        <a title="{{ image_4.alt | default: shop.name | escape }}" {% if image_link_4 != blank %}href="{{ image_link_4 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless image_4.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image_4.aspect_ratio | times: 120 | append: '%' }}{% else %}{{ 1 | divided_by: image_4.aspect_ratio | times: 100 | append: '%' }}{% endunless %}"><img {% render 'lazyload',preview_img: image_4 %}{% unless image_4.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ image_4.presentation.focal_point }}"{% endunless %} />{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}</a>
+                    {%- else -%}
+                        <a {% if image_link_4 != blank %}href="{{ image_link_4 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="image-zoom"><div class="not_img" style="--height_not_img: 1070px;">865px x 1070px</div></a>
+                    {%- endif -%}
+                </div>     
+                {%- if image_text_4 != blank or image_link_4 != blank -%}
+                    <div class="block-image-content text-center">
+                        {%- if image_text_4 != blank -%}
+                            <h2 class="title image-title" style="--image-title-font-size: {{ image_text_4_font_size }};--image-title-font-size-mb: {{ image_text_4_font_size_mb }};--image-title-font-weight: {{ image_text_4_font_weight }};--image-title-color: {% if image_text_4_color != blank %}{{ image_text_4_color }}{% endif %}">{{ image_text_4 }}</h2>
+                        {%- endif -%} 
+                        {%- if image_link_text_4 != blank -%}
+                            <{% if image_link_4 != blank %}a href="{{ image_link_4 }}"{% else %}button type="button"{% endif %} class="link text-underline image-link" style="--link-color: {% if image_link_4_color != blank %}{{ image_link_4_color }}{% endif %};--link-font-size: {{ image_link_4_font_size }};--link-font-size-mb: {{ image_link_4_font_size_mb }};--link-font-weight: {{ image_link_4_font_weight }}"><span class="text">{{ image_link_text_4 }} </span></{% if image_link_4 != blank %}a{% else %}button{% endif %}>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </image-to-flip>
+            {%- if section_view_all != blank -%}
+                <{% if section_view_all_link != blank %}a href="{{ section_view_all_link }}"{% else %}button type="button"{% endif %} class="view-all section-view-all text-center mobile-hidden{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--view-all-font-size: {{ section_view_all_font_size }};--view-all-font-weight: {{ section_view_all_font_weight }};--view-all-color: {{ section_view_all_color }};--view-all-margin-top: {{ section_view_all_margin_top }}"><span class="text">{{ section_view_all }}</span></{% if section_view_all_link != blank %}a{% else %}button{% endif %}>
+            {%- endif -%}
+        </div>
+    </div>
+    {%- if section_view_all != blank -%}
+        <{% if section_view_all_link != blank %}a href="{{ section_view_all_link }}"{% else %}button type="button"{% endif %} class="view-all section-view-all text-center mobile-shown{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--view-all-font-size: {{ section_view_all_font_size }};--view-all-font-weight: {{ section_view_all_font_weight }};--view-all-color: {{ section_view_all_color }};--view-all-margin-top: {{ section_view_all_margin_top }}"><span class="text">{{ section_view_all }}</span></{% if section_view_all_link != blank %}a{% else %}button{% endif %}>
+    {%- endif -%}
+  </div>
+</div> 
+<style>
+    @media (min-width: 1200px) {.section-block-{{section.id}} {padding-top: {{ mg_top_desktop }};padding-bottom: {{ mg_bottom_desktop }}}}   
+    {%- if section.settings.container == 'fullwidth' -%}
+        @media (min-width: 1025px) {.section-block-{{section.id}} .container-full {padding-left: {{ padding_full_width }};padding-right: {{ padding_full_width }}}}
+    {%- endif -%}
+    @media (min-width: 768px) and (max-width: 1199px) {.section-block-{{ section.id }} {padding-top: {{ mg_top_tablet }};padding-bottom: {{ mg_bottom_tablet }}}}
+    @media (max-width: 767px) {.section-block-{{ section.id }} {padding-top: {{ mg_top_mobile }};padding-bottom: {{ mg_bottom_mobile }}}}
+</style>
+{% schema %}
+{
+    "name": "t:sections.puzzled_image_banner.name",
+    "settings": [
+    {
+        "type": "header",
+        "content": "t:settings_schema.general.name"
+    },
+    { 
+        "type": "select",
+        "id": "container",
+        "label": "t:sections.layout.container.option",
+        "default": "container",
+        "options": [
+            {
+                "value": "container",
+                "label": "t:sections.layout.container.option1"
+            },
+            {
+                "value": "1170",
+                "label": "t:sections.layout.container.option4"
+            },
+            {
+                "value": "1770",
+                "label": "t:sections.layout.container.option3"
+            },
+            {
+                "value": "fullwidth",
+                "label": "t:sections.layout.container.option2"
+            }
+        ]
+    },
+    {
+        "type": "range",
+        "id": "padding_full_width",
+        "label": "t:sections.layout.container.padding_full_width",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 0,
+        "info": "t:sections.layout.container.info_full_width"
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_top"
+    },
+    {
+        "type": "range",
+        "id": "mg_top_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_bottom"
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.puzzled_image_banner.settings.section"
+    },
+    {
+        "type": "text",
+        "id": "section_heading",
+        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+        "default": "Shop the collections"
+    },
+    {
+        "type": "range",
+        "id": "section_heading_font_size",
+        "label": "t:sections.slide-show.blocks.image.slider_content.font_size_heading",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "section_heading_font_size_mb",
+        "label": "t:settings_schema.typography.settings.font_size.label_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 28,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "section_heading_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "section_heading_color",
+        "label": "t:sections.slide-show.blocks.image.slider_content.color_heading",
+        "default": "#fff"
+    },
+    {
+        "type": "range",
+        "id": "section_heading_margin_bottom",
+        "label": "t:sections.customer_review.settings.layout_block.heading_margin_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 35,
+        "unit": "px"
+    },  
+    {
+        "type": "text",
+        "id": "section_view_all",
+        "label": "t:settings_schema.typography.settings.typography.view_all",
+        "default": "Shop the collections"
+    },
+    {
+        "type": "url",
+        "id": "section_view_all_link",
+        "label": "t:settings_schema.typography.settings.typography.view_all_link"
+    },
+    {
+        "type": "range",
+        "id": "section_view_all_font_size",
+        "label": "t:settings_schema.typography.settings.typography.view_all_font_size",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "section_view_all_font_weight",
+        "label": "t:settings_schema.typography.settings.typography.view_all_font_weight",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "section_view_all_color",
+        "label": "t:settings_schema.typography.settings.typography.view_all_color",
+        "default": "#fff"
+    },
+    {
+        "type": "range",
+        "id": "section_view_all_margin_top",
+        "label": "t:sections.layout.mg_top_view.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 50,
+        "unit": "px"
+    },
+    {       
+        "type": "header",
+        "content": "t:sections.puzzled_image_banner.settings.block_left"
+    },
+    {
+        "type": "paragraph",
+        "content": "t:sections.counter_positions_image_banner.settings.content__1"
+    },
+    {
+        "type": "image_picker",
+        "id": "image_1",
+        "label": "t:settings_schema.typography.settings.typography.image_select"
+    },
+    {
+        "type": "text",
+        "id": "image_text_1",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.name"
+    },
+    {
+        "type": "range",
+        "id": "image_text_1_font_size",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "image_text_1_font_size_mb",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 28,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_text_1_font_weight",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_weight",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_text_1_color",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.color",
+        "default": "#fff"
+    },
+    {
+        "type": "url",
+        "id": "image_link_1",
+        "label": "t:sections.announcement-bar.blocks.announcement.settings.text.link"
+    },
+    {   
+        "type": "text",
+        "id": "image_link_text_1",
+        "label": "t:settings_schema.general.settings.global_checkbox.label__3"
+    },
+    {
+        "type": "range",
+        "id": "image_link_1_font_size",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+    },
+    {   
+        "type": "range",
+        "id": "image_link_1_font_size_mb",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 12,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_link_1_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "400",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_link_1_color",
+        "label": "t:settings_schema.colors.settings.colors_link.label__1",
+        "default": "#fff"
+    },  
+    {
+        "type": "paragraph",
+        "content": "t:sections.counter_positions_image_banner.settings.content__2"
+    },
+    {
+        "type": "image_picker",
+        "id": "image_2",
+        "label": "t:settings_schema.typography.settings.typography.image_select"
+    },
+    {
+        "type": "text",
+        "id": "image_text_2",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.name"
+    },
+    {
+        "type": "range",
+        "id": "image_text_2_font_size",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "image_text_2_font_size_mb",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 28,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_text_2_font_weight",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_weight",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },  
+    {
+        "type": "color",
+        "id": "image_text_2_color",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.color",
+        "default": "#fff"
+    },  
+    {
+        "type": "url",
+        "id": "image_link_2",
+        "label": "t:sections.announcement-bar.blocks.announcement.settings.text.link"
+    },
+    {   
+        "type": "text",
+        "id": "image_link_text_2",
+        "label": "t:settings_schema.general.settings.global_checkbox.label__3"
+    },
+    {
+        "type": "range",
+        "id": "image_link_2_font_size",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+    },
+    {   
+        "type": "range",
+        "id": "image_link_2_font_size_mb",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 12,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_link_2_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "400",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_link_2_color",
+        "label": "t:settings_schema.colors.settings.colors_link.label__1",
+        "default": "#fff"
+    },  
+    {
+        "type": "header",
+        "content": "t:sections.puzzled_image_banner.settings.block_right"
+    },
+    {
+        "type": "paragraph",
+        "content": "t:sections.counter_positions_image_banner.settings.content__1"
+    },
+    {
+        "type": "image_picker",
+        "id": "image_3",
+        "label": "t:settings_schema.typography.settings.typography.image_select"
+    },
+    {
+        "type": "text",
+        "id": "image_text_3",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.name"
+    },
+    {
+        "type": "range",
+        "id": "image_text_3_font_size",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "image_text_3_font_size_mb",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 28,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_text_3_font_weight",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_weight",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_text_3_color",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.color",
+        "default": "#fff"
+    },
+    {
+        "type": "url",
+        "id": "image_link_3",
+        "label": "t:sections.announcement-bar.blocks.announcement.settings.text.link"
+    },
+    {   
+        "type": "text",
+        "id": "image_link_text_3",
+        "label": "t:settings_schema.general.settings.global_checkbox.label__3"
+    },
+    {
+        "type": "range",
+        "id": "image_link_3_font_size",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+    },
+    {   
+        "type": "range",
+        "id": "image_link_3_font_size_mb",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 12,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_link_3_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "400",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_link_3_color",
+        "label": "t:settings_schema.colors.settings.colors_link.label__1",
+        "default": "#fff"
+    },  
+    {
+        "type": "paragraph",
+        "content": "t:sections.counter_positions_image_banner.settings.content__2"
+    },
+    {
+        "type": "image_picker",
+        "id": "image_4",
+        "label": "t:settings_schema.typography.settings.typography.image_select"
+    },
+    {
+        "type": "text",
+        "id": "image_text_4",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.name"
+    },
+    {
+        "type": "range",
+        "id": "image_text_4_font_size",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 48,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "image_text_4_font_size_mb",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_size_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 28,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_text_4_font_weight",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.font_weight",
+        "default": "600",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },  
+    {
+        "type": "color",
+        "id": "image_text_4_color",
+        "label": "t:sections.counter_positions_image_banner.settings.image_text.color",
+        "default": "#fff"
+    },  
+    {
+        "type": "url",
+        "id": "image_link_4",
+        "label": "t:sections.announcement-bar.blocks.announcement.settings.text.link"
+    },
+    {   
+        "type": "text",
+        "id": "image_link_text_4",
+        "label": "t:settings_schema.general.settings.global_checkbox.label__3"
+    },
+    {
+        "type": "range",
+        "id": "image_link_4_font_size",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs",
+        "min": 1,
+        "max": 50, 
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+    },
+    {   
+        "type": "range",
+        "id": "image_link_4_font_size_mb",
+        "label": "t:sections.collection_lookbook.blocks.collection.link.link_fs_mb",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 12,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "image_link_4_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "400",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "color",
+        "id": "image_link_4_color",
+        "label": "t:settings_schema.colors.settings.colors_link.label__1",
+        "default": "#fff"
+    },  
+    {
+        "type": "range",
+        "id": "block_right_padding_right",
+        "label": "t:sections.counter_positions_image_banner.settings.content_2_padding_right",
+        "default": 100,
+        "min": 0,
+        "max": 150,
+        "step": 5, 
+        "unit": "px" 
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.general.animation"
+    },
+    {
+      "type": "select",
+      "id": "image_behavior",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:settings_schema.typography.settings.text_transform.options__1"
+        },
+        {
+          "value": "ambient",
+          "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+        },
+        {
+          "value": "zoom-in",
+          "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+        }
+      ],
+      "default": "none",
+      "label": "t:sections.main-product.settings.general.image_behavior.label"
+    }
+    ],
+    "presets": [
+    {
+        "name": "t:sections.puzzled_image_banner.name"
+    }],
+    "disabled_on": {
+        "groups": ["header"]
+    }
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+{%- liquid
+    if product.metafields.c_f.short_description
+        assign desc = product.metafields.c_f.short_description
+        assign word_number = 100000
+    else
+        assign desc = product.description | strip_html
+    assign word_number = 44
+    endif
+-%}
+<div class="card-summary {{ class }}">{{ desc | truncatewords: word_number }}</div>

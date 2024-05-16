@@ -1,0 +1,238 @@
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="page section-block-{{section.id}}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+  <div class="{% if section.settings.container == 'fullwidth' %}container-full{% elsif section.settings.container == '1770' %}container-1770{% elsif section.settings.container == '1170' %}container-1170{% else %}container{% endif %}">
+    <h2 class="page-title" style="--color-heading-style: {{ section.settings.heading_color }};
+                      --fontsize-heading-style: {{ section.settings.heading_size | append: 'px' }};
+                      --heading-size-mb-style: {{ section.settings.heading_size_mb | append: 'px' }}">
+      {%- if section.settings.page.title != blank -%}
+        {{ section.settings.page.title | escape }}
+      {%- else -%}
+        {{ 'templates.search.page' | t }}
+      {%- endif -%}
+    </h2>
+    <div class="rte">
+      {%- if section.settings.page.content != blank -%}
+        {{ section.settings.page.content }}
+      {%- else -%}
+        <div class='page-placeholder-wrapper placeholder'>
+          {{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+    {%- liquid
+        assign mg_top_desktop = section.settings.mg_top_desktop
+        assign mg_top_tablet = section.settings.mg_top_tablet
+        assign mg_top_mobile = section.settings.mg_top_mobile
+        assign mg_bottom_desktop = section.settings.mg_bottom_desktop
+        assign mg_bottom_tablet = section.settings.mg_bottom_tablet
+        assign mg_bottom_mobile = section.settings.mg_bottom_mobile
+        assign padding_full_width = section.settings.padding_full_width
+
+        assign heading_color = section.settings.heading_color
+        assign heading_size = section.settings.heading_size
+        assign heading_size_mb = section.settings.heading_size_mb
+    -%}
+
+    .section-block-{{section.id}} .page-title {
+        font-size: var(--fontsize-heading-style);
+        color: var(--color-heading-style);
+    }
+
+    @media (min-width: 1200px) {
+        .section-block-{{section.id}} {
+            padding-top: {{ mg_top_desktop | append: 'px' }};
+            padding-bottom: {{ mg_bottom_desktop | append: 'px' }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        {% if section.settings.container == 'fullwidth' %}
+            .section-block-{{section.id}} .container-full {
+                padding-left: {{ padding_full_width | append: 'px' }};
+                padding-right: {{ padding_full_width | append: 'px' }};
+            }
+        {% endif %}
+    }
+
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .section-block-{{section.id}} {
+            padding-top: {{ mg_top_tablet | append: 'px' }};
+            padding-bottom: {{ mg_bottom_tablet | append: 'px' }};
+        }
+    }
+
+    @media (max-width: 767px) {
+        .section-block-{{section.id}} {
+            padding-top: {{ mg_top_mobile | append: 'px' }};
+            padding-bottom: {{ mg_bottom_mobile | append: 'px' }};
+            font-size: var(--heading-size-mb-style);
+        }
+    }
+</style>
+
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "page",
+      "id": "page",
+      "label": "t:sections.main-page.name"
+    },
+    {
+        "type": "header",
+        "content": "t:settings_schema.general.name"
+    },
+    {
+        "type": "select",
+        "id": "container",
+        "label": "t:sections.layout.container.option",
+        "default": "container",
+        "options": [
+            {
+                "value": "container",
+                "label": "t:sections.layout.container.option1"
+            },
+            {
+                "value": "1170",
+                "label": "t:sections.layout.container.option4"
+            },
+            {
+                "value": "1770",
+                "label": "t:sections.layout.container.option3"
+            },
+            {
+                "value": "fullwidth",
+                "label": "t:sections.layout.container.option2"
+            }
+        ]
+    },
+    {
+        "type": "range",
+        "id": "padding_full_width",
+        "label": "t:sections.layout.container.padding_full_width",
+        "min": 0,
+        "max": 50,
+        "step": 5,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 0,
+        "info": "t:sections.layout.container.info_full_width"
+    },
+   
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_top"
+    },
+    {
+        "type": "range",
+        "id": "mg_top_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_bottom"
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-page.title"
+    },
+    {
+        "type": "range",
+        "id": "heading_size",
+        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.label",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 30
+    },
+    {
+        "type": "range",
+        "id": "heading_size_mb",
+        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.fz_mb",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 24
+    },
+    {
+        "type" : "color",
+        "id" : "heading_color",
+        "label" : "t:sections.rich-text.blocks.heading.settings.heading_size.color",
+        "default" : "#000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main-page.name"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

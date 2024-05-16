@@ -1,0 +1,293 @@
+{% comment %}
+    This template will be automatically generated for you if the file doesn't exist,
+    but where's the fun in having no control? Define your layout below.
+
+    The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+    Your theme's settings determine to use the 'default' or 'theme' customer templates.
+    More info:
+        - http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+    Template note:
+        - All IDs on this template are required to make the forms submit properly
+        - There are two instances of inline JS below. Best practices advise separating this into an external JS file.
+{% endcomment %}
+
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+
+<div class="account-page login-page">
+  <div class="container">
+    <div class="halo-page-header">
+      {% render 'breadcrumb' %}
+      <h1 class="page-header">
+         {{ 'customer.login_page.title' | t }}
+      </h1>
+    </div>
+    <div class="halo-page-content">
+      <div class="login-row clearfix">
+          <div class="login-rowItem login-rowLeft">
+              <div class="login-item" id="recover">
+                  <h2 class="halo-page-title page-subheader text-left">
+                      {{ 'customer.recover_password.title' | t }}
+                  </h2>
+                  <div class="halo-page-wrapper">
+                      <div class="login-text">
+                          {{ 'customer.recover_password.subtext' | t }}
+                      </div>
+                      {% comment %}
+                          This form must use 'recover_customer_password'
+                      {% endcomment %}
+                      {%- form 'recover_customer_password' -%}
+                          {% assign recover_success = form.posted_successfully? %}
+                          {% comment %}
+                              form.posted_successfully? is true only inside this form, but we want
+                              to show a success message outside of it. To do so, set the variable
+                              reset_success to true, then use JS to show our success message above.
+                          {% endcomment %}
+                          {%- if form.errors -%}
+                              {%- assign message = form.errors | default_errors | strip_html -%}
+                              <div class="form-message">
+                                  <div class="alertBox alertBox--error">
+                                      <p class="alertBox-message">
+                                          {{ message }}
+                                      </p>
+                                  </div>
+                              </div>
+                          {%- endif -%}
+                          <div class="form-field{% if form.errors contains "email" %} form-field--error{% endif %}">
+                              <label class="form-label" for="RecoverEmail">
+                                  {{ 'customer.login_page.email' | t }}
+                              </label>
+                              <input class="form-input form-input-placeholder{% if form.errors contains "email" %} error{% endif %}"
+                                  type="email"
+                                  value=""
+                                  name="email"
+                                  id="RecoverEmail"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  autocomplete="email"
+                                  {% if form.errors %}
+                                      aria-invalid="true"
+                                      aria-describedby="RecoverEmail-email-error"
+                                      autofocus
+                                  {% endif %}
+                                  placeholder=""
+                              >
+                          </div>
+                          <div class="form-actions">
+                              <input type="submit" class="button button-2" value="{{ 'customer.login_page.submit' | t }}">
+                              <a href="#login" class="link link-underline cancel">
+                                  <span class="text">{{ 'customer.login_page.cancel' | t }}</span>
+                              </a>
+                          </div>
+                      {%- endform -%}
+                  </div>
+              </div>
+              <div class="login-item" id="login">
+                  <h2 class="halo-page-title page-subheader text-left">
+                      {{ 'customer.login_page.sign_in' | t }}
+                  </h2>
+                  <div class="halo-page-wrapper">
+                      <div class="login-text">
+                          {{ 'customer.login_page.text' | t }}
+                      </div>
+                      {% comment %}
+                          If a user has successfully requested a new password, the form.posted_successfully? variable
+                          is set to true within the 'recover_customer_password' form only. Within that form you'll see
+                          us assign a variable 'reset_success' to true, which is used in JS to show our success message.
+                      {% endcomment %}
+                      {%- if recover_success == true -%}
+                          <div class="login-message" id="resetSuccess">
+                              <div class="alertBox alertBox--success">
+                                  <p class="alertBox-message">{{ 'customer.recover_password.success' | t }}</p>
+                              </div>
+                          </div>
+                      {%- endif -%}
+                      {% comment %}
+                          This form must use 'customer_login'
+                      {% endcomment %}
+                      {%- form 'customer_login', class: 'customer-login-form' -%}
+                          {%- if form.errors -%}
+                              {%- assign message = form.errors.messages['form'] -%}
+                              <div class="form-message">
+                                  <div class="alertBox alertBox--error">
+                                      <p class="alertBox-message">
+                                          {{ message }}
+                                      </p>
+                                  </div>
+                              </div>
+                          {%- endif -%}
+                          <div class="form-field{% if form.errors contains "email" %} form-field--error{% endif %}">
+                              <label class="form-label" for="CustomerEmail">
+                                  {{ 'customer.login_page.email' | t }}
+                                  <em>*</em>
+                              </label>
+                              <input
+                                  class="form-input form-input-placeholder{% if form.errors contains "email" %} error{% endif %}"
+                                  type="email"
+                                  value=""
+                                  name="customer[email]"
+                                  autocomplete="email"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  id="CustomerEmail"
+                                  {% if form.errors contains 'form' %}
+                                      aria-invalid="true"
+                                  {% endif %}
+                                  placeholder=""
+                                  aria-required="true"
+                                  aria-invalid="true"
+                                  required
+                              >
+                          </div>
+                          {%- if form.password_needed -%}
+                              <div class="form-field{% if form.errors contains "password" %} form-field--error{% endif %}">
+                                  <label class="form-label" for="CustomerPassword">
+                                      {{ 'customer.login_page.password' | t }}
+                                      <em>*</em>
+                                  </label>
+                                  <input
+                                      class="form-input form-input-placeholder{% if form.errors contains "password" %} error{% endif %}"
+                                      type="password"
+                                      value=""
+                                      name="customer[password]"
+                                      id="CustomerPassword"
+                                      autocomplete="current-password"
+                                      {% if form.errors contains 'form' %}
+                                          aria-invalid="true"
+                                      {% endif %}
+                                      aria-required="true"
+                                      required
+                                  >
+                              </div>
+                          {%- endif -%}
+                          <div class="form-actions">
+                              <input type="submit" class="button button-2" value="{{ 'customer.login_page.title' | t }}">
+                              <a href="#recover" class="link link-underline forget-password">
+                                  <span class="text">{{ 'customer.login_page.forgot_password' | t }}</span>
+                              </a>
+                          </div>
+                      {%- endform -%}
+                  </div>
+              </div>
+              {%- if shop.checkout.guest_login -%}
+                  <div class="login-item">
+                      <h2 class="halo-page-title page-subheader text-left">
+                          {{ 'customer.login_page.guest_title' | t }}
+                      </h2>
+                      {%- form 'guest_login' -%}
+                          <input type="submit" class="button button--primary" value="{{ 'customer.login_page.guest_continue' | t }}">
+                      {%- endform -%}
+                  </div>
+              {%- endif -%}
+          </div>
+          <div class="login-rowItem login-rowRight">
+              <div class="login-item">
+                  <h2 class="halo-page-title page-subheader text-left">
+                      {{ 'customer.register.register' | t }}
+                  </h2>
+                  <div class="halo-page-wrapper">
+                      <div class="login-text">
+                          {{ 'customer.register.text' | t }}
+                      </div>
+                      {%- form 'create_customer', class: 'create-customer-form' -%}
+                          {%- if form.errors -%}
+                              <div class="form-message" role="alert">
+                                  <div class="alertBox alertBox--error">
+                                      <div class="alertBox-message">
+                                          <ul>
+                                              {%- for field in form.errors -%}
+                                                  <li>
+                                                      {%- if field == 'form' -%}
+                                                          {{ form.errors.messages[field] }}
+                                                      {%- else -%}
+                                                        <a href="#RegisterForm-{{ field }}" class="link link-underline">
+                                                          <span class="text">
+                                                              {{ form.errors.translated_fields[field] | capitalize }}
+                                                              {{ form.errors.messages[field] }}
+                                                          </span>
+                                                        </a>
+                                                      {%- endif -%}
+                                                  </li>
+                                              {%- endfor -%}
+                                          </ul>
+                                      </div>
+                                  </div>
+                              </div>
+                          {% endif %}
+                          <div class="form-field{% if form.errors contains "first_name" %} form-field--error{% endif %}">
+                              <label class="form-label" for="RegisterForm-FirstName">
+                                  {{ 'customer.register.first_name' | t }}
+                              </label>
+                              <input class="form-input form-input-placeholder{% if form.errors contains "first_name" %} error{% endif %}"
+                                  type="text"
+                                  name="customer[first_name]"
+                                  id="RegisterForm-FirstName"
+                                  {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+                                  autocomplete="given-name"
+                                  placeholder=""
+                              >
+                          </div>
+                          <div class="form-field{% if form.errors contains "last_name" %} form-field--error{% endif %}">
+                              <label class="form-label" for="RegisterForm-LastName">
+                                  {{ 'customer.register.last_name' | t }}
+                              </label>      
+                              <input class="form-input form-input-placeholder{% if form.errors contains "last_name" %} error{% endif %}"
+                                  type="text"
+                                  name="customer[last_name]"
+                                  id="RegisterForm-LastName"
+                                  {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+                                  autocomplete="family-name"
+                                  placeholder=""
+                              >
+                          </div>
+                          <div class="form-field{% if form.errors contains "email" %} form-field--error{% endif %}">
+                              <label class="form-label" for="RegisterForm-email">
+                                  {{ 'customer.register.you_email' | t }}
+                                  <em>*</em>
+                              </label>      
+                              <input class="form-input form-input-placeholder{% if form.errors contains "email" %} error{% endif %}"
+                                  type="email"
+                                  name="customer[email]"
+                                  id="RegisterForm-email"
+                                  {% if form.email %} value="{{ form.email }}"{% endif %}
+                                  spellcheck="false"
+                                  autocapitalize="off"
+                                  autocomplete="email"
+                                  aria-required="true"
+                                  {% if form.errors contains 'email' %}
+                                      aria-invalid="true"
+                                      aria-describedby="RegisterForm-email-error"
+                                  {% endif %}
+                                  placeholder=""
+                                  required
+                              >
+                          </div>
+                          <div class="form-field{% if form.errors contains "password" %} form-field--error{% endif %}">
+                              <label class="form-label" for="password">
+                                  {{ 'customer.register.you_password' | t }}
+                                  <em>*</em>
+                              </label>      
+                              <input class="form-input form-input-placeholder{% if form.errors contains "password" %} error{% endif %}"
+                                  type="password"
+                                  name="customer[password]"
+                                  id="RegisterForm-password"
+                                  aria-required="true"
+                                  {% if form.errors contains 'password' %}
+                                      aria-invalid="true"
+                                      aria-describedby="RegisterForm-password-error"
+                                  {% endif %}
+                                  placeholder=""
+                                  required
+                              >
+                          </div>
+                          <div class="form-actions">
+                              <input type="submit" value="{{ 'customer.register.submit' | t }}" class="button button--primary">
+                          </div>
+                      {%- endform -%}
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>  
+  </div>
+</div>

@@ -1,0 +1,96 @@
+.auth-text{
+    text-align: center;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    color: var(--color-text2);
+}
+
+.auth-form .form-input{
+	text-align: center;
+}
+
+.auth-actions{
+	margin: 15px 0 0 0;
+}
+
+.auth-link{
+    font-size: var(--font-body-size);
+	margin: 14px 0 18px 0;
+    color: #3c3c3c;
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+}
+
+.auth-form .form-field + .form-field,
+.auth-actions .button + .button{
+	margin-top: 12px;
+}
+
+.auth-form.auth-form-2{
+    padding: 22px 20px;
+}
+
+.auth-form.auth-form-2 .form-input{
+    text-align: left;
+}
+
+.account-dropdown{
+    padding: 30px 20px;
+}
+
+.account-dropdown .account-item{
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #c7c7c7;
+}
+
+.account-dropdown .account-item:last-child{
+    border-bottom: 0;
+}
+
+.account-dropdown .account-action{
+    width: 100%;
+    padding: 10px 0;
+    text-transform: capitalize;
+}
+
+body.auth-popup-show,
+body.auth-sidebar-show{
+	overflow: hidden;
+	/*height: 100%;*/
+}
+
+body.auth-popup-show .background-overlay,
+body.auth-sidebar-show .background-overlay{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.auth-popup-show .halo-auth-popup{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(-50%,-50%,0);
+}
+
+body.auth-sidebar-show .halo-auth-sidebar{
+    transform: translate3d(0,0,0);
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (min-width: 1025px){
+    .auth-form.auth-form-2{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .account-dropdown{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}

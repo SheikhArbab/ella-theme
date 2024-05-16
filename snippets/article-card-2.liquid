@@ -1,0 +1,73 @@
+{%- liquid
+    assign image = article.image
+    assign id = article.id
+    assign link = article.url
+    assign title = article.title
+    assign author = article.author
+    assign summary = article.excerpt_or_content | strip_html | truncatewords: catewords
+-%}
+<article class="article-item{% if image == blank %} article-card--no-image{% unless show_placeholder %} not-placeholder{% endunless %}{% endif %}" aria-labelledby="Article-{{ id }}">
+    {%- if image -%}
+        <div class="blog-image img-box">
+                {%- assign preview_img = image -%}
+                {%- assign img_url = preview_img | img_url: '700px', crop: 'center' -%}
+                <a href="{{ link }}" class="image image-{{ media_size }} image-zoom" 
+                    {% if media_size == 'adapt' %}
+                      style="padding-bottom: {{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                      style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                  >
+                    <img srcset="
+                        {%- if image.src.width >= 165 -%}{{ image.src | img_url: '165x' }} 165w,{%- endif -%}
+                        {%- if image.src.width >= 360 -%}{{ image.src | img_url: '360x' }} 360w,{%- endif -%}
+                        {%- if image.src.width >= 370 -%}{{ image.src | img_url: '370x' }} 370w,{%- endif -%}
+                        {%- if image.src.width >= 533 -%}{{ image.src | img_url: '533x' }} 533w,{%- endif -%}
+                        {%- if image.src.width >= 720 -%}{{ image.src | img_url: '720x' }} 720w,{%- endif -%}
+                        {%- if image.src.width >= 940 -%}{{ image.src | img_url: '940x' }} 940w,{%- endif -%}
+                        {%- if image.src.width >= 1066 -%}{{ image.src | img_url: '1066x' }} 1066w{%- endif -%}" src="{{ image.src | img_url: '533x' }}" sizes="(min-width: 1100px) {{preview_img.width | append: 'px'}}, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ image.src.alt | escape }}" loading="lazy" class="motion-reduce"
+                    >
+                </a>
+        </div>
+    {%- elsif show_placeholder -%}
+        <div class="blog-image img-box">
+            <a {% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %} class="image">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            </a>
+        </div>
+    {%- endif -%}
+    <div class="blog-content text-{{ blog_text_align }}">
+        <h3 class="blog-title" id="Article-{{ article.id }}">
+            <a {% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %}>
+                {{ title | escape }}
+            </a>
+        </h3>
+        {%- if show_author or show_date or show_comment -%}
+            <p class="blog-info">
+                {% if show_date %}
+                    <span class="blog-date">{{ article.published_at | time_tag: '%b %d, %Y' }}</span>
+                {% endif%}
+                {% if show_author %}
+                    <span class="blog-author">{{ 'blogs.article.author' | t : author : author }}</span>
+                {% endif %}
+                {% if show_comment %}
+                    <span class="blog-comment">{{ 'blogs.article.comments' | t: count: article.comments_count }}</span>
+                {% endif %}
+            </p>
+        {%- endif -%}
+        {%- if show_summary and summary != blank -%}
+            <div class="blog-summary">
+                {{ summary }}
+            </div>
+        {%- endif -%}
+        {%- if show_read_more -%}
+            <a {% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %} class="button button-2 blog-btn link">
+                <span class="text">
+                    {{ 'blogs.article.read_more' | t }}
+                </span>
+            </a>
+        {%- endif -%}
+    </div>
+</article>

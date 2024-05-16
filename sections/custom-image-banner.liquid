@@ -1,0 +1,1723 @@
+{%- if section.blocks.size > 0 -%}
+{%- assign swipe = section.settings.custom_image_banner_block_swipe_on_mobile -%}
+<link rel="stylesheet" href="{{ 'component-custom-image-banner-block.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-custom-image-banner-block.css' | asset_url | stylesheet_tag }}</noscript>
+<div class="custom-image-banner-block section-block-{{section.id}}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="custom-image-banner-{{section.id}}">
+<div class="{% if section.settings.container == 'fullwidth' %}container-full{% elsif section.settings.container == '1170' %}container-1170{% elsif section.settings.container == '1770' %}container-1770{% else %}container{% endif %}">
+    {%- if section.settings.custom_image_banner_title != blank -%}
+        <div class="halo-block-header text-{{ section.settings.title_align }}">   
+            <h3 class="title{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %}style="--animation-order: 1;"{% endif %}><span class="text">{{ section.settings.custom_image_banner_title }}</span></h3>
+            {%- if section.settings.custom_image_banner_des != blank -%}
+                <div class="rte subtext-spotlight{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %}style="--animation-order: 2;"{% endif %}>{{ section.settings.custom_image_banner_des }}</div>        
+            {%- endif -%}
+        </div>
+    {%- endif -%}
+    {%- if swipe == 'slider' -%}
+    <banner-slider-component>
+    {%- endif -%}
+        <div class="halo-row{% if swipe == 'slider' %} slider slider--tablet{% endif %}{% if section.settings.item_distance == 0 %} not-distance{% endif %}{% if swipe == 'scroll' %} scroll-snap-mobile disable-srollbar{% endif %}" style="--row-distance-style: {{ section.settings.item_distance | prepend: '-' | append: 'px' }};">
+        {%- for block in section.blocks -%}
+            {%- if block.type == 'smallImg' -%}
+                {%- if block.settings.enable_item_1 or block.settings.enable_item_2 or block.settings.enable_item_3 or block.settings.enable_item_4 -%}
+                    <div class="halo-item{% if swipe == 'slider' %} slider__slide{% endif %} customImageBanner--{{ block.type }}" id="block-{{block.id}}" style="--item-distance-style: {{ section.settings.item_distance | append: 'px' }}; --item-width-style: {{ block.settings.item_width }}" data-width="{{ block.settings.item_width }}">
+                        <div class="customImageBanner-row" style="--item-grid-gap-style: {{ block.settings.item_grid_gap | prepend: '-' | append: 'px' }}">
+                            {%- if block.settings.enable_item_1 -%}
+                            <div class="customImageBanner-child" style="--item-grid-gap-style: {{ block.settings.item_grid_gap | append: 'px' }}; --item-spacing-style: {{ block.settings.item_spacing_1 | append: 'px' }}; --item-width-style: {{ block.settings.item_width_1 }}" data-width="{{ block.settings.item_width_1 }}" data-spacing-bottom="{{ block.settings.item_spacing_1 }}">
+                                <div class="customImageBanner-item content_absolute{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                    <div class="img-box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                        {%- if block.settings.image_1 != blank -%}
+                                            {%- assign preview_img_1 = block.settings.image_1 -%}
+                                            <a {% if block.settings.link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_1 }}"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless preview_img_1.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: preview_img_1.aspect_ratio | times: 120 }}%;{% else %}{{ 1 | divided_by: preview_img_1.aspect_ratio | times: 100 }}%;{% endunless %} --item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <img {% render 'lazyload',preview_img: preview_img_1 %}{% unless preview_img_1.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ preview_img_1.presentation.focal_point }}"{% endunless %} />
+                                                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            </a>
+                                        {%- else -%}
+                                            <a {% if block.settings.link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_1 }}"{% endif %} class="image-zoom" style="--item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <div class="not_img" style="--height_not_img: 260px">270 x 260px</div>
+                                            </a>
+                                        {%- endif -%}
+                                    </div>
+                                    {%- if block.settings.sub_title_1 != blank or block.settings.title_1 != blank or block.settings.des_1 != blank or block.settings.button_1 != blank -%}
+                                        <div class="content customImageBanner-inner text-{{block.settings.title_align}} align-items--{{block.settings.align_items}}" style="--align-items-spacing-style: {{ block.settings.align_items_spacing | append: 'px' }}; --align-items-spacing-lr-style: {{ block.settings.align_items_spacing_lr | append: 'px' }}">
+                                            {%- if block.settings.sub_title_1 != blank -%}
+                                                <p class="sub_title custom-text-style{% if block.settings.border_sub_title %} has-border{% endif %}" style="--color-text-style: {{ block.settings.color_sub_title_1 }}; --fontsize-text-style: {{ block.settings.fontsize_sub_title | append: 'px' }}; --mg-bottom-sub-title-style: {{ block.settings.mg_bottom_sub_title | append: 'px' }}"><span>{{ block.settings.sub_title_1 }}</span></p>
+                                            {%- endif -%}
+                                            {%- if block.settings.title_1 != blank -%}
+                                                <h3 class="title custom-text-style" style="--color-text-style: {{ block.settings.color_title_1 }}; --fontsize-text-style: {{ block.settings.fontsize_title | append: 'px' }}; --fontsize-mobile-text-style: {{ block.settings.fontsize_title_mb | append: 'px' }}; --font-text-style: {%- if block.settings.enable_style_italic -%}italic{%- else -%}normal{%- endif -%}; --mg-bottom-title-style: {{ block.settings.mg_bottom_title | append: 'px' }}; --mg-bottom-title-style-mb: {{ block.settings.mg_bottom_title_mb | append: 'px' }}; "><a{% if block.settings.link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_1 }}"{% endif %} class="link_title"><span>{{ block.settings.title_1 }}</span></a></h3>
+                                            {%- endif -%}
+                                            {%- if block.settings.des_1 != blank -%}
+                                                <div class="des custom-text-style" style="--color-text-style: {{ block.settings.color_des_1 }}; --fontsize-text-style: {{ block.settings.fontsize_des | append: 'px' }}; --margin-bottom-des-style: {{ block.settings.mg_bottom_des | append: 'px' }}; --margin-bottom-des-style-mb: {{ block.settings.mg_bottom_des_mb | append: 'px' }}; ">{{ block.settings.des_1 }}</div>
+                                            {%- endif -%}
+                                            {%- if block.settings.button_1 != blank -%}
+                                                <a {% if block.settings.link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_1 }}"{% endif %} class="spotlight-button button custom-button-style" style="--color-button-style: {{ block.settings.color_button_1 }}; --bg-color-button-style: {% if block.settings.bg_gradient_color_button_1 != blank %}{{ block.settings.bg_gradient_color_button_1 }}{% else %}{{ block.settings.bg_color_button_1 | color_modify: 'alpha', block.settings.bg_opacity_button }}{% endif %}; --border-color-button-style: {{ block.settings.border_color_button_1 }}; --color-button-hover-style: {{ block.settings.color_button_hover_1 }}; --bg-color-button-hover-style: {% if block.settings.bg_gradient_color_button_hover_1 != blank %}{{ block.settings.bg_gradient_color_button_hover_1 }}{% else %}{{ block.settings.bg_color_button_hover_1 }}{% endif %}; --border-color-button-hover-style: {{ block.settings.border_color_button_hover_1 }}; --text-transform-button-style: {{ block.settings.btn_text_transform }}; --font-size-button-style: {{block.settings.fontsize_btn | append: 'px' }}; --button-width-style: {{block.settings.button_width | append: 'px' }}">
+                                                    {%- if block.settings.btn_icon_1 != blank -%}
+                                                        {{ block.settings.btn_icon_1 }}
+                                                    {%- endif -%}
+                                                    <span>{{ block.settings.button_1 }}</span>
+                                                </a>
+                                            {%- endif -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                            {%- endif -%}
+                            {%- if block.settings.enable_item_2 -%}
+                            <div class="customImageBanner-child" style="--item-grid-gap-style: {{ block.settings.item_grid_gap | append: 'px' }}; --item-spacing-style: {{ block.settings.item_spacing_2 | append: 'px' }}; --item-width-style: {{ block.settings.item_width_2 }}" data-width="{{ block.settings.item_width_2 }}" data-spacing-bottom="{{ block.settings.item_spacing_2 }}">
+                                <div class="customImageBanner-item content_absolute{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                    <div class="img-box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                        {%- if block.settings.image_2 != blank -%}
+                                            {%- assign preview_img_2 = block.settings.image_2 -%}
+                                            <a {% if block.settings.link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_2 }}"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless preview_img_2.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: preview_img_2.aspect_ratio | times: 120 }}%;{% else %}{{ 1 | divided_by: preview_img_2.aspect_ratio | times: 100 }}%;{% endunless %} --item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <img {% render 'lazyload',preview_img: preview_img_2 %}{% unless preview_img_2.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ preview_img_2.presentation.focal_point }}"{% endunless %} />
+                                                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            </a>
+                                        {%- else -%}
+                                            <a {% if block.settings.link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_2 }}"{% endif %} class="image-zoom" style="--item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <div class="not_img" style="--height_not_img: 260px">270 x 260px</div>
+                                            </a>
+                                        {%- endif -%}
+                                    </div>
+                                    {%- if block.settings.sub_title_2 != blank or block.settings.title_2 != blank or block.settings.des_2 != blank or block.settings.button_2 != blank -%}
+                                        <div class="content customImageBanner-inner text-{{block.settings.title_align}} align-items--{{block.settings.align_items}}" style="--align-items-spacing-style: {{ block.settings.align_items_spacing | append: 'px' }}; --align-items-spacing-lr-style: {{ block.settings.align_items_spacing_lr | append: 'px' }}">
+                                            {%- if block.settings.sub_title_2 != blank -%}
+                                                <p class="sub_title custom-text-style{% if block.settings.border_sub_title %} has-border{% endif %}" style="--color-text-style: {{ block.settings.color_sub_title_2 }}; --fontsize-text-style: {{ block.settings.fontsize_sub_title | append: 'px' }}; --mg-bottom-sub-title-style: {{ block.settings.mg_bottom_sub_title | append: 'px' }}"><span>{{ block.settings.sub_title_2 }}</span></p>
+                                            {%- endif -%}
+                                            {%- if block.settings.title_2 != blank -%}
+                                                <h3 class="title custom-text-style" style="--color-text-style: {{ block.settings.color_title_2 }}; --fontsize-text-style: {{ block.settings.fontsize_title | append: 'px' }}; --fontsize-mobile-text-style: {{ block.settings.fontsize_title_mb | append: 'px' }}; --font-text-style: {%- if block.settings.enable_style_italic -%}italic{%- else -%}normal{%- endif -%}; --mg-bottom-title-style: {{ block.settings.mg_bottom_title | append: 'px' }}; --mg-bottom-title-style-mb: {{ block.settings.mg_bottom_title_mb | append: 'px' }};">
+                                                    <a {% if block.settings.link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_2 }}"{% endif %} class="link_title"><span>{{ block.settings.title_2 }}</span></a>
+                                                </h3>
+                                            {%- endif -%}
+                                            {%- if block.settings.des_2 != blank -%}
+                                                <div class="des custom-text-style" style="--color-text-style: {{ block.settings.color_des_2 }}; --fontsize-text-style: {{ block.settings.fontsize_des | append: 'px' }}; --margin-bottom-des-style: {{ block.settings.mg_bottom_des | append: 'px' }}; --margin-bottom-des-style-mb: {{ block.settings.mg_bottom_des_mb | append: 'px' }};">{{ block.settings.des_2 }}</div>
+                                            {%- endif -%}
+                                            {%- if block.settings.button_2 != blank -%}
+                                                <a {% if block.settings.link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_2 }}"{% endif %} class="spotlight-button button custom-button-style" style="--color-button-style: {{ block.settings.color_button_2 }}; --bg-color-button-style: {% if block.settings.bg_gradient_color_button_2 != blank %}{{ block.settings.bg_gradient_color_button_2 }}{% else %}{{ block.settings.bg_color_button_2 | color_modify: 'alpha', block.settings.bg_opacity_button }}{% endif %}; --border-color-button-style: {{ block.settings.border_color_button_2 }}; --color-button-hover-style: {{ block.settings.color_button_hover_2 }}; --bg-color-button-hover-style: {% if block.settings.bg_gradient_color_button_hover_2 != blank %}{{ block.settings.bg_gradient_color_button_hover_2 }}{% else %}{{ block.settings.bg_color_button_hover_2 }}{% endif %}; --border-color-button-hover-style: {{ block.settings.border_color_button_hover_2 }}; --text-transform-button-style: {{ block.settings.btn_text_transform }}; --font-size-button-style: {{block.settings.fontsize_btn | append: 'px' }}; --button-width-style: {{block.settings.button_width | append: 'px' }}">
+                                                    {%- if block.settings.btn_icon_2 != blank -%}
+                                                        {{ block.settings.btn_icon_2 }}
+                                                    {%- endif -%}
+                                                    <span>{{ block.settings.button_2 }}</span>
+                                                </a>
+                                            {%- endif -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                            {%- endif -%}
+                            {%- if block.settings.enable_item_3 -%}
+                            <div class="customImageBanner-child" style="--item-grid-gap-style: {{ block.settings.item_grid_gap | append: 'px' }}; --item-spacing-style: {{ block.settings.item_spacing_3 | append: 'px' }}; --item-width-style: {{ block.settings.item_width_3 }}" data-width="{{ block.settings.item_width_3 }}" data-spacing-bottom="{{ block.settings.item_spacing_3 }}">
+                                <div class="customImageBanner-item content_absolute{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                    <div class="img-box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                        {%- if block.settings.image_3 != blank -%}
+                                            {%- assign preview_img_3 = block.settings.image_3 -%}
+                                            <a {% if block.settings.link_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_3 }}"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless preview_img_3.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: preview_img_3.aspect_ratio | times: 120 }}%;{% else %}{{ 1 | divided_by: preview_img_3.aspect_ratio | times: 100 }}%;{% endunless %} --item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <img {% render 'lazyload',preview_img: preview_img_3 %}{% unless preview_img_3.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ preview_img_3.presentation.focal_point }}"{% endunless %} />
+                                                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            </a>
+                                        {%- else -%}
+                                            <a {% if block.settings.link_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_3 }}"{% endif %} class="image-zoom" style="--item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <div class="not_img" style="--height_not_img: 260px">270 x 260px</div>
+                                            </a>
+                                        {%- endif -%}
+                                    </div>
+                                    {%- if block.settings.sub_title_3 != blank or block.settings.title_3 != blank or block.settings.des_3 != blank or block.settings.button_3 != blank -%}
+                                        <div class="content customImageBanner-inner text-{{block.settings.title_align}} align-items--{{block.settings.align_items}}" style="--align-items-spacing-style: {{ block.settings.align_items_spacing | append: 'px' }}; --align-items-spacing-lr-style: {{ block.settings.align_items_spacing_lr | append: 'px' }}">
+                                            {%- if block.settings.sub_title_3 != blank -%}
+                                                <p class="sub_title custom-text-style{% if block.settings.border_sub_title %} has-border{% endif %}" style="--color-text-style: {{ block.settings.color_sub_title_3 }}; --fontsize-text-style: {{ block.settings.fontsize_sub_title | append: 'px' }}; --mg-bottom-sub-title-style: {{ block.settings.mg_bottom_sub_title | append: 'px' }}"><span>{{ block.settings.sub_title_3 }}</span></p>
+                                            {%- endif -%}
+                                            {%- if block.settings.title_3 != blank -%}
+                                                <h3 class="title custom-text-style"style="--color-text-style: {{ block.settings.color_title_3 }}; --fontsize-text-style: {{ block.settings.fontsize_title | append: 'px' }}; --fontsize-mobile-text-style: {{ block.settings.fontsize_title_mb | append: 'px' }}; --font-text-style: {%- if block.settings.enable_style_italic -%}italic{%- else -%}normal{%- endif -%}; --mg-bottom-title-style: {{ block.settings.mg_bottom_title | append: 'px' }}; --mg-bottom-title-style-mb: {{ block.settings.mg_bottom_title_mb | append: 'px' }};">
+                                                    <a {% if block.settings.link_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_3 }}"{% endif %} class="link_title"><span>{{ block.settings.title_3 }}</span></a>
+                                                </h3>
+                                            {%- endif -%}
+                                            {%- if block.settings.des_3 != blank -%}
+                                                <div class="des custom-text-style"style="--color-text-style: {{ block.settings.color_des_3 }}; --fontsize-text-style: {{ block.settings.fontsize_des | append: 'px' }}; --margin-bottom-des-style: {{ block.settings.mg_bottom_des | append: 'px' }}; --margin-bottom-des-style-mb: {{ block.settings.mg_bottom_des_mb | append: 'px' }};">{{ block.settings.des_3 }}</div>
+                                            {%- endif -%}
+                                            {%- if block.settings.button_3 != blank -%}
+                                                <a {% if block.settings.link_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_3 }}"{% endif %} class="spotlight-button button custom-button-style" style="--color-button-style: {{ block.settings.color_button_3 }}; --bg-color-button-style: {% if block.settings.bg_gradient_color_button_3 != blank %}{{ block.settings.bg_gradient_color_button_3 }}{% else %}{{ block.settings.bg_color_button_3 | color_modify: 'alpha', block.settings.bg_opacity_button }}{% endif %}; --border-color-button-style: {{ block.settings.border_color_button_3 }}; --color-button-hover-style: {{ block.settings.color_button_hover_3 }}; --bg-color-button-hover-style: {% if block.settings.bg_gradient_color_button_hover_3 != blank %}{{ block.settings.bg_gradient_color_button_hover_3 }}{% else %}{{ block.settings.bg_color_button_hover_3 }}{% endif %}; --border-color-button-hover-style: {{ block.settings.border_color_button_hover_3 }}; --text-transform-button-style: {{ block.settings.btn_text_transform }}; --font-size-button-style: {{block.settings.fontsize_btn | append: 'px' }}; --button-width-style: {{block.settings.button_width | append: 'px' }}">
+                                                    {%- if block.settings.btn_icon_3 != blank -%}
+                                                        {{ block.settings.btn_icon_3 }}
+                                                    {%- endif -%}
+                                                    <span>{{ block.settings.button_3 }}</span>
+                                                </a>
+                                            {%- endif -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                            {%- endif -%}
+                            {%- if block.settings.enable_item_4 -%}
+                            <div class="customImageBanner-child" style="--item-grid-gap-style: {{ block.settings.item_grid_gap | append: 'px' }}; --item-spacing-style: {{ block.settings.item_spacing_4 | append: 'px' }}; --item-width-style: {{ block.settings.item_width_4 }}" data-width="{{ block.settings.item_width_4 }}" data-spacing-bottom="{{ block.settings.item_spacing_4 }}">
+                                <div class="customImageBanner-item content_absolute{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                    <div class="img-box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                        {%- if block.settings.image_4 != blank -%}
+                                            {%- assign preview_img_4 = block.settings.image_4 -%}
+                                            <a {% if block.settings.link_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_4 }}"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless preview_img_4.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: preview_img_4.aspect_ratio | times: 120 }}%;{% else %}{{ 1 | divided_by: preview_img_4.aspect_ratio | times: 100 }}%;{% endunless %} --item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <img {% render 'lazyload',preview_img: preview_img_4 %}{% unless preview_img_4.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ preview_img_4.presentation.focal_point }}"{% endunless %} />
+                                                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            </a>
+                                        {%- else -%}
+                                            <a {% if block.settings.link_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_4 }}"{% endif %} class="image-zoom" style="--item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                                <div class="not_img" style="--height_not_img: 260px">270 x 260px</div>
+                                            </a>
+                                        {%- endif -%}
+                                    </div>
+                                    {%- if block.settings.sub_title_4 != blank or block.settings.title_4 != blank or block.settings.des_4 != blank or block.settings.button_4 != blank -%}
+                                        <div class="content customImageBanner-inner text-{{block.settings.title_align}} align-items--{{block.settings.align_items}}" style="--align-items-spacing-style: {{ block.settings.align_items_spacing | append: 'px' }}; --align-items-spacing-lr-style: {{ block.settings.align_items_spacing_lr | append: 'px' }}">
+                                            {%- if block.settings.sub_title_4 != blank -%}
+                                                <p class="sub_title custom-text-style{% if block.settings.border_sub_title %} has-border{% endif %}" style="--color-text-style: {{ block.settings.color_sub_title_4 }}; --fontsize-text-style: {{ block.settings.fontsize_sub_title | append: 'px' }}; --mg-bottom-sub-title-style: {{ block.settings.mg_bottom_sub_title | append: 'px' }}"><span>{{ block.settings.sub_title_4 }}</span></p>
+                                            {%- endif -%}
+                                            {%- if block.settings.title_4 != blank -%}
+                                                <h3 class="title custom-text-style" style="--color-text-style: {{ block.settings.color_title_4 }}; --fontsize-text-style: {{ block.settings.fontsize_title | append: 'px' }}; --fontsize-mobile-text-style: {{ block.settings.fontsize_title_mb | append: 'px' }}; --font-text-style: {%- if block.settings.enable_style_italic -%}italic{%- else -%}normal{%- endif -%}; --mg-bottom-title-style: {{ block.settings.mg_bottom_title | append: 'px' }}; --mg-bottom-title-style-mb: {{ block.settings.mg_bottom_title_mb | append: 'px' }};">
+                                                    <a {% if block.settings.link_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_4 }}"{% endif %} class="link_title"><span>{{ block.settings.title_4 }}</span></a>
+                                                </h3>
+                                            {%- endif -%}
+                                            {%- if block.settings.des_4 != blank -%}
+                                                <div class="des custom-text-style" style="--color-text-style: {{ block.settings.color_des_4 }}; --fontsize-text-style: {{ block.settings.fontsize_des | append: 'px' }}; --margin-bottom-des-style: {{ block.settings.mg_bottom_des | append: 'px' }}; --margin-bottom-des-style-mb: {{ block.settings.mg_bottom_des_mb | append: 'px' }};">{{ block.settings.des_4 }}</div>
+                                            {%- endif -%}
+                                            {%- if block.settings.button_4 != blank -%}
+                                                <a{% if block.settings.link_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link_4 }}"{% endif %} class="spotlight-button button custom-button-style" style="--color-button-style: {{ block.settings.color_button_4 }}; --bg-color-button-style: {% if block.settings.bg_gradient_color_button_4 != blank %}{{ block.settings.bg_gradient_color_button_4 }}{% else %}{{ block.settings.bg_color_button_4 | color_modify: 'alpha', block.settings.bg_opacity_button }}{% endif %}; --border-color-button-style: {{ block.settings.border_color_button_4 }}; --color-button-hover-style: {{ block.settings.color_button_hover_4 }}; --bg-color-button-hover-style: {% if block.settings.bg_gradient_color_button_hover_4 != blank %}{{ block.settings.bg_gradient_color_button_hover_4 }}{% else %}{{ block.settings.bg_color_button_hover_4 }}{% endif %}; --border-color-button-hover-style: {{ block.settings.border_color_button_hover_4 }}; --text-transform-button-style: {{ block.settings.btn_text_transform }}; --font-size-button-style: {{block.settings.fontsize_btn | append: 'px' }}; --button-width-style: {{block.settings.button_width | append: 'px' }}">
+                                                    {%- if block.settings.btn_icon_4 != blank -%}
+                                                        {{ block.settings.btn_icon_4 }}
+                                                    {%- endif -%}
+                                                    <span>{{ block.settings.button_4 }}</span>
+                                                </a>
+                                            {%- endif -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                            {%- endif -%}
+                        </div>
+                    </div>
+                {%- endif -%}
+            {%- else -%}
+                <div class="halo-item{% if swipe == 'slider' %} slider__slide{% endif %} customImageBanner--{{ block.type }}" id="block-{{block.id}}" style="--item-distance-style: {{ section.settings.item_distance | append: 'px' }}; --item-spacing-style: {{ block.settings.item_spacing | append: 'px' }}; --item-width-style: {{ block.settings.item_width }}" data-width="{{ block.settings.item_width }}">
+                    <div class="customImageBanner-item content_absolute{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                        <div class="img-box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                            {%- if block.settings.image != blank -%}
+                                {%- assign preview_img = block.settings.image -%}
+                                <a {% if block.settings.link == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link }}"{% endif %} class="image-zoom adaptive_height image" style="padding-top: {% unless preview_img.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: preview_img.aspect_ratio | times: 120 }}%;{% else %}{{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%;{% endunless %} --item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                    <img {% render 'lazyload',preview_img: preview_img %}{% unless preview_img.presentation.focal_point == '50.0% 50.0%' %} style="object-position: {{ preview_img.presentation.focal_point }}"{% endunless %} />
+                                    {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                </a>
+                            {%- else -%}
+                                <a {% if block.settings.link == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link }}"{% endif %} class="image-zoom" style="--item-border-radirus-style: {{ block.settings.item_border_radirus | append: 'px' }}">
+                                    <div class="not_img" style="--height_not_img: 570px">570 x 570px</div>
+                                </a>
+                            {%- endif -%}
+                        </div>
+                        {%- if block.settings.sub_title != blank or block.settings.title != blank or block.settings.des != blank or block.settings.button != blank -%}
+                            <div class="content customImageBanner-inner text-{{block.settings.title_align}} align-items--{{block.settings.align_items}}" style="--align-items-spacing-style: {{ block.settings.align_items_spacing | append: 'px' }}; --align-items-spacing-lr-style: {{ block.settings.align_items_spacing_lr | append: 'px' }}">
+                                {%- if block.settings.sub_title != blank -%}
+                                    <p class="sub_title custom-text-style{% if block.settings.border_sub_title %} has-border{% endif %}" style="--color-text-style: {{ block.settings.color_sub_title }}; --fontsize-text-style: {{ block.settings.fontsize_sub_title | append: 'px' }}; --mg-bottom-sub-title-style: {{ block.settings.mg_bottom_sub_title | append: 'px' }}"><span>{{ block.settings.sub_title }}</span></p>
+                                {%- endif -%}
+                                {%- if block.settings.title != blank -%}
+                                    <h3 class="title custom-text-style" style="--color-text-style: {{ block.settings.color_title }}; --fontsize-text-style: {{ block.settings.fontsize_title | append: 'px' }}; --fontsize-mobile-text-style: {{ block.settings.fontsize_title_mb | append: 'px' }}; --font-text-style: {%- if block.settings.enable_style_italic -%}italic{%- else -%}normal{%- endif -%}; --mg-bottom-title-style: {{ block.settings.mg_bottom_title | append: 'px' }}; --mg-bottom-title-style-mb: {{ block.settings.mg_bottom_title_mb | append: 'px' }};">
+                                        <a{% if block.settings.link == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link }}"{% endif %} class="link_title"><span>{{ block.settings.title }}</span></a>
+                                    </h3>
+                                {%- endif -%}
+                                {%- if block.settings.des != blank -%}
+                                    <div class="des custom-text-style" style="--color-text-style: {{ block.settings.color_des }}; --fontsize-text-style: {{ block.settings.fontsize_des | append: 'px' }}; --margin-bottom-des-style: {{ block.settings.mg_bottom_des | append: 'px' }}; --margin-bottom-des-style-mb: {{ block.settings.mg_bottom_des_mb | append: 'px' }};">{{ block.settings.des }}</div>
+                                {%- endif -%}
+                                {%- if block.settings.button != blank -%}
+                                    <a {% if block.settings.link == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.link }}"{% endif %} class="spotlight-button button custom-button-style" style="--color-button-style: {{ block.settings.color_button }}; --bg-color-button-style: {% if block.settings.bg_gradient_color_button != blank %}{{ block.settings.bg_gradient_color_button }}{% else %}{{ block.settings.bg_color_button | color_modify: 'alpha', block.settings.bg_opacity_button }}{% endif %}; --border-color-button-style: {{ block.settings.border_color_button }}; --color-button-hover-style: {{ block.settings.color_button_hover }}; --bg-color-button-hover-style: {% if block.settings.bg_gradient_color_button_hover != blank %}{{ block.settings.bg_gradient_color_button_hover }}{% else %}{{ block.settings.bg_color_button_hover }}{% endif %}; --border-color-button-hover-style: {{ block.settings.border_color_button_hover }}; --text-transform-button-style: {{block.settings.btn_text_transform}}; --font-size-button-style: {{block.settings.fontsize_btn | append: 'px' }}; --button-width-style: {{block.settings.button_width | append: 'px' }}">
+                                        {%- if block.settings.btn_icon != blank -%}
+                                            {{ block.settings.btn_icon }}
+                                        {%- endif -%}
+                                        <span>{{ block.settings.button }}</span>
+                                    </a>
+                                {%- endif -%}
+                            </div>
+                        {%- endif -%}
+                    </div>
+                </div>
+            {%- endif -%}
+        {%- endfor -%}
+        </div>
+        {%- if swipe == 'slider' and section.blocks.size > 1 -%}
+            <div class="slider-buttons no-js-hidden{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                <ul class="slider-dots {% if section.blocks.size == 2 %}count_2{% endif %}">
+                    {%- for block in section.blocks -%}
+                    <li class="dots-item {% if forloop.first %}active{% endif %}"><button name="dots" data-index="{{ forloop.index0 }}">{{ forloop.index }}</button></li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif -%}
+    {%- if swipe == 'slider' -%}
+    </banner-slider-component>
+    {%- endif -%}
+</div>
+</div>
+<style>
+    {%- liquid
+        assign custom_image_banner_bg = section.settings.custom_image_banner_bg
+        assign custom_image_banner_bg_gradient = section.settings.custom_image_banner_bg_gradient
+        assign custom_image_bg_image = section.settings.custom_image_bg_image
+        assign color_title = section.settings.color_title
+        assign fontsize_title = section.settings.fontsize_title
+        assign fontsize_title_mb = section.settings.fontsize_title_mb
+        assign margin_bottom_title = section.settings.margin_bottom_title
+        assign color_des = section.settings.color_des
+        assign fontsize_des = section.settings.fontsize_des
+        assign mg_top_desktop = section.settings.mg_top_desktop
+        assign mg_top_tablet = section.settings.mg_top_tablet
+        assign mg_top_mobile = section.settings.mg_top_mobile
+        assign mg_bottom_desktop = section.settings.mg_bottom_desktop
+        assign mg_bottom_tablet = section.settings.mg_bottom_tablet
+        assign mg_bottom_mobile = section.settings.mg_bottom_mobile
+        assign padding_full_width = section.settings.padding_full_width
+        assign enable_border_title = section.settings.enable_border_title
+    -%}
+    {%- if custom_image_bg_image != blank -%}
+        .section-block-{{section.id}}{background: url({{ custom_image_bg_image | img_url: '1920x' }}); background-repeat: repeat-x; background-size: cover;}
+        .section-block-{{section.id}} .halo-block-header .title .text {background-color: transparent;}
+    {%- else -%}
+        .section-block-{{section.id}} {background: {% if custom_image_banner_bg_gradient != blank %}{{ custom_image_banner_bg_gradient }}{% else %}{{ custom_image_banner_bg }}{% endif %};}
+        .section-block-{{section.id}} .halo-block-header .title .text {background: {% if custom_image_banner_bg_gradient != blank %}{% if enable_border_title %}{{ custom_image_banner_bg_gradient }}{% else %}transparent{% endif %}{% else %}{% if custom_image_banner_bg != 'rgba(0,0,0,0)' %}{{ custom_image_banner_bg }}{% else %}#fff{% endif %}{% endif %};}
+    {%- endif -%}
+    .section-block-{{section.id}} .halo-block-header .title:before {background-color: {{ color_title }};{% unless enable_border_title %}display: none;{% endunless %}}
+    .section-block-{{section.id}} .halo-block-header .title {color: {{ color_title }}; font-size: {{ fontsize_title | append: 'px' }}; margin-bottom: {{ margin_bottom_title | append: 'px' }};{% if enable_border_title %} display: block;{% endif %}}
+    .section-block-{{section.id}} .halo-block-header .rte {color: {{ color_des }}; font-size: {{ fontsize_des | append: 'px' }};}
+    {%- if section.settings.container == 'fullwidth' -%}
+        .custom-image-banner-block {overflow: hidden;}
+    {%- endif -%}
+    @media (min-width: 1200px) {.section-block-{{section.id}} {padding-top: {{ mg_top_desktop | append: 'px' }}; padding-bottom: {{ mg_bottom_desktop | append: 'px' }};}}
+    @media (min-width: 1025px) {
+        {%- if section.settings.container == 'fullwidth' -%}
+            .section-block-{{section.id}} .container-full {padding-left: {{ padding_full_width | append: 'px' }}; padding-right: {{ padding_full_width | append: 'px' }};}
+            .custom-image-banner-block {overflow: hidden;}
+        {%- endif -%}
+        {%- unless enable_border_title -%}
+          .section-block-{{section.id}} .halo-block-header .title .text {width: auto;}
+        {%- endunless -%}
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {.section-block-{{section.id}} {padding-top: {{ mg_top_tablet | append: 'px' }}; padding-bottom: {{ mg_bottom_tablet | append: 'px' }};}}
+    @media (max-width: 1024px) {
+        {%- if custom_image_bg_image != blank -%}
+            .section-block-{{section.id}}{background-position: center top;}
+        {%- endif -%}
+        .section-block-{{section.id}}{overflow: hidden;}
+    }
+    @media (max-width: 767px) {
+        .section-block-{{section.id}} {padding-top: {{ mg_top_mobile | append: 'px' }}; padding-bottom: {{ mg_bottom_mobile | append: 'px' }};}
+        .section-block-{{section.id}} .halo-block-header .title {font-size: {{ fontsize_title_mb | append: 'px' }};}
+    }
+</style>
+{%- endif -%}
+{% schema %}
+{
+    "name": "t:sections.custom_image_banner_block.presets.section",
+    "class": "sections-custom-image-banner-block",
+    "max_blocks": 4,
+    "settings": [
+    {
+        "type": "header",
+        "content": "t:settings_schema.general.name"
+    },
+    {
+        "type": "select",
+        "id": "container",
+        "label": "t:sections.layout.container.option",
+        "default": "container",
+        "options": [
+            {
+                "value": "container",
+                "label": "t:sections.layout.container.option1"
+            },
+            {
+                "value": "1170",
+                "label": "t:sections.layout.container.option4"
+            },
+            {
+                "value": "1770",
+                "label": "t:sections.layout.container.option3"
+            },
+            {
+                "value": "fullwidth",
+                "label": "t:sections.layout.container.option2"
+            }
+        ]
+    },
+    {
+        "type": "range",
+        "id": "padding_full_width",
+        "label": "t:sections.layout.container.padding_full_width",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 0,
+        "info": "t:sections.layout.container.info_full_width"
+    },
+    {
+        "type": "select",
+        "id": "custom_image_banner_block_swipe_on_mobile",
+        "label": "t:settings_schema.typography.settings.typography.layout_mobile",
+        "default": "list",
+        "options": [
+        {
+            "value": "list",
+            "label": "t:settings_schema.typography.settings.typography.list"
+        },
+        {
+            "value": "scroll",
+            "label": "t:settings_schema.typography.settings.typography.scroll"
+        },
+        {
+            "value": "slider",
+            "label": "t:settings_schema.typography.settings.typography.slider"
+        }]
+    },
+    {
+        "type": "range",
+        "id": "item_distance",
+        "label": "t:settings_schema.typography.settings.typography.grid_gap",
+        "min": 0,
+        "max": 50,
+        "step": 5,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 15
+    },
+    {
+        "type" : "color",
+        "id" : "custom_image_banner_bg",
+        "label" : "t:settings_schema.colors.settings.colors_name.background_color",
+        "default" : "#fff"
+    },
+    {
+        "type" : "color_background",
+        "id" : "custom_image_banner_bg_gradient",
+        "label" : "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+    },
+    {
+        "type" : "image_picker",
+        "id" : "custom_image_bg_image",
+        "label" : "t:settings_schema.colors.settings.colors_name.background_image"
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_top"
+    },
+    {
+        "type": "range",
+        "id": "mg_top_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_top_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_bottom"
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 50
+    },
+    {
+        "type": "header",
+        "content": "t:sections.custom_image_banner_block.settings.header"
+    },
+    {
+        "type": "select",
+        "id": "title_align",
+        "label": "t:sections.product_block.settings.general.label__7",
+        "options": [
+        {
+            "value": "left",
+            "label": "t:sections.product_block.settings.general.options__7"
+        },
+        {
+            "value": "center",
+            "label": "t:sections.product_block.settings.general.options__8"
+        },
+        {
+            "value": "right",
+            "label": "t:sections.product_block.settings.general.options__9"
+        }],
+        "default": "center"
+    },
+    {
+        "type": "text",
+        "id": "custom_image_banner_title",
+        "label": "t:sections.image-banner.blocks.image.settings.content.label__1",
+        "default": "#Featured On Ella"
+    },
+    {
+        "type": "checkbox",
+        "id": "enable_border_title",
+        "label": "t:sections.spotlight_block.blocks.image.enable_border_title",
+        "default": true
+    },
+    {
+        "type" : "color",
+        "id" : "color_title",
+        "label": "t:sections.layout.color.color_title",
+        "default" : "#232323"
+    },
+    {
+        "type": "range",
+        "id": "fontsize_title",
+        "label": "t:sections.layout.fontsize.fontsize_title.label",
+        "min": 10,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 16
+    },
+    {
+        "type": "range",
+        "id": "fontsize_title_mb",
+        "label": "t:sections.layout.fontsize.fontsize_title.label_mb",
+        "min": 10,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 16
+    },
+    {
+        "type": "range",
+        "id": "margin_bottom_title",
+        "label": "t:sections.layout.fontsize.margin_bottom",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 45
+    },
+    {
+        "type" : "textarea",
+        "id" : "custom_image_banner_des",
+        "label" : "t:sections.image-banner.blocks.image.settings.content.label__2"
+    },
+    {
+        "type" : "color",
+        "id" : "color_des",
+        "label": "t:sections.layout.color.color_des",
+        "default" : "#3c3c3c"
+    },
+    {
+        "type": "range",
+        "id": "fontsize_des",
+        "label": "t:sections.layout.fontsize.fontsize_des.label",
+        "min": 10,
+        "max": 50,
+        "step": 1,
+        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+        "default": 16
+    }],
+    "blocks": [
+    {
+        "type": "smallImg",
+        "name": "t:sections.spotlight_block.blocks.image.smallImg",
+        "settings": [
+        {
+            "type": "header",
+            "content": "t:settings_schema.general.name"
+        },
+        {
+            "type": "text",
+            "id": "item_width",
+            "label": "t:settings_schema.typography.settings.typography.item_width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_grid_gap",
+            "label": "t:settings_schema.typography.settings.typography.item_grid_gap",
+            "min": 0,
+            "max": 50,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 15
+        },
+        {
+            "type": "range",
+            "id": "item_border_radirus",
+            "label": "t:settings_schema.typography.settings.typography.item_border_radirus",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "select",
+            "id": "title_align",
+            "label": "t:sections.custom_image_banner_block.settings.title_align",
+            "default": "left",
+            "options": [
+            {
+                "value": "left",
+                "label": "t:sections.product_block.settings.general.options__7"
+            },
+            {
+                "value": "center",
+                "label": "t:sections.product_block.settings.general.options__8"
+            },
+            {
+                "value": "right",
+                "label": "t:sections.product_block.settings.general.options__9"
+            }]
+        },
+        {
+            "type": "select",
+            "id": "align_items",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__9",
+            "default": "bottom",
+            "options": [
+            {
+                "value": "top",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__9"
+            },
+            {
+                "value": "center",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__7"
+            },
+            {
+                "value": "bottom",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__10"
+            }]
+        },
+        {
+            "type": "range",
+            "id": "align_items_spacing",
+            "label": "t:sections.custom_image_banner_block.settings.align_items_spacing_tb",
+            "min": 0,
+            "max": 500,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 15
+        },
+        {
+            "type": "range",
+            "id": "align_items_spacing_lr",
+            "label": "t:sections.custom_image_banner_block.settings.align_items_spacing_lr",
+            "min": 0,
+            "max": 500,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 30
+        },
+        {
+            "type": "checkbox",
+            "id": "border_sub_title",
+            "label": "t:sections.spotlight_block.blocks.image.border_sub_title",
+            "default": false
+        },
+        {
+            "type": "range",
+            "id": "fontsize_sub_title",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_font_size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 18
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_sub_title",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 10
+        },
+        {
+            "type": "range",
+            "id": "fontsize_title",
+            "label": "t:sections.layout.fontsize.fontsize_title.label",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 24
+        },
+        {
+            "type": "range",
+            "id": "fontsize_title_mb",
+            "label": "t:settings_schema.typography.settings.typography.title_font_size_mb",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_title",
+            "label": "t:settings_schema.typography.settings.typography.title_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 5
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_title_mb",
+            "label": "t:settings_schema.typography.settings.typography.title_mg_bottom_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 5
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_style_italic",
+            "label": "t:sections.image-banner.blocks.image.settings.style.enable_style_italic"
+        },
+        {
+            "type": "range",
+            "id": "fontsize_des",
+            "label": "t:sections.layout.fontsize.fontsize_des.label",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_des",
+            "label": "t:settings_schema.typography.settings.typography.des_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_des_mb",
+            "label": "t:settings_schema.typography.settings.typography.des_margin_bottom_mb",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "fontsize_btn",
+            "label": "t:settings_schema.typography.settings.typography.button_font_size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "button_width",
+            "label": "t:settings_schema.typography.settings.typography.button_width",
+            "min": 100,
+            "max": 600,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 190
+        },
+        {
+            "type": "range",
+            "id": "bg_opacity_button",
+            "label": "t:settings_schema.typography.settings.typography.button_background_opacity",
+            "min": 0,
+            "max": 1,
+            "step": 0.1,
+            "default": 1
+        },
+        {
+            "type": "select",
+            "id": "btn_text_transform",
+            "label": "t:settings_schema.typography.settings.typography.button_text_transform",
+            "default": "uppercase",
+            "options": [
+            {
+                "value": "lowercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__4"
+            },
+            {
+                "value": "capitalize",
+                "label": "t:settings_schema.typography.settings.text_transform.options__2"
+            },
+            {
+                "value": "uppercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__3"
+            }]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.main-product.settings.general.animation"
+        },
+        {
+          "type": "select",
+          "id": "image_behavior",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:settings_schema.typography.settings.text_transform.options__1"
+            },
+            {
+              "value": "ambient",
+              "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+            },
+            {
+              "value": "zoom-in",
+              "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+            }
+          ],
+          "default": "none",
+          "label": "t:sections.main-product.settings.general.image_behavior.label"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.custom_image_banner_block.settings.item_1"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_item_1",
+            "label": "t:sections.custom_image_banner_block.settings.enable_item_1",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "item_width_1",
+            "label": "t:settings_schema.typography.settings.typography.width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_spacing_1",
+            "label": "t:sections.custom_image_banner_block.settings.spacing_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 50
+        },
+        {
+            "type": "image_picker",
+            "id": "image_1",
+            "label": "t:sections.spotlight_block.blocks.image.name"
+        },
+        {
+            "type": "text",
+            "id": "sub_title_1",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type" : "color",
+            "id" : "color_sub_title_1",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_color",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "title_1",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__1",
+            "default" : "Lorem"
+        },
+        {
+            "type" : "color",
+            "id" : "color_title_1",
+            "label": "t:sections.layout.color.color_title",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "textarea",
+            "id" : "des_1",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__2",
+            "default" : "Nullam aliquet"
+        },
+        {
+            "type" : "color",
+            "id" : "color_des_1",
+            "label": "t:sections.layout.color.color_des",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "button_1",
+            "label" : "t:sections.spotlight_block.blocks.image.button"
+        },
+        {
+            "type": "url",
+            "id": "link_1",
+            "label": "t:sections.spotlight_block.blocks.image.link.label"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_1",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_1",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_1",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_1",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_hover_1",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_hover_1",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_hover_1",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_hover_1",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "textarea",
+            "id" : "btn_icon_1",
+            "label" : "t:sections.spotlight_block.settings.icon",
+            "info" : "Go to this link [Find your Icon](https://fontawesome.com/v5.15/icons?d=gallery&p=2). Find the icon you want, then copy the SVG code and paste it here."
+        },
+        {
+            "type": "header",
+            "content": "t:sections.custom_image_banner_block.settings.item_2"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_item_2",
+            "label": "t:sections.custom_image_banner_block.settings.enable_item_2",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "item_width_2",
+            "label": "t:settings_schema.typography.settings.typography.width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_spacing_2",
+            "label": "t:sections.custom_image_banner_block.settings.spacing_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 50
+        },
+        {
+            "type": "image_picker",
+            "id": "image_2",
+            "label": "t:sections.spotlight_block.blocks.image.name"
+        },
+        {
+            "type": "text",
+            "id": "sub_title_2",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type" : "color",
+            "id" : "color_sub_title_2",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_color",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "title_2",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__1",
+            "default" : "Lorem"
+        },
+        {
+            "type" : "color",
+            "id" : "color_title_2",
+            "label": "t:sections.layout.color.color_title",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "textarea",
+            "id" : "des_2",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__2",
+            "default" : "Nullam aliquet"
+        },
+        {
+            "type" : "color",
+            "id" : "color_des_2",
+            "label": "t:sections.layout.color.color_des",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "button_2",
+            "label" : "t:sections.spotlight_block.blocks.image.button"
+        },
+        {
+            "type": "url",
+            "id": "link_2",
+            "label": "t:sections.spotlight_block.blocks.image.link.label"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_2",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_2",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_2",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_2",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_hover_2",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_hover_2",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_hover_2",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_hover_2",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "textarea",
+            "id" : "btn_icon_2",
+            "label" : "t:sections.spotlight_block.settings.icon",
+            "info" : "Go to this link [Find your Icon](https://fontawesome.com/v5.15/icons?d=gallery&p=2). Find the icon you want, then copy the SVG code and paste it here."
+        },
+        {
+            "type": "header",
+            "content": "t:sections.custom_image_banner_block.settings.item_3"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_item_3",
+            "label": "t:sections.custom_image_banner_block.settings.enable_item_3",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "item_width_3",
+            "label": "t:settings_schema.typography.settings.typography.width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_spacing_3",
+            "label": "t:sections.custom_image_banner_block.settings.spacing_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "image_picker",
+            "id": "image_3",
+            "label": "t:sections.spotlight_block.blocks.image.name"
+        },
+        {
+            "type": "text",
+            "id": "sub_title_3",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type" : "color",
+            "id" : "color_sub_title_3",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_color",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "title_3",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__1",
+            "default" : "Lorem"
+        },
+        {
+            "type" : "color",
+            "id" : "color_title_3",
+            "label": "t:sections.layout.color.color_title",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "textarea",
+            "id" : "des_3",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__2",
+            "default" : "Nullam aliquet"
+        },
+        {
+            "type" : "color",
+            "id" : "color_des_3",
+            "label": "t:sections.layout.color.color_des",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "button_3",
+            "label" : "t:sections.spotlight_block.blocks.image.button"
+        },
+        {
+            "type": "url",
+            "id": "link_3",
+            "label": "t:sections.spotlight_block.blocks.image.link.label"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_3",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_3",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_3",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_3",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_hover_3",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_hover_3",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_hover_3",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_hover_3",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "textarea",
+            "id" : "btn_icon_3",
+            "label" : "t:sections.spotlight_block.settings.icon",
+            "info" : "Go to this link [Find your Icon](https://fontawesome.com/v5.15/icons?d=gallery&p=2). Find the icon you want, then copy the SVG code and paste it here."
+        },
+        {
+            "type": "header",
+            "content": "t:sections.custom_image_banner_block.settings.item_4"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_item_4",
+            "label": "t:sections.custom_image_banner_block.settings.enable_item_4",
+            "default": true
+        },
+        {
+            "type": "text",
+            "id": "item_width_4",
+            "label": "t:settings_schema.typography.settings.typography.width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_spacing_4",
+            "label": "t:sections.custom_image_banner_block.settings.spacing_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "image_picker",
+            "id": "image_4",
+            "label": "t:sections.spotlight_block.blocks.image.name"
+        },
+        {
+            "type": "text",
+            "id": "sub_title_4",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type" : "color",
+            "id" : "color_sub_title_4",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_color",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "title_4",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__1",
+            "default" : "Lorem"
+        },
+        {
+            "type" : "color",
+            "id" : "color_title_4",
+            "label": "t:sections.layout.color.color_title",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "textarea",
+            "id" : "des_4",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__2",
+            "default" : "Nullam aliquet"
+        },
+        {
+            "type" : "color",
+            "id" : "color_des_4",
+            "label": "t:sections.layout.color.color_des",
+            "default" : "#ffffff"
+        },
+        {
+            "type" : "text",
+            "id" : "button_4",
+            "label" : "t:sections.spotlight_block.blocks.image.button"
+        },
+        {
+            "type": "url",
+            "id": "link_4",
+            "label": "t:sections.spotlight_block.blocks.image.link.label"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_4",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_4",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_4",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_4",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_hover_4",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_hover_4",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_hover_4",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_hover_4",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "textarea",
+            "id" : "btn_icon_4",
+            "label" : "t:sections.spotlight_block.settings.icon",
+            "info" : "Go to this link [Find your Icon](https://fontawesome.com/v5.15/icons?d=gallery&p=2). Find the icon you want, then copy the SVG code and paste it here."
+        }]
+    },
+    {
+        "type": "largeImg",
+        "name": "t:sections.spotlight_block.blocks.image.largeImg",
+        "settings": [
+        {
+            "type": "text",
+            "id": "item_width",
+            "label": "t:settings_schema.typography.settings.typography.item_width",
+            "default": "50%",
+            "info": "Example: 50%"
+        },
+        {
+            "type": "range",
+            "id": "item_border_radirus",
+            "label": "t:settings_schema.typography.settings.typography.item_border_radirus",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "item_spacing",
+            "label": "t:sections.custom_image_banner_block.settings.spacing_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.spotlight_block.blocks.image.name"
+        },
+        {
+            "type": "select",
+            "id": "title_align",
+            "label": "t:sections.product_block.settings.general.label__7",
+            "default": "left",
+            "options": [
+            {
+                "value": "left",
+                "label": "t:sections.product_block.settings.general.options__7"
+            },
+            {
+                "value": "center",
+                "label": "t:sections.product_block.settings.general.options__8"
+            },
+            {
+                "value": "right",
+                "label": "t:sections.product_block.settings.general.options__9"
+            }]
+        },
+        {
+            "type": "select",
+            "id": "align_items",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__9",
+            "default": "bottom",
+            "options": [
+            {
+                "value": "top",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__9"
+            },
+            {
+                "value": "center",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__7"
+            },
+            {
+                "value": "bottom",
+                "label": "t:sections.image-banner.blocks.image.settings.content.options__10"
+            }]
+        },
+        {
+            "type": "range",
+            "id": "align_items_spacing",
+            "label": "t:sections.custom_image_banner_block.settings.align_items_spacing_tb",
+            "min": 0,
+            "max": 500,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 30
+        },
+        {
+            "type": "range",
+            "id": "align_items_spacing_lr",
+            "label": "t:sections.custom_image_banner_block.settings.align_items_spacing_lr",
+            "min": 0,
+            "max": 500,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 45
+        },
+        {
+            "type": "text",
+            "id": "sub_title",
+            "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+        },
+        {
+            "type": "checkbox",
+            "id": "border_sub_title",
+            "label": "t:sections.spotlight_block.blocks.image.border_sub_title",
+            "default": false
+        },
+        {
+            "type" : "color",
+            "id" : "color_sub_title",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_color",
+            "default" : "#ffffff"
+        },
+        {
+            "type": "range",
+            "id": "fontsize_sub_title",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_font_size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 18
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_sub_title",
+            "label": "t:settings_schema.typography.settings.typography.sub_title_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 10
+        },
+        {
+            "type" : "text",
+            "id" : "title",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__1",
+            "default" : "Lorem De Dorus"
+        },
+        {
+            "type" : "color",
+            "id" : "color_title",
+            "label": "t:sections.layout.color.color_title",
+            "default" : "#ffffff"
+        },
+        {
+            "type": "range",
+            "id": "fontsize_title",
+            "label": "t:sections.layout.fontsize.fontsize_title.label",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 24
+        },
+        {
+            "type": "range",
+            "id": "fontsize_title_mb",
+            "label": "t:settings_schema.typography.settings.typography.title_font_size_mb",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_title",
+            "label": "t:settings_schema.typography.settings.typography.title_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 10
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_title_mb",
+            "label": "t:settings_schema.typography.settings.typography.title_mg_bottom_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 5
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_style_italic",
+            "label": "t:sections.image-banner.blocks.image.settings.style.enable_style_italic"
+        },
+        {
+            "type" : "textarea",
+            "id" : "des",
+            "label" : "t:sections.image-banner.blocks.image.settings.content.label__2",
+            "default" : "Nullam aliquet vestibulum augue non varius."
+        },
+        {
+            "type" : "color",
+            "id" : "color_des",
+            "label": "t:sections.layout.color.color_des",
+            "default" : "#ffffff"
+        },
+        {
+            "type": "range",
+            "id": "fontsize_des",
+            "label": "t:sections.layout.fontsize.fontsize_des.label",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_des",
+            "label": "t:settings_schema.typography.settings.typography.des_margin_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "mg_bottom_des_mb",
+            "label": "t:settings_schema.typography.settings.typography.des_margin_bottom_mb",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 20
+        },
+        {
+            "type" : "text",
+            "id" : "button",
+            "label" : "t:sections.spotlight_block.blocks.image.button",
+            "default" : "Shop Now"
+        },
+        {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.spotlight_block.blocks.image.link.label"
+        },
+        {
+            "type": "range",
+            "id": "fontsize_btn",
+            "label": "t:settings_schema.typography.settings.typography.button_font_size",
+            "min": 10,
+            "max": 50,
+            "step": 1,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "button_width",
+            "label": "t:settings_schema.typography.settings.typography.button_width",
+            "min": 100,
+            "max": 600,
+            "step": 5,
+            "unit": "t:sections.layout.mg_desktop.unit",
+            "default": 190
+        },
+        {
+            "type" : "color",
+            "id" : "color_button",
+            "label": "t:settings_schema.colors.settings.colors_name.color",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button",
+            "label": "t:settings_schema.colors.settings.colors_name.border_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type" : "color",
+            "id" : "color_button_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.color_hover",
+            "default" : "#fff"
+        },
+        {
+            "type" : "color",
+            "id" : "border_color_button_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.border_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color",
+            "id" : "bg_color_button_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover",
+            "default" : "#232323"
+        },
+        {
+            "type" : "color_background",
+            "id" : "bg_gradient_color_button_hover",
+            "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+        },
+        {
+            "type": "range",
+            "id": "bg_opacity_button",
+            "label": "t:settings_schema.typography.settings.typography.button_background_opacity",
+            "min": 0,
+            "max": 1,
+            "step": 0.1,
+            "default": 1
+        },
+        {
+            "type": "select",
+            "id": "btn_text_transform",
+            "label": "t:settings_schema.typography.settings.typography.button_text_transform",
+            "default": "uppercase",
+            "options": [
+            {
+                "value": "none",
+                "label": "t:settings_schema.typography.settings.text_transform.options__1"
+            },
+            {
+                "value": "lowercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__2"
+            },
+            {
+                "value": "capitalize",
+                "label": "t:settings_schema.typography.settings.text_transform.options__3"
+            },
+            {
+                "value": "uppercase",
+                "label": "t:settings_schema.typography.settings.text_transform.options__4"
+            }]
+        },
+        {
+            "type": "textarea",
+            "id" : "btn_icon",
+            "label" : "t:sections.spotlight_block.settings.icon",
+            "info" : "Go to this link [Find your Icon](https://fontawesome.com/v5.15/icons?d=gallery&p=2). Find the icon you want, then copy the SVG code and paste it here."
+        },
+        {
+          "type": "select",
+          "id": "image_behavior",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:settings_schema.typography.settings.text_transform.options__1"
+            },
+            {
+              "value": "ambient",
+              "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+            },
+            {
+              "value": "zoom-in",
+              "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+            }
+          ],
+          "default": "none",
+          "label": "t:sections.main-product.settings.general.image_behavior.label"
+        }
+    ]
+    }],
+    "presets": [
+    {
+        "name": "t:sections.custom_image_banner_block.presets.name",
+        "blocks": [
+        {
+            "type": "smallImg"
+        },
+        {
+            "type": "largeImg"
+        }]
+    }],
+    "disabled_on": {
+        "groups": ["header"]
+    }
+}
+{% endschema %}

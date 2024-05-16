@@ -1,0 +1,211 @@
+<div class="cart-edit" data-template-cart-edit data-count="1">
+    {%- liquid
+        assign current_variant = product.selected_or_first_available_variant
+        assign variantCount = product.variants | size
+    -%}
+    <script>
+        window.edit_cart_inven_array_{{ product.id }} = {
+            {% for variant in product.variants %}
+                '{{ variant.id }}': '{{ variant.inventory_quantity }}',
+            {%endfor%}
+        };
+    </script>
+    <div class="product-edit-item product-edit-itemFirst isChecked clearfix" id="product-edit-{{ product.id }}" data-cart-edit-id="{{ product.id }}" data-position="0">
+        <div class="product-edit-itemLeft">
+            {%- liquid 
+                if current_variant.image
+                    assign image = current_variant.image
+                else
+                    assign image = product.featured_image.src
+                endif
+            -%} 
+            <a class="product-edit-image card-media--adapt" href="{{ product.url | within: collection }}"
+                    style="padding-bottom: {{ 1 | divided_by: image.aspect_ratio | times: 100 }}%;"
+            >
+                <img srcset="{{ image | img_url: '270x' }}" src="{{ image | img_url: '270x' }}" alt="{{ product.title | escape }}" sizes="auto" loading="lazy">
+            </a>
+            <a href="javascript:void(0)" class="product-edit-remove" data-edit-cart-remove>
+                {% render 'icon-close' %}
+            </a>
+        </div>
+        <div class="product-edit-itemCenter">
+            <h3 class="product-edit-title">
+                {{ product.title | escape }}
+            </h3>
+            <span class="product-edit-title-variant" data-change-title>{{ current_variant.title }}</span>
+            <div class="product-edit-price">
+                <span class="compare-price old-price" {% unless current_variant.compare_at_price %}style="display: none;"{% endunless %}>
+                    {{ current_variant.compare_at_price | money }}
+                </span>
+                <span class="price{% if current_variant.compare_at_price %} new-price{% endif %}">
+                    {{ current_variant.price | money }}
+                </span>
+            </div>
+            <quantity-edit-cart-input class="product-edit-quantity quantity__group">
+                <label class="form-label quantity__label" for="edit-quantity-{{ product.id }}">
+                    {{ 'products.product.quantity.label' | t }}:
+                </label>
+                <div class="update-quantity__group">
+                    <a href="#" data-minus-quantity-cart="" class="minus btn-quantity"></a>
+                    <input class="form-input quantity__input" type="number" id="edit-quantity-{{ product.id }}" name="quantity" min="1" value="1" pattern="[0-9]*" {% if current_variant.inventory_management != null and current_variant.inventory_quantity > 0 %} data-quantity="{{ current_variant.inventory_quantity }}"{% endif %}>
+                    <a href="#" data-plus-quantity-cart="" class="plus btn-quantity"></a>
+                </div>
+                <span class="quantity__message"></span>
+            </quantity-edit-cart-input>
+            {%- if settings.show_notify_form -%}
+                <div class="product-edit-notifyMe halo-notifyMe" style="display: none;">
+                    {% render 'halo-notify-sold-out',
+                        id: product.id,
+                        current_variant: current_variant
+                    %}
+                </div>
+            {%- endif -%}
+        </div>
+        <div class="product-edit-itemRight">
+            
+            {%- assign product_form_id = 'product-form-edit-' | append: product.id -%}
+            {% form 'product', product, id: product_form_id, novalidate: 'novalidate' %}
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+            {% endform %}
+            <div class="product-edit-options halo-productOptions" id="product-edit-options-{{ product.id }}">
+                {%- if variantCount > 0  and product.has_only_default_variant != true  -%}
+                    {%- if settings.quick_edit_cart_picker_type == 'button' -%}
+                        {%- assign product_swatch_option = settings.swatch | downcase -%}
+                        <variant-edit-radios class="no-js-hidden product-edit-option has-default" data-product="{{ product.id }}" data-url="{{ product.url }}">
+                            {%- for option in product.options_with_values -%}
+                                {%- liquid
+                                    assign is_swatch = false
+                                    assign option_name = option.name | downcase
+                                    if product_swatch_option contains option_name
+                                        assign is_swatch = true
+                                    endif
+                                    assign swatch_type = settings.swatch_type
+                                    assign option_index = forloop.index0
+                                -%}
+                                <fieldset class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ forloop.index0 }}">
+                                    <legend class="form__label">
+                                        {{ option.name | append: ':' }}
+                                        <span data-header-option>
+                                            {{ option.selected_value }}
+                                        </span>
+                                    </legend>
+                                    {%- assign values = '' -%}
+                                    {%- for variant in product.variants -%}
+                                        {%- assign value = variant.options[option_index] -%}
+                                        {%- unless values contains value -%}
+                                            {%- liquid
+                                                assign values = values | join: ';'
+                                                assign values = values | append: ';' | append: value
+                                                assign values = values | split: ';'
+                                            -%}
+                                            <input class="product-form__radio" type="radio" id="option-edit-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                                name="{{ option.name }}"
+                                                value="{{ value | escape }}"
+                                                {% if option.selected_value == value %}checked{% endif %}
+                                            >
+                                            {%- if is_swatch -%}
+                                                {%- liquid
+                                                    assign enable_variant_image = false
+                                                    case swatch_type
+                                                        when 'variant_image'
+                                                            assign background_image = variant.image.src | product_img_url: '40x'
+                                                            if variant.image
+                                                                assign enable_variant_image = true
+                                                            endif
+                                                        when 'color'
+                                                            assign background_image = value | handle | append: '.png' | file_url
+                                                            assign enable_variant_image = true
+                                                        when 'metafields'
+                                                            assign variant_color = variant.metafields.custom.variant_color
+                                                            assign color_codes = false
+                            
+                                                            if variant_color
+                                                                assign enable_variant_image = true
+                                                            
+                                                                if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                                                    assign color_codes = true
+                                                                    assign background_color = variant_color
+                                                                else
+                                                                    assign background_image = variant_color | append: '.png' | file_url
+                                                                endif
+                                                            elsif variant.image
+                                                                assign enable_variant_image = true
+                                                                assign background_image = variant.image.src | product_img_url: '40x'
+                                                            endif
+                                                    endcase
+                                                -%}
+                                                <label class="product-form__label {% if variant.available %} available{% else %} soldout{% endif %}" for="option-edit-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
+                                                    <span
+                                                        class="pattern"
+                                                        style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                                    ></span>
+                                                </label>
+                                            {%- else -%}   
+                                                <label class="product-form__label{% if variant.available %} available{% else %} soldout{% endif %}" for="option-edit-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
+                                                    <span class="text">{{ value }}</span>
+                                                </label>
+                                            {%- endif -%}
+                                        {%- endunless -%}
+                                    {%- endfor -%}
+                                </fieldset>
+                            {%- endfor -%}
+                            <div class="product-edit-message alertBox alertBox--info" style="display: none;">
+                                <p class="alertBox-message"></p>
+                            </div>
+                            <script type="application/json">
+                                {{ product.variants | json }}
+                            </script>
+                        </variant-edit-radios>
+                    {%- else -%}
+                        <variant-edit-selects class="no-js-hidden product-edit-option has-default" data-product="{{ product.id }}" data-url="{{ product.url }}">
+                            {%- for option in product.options_with_values -%}
+                                <div class="product-form__input product-form__input--dropdown" data-product-attribute="set-select" data-option-index="{{ forloop.index0 }}">
+                                    <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                                        {{ option.name | append: ':' }}
+                                        <span data-header-option>
+                                            {{ option.selected_value }}
+                                        </span>
+                                    </label>
+                                    <div class="form__select select">
+                                        <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                                            class="select__select"
+                                            name="options[{{ option.name | escape }}]"
+                                        >
+                                            {%- for value in option.values -%}
+                                                <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                                                    {{ value }}
+                                                </option>
+                                            {%- endfor -%}
+                                        </select>
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                            <script type="application/json">
+                                {{ product.variants | json }}
+                            </script>
+                        </variant-edit-selects>
+                    {%- endif -%}
+                    {%- if settings.show_hot_stock -%}
+                        {% assign productMaxStock = settings.hot_stock_limit | plus: 0 %}
+                        <div class="product-edit-hotStock" data-edit-cart-hot-stock="{{ productMaxStock }}">
+                            {%- if current_variant.inventory_management -%}
+                                {%- if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= productMaxStock -%}
+                                    {{ 'products.product.hot_stock' | t : inventory: current_variant.inventory_quantity }}
+                                {%- endif -%}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="add-more link link-underline" data-edit-cart-add-more>
+            <span class="text">{{ 'products.product.add.label' | t }}</span>
+        </a>
+    </div>
+    
+</div>
+<div class="product-edit-action">
+    <button data-update-cart-edit class="button button--primary" id="add-all-to-cart">
+        {{ 'products.product.add_to_cart' | t }}
+    </button>
+</div>

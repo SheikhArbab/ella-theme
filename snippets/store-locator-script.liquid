@@ -1,0 +1,261 @@
+<script>
+    const mapStyles=[
+        {
+            name: "streets",
+            url: 'mapbox://styles/halothemes/claklt5h1000814t7eou03m2c'
+        },
+        {   
+            name: "monochrome",
+            url: 'mapbox://styles/halothemes/claklyye3000g15thypsqfken'
+        },
+        {
+            name: "outdoors",
+            url: 'mapbox://styles/halothemes/claklzj6z001415nyb02676pb'
+        },
+        {
+            name: "navigation",
+            url: 'mapbox://styles/halothemes/clakm06ar000h15thwza0nce3'
+        },
+        {
+            name: "satellite_streets",
+            url: 'mapbox://styles/halothemes/clakm0l99000915p3y09u02ll'
+        }
+    ]
+    const mapElement = document.getElementById('map')
+    const style = mapStyles.find(style => style.name === mapElement.dataset.mapStyle);
+    const distanceUnit = mapElement.dataset.distanceUnit;
+    const pitch = Number(mapElement.dataset.pitch);
+    const bearing = Number(mapElement.dataset.bearing);
+    let boundingBox = mapElement.dataset.boundingBox;
+
+    boundingBox = boundingBox.split(',').map(coordinate => Number(coordinate.trim()));
+
+    if (boundingBox.length === 0 || boundingBox.some(coordinate => isNaN(coordinate)) || boundingBox == null || boundingBox === '') {
+        boundingBox = [-171.791110603, 18.91619, -66.96466, 71.3577635769];
+    }
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFsb3RoZW1lcyIsImEiOiJjbGFrbHY1MWMwNGYyM29xaWJqczlxeWk1In0.4xOROr_ZFu8v0Nu3vDRJXg';
+
+    const map = new mapboxgl.Map({
+        container: 'map', 
+        style: style.url,   
+        center: [-77.034084, 38.909671],
+        zoom: 13,       
+        scrollZoom: false,
+        pitch,
+        bearing
+    });
+
+    const stores = {
+        type: "FeatureCollection",
+        features: [
+            {% for block in section.blocks %}
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        {{ block.settings.lng }},
+                        {{ block.settings.lat }}
+                    ]
+                },
+                "properties": {
+                    "phone": "{{ block.settings.phone_formatted }}",
+                    "address": "{{ block.settings.address }}",
+                    "city": "{{ block.settings.city }}",
+                    "country": "{{ block.settings.country }}",
+                    "crossStreet": "{{ block.settings.cross_street }}",
+                    "postal_code": "{{ block.settings.postal_code }}",
+                    "state": "{{ block.settings.state }}",
+                }
+            },
+            {% endfor %}
+        ]
+    }
+    
+    stores.features.forEach((store, index) => {
+        store.properties.id = `store_${index}`;
+    })
+
+    map.on('style.load', () => {
+        map.setFog({});
+        map.resize();
+    });
+
+    map.on('load', () => {
+        map.addSource('places', {
+            type: 'geojson',
+            data: stores,
+        })
+
+        const geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken, 
+            mapboxgl: mapboxgl, 
+            marker: true,   
+            bbox: boundingBox,
+        });     
+
+        geocoder.on('result', e => {
+            const searchResults = e.result.geometry;
+            const options = { units: distanceUnit };
+
+            stores.features.forEach(store => {
+                store.properties.distance = turf.distance(searchResults, store.geometry, options);
+            })
+
+            stores.features.sort((a, b) => {
+                if (a.properties.distance > b.properties.distance) return 1;
+                if (a.properties.distance < b.properties.distance) return -1;
+                return 0;
+            })
+
+            const listings = document.getElementById('listings');
+            while (listings.firstChild) {
+            listings.removeChild(listings.firstChild);
+            }
+
+            buildStoreLocationList(stores);
+
+            const activeListing = document.getElementById(
+                `${stores.features[0].properties.id}`
+            );
+
+            activeListing.classList.add('active');
+            activeListing.scrollIntoView({ block: 'start', behavior: 'smooth' });
+
+            const bbox = getBbox(stores, 0, searchResults);
+            map.fitBounds(bbox, {
+                padding: 100
+            })
+
+            createPopup(stores.features[0]);
+        })
+
+        map.addControl(geocoder, 'top-left');
+        map.addControl(new mapboxgl.NavigationControl());
+        addMarkers(stores)
+        buildStoreLocationList(stores);
+    })
+
+    function addMarkers(stores) {
+        stores.features.forEach(store => {
+            const marker = document.createElement('div');
+            marker.id = `marker-${store.properties.id}`;
+            marker.classList.add('marker');
+
+            marker.addEventListener('click', e => {
+                flyToLocation(store);
+                createPopup(store);
+
+                const activeItem = document.querySelector('.page-find-a-store .item.active') 
+
+                if (activeItem) activeItem.classList.remove('active');
+
+                const listing = document.getElementById(`${store.properties.id}`);
+                listing.classList.add('active');
+            })
+
+            new mapboxgl.Marker(marker, { offset: [0, -23] })
+            .setLngLat(store.geometry.coordinates)
+            .addTo(map);
+        })
+    }
+
+    function buildStoreLocationList(stores) {
+        stores.features.forEach(store => {
+            const listings = document.getElementById('listings');
+            const listing = listings.appendChild(document.createElement('div'));
+            listing.id = store.properties.id;
+            listing.classList.add('item')
+
+            const link = listing.appendChild(document.createElement('a'));
+            link.href = '#';
+            link.classList.add('title');
+            link.id = `link-${store.properties.id}`;
+            link.innerHTML = `${store.properties.address}`;
+
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const currentFeature = stores.features.find(feature =>  link.id === `link-${feature.properties.id}`);
+                flyToLocation(currentFeature);
+                createPopup(currentFeature);
+
+                const activeItem = document.querySelector('.page-find-a-store .item.active');
+                if (activeItem) activeItem.classList.remove('active');
+
+                link.parentNode.classList.add('active');
+
+            })
+
+            const details = listing.appendChild(document.createElement('div'));
+            let html = `${store.properties.city}`
+
+            if (store.properties.phone) html += ` - ${store.properties.phone}`;
+
+            if (store.properties.distance) {
+                const roundedDistance = Math.round(store.properties.distance * 100) / 100;
+                html += `<div><strong>${roundedDistance} ${distanceUnit.toLowerCase()} away!</strong></div>`    
+            }
+            details.innerHTML = html;
+        })
+    }
+
+    function flyToLocation(currentFeature) {
+        map.flyTo({
+            center: currentFeature.geometry.coordinates,
+            zoom: 15,
+        })
+    }
+
+    function createPopup(currentFeature) {
+        const existingPopups = document.getElementsByClassName('mapboxgl-popup');
+
+        if (existingPopups[0]) existingPopups[0].remove();
+
+        const { address, city, phone, country, crossStreet } = currentFeature.properties;
+
+        const popup = new mapboxgl.Popup({ closeOnClick: false })
+        .setLngLat(currentFeature.geometry.coordinates) 
+        .setHTML(`<h3>${address}</h3><h4>${city}${city && phone ? ' - ' : ' '}${phone}${crossStreet && `<br/>${crossStreet}`}${country && `<br/>${country}`}</h4>`)
+        .addTo(map) 
+    }
+
+    function getBbox(sortedStores, storeIdentifier, searchResult) {
+        const lats = [
+            sortedStores.features[storeIdentifier].geometry.coordinates[1],
+            searchResult.coordinates[1]
+        ];
+
+        const lons = [
+            sortedStores.features[storeIdentifier].geometry.coordinates[0],
+            searchResult.coordinates[0]
+        ];
+
+        const sortedLons = lons.sort((a, b) => {
+            if (a > b) {
+                return 1;
+            }
+            if (a.distance < b.distance) {
+                return -1;
+            }
+            return 0;
+        });
+
+        const sortedLats = lats.sort((a, b) => {
+            if (a > b) {
+                return 1;
+            }
+            if (a.distance < b.distance) {
+                return -1;
+            }
+                return 0;
+        });
+
+        return [
+            [sortedLons[0], sortedLats[0]],
+            [sortedLons[1], sortedLats[1]]
+        ];
+    }   
+</script>

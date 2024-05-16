@@ -1,0 +1,322 @@
+#halo-quickshop-popup-option-3 {
+    max-width: 680px;
+    width: 70%;
+    transform: translate(calc(-50% + 10px), -50%);
+}
+
+body.quickshop-popup-show #halo-quickshop-popup-option-3 {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: translate(-50%,-50%);
+}
+
+body.quickshop-popup-show {
+    overflow-y: hidden;
+}
+
+body.quickshop-popup-show .background-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#halo-quickshop-popup-option-3 .halo-popup-wrapper {
+    padding: 30px;
+}
+
+#halo-quickshop-popup-option-3 .on-desktop-hide {
+    display: none;
+}
+
+#halo-quickshop-popup-option-3 .on-mobile-hide {
+    display: block;
+}
+
+#halo-quickshop-popup-option-3 .productView-top {
+    padding-right: 0;
+    display: flex;
+}
+
+#halo-quickshop-popup-option-3 .productView-thumbnail-wrapper, 
+#halo-quickshop-popup-option-3 .productView-desc,
+#halo-quickshop-popup-option-3 .productView-info,
+#halo-quickshop-popup-option-3 .productView-property,
+#halo-quickshop-popup-option-3 .productView-wishlist,
+#halo-quickshop-popup-option-3 .productView-more,
+#halo-quickshop-popup-option-3 .productView-hotStock,
+#halo-quickshop-popup-option-3 .productView-notifyMe {
+    display: none;
+}
+
+#halo-quickshop-popup-option-3 .price {
+    justify-content: flex-start;
+    margin-bottom: 9px;
+}
+
+#halo-quickshop-popup-option-3 .halo-productView-left {
+    width: 45%;
+    padding-right: 20px;
+}
+
+#halo-quickshop-popup-option-3 .halo-productView-right {
+    width: 55%; 
+    margin-bottom: 0;
+}
+
+#halo-quickshop-popup-option-3 .product-option {
+    flex-direction: column;
+}
+
+#halo-quickshop-popup-option-3 .productView-image-wrapper {
+    width: 100%;
+}
+
+#halo-quickshop-popup-option-3 .productView-quantity input {
+    width: 94px;
+    height: 100%;
+}
+
+#halo-quickshop-popup-option-3 .previewCartItem-qty .btn-quantity {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#halo-quickshop-popup-option-3 .productView-see-details {
+    font-size: var(--font-body-size);
+    margin-top: 20px;
+}
+
+#halo-quickshop-popup-option-3 .productView-see-details .button {
+    background-color: var(--product-action-bg);
+    color: var(--product-action-color);
+    border-color: var(--product-action-border);
+}
+
+#halo-quickshop-popup-option-3 .productView-options {
+    border-top: none;
+    padding-top: 0;
+    margin-bottom: 0;
+    margin-top: 7px;
+}
+
+#halo-quickshop-popup-option-3 .product-form__swatch .form__label {
+    margin-bottom: 0;
+}
+
+#halo-quickshop-popup-option-3 .product-form__swatch .product-form__label {
+    width: 30px;
+    height: 30px;
+    padding: 2px;
+}
+
+#halo-quickshop-popup-option-3 .product-form__swatch .product-form__label:hover .tooltip {
+    display: none;
+}
+
+#halo-quickshop-popup-option-3 .product-form__label .text {
+    min-width: 30px;
+    height: 30px;
+    line-height: 28px;
+    padding: 0 5px;
+}
+
+#halo-quickshop-popup-option-3 .product-form__input:not(.product-form__swatch) .product-form__label .text {
+    border-radius: 0;
+    padding: 0 12px;
+    min-width: 40px;
+}
+
+#halo-quickshop-popup-option-3 .productView-groupTop {
+    margin-top: 0;
+    align-items: stretch;
+}
+
+#halo-quickshop-popup-option-3 .productView-groupTop cart-update-quantity {
+    height: auto;
+}
+
+#halo-quickshop-popup-option-3 .productView-groupTop .previewCartItem-qty {
+    height: 100%;
+}
+
+#halo-quickshop-popup-option-3 .productView-groupTop .previewCartItem-qty {
+    margin-top: 0;
+}
+
+#halo-quickshop-popup-option-3 .productView-title {
+    font-size: calc(var(--product-title-font-size) + 2px);
+    margin-bottom: 10px;
+    margin-top: -2px;
+    font-weight: var(--font-weight-medium);
+}
+
+#halo-quickshop-popup-option-3 .price.price--medium .price-item .money {
+    font-size: calc(var(--product-price-font-size) + 2px);
+}
+
+#halo-quickshop-popup-option-3 .product-form__label:hover .expand {
+    display: none;
+}
+
+#halo-quickshop-popup-option-3 .productView-nav .slick-arrow {
+    border: none;
+    border-radius: 0;
+    height: 40px;
+}
+
+#halo-quickshop-popup-option-3 .productView-nav .slick-arrow.slick-prev {
+    left: 0 !important;
+}
+
+#halo-quickshop-popup-option-3 .productView-nav .slick-arrow.slick-next {
+    right: 0 !important;
+}
+
+#halo-quickshop-popup-option-3 .productView-action .button {
+    background-color: var(--product-action-bg-hover);
+    color: var(--product-action-color-hover);
+    border-color: var(--product-action-border-hover);
+    padding-top: var(--btn-1-padding-top);
+    padding-bottom: var(--btn-1-padding-bottom);
+}
+
+#halo-quickshop-popup-option-3 .previewCartItem-qty {
+    margin-right: 10px;
+}
+
+#halo-quickshop-popup-option-3 .productView {
+    padding: 0;
+}
+
+quantity-quick-shop-input.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 767px) {
+    #halo-quickshop-popup-option-3 {
+        width: 90%;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-groupTop {
+        flex-wrap: nowrap;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-groupTop .productView-action {
+        margin-top: 0px;
+        margin-left: 10px;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-nav .slick-arrow {
+        display: none !important;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-image .productView-img-container {
+        padding-bottom: 133% !important;
+    }
+}
+
+@media screen and (max-width: 551px) {
+    #halo-quickshop-popup-option-3 .on-desktop-hide {
+        display: block;
+    }
+    
+    #halo-quickshop-popup-option-3 .on-mobile-hide {
+        display: none;
+    }
+
+    #halo-quickshop-popup-option-3 .halo-productView-right {
+        width: 100%;
+        margin: 0;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-product {
+        display: grid;
+        grid-template-areas: 
+            "image title"
+            "image price"
+            "options options"
+        ;
+        column-gap: 15px;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-product .productView-images.on-desktop-hide {
+        grid-area: image;
+        width: 110px;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-title {
+        grid-area: title;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-price {
+        grid-area: price;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-options {
+        grid-area: options;
+        margin-top: 10px;
+    }
+
+    #halo-quickshop-popup-option-3 .product-form__input {
+        text-align: center;
+    }
+
+    #halo-quickshop-popup-option-3 .product-form__input .form__label {
+        margin: 0 auto;
+    }
+
+    #halo-quickshop-popup-option-3 .product-form .productView-action {
+        width: 100%;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-groupTop {
+        justify-content: center;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-groupTop .productView-action {
+        width: 100%;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-see-details {
+        text-align: center;
+    }
+
+    #halo-quickshop-popup-option-3 .previewCartItem-qty {
+        margin: 0 auto;
+    }
+
+    #halo-quickshop-popup-option-3 .on-desktop-hide .productView-badge {
+        display: none;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-quantity input {
+        padding: 15px 14px 13px 20px;
+    }
+    
+    #halo-quickshop-popup-option-3 .productView-see-details {
+        margin-top: 15px;
+    }
+
+    #halo-quickshop-popup-option-3 .halo-popup-wrapper {
+        padding: 20px;
+    }
+
+    #halo-quickshop-popup-option-3 .productView-title {
+        font-size: calc(var(--product-title-font-size) + 1px);
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    #halo-quickshop-popup-option-3 .productView-see-details .button:hover {
+        background-color: var(--product-action-bg-hover);
+        color: var(--product-action-color-hover);
+        border-color: var(--product-action-border-hover);
+    }
+
+    #halo-quickshop-popup-option-3 .productView-action .button:hover {
+        background-color: var(--product-action-bg);
+        color: var(--product-action-color);
+        border-color: var(--product-action-border);
+    }
+}

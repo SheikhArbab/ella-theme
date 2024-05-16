@@ -1,0 +1,60 @@
+{%- if predictive_search.performed -%}
+    <div id="predictive-search-results" class="quickSearchResults quickSearchResultsBlock custom-scrollbar" >
+        <div class="container">
+            <h2 id="predictive-search-products" class="predictive-search__heading text-body caption-with-letter-spacing search-block-title text-left">
+                <span class="text">{{ 'general.search.search_result_title' | t }}</span>
+                <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+            </h2> 
+            <div id="predictive-search-results-list" class="predictive-search__results-list list-unstyled" role="listbox" aria-labelledby="predictive-search-products">
+                {%- if predictive_search.resources.products.size > 0 -%} 
+                    <div class="products-grid column-{{ settings.search_product_per_row }} disable-srollbar text-left">
+                    {%- for product in predictive_search.resources.products -%}
+                        <div class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                            {% render 'product-grid-layout',
+                                product_card_product: product,
+                                portrait_aspect_ratio: '125',
+                                serial: forloop.index,
+                                sectionId: sectionId,
+                                media_size: image_ratio,
+                                hasCountdown: hasCountdown,
+                                loading: true
+                            %}
+                        </div>
+                    {%- endfor -%}
+                    </div>      
+                    <div id="predictive-search-option-search-keywords" class="predictive-search__list-item productViewAll" role="option">
+                        <a href="{{ routes.search_url }}?q=*type=product" class="predictive-search__item predictive-search__item--term link link--text h5 animate-arrow button button-view-all" tabindex="-1" data-qs-view-all-link>
+                            {%- if search.results_count == 0 -%}
+                                {{ 'templates.search.no_results' | t: terms: predictive_search.terms }}
+                            {%- else -%}
+                                {{ 'general.search.view_all' | t: count: search.results_count }}
+                            {%- endif -%}
+                        </a>
+                    </div>  
+                    <div class="predictive-search__loading-state" aria-hidden="true">
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                {%- else -%}
+                    <div class="productEmpty text-center animate-arrow">
+                        <a class="icon-arrow search-more" href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=product" >
+                            <span class="text">{{ 'general.search.search_no_result' | t }} <strong>"{{ predictive_search.terms }}"</strong></span>
+                            {% render 'icon-link-arrow-right' %}
+                        </a>
+                        {% comment %} <span class="keyword"><strong>{{ predictive_search.terms }}</strong></span> {% endcomment %}
+                    </div>
+                {%- endif -%}
+            </div>  
+            <span class="hidden" data-predictive-search-live-region-count-value>
+                {%- if search.results_count == 0 -%}
+                    {{ 'templates.search.no_results' | t: terms: predictive_search.terms }}
+                {%- else -%}
+                    {{ 'general.search.view_all' | t: count: predictive_search.resources.products.size }}
+                {%- endif -%}
+            </span>
+        </div>
+    </div>
+{%- endif -%}

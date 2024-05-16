@@ -1,0 +1,20 @@
+<div class="halo-top-currency"{% if settings.currency_type == 'auto_currencies' %} style="display:none;" {% endif %}>
+	{%- if settings.currency_type == 'shopify_payment' -%}
+	<div class="btn-group currency-dropdown shopify-currency">
+		<label class="dropdown-toggle dropdown-label d-none{% unless settings.currency_type == 'multiple_currencies' %} show-icon{% endunless %}" data-currency-label>
+	        {% assign currency_iso = cart.currency.iso_code %} {% render 'icon_currency', currency_iso: currency_iso %} <span class="text">{{ cart.currency.iso_code }}</span>
+	    </label>
+	</div>
+	{%- else -%}
+	<div class="btn-group currency-dropdown">
+		<label class="dropdown-toggle dropdown-label{% unless settings.currency_type == 'multiple_currencies' %} show-icon{% endunless %}" data-currency-label>
+	        <span class="icon">{{ settings.i-currency-1 }}</span> <span class="text">{{ settings.currency_1_unit }}</span>
+	    </label>
+	</div>
+	{%- endif -%}
+	<div class="dropdown-currency">
+        {%- if settings.enable_currencies -%}
+            {% render 'halo-currency', icon: icon %}
+        {%- endif -%} 
+    </div>
+</div>

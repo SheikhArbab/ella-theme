@@ -1,0 +1,116 @@
+{% comment %} block__text_first: block__text_first, footer_top_title_color,  address_last: true / false {% endcomment %}
+
+{% liquid
+  assign show_social = block.settings.show_social
+
+  assign layout_style = block.settings.layout_style
+  assign custom_width = block.settings.custom_width | append: '%'
+  assign mg_bottom = block.settings.mg_bottom | append: 'px'
+
+  assign heading = block.settings.heading
+  assign subtext = block.settings.subtext
+  assign logo = block.settings.logo
+
+  assign logo_margin_bottom = block.settings.logo_margin_bottom | append: 'px'
+  assign show_social = block.settings.show_social
+  assign final_icon_color = footer_top_title_color
+  if block.settings.icon_color != blank
+    assign final_icon_color = block.settings.icon_color
+  endif
+
+  if address_last == null or address_last == blank
+    assign address_last = false
+  endif
+%}
+<style>
+  .footer-block__text[style^="--block-custom-width: 100%"] > div {text-align: center}
+  .footer-block__text[style^="--block-custom-width: 100%"] .image_logo {width: max-content;margin-left: auto;margin-right: auto}
+  {%- if block.settings.enable_side_border != blank -%}
+      .footer-block__text {padding-right: 4.5%;padding-left: 2.5%}
+      .footer-block__text .side-bordered {border-left: 1px solid {{ block.settings.side_border_color }};border-right: 1px solid {{ block.settings.side_border_color }};padding-left: {{ block.settings.side_border_spacing_left | append: 'px' }};padding-right: {{ block.settings.side_border_spacing_right | append: 'px' }}}
+  {%- endif -%}
+  @media (max-width: 1200px) {
+      {%- if block.settings.enable_side_border != blank -%}
+          .footer-block__text .side-bordered{padding-left:0;padding-right:0;border:none;margin-left:15px;margin-right:15px}.footer-block__text{padding-right:0;padding-left:0}
+      {%- endif -%}
+      .footer-block__newsletter .newsletter-form__field-wrapper {flex-wrap: wrap}
+  }
+  @media (max-width: 1024px) {.footer-block__newsletter .newsletter-form__field-wrapper {flex-wrap: nowrap}}
+  @media (max-width: 767px) {.footer-block__text{margin-bottom:30px}.footer-block__text:not(.block__text_first){margin-top:25px}}
+  @media (min-width: 768px) and (max-width: 1200px) {.column-5 .footer-block__item.footer-block__text{width:100%}.column-5 .footer-block__item.footer-block__text.block__text_first{width:34%}}
+</style>
+<div class="footer-block__item footer-block__column footer-block__{{ block.type }}{% if block.type == 'text' %} block_text--{{ layout_style }}{% endif %} {{ block__text_first }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--block-custom-width: {{custom_width}};--block-margin-bottom: {{ mg_bottom }}">
+  <div class="{% if block.settings.enable_side_border %}side-bordered{% endif %}">
+    {%- if heading != blank -%}
+      <h2 class="footer-block__heading" data-toggle-column-footer>{{- heading | escape -}}</h2>
+    {%- endif -%}
+    <div class="footer-block__details {% if block.settings.phone_text != blank or block.settings.address_text != blank or block.settings.email_text != blank %}has-content-piece{% endif %}" style="--icon-color: {{ final_icon_color }}; --icon-size: {{ block.settings.icon_size | append: 'px' }}; --content-spacing: {{ block.settings.content_spacing | append: 'px' }}">
+      {%- if logo != blank -%}
+        <div class="image_logo" style="--margin-bottom: {{ logo_margin_bottom }}">
+          {%- assign logo_height = logo.width | divided_by: logo.aspect_ratio | round -%}
+          <img data-srcset="{{ logo | img_url: '200x' }}" class="lazyload" alt="{{ logo.alt | default: shop.name | escape }}" width="{{ logo.width }}" height="{{ logo_height }}">
+        </div>
+      {%- endif -%}
+      <div class="rte">
+        {% if subtext != blank %}
+          {{ subtext | default: ' ' }}
+        {% endif %}
+        {%- if block.settings.address_text != blank and address_last == false -%}
+          <div class="address-wrapper content-piece 12">
+            {%- if block.settings.show_address_icon -%}
+              <span class="icon">
+                {%- if block.settings.address_icon == 'point_icon' -%}
+                  {% render 'icon-point' %}
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+            <div>{{ block.settings.address_text | default: ' ' }}</div>
+          </div>
+        {%- endif -%}
+        {%- if block.settings.phone_text != blank -%}
+          <div class="phone-wrapper content-piece">
+            {%- if block.settings.show_phone_icon -%}
+              <span class="icon">
+                {%- if block.settings.phone_icon == 'message_icon' -%}
+                  {% render 'icon-message' %}
+                {%- elsif block.settings.phone_icon == 'phone_icon' -%}
+                  {% render 'icon-mobile-phone' %}
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+            <div>{{ block.settings.phone_text | default: ' ' }}</div>
+          </div>
+        {%- endif -%}
+        {%- if block.settings.email_text != blank -%}
+          <div class="email-wrapper content-piece">
+            {%- if block.settings.show_email_icon -%}
+              <span class="icon">
+                {%- if block.settings.email_icon == 'envelope_icon' -%}
+                  {% render 'icon-envelop' %}
+                {%- elsif block.settings.email_icon == 'envelope_outline_icon' -%}
+                  {% render 'icon-outline-envelope' %}
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+            <div>{{ block.settings.email_text | default: ' ' }}</div>
+          </div>
+        {%- endif -%}
+        {%- if block.settings.address_text != blank and address_last == true -%}
+          <div class="address-wrapper content-piece is-last">
+            {%- if block.settings.show_address_icon -%}
+              <span class="icon">
+                {%- if block.settings.address_icon == 'point_icon' -%}
+                  {% render 'icon-point' %}
+                {%- endif -%}
+              </span>
+            {%- endif -%}
+            {{ block.settings.address_text | default: ' ' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  {%- if show_social -%}
+    {% render 'footer-social', block: block, social_is_nested: true %}
+  {%- endif -%}
+</div>

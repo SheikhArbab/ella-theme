@@ -1,0 +1,30 @@
+.list-menu--disclosure{
+    display: none;
+    position: absolute;
+    min-width: 100%;
+    width: 22rem;
+    background-color: var(--bg-white);
+    box-shadow: 0 1px 4px 0 rgb(0 0 0 / 15%);
+    padding: 5px 0 5px 20px;
+    opacity: 0;
+    visibility: visible;
+    pointer-events: none;
+    transition: opacity var(--duration-default) ease, transform var(--duration-default) ease;
+}
+
+.list-menu--disclosure-2{
+    margin-left: calc(100% - 15px);
+    z-index: 2;
+    top: -5px;
+}
+
+.list-menu--disclosure:focus {
+    outline: none;
+}
+
+.list-menu--disclosure.localization-selector {
+    max-height: 18rem;
+    overflow: auto;
+    width: 10rem;
+    padding: 0.5rem;
+}

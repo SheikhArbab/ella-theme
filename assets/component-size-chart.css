@@ -1,0 +1,53 @@
+.halo-size-chart {
+    padding: 0 30px 30px 30px;
+}
+
+.halo-size-chart img {
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.halo-size-chart-popup .halo-popup-wrapper {
+    padding: 0;
+}
+
+.halo-size-chart-popup .halo-popup-wrapper .halo-popup-header {
+    border-bottom: 1px solid #e6e6e6;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    margin-bottom: 0;
+}
+
+.halo-size-chart-popup .halo-popup-wrapper .halo-popup-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.halo-size-chart-popup .halo-popup-wrapper .halo-size-chart {
+    padding: 0 20px 30px;
+}
+
+body.size-chart-show {
+    overflow: hidden;
+}
+
+body.size-chart-show .background-overlay {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 101;
+}
+
+body.size-chart-show .halo-size-chart-popup.is-show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 102;
+}
+
+@media (min-width: 1280px) {
+    .halo-size-chart-popup .halo-popup-wrapper .halo-popup-content {
+        padding: 30px 50px 0;
+    }
+}

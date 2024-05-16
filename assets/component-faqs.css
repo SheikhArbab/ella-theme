@@ -1,0 +1,473 @@
+faqs-item{
+    display: block;
+}
+
+.faq-container .breadcrumb {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: -3px;
+}
+
+.faq-container .breadcrumb + .page-header {
+    padding-top: 15px;
+    padding-bottom: 27px;
+}
+
+.faqs-desc {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--body-line-height);
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+}
+
+.faqs-filter {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 33px 0 47px 0;
+}
+
+.faqs-filterLabel{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: var(--body-line-height);
+    color: var(--color-text);
+    margin: 0 20px 0 0;
+}
+
+.faqs-filterDropdown-text .icon-dropdown {
+    --arrow-rotation: 45deg;
+    width: 7px;
+    height: 7px;
+    border: solid var(--color-text);
+    border-width: 0 2px 2px 0;
+    padding: 2px;
+    position: absolute;
+    top: 44%;
+    right: 2rem;
+    transform: translateY(-50%) rotate(var(--arrow-rotation));
+    transition: var(--anchor-transition);
+}
+
+.faqs-filterDropdown-text .icon-dropdown.active {
+    --arrow-rotation: -135deg;
+}
+
+.faqs-filterDropdown-text .icon-dropdown:empty {
+    display: block;
+}
+
+.faqs-filterDropdown{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.faqs-filterDropdown-text{
+    background-color: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    padding: 7px 38px 7px 20px;
+    min-height: 40px;
+    min-width: 90px;
+    cursor: pointer;
+    position: relative;
+    min-width: 160px;
+}
+
+.faqs-filterDropdown-text .text{
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: var(--body-line-height);
+    color: var(--form-label);
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.faqs-filterDropdown-menu{
+    font-size: 0;
+    letter-spacing: 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--bg-white);
+    z-index: 5;
+    width: 100%;
+    min-width: 90px;
+    box-shadow: 0 6px 27px 0 rgb(0, 0, 0, .2);
+    padding: 13px 0 13px 20px;
+    opacity: 0;
+    transform: translateY(-5px);
+    pointer-events: none;
+
+    transition: var(--anchor-transition);
+}
+
+.faqs-filterDropdown-menu li{
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 100%;
+    padding: 0 20px 0 0;
+}
+
+.faqs-filterDropdown-menu li .text{
+    display: block;
+    width: 100%;
+    padding: 7px 0 0 0;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    color: var(--form-label);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    cursor: pointer;
+}
+
+.faqs-filterDropdown-menu li.is-active .text{
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+}
+
+.faqs-filterDropdown-menu.is-show{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.faqs-item {
+    background-color: #fafafa;
+}
+
+.faqs-item .card-header{
+    position: relative;
+}
+
+.faqs-item .card-header .title {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: calc(var(--body-line-height) + 4px);
+    letter-spacing: var(--body-letter-spacing);
+    color: var(--color-text);
+    background-color: #fafafa;
+    text-align: left;
+    padding: 0 0 4px 0;
+    transition: var(--anchor-transition);
+}
+
+.faqs-item .card-header .arrow {
+    --rotation: 45deg;
+    display: inline-block;
+    vertical-align: top;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 11px;
+    height: 11px;
+    z-index: 2;
+    pointer-events: none;
+    transform: translateY(-50%) rotate(var(--rotation));
+    border: solid var(--icon); 
+    border-width: 0px 2px 2px 0px;
+    padding: 3px;
+    transition: var(--anchor-transition);
+}
+
+.faqs-item .card-header:not(.collapsed) .arrow {
+    --rotation: -135deg;
+}
+
+.faqs-item .collapse{
+    transition: max-height 0.5s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: relative;
+}
+
+.faqs-item + .faqs-item{
+    margin-top: 50px;
+}
+
+.faqs-item .card-body a {
+    text-decoration: underline;
+    text-underline-offset: 0.1rem;
+}
+
+.faqs-paragraph.is-hidden{
+    display: none;
+}
+
+.faqs-paragraph.is-active{
+    display: block;
+    margin-top: 0!important;
+}
+
+.faqs-paragraph + .faqs-paragraph{
+    margin-top: 63px;
+}
+
+.faqs .faqs-title {
+    margin-bottom: 35px;
+    position: relative;
+    width: max-content;
+    padding-bottom: 7px;
+}
+
+.faqs .faqs-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: #69c69c;
+}
+
+.faqs .faqs-item .card-header .title {
+    padding: 15px 80px 15px 15px;
+    background-color: #fafafa;
+    cursor: pointer;
+    position: relative;
+}
+
+.faqs .faqs-item .card-header .title::after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 40px;
+    width: calc(100% - 60px);
+    height: 1px;
+    transform: scale(0);
+    transform-origin: right;
+    background-color: var(--color-text);
+    /*transition: transform 500ms ease-in-out;*/
+}
+
+.faqs .faqs-item .card-header:not(.collapsed) .title::after {
+    transform: scale(1);
+    transform-origin: left;
+}
+
+.faqs .faqs-item .card-header:not(.collapsed) + .collapse{
+    pointer-events: auto;
+}
+
+.faqs .faqs-item .halo-text-format{
+    padding: 24px 30px 26px 15px;
+    background-color: var(--bg-white);
+}
+
+.faqs .faqs-item + .faqs-item{
+    margin-top: 15px;
+}
+
+.faqs .faqs-paragraph + .faqs-paragraph{
+    margin-top: 55px;
+}
+
+.faqs-header{
+    min-height: 300px;
+    background-color: #faf8f6;
+    position: relative;
+    overflow: hidden;
+}
+
+.faqs-message-and-questions {
+    display: flex;
+    gap: 30px;
+}
+
+.faqs-message-and-questions .faqs-message {
+    max-width: 270px;
+}
+
+.faqs-message-and-questions .faqs-questions-and-answers {
+    flex-grow: 1;
+}
+
+.faqs-message .faqs-title {
+    margin-bottom: 28px;
+}
+
+.faqs-icon-container {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    min-height: 110px;
+    border-radius: 0.5rem;
+    border: 2px solid #fafafa;
+}
+
+.faqs-icon-container .message-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+    row-gap: 6px;
+    height: 52px;
+}
+
+.faqs-icon-container .message-icon img {
+    width: 30px;
+    height: auto;
+}
+
+.message-icon-1 + .message-icon-2 {
+    border-left: 1px solid var(--color-text);
+}
+
+.message-icon-text-1, .message-icon-text-2 {
+    height: max-content;
+    width: max-content;
+}
+
+.contact-support-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+}
+
+.contact-support-btn {
+    padding: 11px 52px;
+    max-width: 250px;
+    font-size: calc(var(--font-body-size) + 2px);
+    font-weight: 600;
+    color: var(--button-color-style);
+    border: 1px solid var(--button-border-color-style);
+    background: var(--button-bg-color-style);
+    outline: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    transition: var(--anchor-transition);
+    text-align: center;
+}
+
+.contact-support-btn:hover {
+    color: var(--button-color-hover-style);
+    border: 1px solid var(--button-border-color-hover-style);
+    background: var(--button-bg-color-hover-style);
+}
+
+@media (max-width: 1024px) {
+    .faq-container .breadcrumb {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .faqs-message-and-questions {
+        flex-direction: column;
+    }
+
+    .faqs-message-and-questions .faqs-message {
+        max-width: 100%;
+    }
+
+    .faqs-message-and-questions .faqs-message .faqs-icon-container {
+        max-width: 270px;
+    }
+
+    .contact-support-button-wrapper {
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 550px) {
+    .faqs .faqs-item .card-header .title::after {
+        left: 15px;
+    }
+
+    .faqs .faqs-item .card-header .title, .faqs .faqs-item .card-body, .faqs .faqs-item .halo-text-format {
+        padding-left: 15px;
+    }
+
+    .faqs .faqs-item .card-header .title {
+        padding-right: 50px;
+    }
+
+    .faqs .faqs-paragraph+.faqs-paragraph {
+        margin-top: 45px;
+    }
+}
+
+@media (min-width: 375px){
+    .faqs-form .form-label{
+        font-size: 36px;
+    }
+}
+
+@media (min-width: 551px){
+    .faqs .faqs-item .card-body{
+        padding-left: 15px;
+    }
+
+    .faqs .faqs-item .card-header .title::after {
+        left: 15px;
+    }
+
+    .faqs .faqs-item .card-body {
+        margin-top: 15px;
+        padding-bottom: 30px;
+    }
+}
+
+@media (min-width: 551px) and (max-width: 1024px) {
+    .container-1170 .breadcrumb-container.style--line_clamp_1 .breadcrumb {
+        padding-left: 15px;
+    }
+}
+
+@media (min-width: 768px){
+    .faqs .faqs-item .card-header .title,
+    .faqs .faqs-item .card-body,
+    .faqs .faqs-item .halo-text-format{
+        padding-left: 30px;
+    }
+
+    .faqs .faqs-item .card-header .title::after {
+        left: 30px;
+    }
+
+    .faqs .faqs-item .card-body {
+        margin-top: 23px;
+    }
+
+    .contact-support-button-wrapper {
+        justify-content: flex-end;
+        margin-top: 35px;
+    }
+}
+
+@media (min-width: 1025px){
+    .faqs-item .card-header .title{
+        font-size: calc(var(--font-body-size) + 2px);
+    }
+
+    .faqs-item .card-header .icon-plus {
+        right: 32px;
+    }
+
+    .faqs-icon-container .message-icon img {
+        transform: scale(1);
+        transition: transform .64s ease;
+    }
+
+    .faqs-icon-container .message-icon:hover img {
+        transform: scale(1.3);
+    }
+}

@@ -1,0 +1,79 @@
+.halo-currency{
+	position: relative;
+}
+.halo-currency .currency-menu{
+    padding: 9px 0;
+    min-width: 100px;
+    outline: 0;
+    background: var(--bg-white);
+    max-height: 300px;
+    overflow: auto;
+}
+.halo-currency .title {
+    font-size: var(--font-body-size);
+    text-transform: uppercase;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-link);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    padding: 10px 19px 22px;
+    text-align: left;
+    margin: 0;
+}
+.halo-currency .currency-menu .icon{
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+}
+.halo-currency .currency-menu .icon svg{
+    width: 100%;
+    height: 100%;
+    stroke: initial;
+    vertical-align: top;
+}
+.halo-currency .currency-menu .icon svg polygon{
+   display: block;
+}
+.halo-currency .currency-menu .dropdown-item{
+	display: flex;
+	align-items: center;
+}
+.halo-currency .currency-menu .dropdown-item  {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-link);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    padding: 7px 15px;
+}
+.halo-currency .currency-menu .dropdown-item .text span{
+	padding-right: 3px;
+}
+.halo-currency .currency-menu .dropdown-item .text {
+    position: relative;
+}
+.halo-currency .currency-menu .dropdown-item.active .text:before, .halo-currency .currency-menu .dropdown-item .text:hover:before{
+	content: "";
+	height: 1px;
+	width: 100%;
+	background: #232323;
+    position: absolute;
+    bottom: 4px;
+}
+.shopify-currency .img-icon{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgb(128,128,128,17%);
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    margin: 4px 9px 3px 0px;
+}
+.shopify-currency .img-icon img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+}

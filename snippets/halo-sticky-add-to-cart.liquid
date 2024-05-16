@@ -1,0 +1,266 @@
+<sticky-add-to-cart class="productView-stickyCart style-{{ sticky_atc_layout }}" data-sticky-add-to-cart>
+    <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%}container-full{% else %}container{% endif %}">
+        <a href="javascript:void(0)" class="sticky-product-close close" data-close-sticky-add-to-cart>
+            {% render 'icon-close' %}
+        </a>
+        <div class="sticky-product-wrapper">
+            <div class="sticky-product clearfix">
+                {%- liquid 
+                    if current_variant.image
+                        assign image = current_variant.image
+                    else
+                        assign image = product.featured_image.src
+                    endif
+                -%}
+                <div class="sticky-left">
+                    <div class="sticky-image" data-image-sticky-add-to-cart>
+                        <img srcset="{{ image | img_url: '1200x' }}" src="{{ image | img_url: '1200x' }}" alt="{{ image.alt | default: shop.name | escape }}" sizes="auto" loading="lazy">
+                    </div>
+                    {% if sticky_atc_layout == '1' %}
+                        <div class="sticky-info">
+                            {%- if show_vendor -%}
+                                <h3 class="sticky-brand">
+                                    <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                                    {{ product.vendor | link_to_vendor }}
+                                </h3>
+                            {%- endif -%}
+                            <h4 class="sticky-title">
+                                {{ product.title | escape }}
+                            </h4>
+                            {% if sticky_atc_layout == '1' %}
+                                {% assign compare_price = current_variant.compare_at_price | money %}
+                                {% assign subtotal = current_variant.price | money %}
+                                <div class="sticky-price{% if compare_price != blank %} has-compare-price{% endif %}">
+                                    {% if compare_price != blank %}
+                                        <s class="money-compare-price" data-compare-price="{{ current_variant.compare_at_price }}">{{ compare_price }}</s>
+                                    {% endif %}
+                                    <span class="money-subtotal">{{ subtotal }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="sticky-right sticky-content">
+                    {% if sticky_atc_layout == '2' %}
+                        <div class="sticky-info">
+                            {%- if show_vendor -%}
+                                <h3 class="sticky-brand">
+                                    <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                                    {{ product.vendor | link_to_vendor }}
+                                </h3>
+                            {%- endif -%}
+                            <h4 class="sticky-title">
+                                {{ product.title | escape }}
+                            </h4>
+                        </div>
+                    {% endif %}
+                    {%- if product.available -%}
+                        {%- if variantCount > 0  and product.has_only_default_variant != true -%}
+                            <div class="sticky-options">
+                                <variant-sticky-selects class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                                    <div class="form__select select">
+                                        <label class="form__label hiddenLabels" for="stick-variant-{{ product.id }}">
+                                            {{ 'products.product.select_options' | t }}
+                                        </label>
+                                        <select id="stick-variant-{{ product.id }}"
+                                            class="select__select"
+                                            name="stick-variant-{{ product.id }}"
+                                        >
+                                            {%- for variant in product.variants -%}
+                                                <option value="{{ variant.id }}" {% if variant == current_variant and current_variant.available %}selected="selected"{% endif %}{% unless variant.available %}  disabled="disabled"{% endunless %}>
+                                                    {{ variant.title }}
+                                                    {% if sticky_atc_layout != '1' %} - {{ variant.price | money }}{% endif %}
+                                                    {%- unless variant.available -%}
+                                                        ({{ 'products.product.sold_out' | t }})
+                                                    {%- endunless -%}
+                                                </option>
+                                            {%- endfor -%}
+                                        </select>
+                                    </div>
+                                    <script type="application/json">
+                                        {{ product.variants | json }}
+                                    </script>
+                                </variant-sticky-selects>
+                            </div>
+                        {%- endif -%}
+                    {%- endif -%}
+                    <div class="sticky-actions{% unless settings.show_wishlist %} sticky-actions-2{% endunless %}">
+                        {%- assign product_form_sticky_id = 'product-form-sticky-' | append: product.id -%}
+                        {% form 'product', product, id: product_form_sticky_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+                            <input type="hidden" name="id" value="{{ current_variant.id }}">
+                            {%- if current_variant.available -%}
+                                {%- if show_qty -%}
+                                    {% render 'product-quantity',
+                                        current_variant: current_variant,
+                                        qty_style: qty_style,
+                                        check_hidden: false,
+                                        quantity_stt: 3
+                                    %}
+                                {%- endif -%}
+                                {%- if current_variant.inventory_management -%}
+                                    {%- assign first_inventory = current_variant.inventory_quantity -%}
+                                    <button
+                                        type="submit"
+                                        name="add"
+                                        data-btn-addToCart
+                                        class="product-form__submit button button--primary{% if first_inventory == 0 %} button-text-change{% endif %}"
+                                        id="product-sticky-add-to-cart">
+                                        {%- if first_inventory > 0 -%}
+                                            {{ 'products.product.add_to_cart' | t}}
+                                        {%- else -%}
+                                            {{ 'products.product.pre_order' | t }}
+                                        {%- endif -%}
+                                    </button>
+                                {% else %}
+                                    <button
+                                        type="submit"
+                                        name="add"
+                                        data-btn-addToCart
+                                        class="product-form__submit button button--primary"
+                                        id="product-sticky-add-to-cart">
+                                        {{ 'products.product.add_to_cart' | t}}
+                                    </button>
+                                {% endif %}
+                            {%- else -%}
+                                <button
+                                    type="submit"
+                                    name="add"
+                                    data-btn-addToCart
+                                    class="product-form__submit button button--primary"
+                                    id="product-sticky-add-to-cart"
+                                    disabled
+                                >
+                                    {{ 'products.product.sold_out' | t }}
+                                </button>
+                            {%- endif -%}
+                        {% endform %}
+                        {% if sticky_atc_layout == '1' %}
+                            <div class="empty-add-cart-button-wrapper">
+                                    {%- if show_qty -%}
+                                        {% render 'product-quantity',
+                                            current_variant: current_variant,
+                                            qty_style: qty_style,
+                                            check_hidden: false,
+                                            quantity_stt: 3
+                                        %}
+                                    {%- endif -%}
+                                    <button
+                                        class="product-form__submit button button--primary{% if first_inventory == 0 %} button-text-change{% endif %}"
+                                        id="show-sticky-product">
+                                            {{ 'products.product.add_to_cart' | t }}
+                                    </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {%- if settings.show_wishlist -%}
+                        <div class="sticky-wishlist clearfix">
+                            <a data-wishlist href="#" data-wishlist-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
+                                <span class="visually-hidden">
+                                    {{ 'wishlist.general.add' | t }}
+                                </span>
+                                {% render 'icon-heart' %}
+                            </a>
+                        </div>
+                    {%- endif -%}
+                </div>
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="sticky-product-expand" data-expand-sticky-add-to-cart>
+            {% render 'icon-cart' %}
+        </a>
+    </div>
+    
+    {% if sticky_atc_layout == '1' %}
+        <div class="no-js-hidden product-option has-default sticky-product-mobile" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+            <div class="sticky-product-mobile-header">
+                <a href="javascript:void(0)" class="sticky-product-close close" data-close-sticky-mobile>
+                    {% render 'icon-close-thin' %}
+                </a>
+            </div>
+            <div class="sticky-product-mobile-content halo-productView-mobile">
+                <div class="productView-thumbnail-wrapper is-hidden-desktop">
+                    <div class="productView-for mobile clearfix" data-max-thumbnail-to-show="2">
+                        {%- for media in product.media -%}
+                            {%- case media.media_type -%}
+                                {%- when 'image' -%}
+                                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ section.id }}-{{ media.id }}">
+                                        <div class="productView-thumbnail-link animated-loading" data-image="{{ media | img_url: 'original' }}">
+                                            <img src="{{ media | img_url: 'master' }}" alt="{{ media.alt | escape }}" title="{{ media.alt | escape }}" loading="lazy" />
+                                        </div>
+                                    </div>
+                                {%- when 'external_video' -%}
+                                    {%- if video_layout == 'thumbnail' -%}
+                                        <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ section.id }}-{{ media.id }}">
+                                            <div class="productView-thumbnail-link animated-loading">
+                                                <img src="{{ media | img_url: 'compact' }}" alt="{{ media.alt | escape }}" title="{{ media.alt | escape }}" loading="lazy" />
+                                            </div>
+                                            <div class="productView-thumbnail-icon">
+                                                {% render 'icon-video' %}
+                                            </div>
+                                        </div>
+                                    {%- endif -%}
+                                {%- when 'video' -%}
+                                    {%- if video_layout == 'thumbnail' -%}
+                                        <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ section.id }}-{{ media.id }}">
+                                            <div class="productView-thumbnail-link animated-loading">
+                                                <img src="{{ media | media_tag | split: 'src="' | last | split: '">' | first }}" alt="{{ media.alt | escape }}" title="{{ media.alt | escape }}" loading="lazy" />
+                                            </div>
+                                            <div class="productView-thumbnail-icon">
+                                                {% render 'icon-video' %}
+                                            </div>
+                                        </div>
+                                    {%- endif -%}
+                                {%- when 'model' -%}
+                                    <div class="productView-thumbnail" data-media-id="{{ section.id }}-{{ media.id }}">
+                                        <div class="productView-thumbnail-link animated-loading">
+                                            <img src="{{ media | media_tag | split: 'poster="' | last | split: '">' | first }}" alt="{{ media.alt | escape }}" title="{{ media.alt | escape }}" loading="lazy" />
+                                        </div>
+                                        <div class="productView-thumbnail-icon">
+                                            {% render 'icon-3d-model' %}
+                                        </div>
+                                    </div>
+                                {%- else -%}
+                                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ section.id }}-{{ media.id }}">
+                                        <div class="productView-thumbnail-link animated-loading">
+                                            {{ media | media_tag }}
+                                        </div>
+                                    </div>
+                            {%- endcase -%}
+                        {%- endfor -%}
+                    </div>
+                </div>
+                <div class="sticky-info">
+                    {%- if show_vendor -%}
+                        <h3 class="sticky-brand">
+                            <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                            {{ product.vendor | link_to_vendor }}
+                        </h3>
+                    {%- endif -%}
+                    <h4 class="sticky-title">
+                        {{ product.title | escape }}
+                    </h4>
+                    {%- if sticky_atc_layout == '1' -%}
+                        {% assign compare_price = current_variant.compare_at_price | money %}
+                        {% assign subtotal = current_variant.price | money %}
+                        <div class="sticky-price{% if compare_price != blank %} has-compare-price{% endif %}">
+                            {% if compare_price != blank %}
+                                <s class="money-compare-price" data-compare-price="{{ current_variant.compare_at_price }}">{{ compare_price }}</s>
+                            {% endif %}
+                            <span class="money-subtotal">{{ subtotal }}</span>
+                        </div>
+                    {%- endif -%}
+                </div>
+                {% render 'product-variant-sticky-mobile',
+                    block: block,
+                    product: product,
+                    variantCount: variantCount,
+                    current_variant: current_variant,
+                    picker_type: 'button'
+                %}
+            </div>
+            <script type="application/json">
+                {{ product.variants | json }}
+            </script>
+        </div>
+    {% endif %}
+</sticky-add-to-cart>

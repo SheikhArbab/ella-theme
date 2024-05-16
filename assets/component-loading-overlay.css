@@ -1,0 +1,239 @@
+.loading-overlay {
+    position: absolute;
+    z-index: 1;
+    width: 3rem;
+    top: 0;
+    right: 0;
+}
+
+.loading-overlay__spinner {
+    width: 3rem;
+    display: inline-block;
+}
+
+/*.spinner {
+    animation: rotator 1.4s linear infinite;
+}
+
+.path {
+    stroke-dasharray: 280;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    stroke: var(--color-background-global);
+    animation: dash 1.4s ease-in-out infinite;
+}*/
+
+.halo-cart-content.is-loading .path {
+    stroke-dasharray: 280;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    stroke: var(--color-background-global);
+    animation: dash 1.4s ease-in-out infinite;
+}
+
+predictive-search[open] .path,
+.cart-sidebar-show .path,
+.has-halo-loader .path {
+    stroke-dasharray: 280;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    stroke: var(--color-background-global);
+    animation: dash 1.4s ease-in-out infinite;
+}
+
+predictive-search[open] .spinner {
+    animation: rotator 1.4s linear infinite;
+}
+
+.loading-overlay:not(.hidden) + .cart-item__price-wrapper,
+.loading-overlay:not(.hidden) ~ cart-remove-button {
+    opacity: 50%;
+}
+
+.loading-overlay:not(.hidden) ~ cart-remove-button {
+    pointer-events: none;
+    cursor: default;
+}
+
+.loading-overlay--custom{
+    display: none;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0 5rem;
+    background-color: var(--color-background-overylay);
+}
+
+.loading-overlay--custom .loading-overlay__spinner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    transform: translate(-50%, -50%);
+}
+
+.loading-overlay--custom .spinner{
+    width: 100%;
+    height: 100%;
+}
+
+.is-loading > .loading-overlay{
+    display: block;
+}
+
+.show_image_loading .card-media.animated-loading{
+    background: var(--bg-planceholder);
+}
+
+.animated-loading{
+    animation-duration: 2.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: inherit;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    border: none!important;
+    border-radius: 0!important;
+    background: var(--bg-planceholder);
+    background: linear-gradient(to right, var(--bg-planceholder) 4%, #f1f2f3 25%, var(--bg-planceholder) 36%);
+    background-size: 2000px 100%;
+}
+
+.card:not(.ajax-loaded) .animated-loading{
+    animation-iteration-count: infinite;
+}
+
+.animated-loading > span,
+.animated-loading > img{
+    opacity: 0!important;
+}
+
+.is-loading.add-to-cart-btn, .is-loading.button{
+    font-size: 0 !important;
+    transition: none;
+    position: relative;
+}
+
+.is-loading.button svg{
+    display: none !important;
+}
+
+/*.is-loading.button:before{
+    opacity: 1;
+    visibility: visible;
+    animation: spin 1.4s linear infinite;
+    display: block; 
+}*/
+
+.is-loading.button:before{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 46%;
+    transform: translate(-50%,-50%);
+    display: inline-block;
+    border: 2px solid #f6f6f6;
+    border-radius: 50%;
+    border-top: 2px solid var(--spinner-top-color);
+    border-right: 2px solid var(--spinner-right-color);
+    border-bottom: 2px solid var(--spinner-bottom-color);
+    border-left: 2px solid var(--spinner-left-color);
+    width: 20px;
+    height: 20px;
+    animation: spin 1.4s linear infinite;
+}
+
+.has-halo-loader .loading-overlay--custom{
+    display: block;
+    position: fixed;
+    z-index: 111;
+}
+
+.product-item--loadingNoInfo .card-vendor,
+.product-item--loadingNoInfo .card-title .text,
+.product-item--loadingNoInfo .card-price .price {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/*.media--loading-effect{
+    animation-duration: 2.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: inherit;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    border: none!important;
+    border-radius: 0!important;
+    background: var(--bg-planceholder);
+    background: linear-gradient(to right, var(--bg-planceholder) 4%, #f1f2f3 25%, var(--bg-planceholder) 36%);
+    background-size: 2000px 100%;
+}*/
+
+/*.card:not(.ajax-loaded) .media--loading-effect{
+    animation-duration: 2.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    border: none!important;
+    border-radius: 0!important;
+    background: var(--bg-planceholder);
+    background: linear-gradient(to right, var(--bg-planceholder) 4%, #f1f2f3 25%, var(--bg-planceholder) 36%);
+    background-size: 2000px 100%;
+}*/
+
+.show_image_loading .media--loading-effect{
+    background: var(--bg-planceholder);
+}
+
+.media--loading-effect > img.lazyload,
+.media--loading-effect > img.lazyloading{
+    opacity: 0!important;
+}
+
+.media--loading-effect > img.lazyload ~ .media-loading,
+.media--loading-effect > img.lazyloading ~ .media-loading,
+.card-media--loading .media-loading{
+    display: block;
+}
+
+.ajax-loaded .media--loading-effect {
+    background: transparent;
+}
+
+@keyframes spin{
+    0%{
+        transform:translateY(-50%) rotate(0)
+    }
+    100%{
+        transform:translateY(-50%) rotate(360deg)
+    }
+}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 768px) {
+    .loading-overlay {
+        left: 0;
+        right: auto;
+    }
+}

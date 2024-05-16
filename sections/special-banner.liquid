@@ -1,0 +1,1221 @@
+{{ 'component-special-banner.css' | asset_url | stylesheet_tag }}
+<div class="special-banner{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--p-top: {{ section.settings.padding_top }}px; --p-bottom: {{ section.settings.padding_bottom }}px">
+    <div class="container-{{ section.settings.container }}">
+        <div class="special-banner__wrapper">
+            {%- for block in section.blocks -%}
+                {%-  case block.type  -%}
+                    {%- when 'image_rotating_text' -%}
+                        {%-  liquid 
+                            assign image = block.settings.image
+                            assign rotating_text = block.settings.rotating_text
+                            assign link = block.settings.link
+                        -%}
+                        {%- if image != blank or rotating_text != blank -%}
+                            <div class="special-banner__item special-banner__item--{{ block.type }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" sticky-special-banner>
+                                <div class="special-banner__img_box{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                    <div class="special-banner__img image-zoom adaptive_height image{% if image == blank %} no-image{% endif %}" style="padding-top: {% if image != blank %}{% unless image.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image.aspect_ratio | times: 120 }}%{% else %}{{ 1 | divided_by: image.aspect_ratio | times: 100 }}%{% endunless %}{% else %}112.63157894736842%{% endif %}">
+                                        {%- if image != blank -%}
+                                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image.width < 320 -%}{{ image | image_url: width: image.width }} 320w,{%- endif -%}
+                                                {%- if image.width >= 320 -%}{{ image | image_url: width: 375 }} 375w,{%- endif -%}
+                                                {%- if image.width >= 750 -%}{{ image | image_url: width: 750 }} 750w,{%- endif -%}
+                                                {%- if image.width >= 1100 -%}{{ image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                                {%- if image.width >= 1370 -%}{{ image | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                                {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                                {%- if image.width >= 1780 -%}{{ image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                                {%- if image.width >= 2000 -%}{{ image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                                {%- if image.width >= 2800 -%}{{ image | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                                sizes="{% if section.settings.image != blank and section.settings.stack_images_on_mobile %}(min-width: 750px) 50vw, 100vw{% elsif section.settings.image != blank %}50vw{% else %}100vw{% endif %}" {% unless settings.enable_lazyload %}src="{{ image | image_url: width: 750 }}"{% endunless %} alt="{{ image.alt | escape }}" width="{{ image.width }}" height="{{ image.width | divided_by: image.aspect_ratio | round}}"
+                                                {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                                {% unless image.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image.presentation.focal_point }}"{% endunless %}
+                                            >
+                                            {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                        {%- endif -%}
+                                        {%- if rotating_text != blank -%}
+                                            <div class="special-banner__rotatingText position--{{ block.settings.position }}" style="--color: {{ block.settings.rotating_text_color }}; --letter-spacing: {{ block.settings.letter_spacing }}px">
+                                                <svg class="rotatingText" viewBox="0 0 200 200"><defs><path id="circlePath" d=" M 100, 100 m -75, 0 a 75,75 0 0,1 150,0 a 75,75 0 0,1 -150,0 "/></defs><circle cx="150" cy="100" r="75" fill="none"/><g><use xlink:href="#circlePath" fill="none"/><text><textPath xlink:href="#circlePath">{{ rotating_text }}</textPath></text></g></svg>
+                                            </div>
+                                        {%- endif -%}
+                                        {%- if link != blank-%}
+                                            <a href="{{ link }}" title="{{ image.alt | default: shop.name | escape }}"></a>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            </div>
+                        {%- endif -%}
+                    {%- when 'image_with_text' -%}
+                        {%-  liquid 
+                            assign image = block.settings.image
+                            assign link = block.settings.link
+                            assign heading = block.settings.heading
+                            assign desc = block.settings.desc
+                            assign btn_txt = block.settings.btn_txt
+                            assign content_align = block.settings.content_align
+                        -%}
+                        {%- if image != blank or heading != blank or desc != blank or btn_txt != blank -%}
+                            <div class="special-banner__item special-banner__item--{{ block.type }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger {% if settings.animations_hover_elements == '3d-lift' %}animate--fade-in{% else %}animate--slide-in{% endif %}{% endif %}{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}" sticky-special-banner>
+                                <div class="special-banner__img p-relative adaptive_height image-zoom image"{% if image != blank %} style="padding-top: {% if image != blank %}{% unless image.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image.aspect_ratio | times: 120 }}%{% else %}{{ 1 | divided_by: image.aspect_ratio | times: 100 }}%{% endunless %}{% else %}100%{% endif %}"{% endif %}>
+                                    {%- if image != blank -%}
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image.width < 320 -%}{{ image | image_url: width: image.width }} 320w,{%- endif -%}
+                                            {%- if image.width >= 320 -%}{{ image | image_url: width: 375 }} 375w,{%- endif -%}
+                                            {%- if image.width >= 750 -%}{{ image | image_url: width: 750 }} 750w,{%- endif -%}
+                                            {%- if image.width >= 1100 -%}{{ image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                            {%- if image.width >= 1370 -%}{{ image | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                            {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                            {%- if image.width >= 1780 -%}{{ image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                            {%- if image.width >= 2000 -%}{{ image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                            {%- if image.width >= 2800 -%}{{ image | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                            sizes="{% if section.settings.image != blank %}(min-width: 750px) 50vw, 100vw{% elsif section.settings.image != blank %}50vw{% else %}100vw{% endif %}" {% unless settings.enable_lazyload %}src="{{ image | image_url: width: 750 }}"{% endunless %} alt="{{ image.alt | escape }}" width="{{ image.width }}" height="{{ image.width | divided_by: image.aspect_ratio | round}}"
+                                            {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                            {% unless image.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image.presentation.focal_point }}"{% endunless %}
+                                        >
+                                        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                    {%- else -%}
+                                        <div class="not_img" style="--height_not_img: 1070px">950 x 1070px</div>
+                                    {%- endif -%}
+                                    {%- if heading != blank or desc != blank or btn_txt != blank -%}
+                                        <div class="special-banner__content p-absolute left-0 right-0 text-{{block.settings.text_align}}{% if content_align == 'top' %} special-banner__content_top top-0{% elsif content_align == 'center' %} special-banner__content_center middle-y{% else %} special-banner__content_bottom bottom-0{% endif %}" style="--text-color: {{ block.settings.text_color }}">
+                                            {%- if heading != blank -%}
+                                                <h3 class="heading m-zero mb-15" style="--font-size: {{block.settings.fontsize_heading | append: 'px'}};--font-size-mb: {{block.settings.fontsize_heading_mb | append: 'px'}};--line-height: {{block.settings.fontsize_heading | plus: 8 | append: 'px'}}; --line-height-mb: {{block.settings.fontsize_heading_mb | plus: 8 | append: 'px'}}">{{heading}}</h3>
+                                            {%- endif -%}
+                                            {%- if desc != blank -%}
+                                                <div class="desc d-inline-block w-100">{{desc}}</div>
+                                            {%- endif -%}
+                                            {%- if btn_txt != blank -%}
+                                                <span class="button_link d-inline-block txt-d-underline{% if block.settings.fontsize_btn <= 18 %} txt-u-o-6{% else %} txt-u-o-8{% endif %}" style="--font-size-btn: {{block.settings.fontsize_btn | append: 'px'}}">{{btn_txt}}</span>
+                                            {%- endif -%}
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if link != blank-%}
+                                        <a href="{{ link }}" title="{{ image.alt | default: shop.name | escape }}"></a>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                        {%- endif -%}
+                    {%- when 'collection_banner' -%}
+                        <div class="special-banner__item special-banner__item--{{ block.type }} d-flex flex-jc-center flex-align-center p-relative{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            <div class="special-banner__collection d-flex" style="--font-size: {{block.settings.fontsize_heading | append: 'px'}};--font-size-mb: {{block.settings.fontsize_heading_mb | append: 'px'}};--line-height: {{block.settings.fontsize_heading | plus: 8 | append: 'px'}}; --line-height-mb: {{block.settings.fontsize_heading_mb | plus: 8 | append: 'px'}};--font-size-btn: {{block.settings.fontsize_btn | append: 'px'}}">
+                                {%-  liquid 
+                                    assign image_1 = block.settings.image_1
+                                    assign image_2 = block.settings.image_2
+                                -%}
+                                <div class="special-banner__coll_item special-banner__coll_item_1 d-inline-block w-50pc image-zoom{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {%- if image_1 != blank -%}
+                                        {%- if block.settings.btn_lnk_1 != blank -%}<a href="{{block.settings.btn_lnk_1}}" class="link">{%- endif -%}
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image_1.width < 320 -%}{{ image_1 | image_url: width: image_1.width }} 320w,{%- endif -%}
+                                            {%- if image_1.width >= 320 -%}{{ image_1 | image_url: width: 375 }} 375w,{%- endif -%}
+                                            {%- if image_1.width >= 750 -%}{{ image_1 | image_url: width: 750 }} 750w,{%- endif -%}
+                                            {%- if image_1.width >= 1100 -%}{{ image_1 | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                            {%- if image_1.width >= 1370 -%}{{ image_1 | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                            {%- if image_1.width >= 1500 -%}{{ image_1 | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                            {%- if image_1.width >= 1780 -%}{{ image_1 | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                            {%- if image_1.width >= 2000 -%}{{ image_1 | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                            {%- if image_1.width >= 2800 -%}{{ image_1 | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                            sizes="50vw"{% unless settings.enable_lazyload %} src="{{ image_1 | image_url: width: 750 }}"{% endunless %} alt="{{ image_1.alt | escape }}" width="{{ image_1.width }}" height="{{ image_1.width | divided_by: image_1.aspect_ratio | round}}" 
+                                            {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                            {% unless image_1.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_1.presentation.focal_point }}"{% endunless %}
+                                        >
+                                    {%- if block.settings.btn_lnk_1 != blank -%}</a>{%- endif -%}
+                                        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                    {%- else -%}
+                                        <div class="not_img" style="--height_not_img: 450px">320 x 450px</div>
+                                    {%- endif -%}
+                                    {%- if block.settings.heading_1 != blank -%}
+                                    <h3 class="heading mt-25 mb-20{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{%- if block.settings.btn_lnk_1 != blank -%}<a href="{{block.settings.btn_lnk_1}}" class="link-effect p-relative">{%- endif -%}<span class="text">{{ block.settings.heading_1 }}</span>{%- if block.settings.btn_lnk_1 != blank -%}</a>{%- endif -%}</h3>
+                                    {%- endif -%}
+                                    {%- if block.settings.desc_1 != blank -%}
+                                    <div class="desc mb-20{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{{block.settings.desc_1}}</div>
+                                    {%- endif -%}
+                                    {%- if block.settings.btn_txt_1 != blank -%}
+                                        {%- if block.settings.btn_lnk_1 != blank -%}
+                                            <a href="{{block.settings.btn_lnk_1}}" class="button_link coll_item_btn d-inline-block txt-d-underline{% if block.settings.fontsize_btn <= 18 %} txt-u-o-8{% else %} txt-u-o-12{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{{block.settings.btn_txt_1}}</a>
+                                        {%- else -%}
+                                            <span class="coll_item_btn">{{block.settings.btn_txt_1}}</span>
+                                        {%- endif -%}
+                                    {%- endif -%}
+                                </div>
+                                <div class="special-banner__coll_item special-banner__coll_item_2 d-inline-block w-50pc image-zoom{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                    {%- if image_2 != blank -%}
+                                        {%- if block.settings.btn_lnk_2 != blank -%}<a href="{{block.settings.btn_lnk_2}}" class="link">{%- endif -%}
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image_2.width < 320 -%}{{ image_2 | image_url: width: image_2.width }} 320w,{%- endif -%}
+                                            {%- if image_2.width >= 320 -%}{{ image_2 | image_url: width: 375 }} 375w,{%- endif -%}
+                                            {%- if image_2.width >= 750 -%}{{ image_2 | image_url: width: 750 }} 750w,{%- endif -%}
+                                            {%- if image_2.width >= 1100 -%}{{ image_2 | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                            {%- if image_2.width >= 1370 -%}{{ image_2 | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                            {%- if image_2.width >= 1500 -%}{{ image_2 | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                            {%- if image_2.width >= 1780 -%}{{ image_2 | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                            {%- if image_2.width >= 2000 -%}{{ image_2 | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                            {%- if image_2.width >= 2800 -%}{{ image_2 | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                            sizes="50vw"{% unless settings.enable_lazyload %} src="{{ image_2 | image_url: width: 320 }}"{% endunless %} alt="{{ image_2.alt | escape }}" width="{{ image_2.width }}" height="{{ image_2.width | divided_by: image_2.aspect_ratio | round}}" class="lazyload" 
+                                            {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                            {% unless image_2.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_2.presentation.focal_point }}"{% endunless %}
+                                        >
+                                        {%- if block.settings.btn_lnk_2 != blank -%}</a>{%- endif -%}
+                                        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                    {%- else -%}
+                                        <div class="not_img" style="--height_not_img: 450px">320 x 450px</div>
+                                    {%- endif -%}
+                                    {%- if block.settings.heading_2 != blank -%}
+                                    <h3 class="heading mt-25 mb-20{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{%- if block.settings.btn_lnk_2 != blank -%}<a href="{{block.settings.btn_lnk_2}}" class="link-effect p-relative">{%- endif -%}<span class="text">{{ block.settings.heading_2 }}</span>{%- if block.settings.btn_lnk_2 != blank -%}</a>{%- endif -%}</h3>
+                                    {%- endif -%}
+                                    {%- if block.settings.desc_2 != blank -%}
+                                    <div class="desc mb-20{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{{block.settings.desc_2}}</div>
+                                    {%- endif -%}
+                                    {%- if block.settings.btn_txt_2 != blank -%}
+                                        {%- if block.settings.btn_lnk_2 != blank -%}
+                                            <a href="{{block.settings.btn_lnk_2}}" class="button_link coll_item_btn d-inline-block txt-d-underline{% if block.settings.fontsize_btn <= 18 %} txt-u-o-8{% else %} txt-u-o-12{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">{{block.settings.btn_txt_2}}</a>
+                                        {%- else -%}
+                                            <span class="coll_item_btn">{{block.settings.btn_txt_2}}</span>
+                                        {%- endif -%}
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                        </div>
+                    {%- when 'lookbook_banner' -%}
+                        {%-  liquid 
+                            assign image_1 = block.settings.image_1
+                            assign image_2 = block.settings.image_2
+                            assign image_3 = block.settings.image_3
+                            assign product_1_1 = block.settings.lb_product_1_1
+                            assign left_1_1 = block.settings.horizontal_pos_1_1 | append: '%' 
+                            assign top_1_1 = block.settings.vertical_pos_1_1 | append: '%'
+
+                            assign product_1_2 = block.settings.lb_product_1_2
+                            assign left_1_2 = block.settings.horizontal_pos_1_2 | append: '%' 
+                            assign top_1_2 = block.settings.vertical_pos_1_2 | append: '%'
+
+                            assign product_2_1 = block.settings.lb_product_2_1
+                            assign left_2_1 = block.settings.horizontal_pos_2_1 | append: '%' 
+                            assign top_2_1 = block.settings.vertical_pos_2_1 | append: '%'
+
+                            assign product_2_2 = block.settings.lb_product_2_2
+                            assign left_2_2 = block.settings.horizontal_pos_2_2 | append: '%' 
+                            assign top_2_2 = block.settings.vertical_pos_2_2 | append: '%'
+
+                            assign product_3_1 = block.settings.lb_product_3_1
+                            assign left_3_1 = block.settings.horizontal_pos_3_1 | append: '%' 
+                            assign top_3_1 = block.settings.vertical_pos_3_1 | append: '%'
+
+                            assign product_3_2 = block.settings.lb_product_3_2
+                            assign left_3_2 = block.settings.horizontal_pos_3_2 | append: '%' 
+                            assign top_3_2 = block.settings.vertical_pos_3_2 | append: '%'
+
+                            assign lookbook_style = block.settings.lookbook_style
+                            assign check_lookbook = true
+                        -%}
+                    {%- if image_1 != blank or image_2 != blank or image_3 != blank -%}
+                    <div class="special-banner__item special-banner__item--{{ block.type }} d-flex flex-jc-center flex-align-center p-relative{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {%- if check_lookbook -%}
+                            {%- if product_1_1 != blank or product_1_2 != blank or product_2_1 != blank or product_2_2 != blank or product_3_1 != blank or product_3_2 != blank -%}
+                                {%- assign check_lookbook = false -%}
+                                <script src="{{ 'lookbook-script.js' | asset_url }}" defer="defer"></script>
+                            {%- endif -%}
+                        {%- endif -%}
+                        <div class="special-banner__lookbook lookbook-carousel{% if block.settings.lookbook_counter_number %} enable_counter_number{% endif %}" style="--font-size: {{block.settings.fontsize_heading | append: 'px'}};--font-size-mb: {{block.settings.fontsize_heading_mb | append: 'px'}};--line-height: {{block.settings.fontsize_heading | plus: 8 | append: 'px'}}; --line-height-mb: {{block.settings.fontsize_heading_mb | plus: 8 | append: 'px'}};--icon_color: {{block.settings.icon_color}}" data-item-to-show="1" data-item-dots="false" data-item-dots-mb="true" data-item-arrows="true" data-item-arrows-mb="false">
+                            <div class="special-banner__lb_item special-banner__lb_item_1 d-inline-block w-100{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                {%- if image_1 != blank -%}
+                                {% if settings.animations_hover_elements == '3d-lift' or settings.animations_hover_elements == 'vertical-lift' %}
+                                <div class="image-animation">
+                                {% endif %}
+                                    <div class="lookbook-img p-relative image-zoom image">
+                                        {%- if block.settings.lnk_1 != blank -%}<a href="{{block.settings.lnk_1}}" class="link">{%- endif -%}
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image_1.width < 320 -%}{{ image_1 | image_url: width: image_1.width }} 320w,{%- endif -%}
+                                            {%- if image_1.width >= 320 -%}{{ image_1 | image_url: width: 375 }} 375w,{%- endif -%}
+                                            {%- if image_1.width >= 750 -%}{{ image_1 | image_url: width: 750 }} 750w,{%- endif -%}
+                                            {%- if image_1.width >= 1100 -%}{{ image_1 | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                            {%- if image_1.width >= 1370 -%}{{ image_1 | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                            {%- if image_1.width >= 1500 -%}{{ image_1 | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                            {%- if image_1.width >= 1780 -%}{{ image_1 | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                            {%- if image_1.width >= 2000 -%}{{ image_1 | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                            {%- if image_1.width >= 2800 -%}{{ image_1 | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                            sizes="50vw"{% unless settings.enable_lazyload %} src="{{ image_1 | image_url: width: 750 }}"{% endunless %} alt="{{ image_1.alt | escape }}" width="{{ image_1.width }}" height="{{ image_1.width | divided_by: image_1.aspect_ratio | round}}" 
+                                            {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                            {% unless image_1.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_1.presentation.focal_point }}"{% endunless %}
+                                        >
+                                        {%- if block.settings.lnk_1 != blank -%}</a>{%- endif -%}
+                                        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+
+                                        {%- if product_1_1 != blank or product_1_2 != blank -%}
+                                            <lookbook-wrapper>
+                                            {%- if product_1_1 != blank -%}
+                                                {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_1_1, left: left_1_1, product: product_1_1, num: 1 %}
+                                            {% endif %}
+                                            {%- if product_1_2 != blank -%}
+                                                {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_1_2, left: left_1_2, product: product_1_2, num: 2 %}
+                                            {%- endif -%}
+                                            </lookbook-wrapper>
+                                        {%- endif -%}
+                                    </div>
+                                {% if settings.animations_hover_elements == '3d-lift' or settings.animations_hover_elements == 'vertical-lift' %}    
+                                </div>
+                                {% endif %}
+                                {%- else -%}
+                                    <div class="not_img" style="--height_not_img: 770px">670 x 770px</div>
+                                {%- endif -%}
+
+                                {%- if block.settings.heading_1 != blank -%}
+                                <h3 class="heading mt-25 mb-0 text-center">{%- if block.settings.lnk_1 != blank -%}<a href="{{block.settings.lnk_1}}" class="link-effect p-relative">{%- endif -%}<span class="text">{{ block.settings.heading_1 }}</span>{%- if block.settings.lnk_1 != blank -%}</a>{%- endif -%}</h3>
+                                {%- endif -%}
+                            </div>
+                            <div class="special-banner__lb_item special-banner__lb_item_2 d-inline-block w-100{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                {%- if image_2 != blank -%}
+                                    <div class="lookbook-img p-relative image-zoom image">
+                                    {%- if block.settings.lnk_2 != blank -%}<a href="{{block.settings.lnk_2}}" class="link">{%- endif -%}
+                                        <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image_2.width < 320 -%}{{ image_2 | image_url: width: image_2.width }} 320w,{%- endif -%}
+                                            {%- if image_2.width >= 320 -%}{{ image_2 | image_url: width: 375 }} 375w,{%- endif -%}
+                                            {%- if image_2.width >= 750 -%}{{ image_2 | image_url: width: 750 }} 750w,{%- endif -%}
+                                            {%- if image_2.width >= 1100 -%}{{ image_2 | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                            {%- if image_2.width >= 1370 -%}{{ image_2 | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                            {%- if image_2.width >= 1500 -%}{{ image_2 | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                            {%- if image_2.width >= 1780 -%}{{ image_2 | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                            {%- if image_2.width >= 2000 -%}{{ image_2 | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                            {%- if image_2.width >= 2800 -%}{{ image_2 | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                            sizes="50vw"{% unless settings.enable_lazyload %} src="{{ image_2 | image_url: width: 320 }}"{% endunless %} alt="{{ image_2.alt | escape }}" width="{{ image_2.width }}" height="{{ image_2.width | divided_by: image_2.aspect_ratio | round}}" class="lazyload" 
+                                            {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                            {% unless image_2.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_2.presentation.focal_point }}"{% endunless %}
+                                        >
+                                        {%- if block.settings.lnk_2 != blank -%}</a>{%- endif -%}
+                                        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+
+                                        {%- if product_2_1 != blank or product_2_2 != blank -%}
+                                        <lookbook-wrapper>
+                                        {%- if product_2_1 != blank -%}
+                                            {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_2_1, left: left_2_1, product: product_2_1, num: 3 %}
+                                        {% endif %}
+                                        {%- if product_2_2 != blank -%}
+                                            {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_2_2, left: left_2_2, product: product_2_2, num: 4 %}
+                                        {%- endif -%}
+                                        </lookbook-wrapper>
+                                    {%- endif -%}
+                                    </div>
+                                {%- else -%}
+                                    <div class="not_img" style="--height_not_img: 770px">670 x 770px</div>
+                                {%- endif -%}
+                                {%- if block.settings.heading_2 != blank -%}
+                                <h3 class="heading mt-25 mb-0 text-center">{%- if block.settings.lnk_2 != blank -%}<a href="{{block.settings.lnk_2}}" class="link-effect p-relative">{%- endif -%}<span class="text">{{ block.settings.heading_2 }}</span>{%- if block.settings.lnk_2 != blank -%}</a>{%- endif -%}</h3>
+                                {%- endif -%}
+                            </div>
+                            <div class="special-banner__lb_item special-banner__lb_item_3 d-inline-block w-100{% if block.settings.image_behavior != 'none' %} animate--{{ block.settings.image_behavior }} o-hidden{% endif %}">
+                                {%- if image_3 != blank -%}
+                                    <div class="lookbook-img p-relative image-zoom image">
+                                    {%- if block.settings.lnk_3 != blank -%}<a href="{{block.settings.lnk_3}}" class="link">{%- endif -%}
+                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if image_3.width < 320 -%}{{ image_3 | image_url: width: image_3.width }} 320w,{%- endif -%}
+                                        {%- if image_3.width >= 320 -%}{{ image_3 | image_url: width: 375 }} 375w,{%- endif -%}
+                                        {%- if image_3.width >= 750 -%}{{ image_3 | image_url: width: 750 }} 750w,{%- endif -%}
+                                        {%- if image_3.width >= 1100 -%}{{ image_3 | image_url: width: 1100 }} 1100w,{%- endif -%}
+                                        {%- if image_3.width >= 1370 -%}{{ image_3 | image_url: width: 1370 }} 1370w,{%- endif -%}
+                                        {%- if image_3.width >= 1500 -%}{{ image_3 | image_url: width: 1500 }} 1500w,{%- endif -%}
+                                        {%- if image_3.width >= 1780 -%}{{ image_3 | image_url: width: 1780 }} 1780w,{%- endif -%}
+                                        {%- if image_3.width >= 2000 -%}{{ image_3 | image_url: width: 2000 }} 2000w,{%- endif -%}
+                                        {%- if image_3.width >= 2800 -%}{{ image_3 | image_url: width: 2800 }} 2800w{%- endif -%}"
+                                        sizes="50vw"{% unless settings.enable_lazyload %} src="{{ image_3 | image_url: width: 320 }}"{% endunless %} alt="{{ image_3.alt | escape }}" width="{{ image_3.width }}" height="{{ image_3.width | divided_by: image_3.aspect_ratio | round}}" class="lazyload" 
+                                        {%- if settings.enable_lazyload -%}class="lazyload" loading="lazy"{%- endif -%}
+                                        {% unless image_3.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_3.presentation.focal_point }}"{% endunless %}
+                                    >
+                                    {%- if block.settings.lnk_3 != blank -%}</a>{%- endif -%}
+                                    {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                    <lookbook-wrapper>
+                                        {%- if product_3_1 != blank -%}
+                                            {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_3_1, left: left_3_1, product: product_3_1, num: 5 %}
+                                        {% endif %}
+                                        {%- if product_3_2 != blank -%}
+                                            {% render 'lookbook-modal-wrapper', lookbook_style: lookbook_style, top: top_3_2, left: left_3_2, product: product_3_2, num: 6 %}
+                                        {%- endif -%}
+                                    </lookbook-wrapper>
+                                    </div>
+                                {%- else -%}
+                                    <div class="not_img" style="--height_not_img: 770px">670 x 770px</div>
+                                {%- endif -%}
+                                {%- if block.settings.heading_3 != blank -%}
+                                <h3 class="heading mt-25 mb-0 text-center">{%- if block.settings.lnk_3 != blank -%}<a href="{{block.settings.lnk_3}}" class="link-effect p-relative">{%- endif -%}<span class="text">{{ block.settings.heading_3 }}</span>{%- if block.settings.lnk_3 != blank -%}</a>{%- endif -%}</h3>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                        {%- if block.settings.lookbook_counter_number -%}
+                            {%- if image_1 != blank -%}
+                                {%- if image_2 != blank -%}
+                                    {%- if image_3 != blank -%}
+                                        {%- assign lookbook_total = 3 -%}
+                                    {%- else -%}
+                                        {%- assign lookbook_total = 2 -%}
+                                    {%- endif -%}
+                                {%- else -%}
+                                    {%- if image_3 != blank -%}
+                                        {%- assign lookbook_total = 2 -%}
+                                    {%- else -%}
+                                        {%- assign lookbook_total = 1 -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- else -%}
+                                {%- if image_2 != blank -%}
+                                    {%- if image_3 != blank -%}
+                                        {%- assign lookbook_total = 2 -%}
+                                    {%- else -%}
+                                        {%- assign lookbook_total = 1 -%}
+                                    {%- endif -%}
+                                {%- else -%}
+                                    {%- if image_3 != blank -%}
+                                        {%- assign lookbook_total = 1 -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- endif -%}
+                            <div class="products-counter-number"> 
+                                <div class="counter"><span id="count-image">1</span>/{{lookbook_total}}</div>
+                            </div>
+                        {%- endif -%}
+                    </div>
+                    {%- endif -%}
+                    {%- when 'product' -%}
+                        <div class="special-banner__item special-banner__item--{{ block.type }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {%- liquid 
+                                assign image_ratio = settings.product_block_image_ratio
+                                assign collection = block.settings.collection
+                                assign limit = block.settings.limit
+                                assign products_to_display = 0
+                                if collections[collection].handle != ''
+                                    if collections[collection].all_products_count > limit
+                                        assign products_to_display = limit
+                                    else
+                                        assign products_to_display = collections[collection].all_products_count
+                                    endif 
+                                else
+                                    assign products_to_display = limit
+                                endif
+
+                                assign layout = block.settings.layout
+                                assign product_layout = 'grid'
+                                if layout == 'slider'
+                                    assign product_layout = 'carousel'
+                                endif
+
+                                assign product_counter_number = block.settings.product_counter_number
+                            -%}
+                            <h3 class="title center">
+                                <span class="text">{{ block.settings.title }}</span>
+                            </h3>
+                            <div class="special-banner__product" data-product-block data-limit="{{ limit }}" data-layout="{{ layout }}" sectionId="{{ section.id }}" data-collection="{{ collection }}" data-image-ratio="{{ image_ratio }}" data-swipe="false" hasCountdown=true>
+                                <div class="special-banner__products--{{ layout }} products-{{ product_layout }}{% if product_layout == 'carousel' %}{% if product_counter_number %} enable_counter_number{% endif %}{% endif %}" data-item-to-show="1" data-item-dots="false" data-item-dots-mb="true" data-item-arrows="true" data-item-arrows-mb="false">
+                                    {%- if collection.products[0] != nil -%}
+                                        {%- liquid 
+                                            assign product_limit = 1
+                                            if layout == 'grid'
+                                                assign product_limit = limit
+                                            endif
+                                        -%}
+                                        {%- for product in collection.products limit: product_limit -%}
+                                            <div class="product{% if swipe == 'true' %} slider__slide grid__item{% endif %}">
+                                                {% render 'product-card-loading', product_card_product: product, media_size: image_ratio, portrait_aspect_ratio: '133' %}
+                                            </div>
+                                        {%- endfor -%}
+                                    {%- else -%}
+                                        <div class="product{% if swipe %} slider__slide grid__item{% endif %}">
+                                            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                                            {% render 'product-card-placeholder', index: current %}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                                {%- if product_counter_number -%}
+                                    {%- assign product_total = collections[collection].all_products_count -%}
+                                    <div class="products-counter-number"> 
+                                        <div class="counter"><span id="count-image">1</span>/{% if product_total <= limit %}{{ product_total }}{% else %}{{limit}}{% endif %}</div>
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                            {% if layout == 'grid' %}
+                            <style type="text/css">
+                                .template-index .wrapper-body {
+                                    overflow: initial !important;
+                                }
+                            </style>
+                            {% endif %}
+                        </div>
+                {%- endcase -%}
+            {%- endfor -%}
+        </div>
+    </div>
+</div>
+{% schema %}
+    {
+        "name": "t:sections.special_banner.name",
+        "tag": "section",
+        "class": "section-special-banner",
+        "max_blocks": 2,
+        "settings": [
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "1920",
+                "options": [
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "1370",
+                        "label": "t:sections.layout.container.option8"
+                    },
+                    {
+                        "value": "1470",
+                        "label": "t:sections.layout.container.option5"
+                    },
+                    {
+                        "value": "1570",
+                        "label": "t:sections.layout.container.option6"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    },
+                    {
+                        "value": "1920",
+                        "label": "t:sections.layout.container.option9"
+                    },
+                    {
+                        "value": "full",
+                        "label": "t:sections.layout.container.option2"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main-product.settings.general.spacing"
+            },
+            {
+                "type": "range",
+                "id": "padding_top",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "t:sections.main-list-collections.settings.spacing.mg_top",
+                "default": 0
+            },
+            {
+                "type": "range",
+                "id": "padding_bottom",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "t:sections.main-list-collections.settings.spacing.mg_bottom",
+                "default": 0
+            }
+        ],
+        "blocks": [
+            {
+                "type": "image_rotating_text",
+                "name": "t:sections.special_banner.settings.image_rotating_text",
+                "settings": [
+                    {
+                        "type" : "image_picker",
+                        "id" : "image",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                      "type": "header",
+                      "content": "t:sections.main-product.settings.general.animation"
+                    },
+                    {
+                      "type": "select",
+                      "id": "image_behavior",
+                      "options": [
+                        {
+                          "value": "none",
+                          "label": "t:settings_schema.typography.settings.text_transform.options__1"
+                        },
+                        {
+                          "value": "ambient",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+                        },
+                        {
+                          "value": "zoom-in",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+                        }
+                      ],
+                      "default": "none",
+                      "label": "t:sections.main-product.settings.general.image_behavior.label"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.special_banner.settings.rotating_text"
+                    },
+                    {
+                        "type": "text",
+                        "id": "rotating_text",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                        "default": "clearance sale  .  up to 50% off  .  clearance sale  .  up to 50% off  .  "
+                    },
+                    {
+                        "type": "color",
+                        "id": "rotating_text_color",
+                        "label": "t:settings_schema.colors.settings.colors_name.color",
+                        "default": "#ffffff"
+                    },
+                    {
+                        "type": "range",
+                        "id": "letter_spacing",
+                        "label": "t:settings_schema.typography.settings.typography.label__2",
+                        "min": 0,
+                        "max": 20,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 1
+                    },
+                    {
+                        "type": "select",
+                        "id": "position",
+                        "label": "t:sections.product_block.settings.general.label__7",
+                        "options": [
+                        {
+                            "value": "left",
+                            "label": "t:sections.product_block.settings.general.options__7"
+                        },
+                        {
+                            "value": "center",
+                            "label": "t:sections.product_block.settings.general.options__8"
+                        },
+                        {
+                            "value": "right",
+                            "label": "t:sections.product_block.settings.general.options__9"
+                        }],
+                        "default": "right"
+                    }
+                ]
+            },
+            {
+                "type": "image_with_text",
+                "name": "t:sections.special_banner.settings.image_with_text",
+                "settings": [
+                    {
+                        "type" : "image_picker",
+                        "id" : "image",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                      "type": "header",
+                      "content": "t:sections.main-product.settings.general.animation"
+                    },
+                    {
+                      "type": "select",
+                      "id": "image_behavior",
+                      "options": [
+                        {
+                          "value": "none",
+                          "label": "t:settings_schema.typography.settings.text_transform.options__1"
+                        },
+                        {
+                          "value": "ambient",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+                        },
+                        {
+                          "value": "zoom-in",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+                        }
+                      ],
+                      "default": "none",
+                      "label": "t:sections.main-product.settings.general.image_behavior.label"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:settings_schema.general.settings.gdpr_cookie_consent.label__4"
+                    },
+                    {
+                        "type": "select",
+                        "id": "text_align",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__7",
+                        "default": "left",
+                        "options": [
+                        {
+                            "value": "left",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__6"
+                        },
+                        {
+                            "value": "center",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__7"
+                        },
+                        {
+                            "value": "right",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__8"
+                        }]
+                    },
+                    {
+                        "type": "select",
+                        "id": "content_align",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__9",
+                        "default": "bottom",
+                        "options": [
+                        {
+                            "value": "top",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__9"
+                        },
+                        {
+                            "value": "center",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__7"
+                        },
+                        {
+                            "value": "bottom",
+                            "label": "t:sections.image-banner.blocks.image.settings.content.options__10"
+                        }]
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading",
+                        "label": "t:sections.slide-show.blocks.image.slider_content.font_size_heading",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 80
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading_mb",
+                        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.fz_mb",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 50
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "desc",
+                        "label": "t:settings_schema.newsletter_popup.settings.general.label__7"
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_desc",
+                        "label": "t:sections.layout.fontsize.fontsize_des.label",
+                        "min": 10,
+                        "max": 50,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 15
+                    },
+                    {
+                        "type": "text",
+                        "id": "btn_txt",
+                        "label": "t:settings_schema.typography.settings.typography.button_text",
+                        "default": "Button label"
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_btn",
+                        "label": "t:settings_schema.typography.settings.typography.button_font_size",
+                        "min": 10,
+                        "max": 50,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 20
+                    },
+                    {
+                        "type": "color",
+                        "id": "text_color",
+                        "label": "t:settings_schema.colors.settings.colors_name.color",
+                        "default": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "type": "collection_banner",
+                "name": "t:sections.main-collection-banner.name",
+                "settings": [
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading",
+                        "label": "t:sections.slide-show.blocks.image.slider_content.font_size_heading",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 50
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading_mb",
+                        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.fz_mb",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 30
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_desc",
+                        "label": "t:sections.layout.fontsize.fontsize_des.label",
+                        "min": 10,
+                        "max": 50,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 15
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_btn",
+                        "label": "t:settings_schema.typography.settings.typography.button_font_size",
+                        "min": 10,
+                        "max": 50,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 20
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.policies_block.settings.setting_block.item_1"
+                    },
+                    {
+                        "type" : "image_picker",
+                        "id" : "image_1",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading_1",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "desc_1",
+                        "label": "t:settings_schema.newsletter_popup.settings.general.label__7",
+                        "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+                    },
+                    {
+                        "type": "text",
+                        "id": "btn_txt_1",
+                        "label": "t:settings_schema.typography.settings.typography.button_text",
+                        "default": "Button label"
+                    },
+                    {
+                        "type": "url",
+                        "id": "btn_lnk_1",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.policies_block.settings.setting_block.item_2"
+                    },
+                    {
+                        "type" : "image_picker",
+                        "id" : "image_2",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading_2",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "desc_2",
+                        "label": "t:settings_schema.newsletter_popup.settings.general.label__7",
+                        "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+                    },
+                    {
+                        "type": "text",
+                        "id": "btn_txt_2",
+                        "label": "t:settings_schema.typography.settings.typography.button_text",
+                        "default": "Button label"
+                    },
+                    {
+                        "type": "url",
+                        "id": "btn_lnk_2",
+                        "label": "t:settings_schema.typography.settings.typography.button_link"
+                    }
+                ]
+            },
+            {
+                "type": "lookbook_banner",
+                "name": "t:sections.special_banner.settings.lookbook_banner",
+                "settings": [
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading",
+                        "label": "t:sections.slide-show.blocks.image.slider_content.font_size_heading",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 20
+                    },
+                    {
+                        "type": "range",
+                        "id": "fontsize_heading_mb",
+                        "label": "t:sections.rich-text.blocks.heading.settings.heading_size.fz_mb",
+                        "min": 10,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                        "default": 18
+                    },
+                    {
+                        "type": "color",
+                        "id": "icon_color",
+                        "label": "t:settings_schema.typography.settings.typography.icon_color",
+                        "default": "#ffffff"
+                    },
+                    {
+                        "type": "select",
+                        "id": "lookbook_style",
+                        "label": "t:sections.main_lookbook_page.settings.style",
+                        "default": "1",
+                        "options": [
+                            {
+                                "value": "1",
+                                "label": "t:settings_schema.typography.settings.typography.style_1"
+                            },
+                            {
+                                "value": "2",
+                                "label": "t:settings_schema.typography.settings.typography.style_2"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "lookbook_counter_number",
+                        "label": "t:sections.product_block.settings.slider.enable_counter_number",
+                        "default": false
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.policies_block.settings.setting_block.item_1"
+                    },
+                    {
+                        "type" : "image_picker",
+                        "id" : "image_1",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading_1",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "lnk_1",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_1"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_1_1",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_1_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_1_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_2"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_1_2",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_1_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_1_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.policies_block.settings.setting_block.item_2"
+                    },
+                    {
+                        "type" : "image_picker",
+                        "id" : "image_2",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading_2",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "lnk_2",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_1"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_2_1",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_2_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_2_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_2"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_2_2",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_2_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_2_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.policies_block.settings.setting_block.item_3"
+                    },
+                    {
+                        "type" : "image_picker",
+                        "id" : "image_3",
+                        "label" : "t:sections.image-banner.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "heading_3",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Image with text"
+                    },
+                    {
+                        "type": "url",
+                        "id": "lnk_3",
+                        "label": "t:settings_schema.before_you_leave.settings.back_to_store.label__3"
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_1"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_3_1",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_3_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_3_1",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type" : "paragraph",
+                        "content" : "t:sections.slide-show.blocks.image.slider_look.product_2"
+                    },
+                    {
+                        "type" : "product",
+                        "id" : "lb_product_3_2",
+                        "label" : "t:sections.slide-show.blocks.image.slider_look.lb_product"
+                    },
+                    {
+                        "type": "range",
+                        "id": "horizontal_pos_3_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_2",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                        "type": "range",
+                        "id": "vertical_pos_3_2",
+                        "label": "t:sections.collection_lookbook.blocks.lookbook.settings.label_3",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "t:settings_schema.typography.settings.typography.unit_2",
+                        "default": 0
+                    },
+                    {
+                      "type": "header",
+                      "content": "t:sections.main-product.settings.general.animation"
+                    },
+                    {
+                      "type": "select",
+                      "id": "image_behavior",
+                      "options": [
+                        {
+                          "value": "none",
+                          "label": "t:settings_schema.typography.settings.text_transform.options__1"
+                        },
+                        {
+                          "value": "ambient",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__1"
+                        },
+                        {
+                          "value": "zoom-in",
+                          "label": "t:sections.main-product.settings.general.image_behavior.option__3"
+                        }
+                      ],
+                      "default": "none",
+                      "label": "t:sections.main-product.settings.general.image_behavior.label"
+                    }
+                ]
+            },
+            {
+                "type": "product",
+                "name": "t:settings_schema.product_card.settings.product_badge.unit__2",
+                "settings": [
+                    {
+                        "type": "select",
+                        "id": "layout",
+                        "label": "t:sections.product_block.settings.product_block_layout.option",
+                        "default": "grid",
+                        "options": [
+                            {
+                                "value": "grid",
+                                "label": "t:sections.product_block.settings.product_block_layout.option1"
+                            },
+                            {
+                                "value": "slider",
+                                "label": "t:sections.product_block.settings.product_block_layout.option2"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "t:settings_schema.general.settings.gdpr_cookie_consent.label__3",
+                        "default": "FEATURED PRODUCTS"
+                    },
+                    {
+                        "type": "collection",
+                        "id": "collection",
+                        "label": "t:settings_schema.typography.settings.typography.collection"
+                    },
+                    {
+                        "type": "range",
+                        "id": "limit",
+                        "label": "t:sections.product_block.settings.product_block_limit",
+                        "min": 1,
+                        "max": 10,
+                        "step": 1,
+                        "default": 2
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "product_counter_number",
+                        "label": "t:sections.product_block.settings.slider.enable_counter_number",
+                        "default": false,
+                        "info": "t:sections.special_banner.settings.info"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "t:sections.special_banner.name",
+                "blocks": [
+                    {
+                        "type": "image_rotating_text"
+                    },
+                    {
+                        "type": "product"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

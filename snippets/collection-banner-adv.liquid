@@ -1,0 +1,326 @@
+{%- liquid
+    assign colors_bg = section.settings.colors_bg
+    assign colors_bg_gradient = section.settings.colors_bg_gradient
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign container = section.settings.container
+    assign has_sidebar = false
+    assign show_sidebar = section.settings.show_sidebar
+    assign show_filter = section.settings.show_filter
+    assign sidebar_type = section.settings.sidebar_type
+    assign sidebar_position = section.settings.sidebar_position
+    assign show_sidebar_collapse = section.settings.show_sidebar_collapse
+    assign sidebar_collapse_default = section.settings.sidebar_collapse_default
+    if show_sidebar
+        if show_filter
+            assign has_sidebar = true
+            assign filter_swatch = section.settings.filter_swatch
+            assign filter_swatch_type = section.settings.filter_swatch_type
+            assign filter_rectangle = section.settings.filter_rectangle
+        elsif section.blocks.size > 0
+            assign has_sidebar = true
+        endif
+        if has_sidebar
+            assign sidebar_heading_font = section.settings.sidebar_heading_font
+            assign sidebar_heading_font_size = section.settings.sidebar_heading_font_size
+            assign sidebar_heading_font_weight = section.settings.sidebar_heading_font_weight
+            assign sidebar_heading_text_transform = section.settings.sidebar_heading_text_transform
+            assign enable_sticky = section.settings.enable_sticky
+            assign sidebar_layout = section.settings.sidebar_layout
+        endif
+    endif
+    assign sort_by = collection.sort_by | default: collection.default_sort_by
+    assign sort_options = collection.sort_options
+    assign layout = section.settings.layout
+    if cart.attributes.pagination != blank and cart.attributes.pagination
+        assign products_per_page = cart.attributes.pagination
+    else
+        assign products_per_page =  section.settings.products_per_page
+    endif
+    assign show_toolbar = section.settings.show_toolbar
+    if show_toolbar
+        assign show_sorting = section.settings.show_sorting
+        assign show_item_per_page = section.settings.show_item_per_page
+        assign show_view_as = section.settings.show_view_as
+    endif
+    assign image_ratio = section.settings.image_ratio
+    assign portrait_aspect_ratio = section.settings.portrait_aspect_ratio
+    assign show_infinite_scrolling = section.settings.show_infinite_scrolling
+-%}
+
+<style type="text/css" media="screen">
+    {%- if has_sidebar -%}
+        :root {
+            {%- if sidebar_heading_font == 'font_1' -%}
+                --sidebar-heading-font: var(--font-heading-family);
+            {%- elsif sidebar_heading_font == 'font_2' -%}
+                --sidebar-heading-font: var(--font-body-family);
+            {%- endif -%}
+            {%- if colors_bg != blank or colors_bg_gradient != blank -%}
+                --body-bg: {% if colors_bg_gradient != blank %}{{ colors_bg_gradient }}{% else %}{{ colors_bg }}{% endif %};
+            {%- endif -%}
+        }
+    {%- endif -%}
+
+    {%- if colors_bg != blank or colors_bg_gradient != blank -%}
+        body{background: var(--body-bg)}
+    {%- endif -%}
+
+    #CollectionSection-{{ section.id }}{padding-top: {{ padding_top }};padding-bottom: {{ padding_bottom }}}
+
+    {%- if has_sidebar -%}
+        #CollectionSection-{{ section.id }} .sidebarBlock-heading{font-family: var(--sidebar-heading-font);font-size: {{ sidebar_heading_font_size | append: 'px' }};font-weight: {{ sidebar_heading_font_weight }};text-transform: {{ sidebar_heading_text_transform }}}
+        #CollectionSection-{{ section.id }} .facets-horizontal .widget_filter {font-size: {{ sidebar_heading_font_size | append: 'px' }}}
+    {%- endif -%}
+
+    @media (max-width: 1024px) {#CollectionSection-{{ section.id }}{padding-top: {{ padding_top_tablet }};padding-bottom: {{ padding_bottom_tablet }}}}
+    @media (max-width: 550px) {#CollectionSection-{{ section.id }}{padding-top: {{ padding_top_mobile }};padding-bottom: {{ padding_bottom_mobile }}}}
+</style>
+
+<div data-section-id="{{ section.id }}" data-section-type="collection" id="CollectionSection-{{ section.id }}" data-section="{{ section.id }}" class="collection-banner-adv">
+    {%- if settings.layout != '4' or sidebar_type != 'horizontal' -%}
+        <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%}container-full{% else %}container{% endif %}">
+    {%- endif -%}
+        <div class="halo-collection-content halo-grid-content sidebar--layout_{{ sidebar_type }}">
+            {%- if has_sidebar -%}
+                {{ 'component-main-sidebar.css' | asset_url | stylesheet_tag }}
+                <div class="page-sidebar page-sidebar-{{ sidebar_position }} page-sidebar--{{ sidebar_type }} sidebar--{{ sidebar_layout }}{% if enable_sticky %} has-sticky{% endif %}" id="halo-sidebar">
+                    <button type="button" class="halo-sidebar-close" data-close-sidebar role="button"><span class="visually-hidden">{{ 'general.common.close' | t }}</span> {% render 'icon-close' %}</button>
+                    <div class="halo-sidebar-header text-left{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"><span class="title">{{ 'sections.sidebar.title' | t }}</span></div>
+                    <div class="halo-sidebar-wrapper custom-scrollbar{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {% render 'collection-sidebar',
+                            results: collection,
+                            section: section,
+                            sort_by: sort_by,
+                            sidebar_type: sidebar_type,
+                            show_filter: show_filter,
+                            show_sorting: show_sorting,
+                            show_collapse: show_sidebar_collapse,
+                            sidebar_collapse: sidebar_collapse_default,
+                            filter_swatch: filter_swatch,
+                            filter_swatch_type: filter_swatch_type,
+                            filter_rectangle: filter_rectangle
+                        %}
+                    </div>
+                </div>
+            {%- endif -%}
+            <div class="page-content" id="CollectionProductGrid">
+                {%- if settings.layout == '4' and sidebar_type == 'horizontal' -%}
+                    <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%}container-full{% else %}container{% endif %}">
+                {%- endif -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'lookbook' -%}
+                        {%- liquid
+                            if collection.image
+                                assign image = collection.image
+                                assign preview_img = collection.image
+                            else
+                                assign image = block.settings.image
+                                assign preview_img = block.settings.image
+                            endif
+                            if collection.description != blank
+                                assign description = collection.description
+                            else
+                                assign description = block.settings.description
+                            endif
+                            assign description = collection.description
+                            assign show_description = block.settings.show_collection_description
+                            assign link = block.settings.link
+                            assign margin_bottom = block.settings.margin_bottom
+                            assign title = block.settings.show_title
+                            assign fontsize_title = block.settings.fontsize_title | append: 'px'
+                            assign title_alignment = block.settings.page_title_alignment
+                            assign title_text_transform = block.settings.page_title_text_transform
+                            assign margin_top_title = block.settings.margin_top_title | append: 'px'
+                            assign title_color = block.settings.title_color
+                            assign fontsize_des = block.settings.fontsize_des | append: 'px'
+                            assign margin_top_des = block.settings.margin_top_des | append: 'px'
+                            assign des_color = block.settings.des_color
+                            assign desc_alignment = block.settings.desc_alignment
+                        -%}
+                        <div class="articleLookbook-block" style="--lookbook-margin-bottom: {{ margin_bottom | append: 'px' }}";>
+                            <div class="articleLookbook-item">
+                                {%- if block.settings.show_image -%}
+                                    {%- if image != blank -%}
+                                        <a class="image image-zoom image-adapt adaptive_height{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" href="{{ link }}" style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100 | append: '%' }}">
+                                            {%- assign height = image.width | divided_by: image.aspect_ratio | round -%}
+                                            {{ image | image_url: width: 1100 | image_tag: height: height, sizes: "100vw", widths: '375, 550, 750, 1100, 1500, 1780, 2000' }}
+                                            {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+                                        </a>
+                                    {%- endif -%}
+                                {%- endif -%}
+                                {%- if title -%}
+                                    <h1 class="articleLookbook-title text-{{ title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--lb-fontsize-title: {{ fontsize_title }};--lb-margin-top-title: {{ margin_top_title }};--lb-title-color: {{ title_color }};--lb-title-text-transform: {{ title_text_transform }}">{{ collection.title }}</h1>
+                                {%- endif -%}
+                                
+                                {%- if show_description and block.settings.desc_pos == 'top' -%}
+                                    <div class="articleLookbook-des text-{{ desc_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--lb-fontsize-des: {{ fontsize_des }};--lb-line-height-des: {{ fontsize_des | plus: 10 | append: 'px'}};--lb-margin-top-des: {{ margin_top_des }};--lb-title-des: {{ des_color }}">{{ description }}</div>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- paginate collection.products by products_per_page -%}
+                    {%- if show_toolbar -%}
+                        {% render 'toolbar',
+                            has_sidebar: has_sidebar,
+                            show_sorting: show_sorting,
+                            show_item_per_page: show_item_per_page,
+                            show_view_as: show_view_as,
+                            products_per_page: products_per_page,
+                            layout: layout,
+                            sort_by: sort_by,
+                            sort_options: sort_options
+                        %}
+                    {%- endif -%}
+                    {%- if collection.products.size == 0 -%}
+                        <div class="collection collection--empty{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="main-collection-product-grid" data-id="{{ section.id }}">
+                            <p class="collection-product-count ">{{ 'sections.collection_template.product_count' | t: count: collection.products_count, total: collection.all_products_count }}</p>
+                            <div class="collection-product-wrapper">
+                                <h2 class="title">{{ 'sections.collection_template.empty' | t }} <br> {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "link-underline link" }}</h2>
+                            </div>
+                        </div>
+                    {%- else -%}
+                        <div class="collection{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            <ul class="productListing{% if layout == '1' %} productList{% else %} productGrid column-{{ layout }}{% endif %} list-{{ layout }} list-unstyled" id="main-collection-product-grid" data-id="{{ section.id }}">
+                                {%- liquid
+                                    assign banner_position_1 = 3
+                                    assign banner_position_2 = 4
+                                    assign banner_position_3 = 9
+                                -%}
+                                    
+                                {%- for product in collection.products -%}
+                                    {%- if paginate.current_page == 1 and forloop.index == banner_position_1 and section.settings.show_banner -%}
+                                        <li class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                            {% render 'product-grid-layout',
+                                                product_card_product: product,
+                                                media_size: image_ratio,
+                                                portrait_aspect_ratio: portrait_aspect_ratio,
+                                                serial: forloop.index,
+                                                sectionId: section.id,
+                                                show_list: true,
+                                                loading: true
+                                            %}
+                                        </li>
+                                        <li class="product banner" data-product-banner="1" data-first-position="{{ banner_position_1 }}">
+                                            <div class="grid-item banner-img">
+                                              <a class="animate-scale"{% if section.settings.link_banner_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ section.settings.link_banner_1 }}"{% endif %}>
+                                                {%- if section.settings.img_banner1 != blank -%}
+                                                    {%- assign height = section.settings.img_banner1.width | divided_by: section.settings.img_banner1.aspect_ratio | round -%}
+                                                     <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ section.settings.img_banner1 | img_url: 'master' }}" src="{{ section.settings.img_banner1 | img_url: 'master' }}" alt="{{ section.settings.img_banner1.alt | default: shop.name | escape }}" loading="lazy" width="{{section.settings.img_banner1.width}}" height="{{height}}">
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 560px">420 x 560px</div>  
+                                                {%- endif -%}
+                                              </a>
+                                            </div>
+                                        </li>
+                                    {%- elsif paginate.current_page == 1 and forloop.index == banner_position_2 and section.settings.show_banner -%}
+                                        <li class="product banner" data-product-banner="2" data-first-position="{{ banner_position_2 }}">
+                                            <div class="grid-item banner-img">
+                                              <a class="animate-scale"{% if section.settings.link_banner_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ section.settings.link_banner_2 }}"{% endif %}>
+                                                {%- if section.settings.img_banner2 != blank -%}
+                                                    {%- assign height = section.settings.img_banner2.width | divided_by: section.settings.img_banner2.aspect_ratio | round -%}
+                                                     <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ section.settings.img_banner2 | img_url: 'master' }}" src="{{ section.settings.img_banner2 | img_url: 'master' }}" alt="{{ section.settings.img_banner2.alt | default: shop.name | escape }}" loading="lazy" width="{{section.settings.img_banner2.width}}" height="{{height}}">
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 560px">420 x 560px</div>  
+                                                {%- endif -%}
+                                              </a>
+                                            </div>
+                                        </li>
+                                        <li class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                            {% render 'product-grid-layout',
+                                                product_card_product: product,
+                                                media_size: image_ratio,
+                                                portrait_aspect_ratio: portrait_aspect_ratio,
+                                                serial: forloop.index,
+                                                sectionId: section.id,
+                                                show_list: true,
+                                                loading: true
+                                            %}
+                                        </li>
+                                    {%- elsif paginate.current_page == 1 and forloop.index == banner_position_3 and section.settings.show_banner -%}
+                                        <li class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                            {% render 'product-grid-layout',
+                                                product_card_product: product,
+                                                media_size: image_ratio,
+                                                portrait_aspect_ratio: portrait_aspect_ratio,
+                                                serial: forloop.index,
+                                                sectionId: section.id,
+                                                show_list: true,
+                                                loading: true
+                                            %}
+                                        </li>
+                                        <li class="product banner" data-product-banner="3" data-first-position="{{ banner_position_3 | plus: 2 }}">
+                                            <div class="grid-item banner-img">
+                                              <a class="animate-scale"{% if section.settings.link_banner_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ section.settings.link_banner_3 }}"{% endif %}>
+                                                {%- if section.settings.img_banner3 != blank -%}
+                                                    {%- assign height = section.settings.img_banner3.width | divided_by: section.settings.img_banner3.aspect_ratio | round -%}
+                                                     <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ section.settings.img_banner3 | img_url: 'master' }}" src="{{ section.settings.img_banner3 | img_url: 'master' }}" alt="{{ section.settings.img_banner3.alt | default: shop.name | escape }}" loading="lazy" width="{{section.settings.img_banner3.width}}" height="{{height}}">
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 560px">420 x 560px</div>  
+                                                {%- endif -%}
+                                              </a>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li class="product{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} style="--animation-order: {{ forloop.index }};"{% endif %}>
+                                            {% render 'product-grid-layout',
+                                                product_card_product: product,
+                                                media_size: image_ratio,
+                                                portrait_aspect_ratio: portrait_aspect_ratio,
+                                                serial: forloop.index,
+                                                sectionId: section.id,
+                                                show_list: true,
+                                                loading: true
+                                            %}
+                                        </li>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </ul>
+                            {%- if paginate.pages > 1 -%}
+                                {% render 'pagination-listing',
+                                    paginate: paginate,
+                                    show_infinite_scrolling: show_infinite_scrolling,
+                                    anchor: '',
+                                    class: 'pagination-wrapper text-center' 
+                                %}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endpaginate -%}
+
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'lookbook' and block.settings.desc_pos == 'bottom' -%}
+                        {%- liquid
+                            assign fontsize_des = block.settings.fontsize_des | append: 'px'
+                            assign margin_top_des = block.settings.margin_top_des | append: 'px'
+                            assign des_color = block.settings.des_color
+                            assign show_description = block.settings.show_collection_description
+                            assign desc_alignment = block.settings.desc_alignment
+                        -%}
+                      {%- if show_description -%}
+                        <div class="articleLookbook-block" style="--lookbook-margin-bottom: {{ margin_bottom | append: 'px' }}";>
+                            <div class="articleLookbook-item">
+                                <div class="articleLookbook-des text-{{ desc_alignment }}" style="--lb-fontsize-des: {{ fontsize_des }};--lb-line-height-des: {{ fontsize_des | plus: 10 | append: 'px'}};--lb-margin-top-des: {{ margin_top_des }};--lb-title-des: {{ des_color }}">{{ description }}</div>
+                            </div>
+                        </div>
+                      {%- endif -%}
+                    {%- endif -%}
+                {%- endfor -%}
+
+                {%- if settings.layout == '4' and sidebar_type == 'horizontal' -%}
+                    </div>
+                {%- endif -%}
+            </div>
+        </div>
+    {%- if settings.layout != '4' or sidebar_type == 'horizontal' -%}
+        </div>
+    {%- endif -%}
+    <div class="loading-overlay loading-overlay--custom">
+        <div class="loading-overlay__spinner" aria-label="{{ 'general.button_load_more.loading' | t }}"><svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg></div>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+{%- liquid
+    assign layout = settings.list_collections_layout
+-%}
+<div class="banner-item item">
+  {%- if layout == 'collections_02_list' or layout == 'collections_full' -%}
+    <div class="halo-row column-2">
+      <div class="halo-item">
+  {%- endif -%} 
+      <div class="img-box{% if layout == 'collections_01_grid' or layout == 'collections_4' %} animate-hvr{% endif %}">
+        {%- liquid
+          if type == 'all'
+            assign image = collection.featured_image
+            assign link = collection.url
+          else
+            if block.settings.image != blank
+                assign image = block.settings.image
+              else
+              assign image = collection.image
+            endif
+            if block.settings.link != blank
+                assign link = block.settings.link
+              else
+              assign link = collection.url
+            endif
+          endif
+        -%}
+        {%- if image != blank -%}
+          <a class="image image-{{ image_ratio }} adaptive_height" href="{{ link }}"{% if image_ratio == 'adapt' %} style="padding-bottom: {{ 1 | divided_by: image.aspect_ratio | times: 100 }}%;"{% elsif image_ratio == 'square' %} style="padding-bottom: 100%;"{% elsif image_ratio == 'portrait' %}{% if portrait_aspect_ratio != blank %} style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }};"{% endif %}{% endif %}>
+              <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ image | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ image | img_url: 'master' }}"{% endunless %} alt="{{ image.alt | default: shop.name | escape }}" loading="lazy"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+              {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+            </a>
+        {%- else -%}
+            <a class="image" href="{{ link }}">{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}</a>
+        {%- endif -%}
+        {% if layout == 'collections_01_grid' or layout == 'collections_4' %}
+          <div class="view-abs"><a href="{{ link }}" class="view"></a></div>
+        {%- endif -%}
+        {%- if layout == 'collections_4' -%}
+          {%- if show_collection_title -%}
+            <h3 class="collection-title"><a href="{{ link }}" title="{{ collection.title | escape }}">{{ collection.title}}</a> {% render 'icon-arrow-right' %}</h3>
+          {%- endif -%}
+          {%- if show_collection_product_count -%}
+              <span class="count">{{ 'sections.collection_list.count' | t: count: collection.all_products_count }}</span>
+          {%- endif -%}
+        {%- endif -%}
+        {%- if block.settings.display_countdown -%}
+          <div class="content-box countdown-{{ block.id }}">
+            {%- if block.settings.title != blank -%}
+              <h3 class="banner-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- if block.settings.des != blank -%}
+              <p class="des-countdown">{{ block.settings.des }}</p>
+            {%- endif -%}
+            {%- if block.settings.countdown != blank -%}
+                <div class="collection-countdown" data-collection-countdown data-collection-countdown-value="{{ block.settings.countdown }}"></div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+  {%- if layout == 'collections_02_list' or layout == 'collections_full' -%}    
+    </div>
+    <div class="halo-item">
+  {%- endif -%}
+        {%- if show_collection_title or show_collection_product_count -%}
+          {%- unless layout == 'collections_4' -%}
+            <div class="collections-wrapper text-{{ align }}">
+              {%- if show_collection_title -%}
+                <h3 class="collection-title"><a href="{{ link }}" title="{{ collection.title | escape }}">{{ collection.title}}</a></h3>
+              {%- endif -%}
+              {%- if show_collection_product_count -%}
+                  <span class="count">{{ 'sections.collection_list.count' | t: count: collection.all_products_count }}</span>
+              {%- endif -%}
+              <div class="des">{{ collection.description | strip_html | truncatewords: limit_content_des }}</div>
+              <a href="{{ link }}" class="collections-button{% if button_style == 'style1' %} button button--primary{% endif %}">{{ button }}</a>
+            </div>
+          {%- endunless -%}
+        {%- endif -%}
+  {%- if layout == 'collections_02_list' or layout == 'collections_full' -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+<style>
+  {%- liquid
+        assign title_font_size = block.settings.title_font_size
+        assign title_font_size_mb = block.settings.title_font_size_mb
+        assign title_font_weight = block.settings.title_font_weight
+        assign title_color = block.settings.title_color
+        assign mg_bottom_title = block.settings.mg_bottom_title
+        assign des_font_size = block.settings.des_font_size
+        assign des_font_size_mb = block.settings.des_font_size_mb
+        assign des_font_weight = block.settings.des_font_weight
+        assign text_color = block.settings.text_color
+        assign mg_bottom_des = block.settings.mg_bottom_des
+        assign border_color = block.settings.border_color
+        assign countdown_background = block.settings.countdown_background
+        assign countdown_background_gradient = block.settings.countdown_background_gradient
+        assign opacity_background = block.settings.opacity_background
+        assign item_countdown_width = block.settings.item_countdown_width
+        assign item_countdown_height = block.settings.item_countdown_height
+        assign item_countdown_radius = block.settings.item_countdown_radius
+        assign item_countdown_gap = block.settings.item_countdown_gap
+        assign num_font_size = block.settings.num_font_size
+        assign num_font_size_mb = block.settings.num_font_size_mb
+        assign num_font_weight = block.settings.num_font_weight
+        assign num_color = block.settings.num_color
+        assign text_time_font_size = block.settings.text_time_font_size
+        assign text_time_font_size_mb = block.settings.text_time_font_size_mb
+        assign text_time_font_weight = block.settings.text_time_font_weight
+        assign text_time_color = block.settings.text_time_color
+  -%}
+  .countdown-{{ block.id }} .banner-title {
+    font-size: {{ title_font_size | append: 'px' }};
+    font-weight: {{ title_font_weight }};
+    color: {{ title_color }};
+    margin-bottom: {{ mg_bottom_title | append: 'px' }};
+  }
+
+  .countdown-{{ block.id }} .des-countdown {
+    font-size: {{ des_font_size | append: 'px' }};
+    font-weight: {{ des_font_weight }};
+    color: {{ text_color }};
+    margin-bottom: {{ mg_bottom_des | append: 'px' }};
+  }
+
+  .countdown-{{ block.id }} .collection-countdown .clock-item {
+    border-color: {{ border_color | color_modify: 'alpha', opacity_background }};
+    {%- if countdown_background_gradient != blank -%}
+        background:  {{ countdown_background_gradient }};
+    {%- elsif countdown_background != 'rgba(0,0,0,0)' and countdown_background != blank -%}
+        background:  {{ countdown_background | color_modify: 'alpha', opacity_background }};
+    {%- endif -%}
+    width: {{ item_countdown_width | append: 'px' }};
+    height: {{ item_countdown_height | append: 'px' }};
+    -moz-border-radius: {{ item_countdown_radius | append: '%' }};
+    -webkit-border-radius: {{ item_countdown_radius | append: '%' }};
+    -ms-border-radius: {{ item_countdown_radius | append: '%' }};
+    -o-border-radius: {{ item_countdown_radius | append: '%' }};
+    border-radius: {{ item_countdown_radius | append: '%' }};
+    margin-left: {{ item_countdown_gap | append: 'px' }};
+    margin-right: {{ item_countdown_gap | append: 'px' }};
+  }
+
+  .countdown-{{ block.id }} .collection-countdown .clock-item .num {
+    font-size: {{ num_font_size | append: 'px' }};
+    font-weight: {{ num_font_weight }};
+    color: {{ num_color }};
+  }
+
+  .countdown-{{ block.id }} .collection-countdown .clock-item .text {
+    font-size: {{ text_time_font_size | append: 'px' }};
+    font-weight: {{ text_time_font_weight }};
+    color: {{ text_time_color }};
+  }
+
+  @media (max-width: 767px) {
+    .countdown-{{ block.id }} .banner-title {font-size: {{ block.settings.title_font_size_mb | append: 'px' }}}
+    .countdown-{{ block.id }} .des-countdown {font-size: {{ block.settings.des_font_size_mb | append: 'px' }}}
+    .countdown-{{ block.id }} .collection-countdown .clock-item .num {font-size: {{ block.settings.num_font_size_mb | append: 'px' }}}
+    .countdown-{{ block.id }} .collection-countdown .clock-item .text {font-size: {{ block.settings.text_time_font_size_mb | append: 'px' }}}
+  }
+</style>

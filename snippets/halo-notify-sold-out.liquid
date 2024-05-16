@@ -1,0 +1,51 @@
+{%- liquid
+    assign btn = settings.notify_form_btn
+    if id
+        assign inputId = 'halo-notify-email' | append: id
+        assign buttonId = 'halo-btn-notify' | append: id
+    else
+        assign inputId = 'halo-notify-email'
+        assign buttonId = 'halo-btn-notify'
+    endif
+-%}
+{%- form 'contact', id: 'ContactForm-notifyMe', class: 'notifyMe-form contact-form' -%}
+    <input type="hidden" name="contact[Form]" value="{{ 'notify_form.general.label' | t }}"/>
+    <input type="hidden" class="halo-notify-product-site" name="contact[Shop name]" value="{{ shop.name }}"/>
+    <input type="hidden" class="halo-notify-product-site-url" name="contact[Link]" value="{{ shop.url }}"/>
+    <input type="hidden" class="halo-notify-product-title" name="contact[Product title]" value="{{ product.title }}" />
+    <input type="hidden" class="halo-notify-product-link" name="contact[Product URL]" value="{{ shop.url | append: product.url }}"/>
+    <input type="hidden" class="halo-notify-product-variant" name="contact[Product variant]" value="{{ current_variant.title }}"/>
+
+    <div class="form-field">
+        <label class="form-label" for="{{ inputId }}">{{ 'notify_form.general.title' | t }}</label>
+        <input class="form-input form-input-placeholder" type="email" name="contact[email]" required id="{{ inputId }}" placeholder="{{ 'notify_form.general.placeholder' | t }}">
+        <button type="submit" class="button button-{{ btn }}" id="{{ buttonId }}" data-button-message="notifyMe">{{ 'notify_form.general.submit' | t }}</button>
+    </div>
+
+    {%- if show_message -%}
+        {%- if form.posted_successfully? -%}
+            <div class="form-message" data-form-message="notifyMe">
+                <div class="alertBox alertBox--success">
+                    <p class="alertBox-message">
+                        {{ 'notify_form.general.success' | t }}
+                    </p>
+                </div>
+            </div>
+        {%- elsif form.errors -%}
+            <div class="form-message" data-form-message="notifyMe">
+                <div class="alertBox alertBox--error">
+                    <p class="alertBox-message">
+                        <ul>
+                            {% for field in form.errors %}
+                                <li>
+                                    {{ form.errors.translated_fields[field] | capitalize }} - {{ form.errors.messages[field] }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+{%- endform -%}
+<div class="notifyMe-text"></div>

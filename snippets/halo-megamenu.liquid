@@ -1,0 +1,665 @@
+{%- liquid
+    if menu_text_left != blank
+        if block_style == "megamenu_style_5" or block_style == "megamenu_style_4"
+            assign site_text_width = 100 | divided_by: column | append: '%'
+            assign column = column | minus: 1
+        endif
+    endif
+-%}
+<li class="menu-lv-item menu-lv-1 has-megamenu dropdown{% if sale_item_lv1 contains title %} menu-sale{% endif %} block_layout--{{container}}">
+    {%- if link.links != blank -%}
+        <a class="menu-lv-1__action header__menu-item list-menu__item link focus-inset menu_mobile_link link-effect" href="{{ link.url }}">{% if check_vertical == true %}{% assign img = link.handle | downcase | replace: ' ', '-' | append: '.png' | file_url %}<span class="icon-img"><img src="{{ img }}" alt="{{ link.title }}" onError="style.display = 'none';"></span>{% endif %}
+            <span class="text{% if link.child_active %} header__active-menu-item{% endif %} p-relative">{{ link.title | escape }}</span>
+            <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+            {%- if new_label_1 contains title -%}
+                <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+            {%- elsif sale_label_1 contains title -%}
+                <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+            {%- elsif hot_label_1 contains title -%}
+                <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+            {%- endif -%}
+        </a>
+
+        {%- if block_style == "megamenu_style_1" -%}
+            <div class="menu-dropdown custom-scrollbar {{block_style}} p-absolute top-auto left-0 w-100 zi-10 o-x-hidden o-y-auto text-left opacity-0">
+                <div class="{%- if container == 'full' -%}container-full{%- else -%}container{%- endif -%}" {% if container != 'full' %}style="--container_size: {{ size_container | append: 'px' }}"{% endif %}>
+                    <div class="menu-dropdown__wrapper d-flex flex-wrap flex-align-stretch flex-jc-between">
+                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span>{{ link.title | escape }}</div>
+                        <div class="site-nav navigation_all_mobile d-none">
+                            <div class="site-nav-list "><a href="{{ link.url }}" class="site-nav-title menu-lv-2"><span>{{ 'general.navigation.go_to' | t }} {{ link.title | escape }}</span></a></div>
+                        </div>
+                        <div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto{% unless show_banner_1 or show_product %} column-full{% endunless %} {% unless show_product %}no_show_product{% endunless %}{% unless show_banner_1 %} no_show_banner{% endunless %}" data-masonry='{ "itemSelector": "[data-gridItem]", "columnWidth": ".grid-sizer" }'>
+                            <div class="grid-sizer"></div>
+                            {%- for childlink in link.links -%}
+                                {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                <div class="site-nav dropdown{% if show_label_blink %} menu-lv-blink{% endif %}" data-gridItem>
+                                    <div class="site-nav-list">
+                                        <a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                            <span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                            {%- if childlink.links != blank -%}
+                                            <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                            {%- endif -%}
+                                            {%- if new_label_2 contains childtitle -%}
+                                                <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                            {%- elsif sale_label_2 contains childtitle -%}
+                                                <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                            {%- elsif hot_label_2 contains childtitle -%}
+                                                <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                            {%- endif -%}
+                                        </a>
+                                        {%- if childlink.links != blank -%}
+                                            <div class="site-nav-sub">
+                                                <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ childlink.title | escape }}</div>
+                                                <ul class="list-unstyled">
+                                                    <li class="site-nav-item menu-lv-3 text-left navigation_all_mobile d-none"><a href="{{ childlink.url }}" class="site-nav-link m-zero link link-underline link--text focus-inset link-effect caption-large"><span class="text p-relative">{{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}</span></a></li>
+                                                    {%- for grandchildlink in childlink.links -%}
+                                                        {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                        <li class="site-nav-item menu-lv-3 text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset caption-large link-effect"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %} p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                {%- if new_label_3 contains grandchildtitle -%}
+                                                                    <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                    <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                    <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                {%- endif -%}</a></li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
+                        <div class="menu-dropdown__banner clearfix {% unless show_product %}no_show_product{% endunless %}{% unless show_banner_1 %} no_show_banner{% endunless %}">
+                            <div class="site-nav-banner d-flex ft-0 ls-0 flex-jc-end">
+                                {%- if show_product -%}
+                                    <div class="menu-dropdown__product col-left">
+                                        {% if product_title != blank %}<h3 class="menu-dropdown__block--title text-center p-relative"><span class="text d-inline-block ver-alg-top w-auto p-zero p-relative zi-2">{{ product_title | escape }}</span></h3>{% endif %}
+                                        <div class="menu-dropdown__block--content">
+                                            <div class="site-nav-product">{% render 'mega-menu-product-card' product_card_product: product, media_size: image_ratio %}</div>
+                                        </div>
+                                    </div>
+                                {%- endif -%}
+                                {%- if show_banner_1 -%}
+                                    <div class="site-nav-banner--item site-nav-banner-item--right d-inline-block ver-alg-top w-100">    
+                                        <div class="banner d-block">
+                                            <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                {%- if banner_1 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 337px">210 x 337px</div>
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {%- elsif block_style == "megamenu_style_2" -%}
+            <div class="menu-dropdown custom-scrollbar {{block_style}} p-absolute top-auto left-0 w-100 zi-10 o-x-hidden o-y-auto text-left opacity-0">
+                <div class="{%- if container == 'full' -%}container-full{%- else -%}container{%- endif -%}" {% if container != 'full' %}style="--container_size: {{ size_container | append: 'px' }}"{% endif %}>
+                    <div class="menu-dropdown__wrapper d-flex flex-wrap flex-align-stretch flex-jc-between">
+                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ link.title | escape }}</div>
+                        <div class="site-nav navigation_all_mobile d-none">
+                            <div class="site-nav-list "><a href="{{ link.url }}" class="site-nav-title menu-lv-2"><span>{{ 'general.navigation.go_to' | t }} {{ link.title | escape }}</span></a></div>
+                        </div>
+                        <div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto{% unless show_banner_1 or show_banner_2 or show_banner_3 %} column-full{% endunless %}" data-masonry='{ "itemSelector": "[data-gridItem]", "columnWidth": ".grid-sizer" }'>
+                            <div class="grid-sizer"></div>
+                            {%- for childlink in link.links -%}
+                                {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                <div class="site-nav dropdown{% if show_label_blink %} menu-lv-blink{% endif %}" data-gridItem>
+                                    <div class="site-nav-list">
+                                        <a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                            <span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                            {%- if childlink.links != blank -%}
+                                            <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                            {%- endif -%}
+                                            {%- if new_label_2 contains childtitle -%}
+                                                <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                            {%- elsif sale_label_2 contains childtitle -%}
+                                                <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                            {%- elsif hot_label_2 contains childtitle -%}
+                                                <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                            {%- endif -%}
+                                        </a>
+                                        {%- if childlink.links != blank -%}
+                                            <div class="site-nav-sub">
+                                                <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ childlink.title | escape }}</div>
+                                                <ul class="list-unstyled">
+                                                    <li class="site-nav-item menu-lv-3 text-left navigation_all_mobile d-none"><a href="{{ childlink.url }}" class="site-nav-link m-zero link link-underline link--text focus-inset link-effect caption-large"><span class="text  p-relative">{{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}</span></a></li>
+                                                    {%- for grandchildlink in childlink.links -%}
+                                                        {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                        <li class="site-nav-item text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset link-effect caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %}  p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                {%- if new_label_3 contains grandchildtitle -%}
+                                                                    <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                    <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                    <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                {%- endif -%}
+                                                            </a></li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
+                        <div class="menu-dropdown__banner clearfix">
+                            <div class="site-nav-banner d-flex ft-0 ls-0 flex-jc-end">
+                                <div class="site-nav-banner--item site-nav-banner-item--left d-inline-block ver-alg-top w-100{% if show_banner_3 == blank %} disable_banner_3{% endif %}">
+                                    {%- if show_banner_1 -%}
+                                        <div class="banner d-block">
+                                           <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                {%- if banner_1 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    {%- if show_banner_3 == blank -%}
+                                                        <div class="not_img" style="--height_not_img: 180px">468 x 180px</div>
+                                                    {%- else -%}
+                                                        <div class="not_img" style="--height_not_img: 165px">210 x 165px</div>
+                                                    {%- endif -%}
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if show_banner_2 -%}
+                                        <div class="banner">
+                                            <a{% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_2.aspect_ratio | times: 100 }}%" title="{{ banner_2.alt | default: shop.name | escape }}">
+                                                {%- if banner_2 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_2 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_2 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_2.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    {%- if show_banner_3 == blank -%}
+                                                        <div class="not_img" style="--height_not_img: 180px">468 x 180px</div>
+                                                    {%- else -%}
+                                                        <div class="not_img" style="--height_not_img: 165px">210 x 165px</div>
+                                                    {%- endif -%}
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+
+                                {%- if show_banner_3 -%}
+                                <div class="site-nav-banner--item site-nav-banner-item--right d-inline-block ver-alg-top w-100">   
+                                    <div class="banner d-block">
+                                        <a{% if banner_url_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_3 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_3.aspect_ratio | times: 100 }}%" title="{{ banner_3.alt | default: shop.name | escape }}">
+                                            {%- if banner_3 != blank -%}
+                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_3 | img_url: 'master' }}"
+                                                {% unless settings.enable_lazyload %}src="{{ banner_3 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_3.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            {%- else -%}
+                                                <div class="not_img" style="--height_not_img: 337px">210 x 337px</div>
+                                            {%- endif -%}
+                                        </a>
+                                    </div>
+                                </div>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {%- elsif block_style == "megamenu_style_3" -%}
+            <div class="menu-dropdown custom-scrollbar {{block_style}} megamenu_style_3--{{ mega_tyle }} p-absolute top-auto left-0 w-100 zi-10 o-x-hidden o-y-auto text-left opacity-0">
+                <div class="{%- if container == 'full' -%}container-full{%- else -%}container{%- endif -%}" {% if container != 'full' %}style="--container_size: {{ size_container | append: 'px' }}"{% endif %}>
+                    <div class="menu-dropdown__wrapper d-flex flex-wrap flex-align-stretch flex-jc-between">
+                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ link.title | escape }}</div>
+                        <div class="site-nav navigation_all_mobile d-none">
+                            <div class="site-nav-list "><a href="{{ link.url }}" class="site-nav-title menu-lv-2"><span>{{ 'general.navigation.go_to' | t }} {{ link.title | escape }}</span></a></div>
+                        </div>
+                        {% if mega_tyle == 'style1' %}<div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto" data-masonry='{ "itemSelector": "[data-gridItem]", "columnWidth": ".grid-sizer" }'>
+                            <div class="grid-sizer"></div>
+                            {%- for childlink in link.links -%}
+                                {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                <div class="site-nav dropdown d-inline-block ver-alg-top w-100{% if show_label_blink %} menu-lv-blink{% endif %}" data-gridItem>
+                                    <div class="site-nav-list">
+                                        <a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}><span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                            {%- if childlink.links != blank -%}
+                                            <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                            {%- endif -%}
+                                            {%- if new_label_2 contains childtitle -%}
+                                                <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                            {%- elsif sale_label_2 contains childtitle -%}
+                                                <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                            {%- elsif hot_label_2 contains childtitle -%}
+                                                <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                            {%- endif -%}
+                                        </a>
+                                        {% case forloop.index  %}
+                                            {% when 1 %}
+                                                {%- if show_banner_1 -%}
+                                                        <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                            {%- if banner_1 != blank -%}
+                                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                            {%- else -%}
+                                                                <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                            {%- endif -%}
+                                                        </a>
+                                                {%- endif -%}
+                                            {% when 2 %}
+                                                {%- if show_banner_2 -%}
+                                                        <a{% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_2.aspect_ratio | times: 100 }}%" title="{{ banner_2.alt | default: shop.name | escape }}">
+                                                            {%- if banner_2 != blank -%}
+                                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_2 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_2 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_2.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                            {%- else -%}
+                                                                <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                            {%- endif -%}
+                                                        </a>
+                                                {%- endif -%}
+                                            {% when 3 %}
+                                                {%- if show_banner_3 -%} 
+                                                        <a{% if banner_url_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_3 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_3.aspect_ratio | times: 100 }}%" title="{{ banner_3.alt | default: shop.name | escape }}">
+                                                            {%- if banner_3 != blank -%}
+                                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_3 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_3 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_3.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                            {%- else -%}
+                                                                <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                            {%- endif -%}
+                                                        </a>
+                                                {%- endif -%}
+                                            {% when 4 %}
+                                                {%- if show_banner_4 -%} 
+                                                        <a{% if banner_url_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_4 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_4.aspect_ratio | times: 100 }}%" title="{{ banner_4.alt | default: shop.name | escape }}">
+                                                            {%- if banner_4 != blank -%}
+                                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_4 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_4 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_4.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                            {%- else -%}
+                                                                <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                            {%- endif -%}
+                                                        </a>
+                                                {%- endif -%}
+                                            {% when 5 %}
+                                                {%- if show_banner_5 -%} 
+                                                        <a{% if banner_url_5 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_5 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_5.aspect_ratio | times: 100 }}%" title="{{ banner_5.alt | default: shop.name | escape }}">
+                                                            {%- if banner_5 != blank -%}
+                                                                <img srcset="{{ banner_5 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_5 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_5.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                            {%- else -%}
+                                                                <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                            {%- endif -%}
+                                                        </a>
+                                                {%- endif -%}
+                                        {% endcase %}
+                                        {%- if childlink.links != blank -%}
+                                            <div class="site-nav-sub">
+                                                <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ childlink.title | escape }}</div>
+                                                <ul class="list-unstyled">
+                                                    <li class="site-nav-item menu-lv-3 text-left navigation_all_mobile d-none"><a href="{{ childlink.url }}" class="site-nav-link m-zero link link-underline link--text focus-inset link-effect caption-large"><span class="text p-relative">{{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}</span></a></li>
+                                                    {%- for grandchildlink in childlink.links -%}
+                                                        {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                        <li class="site-nav-item text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset link-effect caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %} p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                {%- if new_label_3 contains grandchildtitle -%}
+                                                                    <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                    <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                    <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                {%- endif -%}</a></li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
+                        {% else %}
+                        <div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto">
+                            {%- for childlink in link.links -%}
+                                {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                <div class="dropdown site-nav{% if show_label_blink %} menu-lv-blink{% endif %}">
+                                    {% case forloop.index  %}
+                                        {% when 1 %}
+                                            {%- if show_banner_1 -%}
+                                                    <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                        {%- if banner_1 != blank -%}
+                                                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}"{% unless settings.enable_lazyload %} src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                        {%- else -%}
+                                                            <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                        {%- endif -%}
+                                                    </a>
+                                            {%- endif -%}
+                                        {% when 2 %}
+                                            {%- if show_banner_2 -%}
+                                                    <a{% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_2.aspect_ratio | times: 100 }}%" title="{{ banner_2.alt | default: shop.name | escape }}">
+                                                        {%- if banner_2 != blank -%}
+                                                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_2 | img_url: 'master' }}"{% unless settings.enable_lazyload %} src="{{ banner_2 | img_url: 'master' }}"{% endunless %}
+                                                            loading="lazy" alt="{{ banner_2.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                        {%- else -%}
+                                                            <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                        {%- endif -%}
+                                                    </a>
+                                            {%- endif -%}
+                                        {% when 3 %}
+                                            {%- if show_banner_3 -%} 
+                                                    <a{% if banner_url_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_3 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_3.aspect_ratio | times: 100 }}%" title="{{ banner_3.alt | default: shop.name | escape }}">
+                                                        {%- if banner_3 != blank -%}
+                                                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_3 | img_url: 'master' }}"{% unless settings.enable_lazyload %} src="{{ banner_3 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_3.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                        {%- else -%}
+                                                            <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                        {%- endif -%}
+                                                    </a>
+                                            {%- endif -%}
+                                        {% when 4 %}
+                                            {%- if show_banner_4 -%} 
+                                                    <a{% if banner_url_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_4 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_4.aspect_ratio | times: 100 }}%" title="{{ banner_4.alt | default: shop.name | escape }}">
+                                                        {%- if banner_4 != blank -%}
+                                                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_4 | img_url: 'master' }}"{% unless settings.enable_lazyload %} src="{{ banner_4 | img_url: 'master' }}"{% endunless %} loading="lazy"
+                                                            alt="{{ banner_4.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                        {%- else -%}
+                                                            <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                        {%- endif -%}
+                                                    </a>
+                                            {%- endif -%}
+                                        {% when 5 %}
+                                            {%- if show_banner_5 -%} 
+                                                    <a{% if banner_url_5 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_5 }}"{% endif %} class="image adaptive_height image-zoom" style="padding-top: {{ 1 | divided_by: banner_5.aspect_ratio | times: 100 }}%" title="{{ banner_5.alt | default: shop.name | escape }}">
+                                                        {%- if banner_5 != blank -%}
+                                                            <img srcset="{{ banner_5 | img_url: 'master' }}"{% unless settings.enable_lazyload %} src="{{ banner_5 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_5.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                                                            {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                        {%- else -%}
+                                                            <div class="not_img" style="--height_not_img: 125px">210 x 125px</div>
+                                                        {%- endif -%}
+                                                    </a>
+                                            {%- endif -%}
+                                    {% endcase %}
+                                </div>
+                                <div class="site-nav site-nav-right dropdown{% if show_label_blink %} menu-lv-blink{% endif %}">
+                                    <div class="site-nav-list">
+                                        <a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                            <span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                            {%- if childlink.links != blank -%}
+                                                <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                            {%- endif -%}
+                                            {%- if new_label_2 contains childtitle -%}
+                                                <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                            {%- elsif sale_label_2 contains childtitle -%}
+                                                <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                            {%- elsif hot_label_2 contains childtitle -%}
+                                                <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                            {%- endif -%}
+                                        </a>
+                                        {%- if childlink.links != blank -%}
+                                            <div class="site-nav-sub">
+                                                <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ childlink.title | escape }}</div>
+                                                <ul class="list-unstyled">
+                                                    {%- for grandchildlink in childlink.links -%}
+                                                        {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                        <li class="site-nav-item text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset link-effect caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %} p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                {%- if new_label_3 contains grandchildtitle -%}
+                                                                    <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                    <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                    <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                {%- endif -%}</a></li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
+                        {% endif %}
+                       
+                    </div>
+                </div>
+            </div>
+        {%- elsif block_style == "megamenu_style_4" -%}
+            <div class="menu-dropdown custom-scrollbar {{block_style}} p-absolute top-auto left-0 w-100 zi-10 o-x-hidden o-y-auto text-left opacity-0">
+                <div class="{%- if container == 'full' -%}container-full{%- else -%}container{%- endif -%}" {% if container != 'full' %}style="--container_size: {{ size_container | append: 'px' }}"{% endif %}>
+                    <div class="menu-dropdown__wrapper d-flex flex-wrap flex-align-stretch flex-jc-between" style="--site_text_width: {{ site_text_width | default: '0' }}">
+                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span>{{ link.title | escape }}</div>
+                        <div class="site-nav navigation_all_mobile d-none">
+                            <div class="site-nav-list"><a href="{{ link.url }}" class="site-nav-title menu-lv-2"><span>{{ 'general.navigation.go_to' | t }} {{ link.title | escape }}</span></a></div>
+                        </div>
+                        <div class="wrapper-colunm-menu"> 
+                            {%- if menu_text_left != blank -%}
+                                <div class="col-left">
+                                    <div class="site-nav-title menu-dropdown__text">
+                                        {%- for link in menu_text_left.links -%}
+                                            {% assign linktitle = link.title | escape | downcase | handle %}
+                                            {% assign menu_text_left_sale = menu_text_left_sale | escape | downcase | handle %}<a{% if menu_text_left_sale contains linktitle %} class="active-sale"{% endif %} href="{{ link.url | escape }}" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+                                        {%- endfor -%}
+                                    </div>
+                                </div>
+                                <div class="col-right">
+                            {%- endif -%}
+                                <div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto{% unless show_banner_1 or show_banner_2 or show_banner_3 %} column-full{% endunless %}" data-masonry='{ "itemSelector": "[data-gridItem]", "columnWidth": ".grid-sizer" }'>
+                                    <div class="grid-sizer"></div>
+                                    {%- for childlink in link.links -%}
+                                        {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                        <div class="site-nav dropdown{% if show_label_blink %} menu-lv-blink{% endif %}" data-gridItem>
+                                            <div class="site-nav-list"><a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}><span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                                    {%- if childlink.links != blank -%}
+                                                    <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                                    {%- endif -%}
+                                                    {%- if new_label_2 contains childtitle -%}
+                                                        <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                    {%- elsif sale_label_2 contains childtitle -%}
+                                                        <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                    {%- elsif hot_label_2 contains childtitle -%}
+                                                        <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                    {%- endif -%}
+                                                </a>
+                                                {%- if childlink.links != blank -%}
+                                                    <div class="site-nav-sub">
+                                                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span> {{ childlink.title | escape }}</div>
+                                                        <ul class="list-unstyled">
+                                                            <li class="site-nav-item menu-lv-3 text-left navigation_all_mobile d-none">
+                                                                <a href="{{ childlink.url }}" class="site-nav-link m-zero link link-underline link--text focus-inset link-effect caption-large"><span class="text p-relative">{{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}</span></a>
+                                                            </li>
+                                                            {%- for grandchildlink in childlink.links -%}
+                                                                {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                                <li class="site-nav-item text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset link-effect caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %} p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                        {%- if new_label_3 contains grandchildtitle -%}
+                                                                            <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                        {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                            <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                        {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                            <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                        {%- endif -%}
+                                                                    </a></li>
+                                                            {%- endfor -%}
+                                                        </ul>
+                                                    </div>
+                                                {%- endif -%}
+                                            </div>
+                                        </div>
+                                    {%- endfor -%}
+                                </div>
+                            {% if menu_text_left != blank %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="menu-dropdown__banner clearfix">
+                            <div class="site-nav-banner d-flex ft-0 ls-0 flex-jc-end background-bottom" style="--mega-menu-bottom-background: {{ bg_mega_menu_bottom }}; --brand-link-color: {{ az_brand_link_text_color }}">
+                                <div class="site-nav-banner--item site-nav-banner-item--left d-inline-block ver-alg-top w-100">
+                                    {%- if show_banner_1 -%}
+                                        <div class="banner d-block">
+                                           <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                {%- if banner_1 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                                                    {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 255px">390 x 255px</div>
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                                <div class="site-nav-banner--item site-nav-banner-item--center d-inline-block ver-alg-top w-100">
+                                    {%- if show_banner_2 -%}
+                                        <div class="banner d-block">
+                                            <a{% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_2.aspect_ratio | times: 100 }}%" title="{{ banner_2.alt | default: shop.name | escape }}">
+                                                {%- if banner_2 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_2 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_2 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_2.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}>
+                                                    {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 255px">390 x 255px</div>
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                                <div class="site-nav-banner--item site-nav-banner-item--right d-inline-block ver-alg-top w-100">
+                                    {%- if show_az_brand -%}
+                                    <div class="menu-dropdown__block menu-dropdown__brand">
+                                        {% if az_brand_title != blank %}<h3 class="menu-dropdown__block--title text-left p-relative"><span class="text d-inline-block ver-alg-top w-auto p-zero p-relative zi-2">{{ az_brand_title | escape }}</span></h3>{% endif %}
+                                        <div class="menu-dropdown__block--content">
+                                            <div class="site-nav-brand d-flex flex-align-center flex-jc-between flex-nowrap">
+                                                <ul class="azbrandsTable clearfix list-unstyled d-block w-100 text-left">
+                                                    {% assign list_vendor = '' %}
+                                                    {% assign array = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|1-9" | split: "|" %}
+                                                    {%- for brand in shop.vendors -%}
+                                                        {% assign first = brand | strip_html | capitalize | truncate: 1, '' %}
+                                                        {%- unless list_vendor contains first -%}
+                                                            {% assign list_vendor = list_vendor | append: first %}
+                                                        {%- endunless -%}
+                                                    {%- endfor -%}
+                                                    {%- for item in array -%} 
+                                                        <li>{%- if forloop.first -%}
+                                                            {% if list_vendor contains '1' or list_vendor contains '2' or list_vendor contains '3' or list_vendor contains '4' or list_vendor contains '5' or list_vendor contains '6' or list_vendor contains '7' or list_vendor contains '8' or list_vendor contains '9' or list_vendor contains '0' %}<a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline is-active"><span class="text">{{ item }}</span></a>{% else %}<a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline"><span class="text">{{ item }}</span></a>{% endif %}
+                                                            {%- else -%}<a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline{% if list_vendor contains item %} is-active{% endif %}"><span class="text">{{ item }}</span></a>
+                                                            {%- endif -%}
+                                                        </li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="nazbrandsLink p-zero">
+                                            {%- if az_brand_link_text -%}
+                                                <a{% if az_brand_url == blank %} role="link" aria-disabled="true"{% else %} href="{{ az_brand_url }}"{% endif %} class="site-nav-action link link-underline m-zero txt-d-underline"><span class="text">{{ az_brand_link_text | escape }}</span></a>
+                                            {%- endif -%}
+                                        </div>
+                                    </div>
+                                    {%- endif -%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {%- elsif block_style == "megamenu_style_5" -%}
+            <div class="menu-dropdown custom-scrollbar {{block_style}} megamenu_style_5--{{ mega_tyle }} p-absolute top-auto left-0 w-100 zi-10 o-x-hidden o-y-auto text-left opacity-0">
+                <div class="{%- if container == 'full' -%}container-full{%- else -%}container{%- endif -%}"{% if container != 'full' %} style="--container_size: {{ size_container | append: 'px' }}"{% endif %}>
+                    <div class="menu-dropdown__wrapper d-flex flex-wrap flex-align-stretch flex-jc-between" style="--site_text_width: {{ site_text_width | default: '0' }}">
+                        <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span>{{ link.title | escape }}</div>
+                        <div class="site-nav navigation_all_mobile d-none">
+                            <div class="site-nav-list"><a href="{{ link.url }}" class="site-nav-title menu-lv-2"><span>{{ 'general.navigation.go_to' | t }} {{ link.title | escape }}</span></a></div>
+                        </div>
+                        <div class="wrapper-colunm-menu{% unless show_banner_1 %} not_banner{% endunless %}">
+                            {%- if menu_text_left != blank -%}
+                                <div class="col-left">
+                                    <div class="site-nav-title menu-dropdown__text">
+                                        {%- for link in menu_text_left.links -%}
+                                            {% assign linktitle = link.title | escape | downcase | handle %}
+                                            {% assign menu_text_left_sale = menu_text_left_sale | escape | downcase | handle %}<a{% if menu_text_left_sale contains linktitle %} class="active-sale"{% endif %} href="{{ link.url | escape }}" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+                                        {%- endfor -%}
+                                    </div>
+                                </div>
+                                <div class="col-right">
+                            {%- endif -%}
+                            <div class="menu-dropdown__column menu-dropdown__column-{{ column }} w-auto{% unless show_banner_1 or show_product %} column-full{% endunless %} {% unless show_product %}no_show_product{% endunless %}{% unless show_banner_1 %} no_show_banner{% endunless %}" data-masonry='{ "itemSelector": "[data-gridItem]", "columnWidth": ".grid-sizer" }'>
+                                <div class="grid-sizer"></div>
+                                {%- for childlink in link.links -%}
+                                    {%- assign childtitle = childlink.title | escape | downcase | handle -%}
+                                    <div class="site-nav dropdown{% if show_label_blink %} menu-lv-blink{% endif %}" data-gridItem>
+                                        <div class="site-nav-list">
+                                            <a href="{{ childlink.url }}" class="site-nav-title{% if childlink.links != blank %} menu_mobile_link_2{% endif %}{% if sale_item_lv2 contains childtitle %} active-sale{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}><span class="text{% if childlink.current %} site-nav-active{% endif %}">{{ childlink.title | escape }}</span>
+                                                {%- if childlink.links != blank -%}
+                                                <span class="icon-dropdown" data-toggle-menu-mb="">{% render 'icon-caret-right' %}</span>
+                                                {%- endif -%}
+                                                {%- if new_label_2 contains childtitle -%}
+                                                    <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                {%- elsif sale_label_2 contains childtitle -%}
+                                                    <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                {%- elsif hot_label_2 contains childtitle -%}
+                                                    <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                {%- endif -%}
+                                            </a>
+                                            {%- if childlink.links != blank -%}
+                                                <div class="site-nav-sub">
+                                                    <div class="nav-title-mobile text-center"><span class="icon-dropdown">{% render 'icon-arrow-nav' %}</span>{{ childlink.title | escape }}</div>
+                                                    <ul class="list-unstyled">
+                                                        <li class="site-nav-item menu-lv-3 text-left navigation_all_mobile d-none"><a href="{{ childlink.url }}" class="site-nav-link m-zero link link-underline link--text focus-inset link-effect caption-large"><span class="text p-relative">{{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}</span></a></li>
+                                                        {%- for grandchildlink in childlink.links -%}
+                                                            {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                            <li class="site-nav-item text-left{% if sale_item_lv3 contains grandchildtitle %} active-sale{% endif %}"><a href="{{ grandchildlink.url }}" class="site-nav-link m-zero link link--text focus-inset link-effect caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}><span class="text{% if grandchildlink.current %} site-nav-active{% endif %} p-relative">{{ grandchildlink.title | escape }}</span>
+                                                                    {%- if new_label_3 contains grandchildtitle -%}
+                                                                        <span class="label new-label">{{ 'general.navigation.new_label' | t }}</span>
+                                                                    {%- elsif sale_label_3 contains grandchildtitle -%}
+                                                                        <span class="label sale-label">{{ 'general.navigation.sale_label' | t }}</span>
+                                                                    {%- elsif hot_label_3 contains grandchildtitle -%}
+                                                                        <span class="label hot-label">{{ 'general.navigation.hot_label' | t }}</span>
+                                                                    {%- endif -%}
+                                                                </a></li>
+                                                        {%- endfor -%}
+                                                    </ul>
+                                                </div>
+                                            {%- endif -%}
+                                        </div>
+                                    </div>
+                                {%- endfor -%}
+                            </div>
+                            {%- if menu_text_left != blank -%}</div>{%- endif -%}
+                        </div>
+                        {% if mega_tyle == 'style2' or mega_tyle == 'style3' and show_banner_1 %}
+                            {%- if show_banner_1 -%}
+                            <div class="menu-banner__top">
+                                <div class="site-nav-banner--item site-nav-banner-item--right d-inline-block ver-alg-top w-100">    
+                                    <div class="banner d-block">
+                                        <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" {% if show_banner_1 %}style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%"{% endif %} title="{{ banner_1.alt | default: shop.name | escape }}">
+                                            {%- if banner_1 != blank and show_banner_1 -%}
+                                                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}"
+                                                {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                            {%- else -%}
+                                                <div class="not_img" style="--height_not_img: 337px">210 x 337px</div>
+                                            {%- endif -%}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {%- endif -%}
+                        {% endif %}
+                        <div class="menu-dropdown__banner clearfix {% unless show_product %}no_show_product{% endunless %}{% unless show_banner_1 %} no_show_banner{% endunless %}">
+                            <div class="site-nav-banner d-flex ft-0 ls-0 flex-jc-end background-bottom" style="--mega-menu-bottom-background: {{ bg_mega_menu_bottom}}">
+                                {%- if show_product -%}
+                                    <div class="menu-dropdown__product col-left">
+                                        {% if product_title != blank %}<h3 class="menu-dropdown__block--title text-center p-relative"><span class="text d-inline-block ver-alg-top w-auto p-zero p-relative zi-2">{{ product_title | escape }}</span></h3>{% endif %}
+                                        <div class="menu-dropdown__block--content">
+                                            <div class="products-grid column-{{product_limit}} products-carousel" data-row="{{product_limit}}">
+                                                {% for product in collections[collection_product].products limit: product_limit %}
+                                                    <div class="product">{% render 'mega-menu-product-card' product_card_product: product, media_size: 'adapt' %}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {%- endif -%}
+                                {%- if show_banner_1 and mega_tyle == 'style1' or mega_tyle == 'style4' -%}
+                                    <div class="site-nav-banner--item site-nav-banner-item--right d-inline-block ver-alg-top w-100">    
+                                        <div class="banner d-block">
+                                            <a{% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image adaptive_height image-zoom w-100 text-center" style="padding-top: {{ 1 | divided_by: banner_1.aspect_ratio | times: 100 }}%" title="{{ banner_1.alt | default: shop.name | escape }}">
+                                                {%- if banner_1 != blank -%}
+                                                    <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ banner_1 | img_url: 'master' }}" {% unless settings.enable_lazyload %}src="{{ banner_1 | img_url: 'master' }}"{% endunless %} loading="lazy" alt="{{ banner_1.alt | default: shop.name | escape }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %}> {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                                                {%- else -%}
+                                                    <div class="not_img" style="--height_not_img: 337px">210 x 337px</div>
+                                                {%- endif -%}
+                                            </a>
+                                        </div>
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {%- endif -%}
+    {%- else -%}
+        <a href="{{ link.url }}" class="menu-lv-1__action header__menu-item header__menu-item list-menu__item link link--text focus-inset"{% if link.current %} aria-current="page"{% endif %}>
+            <span class="text{%- if link.current %} header__active-menu-item{% endif %} link-effect">{{ link.title | escape }}</span>
+        </a>
+    {%- endif -%}
+</li>

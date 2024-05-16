@@ -1,0 +1,236 @@
+<div class="changing on collection collection-info collection-info--{{ position }} align-{{ collection_description_align_tb }}{% if show_sub_collection %} show_sub_collection{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" {% if sub_collection_layout == 'slider' %}data-loader-script="{{ 'halo.slide-sub-collection.js' | asset_url }}"{% endif %} style="--desc-color: {{ collection_description_color }};">
+	{%- if show_breadcrumb -%}
+		<div class="collection-breadcrumb text-{{ breadcrumb_alignment }}" style="--breadcrumb-color: {{ breadcrumb_color }}; --breadcrumb-color-mb: {{ breadcrumb_color_mb }};--breadcrumb-bg: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};--breadcrumb-bg-mb: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %}">
+        	{% render 'breadcrumb' %}
+		</div>
+    {%- endif -%}
+    
+	  {%- if show_page_title -%}
+        <h1 class="collection-title page-header text-{{ page_title_alignment }}">{{ collection.title | escape }}</h1>
+    {%- endif -%}
+
+    {%- if show_collection_description -%}
+	<div class="collection-info-item">
+		<div class="collection-description halo-text-format text-{{ collection_description_align }}" style="{% if collection_description_align == 'left' or collection_description_align == 'right' %}margin: 0;{% endif %}">
+			{%- if show_read_more_read_less -%}
+				<div class="short-description">
+					{%- liquid
+              assign desc = collection.description | strip_html
+              assign word_number = 50
+              assign countWord = desc | split: ' ' 
+              assign countWordSize = countWord.size
+          -%}
+					{{ desc | truncatewords: word_number }}
+				</div>
+				<div class="full-description">{{ collection.description }}</div>
+				<button type="button" class="link link-underline read-description more{% if word_number > countWordSize %} hidden{% endif %}"><span class="text">{{ 'sections.collection_template.read_more' | t }}</span></button>
+			{%- else -%}
+				{{ collection.description }}
+			{%- endif -%}
+		</div>
+	</div>
+    {%- endif -%}
+	
+	{%- if show_sub_collection -%}
+		{%- if sub_collection_position == 'absolute' -%}
+			{%- if linklists[collection.handle] != blank -%}
+				<div class="collection-info-item sub-collection{% if show_sub_collection_image == true %} has-image{% else %} no-image{% endif %}{% if sub_collection_layout == 'slider' %} has-slider {% else %} no-slider{% endif %}">
+					<div class="collection-sub-list list-unstyled text-{{ collection_description_align }}" {% if sub_collection_layout == 'slider' %}{% if settings.layout_body == 'default' %} data-rows="6"{% else %} data-rows="8"{% endif %} data-sub-collection-slider data-link="{{ linklists[collection.handle].links.size }}"{% endif %}>
+						{%- liquid
+							if sub_collection_type == 'some'
+								assign limit = 5
+							else
+								assign limit = 10000
+							endif
+						-%}
+						{%- for link in linklists[collection.handle].links limit: limit -%}                         
+                <div class="item" {% if forloop.first %}data-first{% endif %}{% if forloop.last %}data-last{% endif %}><a href="{{ link.url }}">
+                       {%- if show_sub_collection_image -%}
+                          {%- assign subImg = link.object.image | img_url :"210x", format: 'jpg' -%}
+                          {%- if link.object -%}
+                              <img class="sub-image" src="{{ subImg }}" alt="{{ link.title }}">
+                          {%- endif -%} 
+                      {%- endif -%}
+                      <span class="sub-title">{{ link.title | escape }}</span></a>
+                </div>
+            {%- endfor -%}
+					</div>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+	{%- endif -%}
+</div>
+
+{%- if show_sub_collection -%}
+	{%- if sub_collection_position == 'relative' -%}
+		{%- if linklists[collection.handle] != blank -%}
+			<div class="collection-info-item sub-collection{% if show_sub_collection_image == true %} has-image{% else %} no-image{% endif %}{% if sub_collection_layout == 'slider' %} has-slider {% else %} no-slider{% endif %} no-show-more" data-collection-links>
+        <div class="collection-sub-wrapper text-{{ collection_description_align }}">
+          {%- if sub_collection_title -%}
+    					<div class="item-title text-{{ collection_description_align }}"><span>{{ sub_collection_title}}</span></div>
+          {%- endif -%}
+    				<div class="collection-sub-list list-unstyled text-{{ collection_description_align }}" {% if sub_collection_layout == 'slider' %}{% if settings.layout_body == 'default' %} data-rows="6"{% else %} data-rows="8"{% endif %} data-sub-collection-slider data-link="{{ linklists[collection.handle].links.size }}"{% endif %} {% if sub_collection_layout == 'grid' %}data-sub-collection-show-more style="--max-height: {{maxheight_sub_collection}}; --max-height-mb: 110"{% endif %}>
+    					{%- liquid
+    						if sub_collection_type == 'some'
+    							assign limit = 5
+    						else
+    							assign limit = 10000
+    						endif
+    					-%}          
+    					{%- for link in linklists[collection.handle].links limit: limit -%}
+                  <div class="item"><a href="{{ link.url }}">
+                           {%- if show_sub_collection_image -%}
+                              {%- assign subImg = link.object.image | img_url :"210x", format: 'jpg' -%}
+                              {%- if link.object -%}
+                                  <img class="sub-image" src="{{ subImg }}" alt="{{ link.title }}">
+                              {%- endif -%} 
+                          {%- endif -%}
+                          <span class="sub-title">{{ link.title | escape }}</span></a></div>
+              {%- endfor -%}
+    				</div>
+        </div>
+        <div class="button-show-more" data-des-max="{{maxheight_sub_collection}}" data-des-max-mb="110" style="display: none;"><button type="button" class="button" data-show-more-text="{{ 'products.product.read_more' | t }}" data-show-less-text="{{ 'products.product.read_less' | t }}" data-show-more-sub-collection>{{ 'products.product.read_more' | t }}</button></div>
+			</div>
+		{%- endif -%}
+	{%- endif -%}
+{%- endif -%}
+<style type="text/css" media="screen">
+	#HeaderCollectionSection-{{ section.id }} .collection-info-item.sub-collection {padding-top: {{ all_sub_collection_padding_top }};padding-bottom: {{ all_sub_collection_padding_bottom }};margin-top: {{ sub_collection_mg_top }};
+		{%- if colors_bg_gradient != blank -%}
+      background: {{ colors_bg_gradient }};padding-left: 15px;padding-right: 15px
+    {%- else -%}
+      background-color: {{ colors_bg }};
+      {%- if colors_bg != blank and colors_bg != 'rgba(0,0,0,0)' -%}
+      padding-left: 15px;padding-right: 15px
+      {%- endif -%}  
+    {%- endif -%}        
+	}
+	#HeaderCollectionSection-{{ section.id }} .collection-sub-list .item {padding-left: {{ sub_collection_grid_gap }};padding-right: {{ sub_collection_grid_gap }};margin-right: 0}
+
+	{%- if sub_collection_layout == 'slider' and show_sub_collection_image == false -%}
+  #HeaderCollectionSection-{{ section.id }} .collection-sub-list .item {margin-bottom: 0}
+  {%- endif -%}
+
+	#HeaderCollectionSection-{{ section.id }} .collection-info-item.sub-collection .item-title span{font-size: {{ fontsize_sub_collection }};font-weight: {{ fontweight_sub_collection }};text-transform: {{ sub_collection_text_transform }};color: {{ sub_collection_title_color }};display: block;background-image: linear-gradient(transparent 97%, {{ sub_collection_title_color}} 3%);background-repeat: repeat-x;background-position-y: -4px;display: inline-block}
+	#HeaderCollectionSection-{{ section.id }} .collection-sub-list .item a {font-size: {{ fontsize_sub_collection }};font-weight: {{ fontweight_sub_collection }};text-transform: {{ sub_collection_text_transform }};color: {{ color_sub_collection }};padding-top: {{ sub_collection_padding_top }};padding-bottom: {{ sub_collection_padding_bottom }};border: 1px solid {{ sub_collection_border }};text-align: center;{%- if sub_collection_background_gradient != blank -%}background: {{ sub_collection_background_gradient }}{%- else -%}background-color: {{ sub_collection_background }}{%- endif -%}}
+    #HeaderCollectionSection-{{ section.id }} .collection-info-item .button-show-more .button {font-size: {{ fontsize_sub_collection }}}
+  
+{%- if show_sub_collection_image -%}
+  #HeaderCollectionSection-{{ section.id }} .collection-sub-list .item a .sub-image {margin-bottom: 10px}
+{%- endif -%}
+    
+{%- if sub_collection_background != blank or sub_collection_background != 'rgba(0,0,0,0)' or sub_collection_border != blank or sub_collection_border != 'rgba(0,0,0,0)' -%}
+  #HeaderCollectionSection-{{ section.id }} .collection-info-item.sub-collection.has-image .item-title {margin-bottom: 15px}
+{%- else -%}
+  #HeaderCollectionSection-{{ section.id }} .collection-info-item.sub-collection.has-image .item-title {margin-bottom: 5px}
+{%- endif -%}
+    
+@media (min-width: 1025px) {
+	#HeaderCollectionSection-{{ section.id }} .collection-sub-list .item a:hover {border-color: {{ sub_collection_border_hover }} !important; color: {{ sub_collection_color_hover }} !important;
+  	{%- if sub_collection_background_gradient_hover != blank -%}
+      background: {{ sub_collection_background_gradient_hover }} !important
+    {%- else -%}
+      background: {{ sub_collection_background_hover }} !important
+    {%- endif -%}
+  }
+
+  {%- if sub_collection_background == blank or sub_collection_background == 'rgba(0,0,0,0)' -%}
+    #HeaderCollectionSection-{{ section.id }} .collection-sub-list .item a:hover {text-decoration: underline;text-underline-offset: 0.1em}
+  {%- endif -%}
+  {%- if sub_collection_title -%}  
+    #HeaderCollectionSection-{{ section.id }} .collection-info-item.sub-collection .item-title {padding-top: {{ sub_collection_padding_top }}}
+  {%- endif -%}
+}
+    @media (max-width: 767px) {#HeaderCollectionSection-{{ section.id }} [data-sub-collection-show-more] {margin-left: -15px;margin-right: -15px}#HeaderCollectionSection-{{ section.id }} .collection-sub-list .item {padding-left: 10px; padding-right: 10px}}
+</style>
+<script type="text/javascript">
+	window.addEventListener('load', () => {
+		const collectionLinksElement = document.querySelector('[data-collection-links]')
+		const collectionLinksList = [...collectionLinksElement.querySelectorAll('ul li.item')]
+		const firstLink = collectionLinksList[0]
+		const lastLink = collectionLinksList.pop()
+
+		collectionLinksElement.classList.add('initialized')
+
+		const scrollToLastObserver = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				collectionLinksElement.classList.add('disable-last')
+			} else {
+				collectionLinksElement.classList.remove('disable-last')
+			}
+		}, {
+			threshold: 0.6
+		})
+		
+		const scrollToFirstObserver = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				collectionLinksElement.classList.add('disable-first')
+			} else {
+				collectionLinksElement.classList.remove('disable-first')
+			}
+		}, {
+			threshold: 0.6
+		})
+    window.read_description = { more: `{{ 'sections.collection_template.read_more' | t }}`, less: `{{ 'sections.collection_template.read_less' | t }}` };
+
+    function checkOverflow() {
+        const subCollection = document.querySelector('[data-sub-collection-show-more]');
+        const readMoreButtons = document.querySelectorAll('[data-show-more-sub-collection]');
+        const item = subCollection.querySelector('.item');
+        const mgBot = parseInt(getComputedStyle(item).getPropertyValue('margin-bottom').split('px')[0]);
+        
+        if (subCollection.clientHeight < subCollection.scrollHeight - mgBot) {
+          readSubCollectionToggle();
+          document.querySelector('.collection-info-item.sub-collection').classList.remove('no-show-more');
+        } else {
+          // readMoreButtons.forEach(button => button.remove());
+        }
+    }
+        
+    function readSubCollectionToggle() {
+      const readMoreButtons = document.querySelectorAll('[data-show-more-sub-collection]');
+
+      if (readMoreButtons.length > 0) {
+        readMoreButtons.forEach(button => {
+          button.addEventListener('click', e => {
+              event.preventDefault();
+              event.stopPropagation();
+
+              var $this = event.target,
+                  textShowMore = $this.getAttribute('data-show-more-text'),
+                  textShowLess = $this.getAttribute('data-show-less-text'),
+                  desMax = $this.closest('.button-show-more').dataset.desMax
+                  desMaxMb = $this.closest('.button-show-more').dataset.desMaxMb;
+                  
+              if($this.classList.contains('is-less')) {
+                  $this.closest('.button-show-more').classList.remove('is-less');
+                  $this.classList.remove('is-less');
+                  $this.closest('.button-show-more').classList.add('is-show');
+                  $this.classList.add('is-show');
+                  $this.innerText = textShowMore;
+                  if (window.innerWidth > 1024) {
+                    document.querySelector('[data-sub-collection-show-more]').style.setProperty('--max-height', `${desMax}`);
+                  } else {
+                    document.querySelector('[data-sub-collection-show-more]').style.setProperty('--max-height-mb', `${desMaxMb}`);
+                  }
+              } else {
+                  $this.closest('.button-show-more').classList.remove('is-show');
+                  $this.classList.remove('is-show');
+                  $this.closest('.button-show-more').classList.add('is-less');
+                  $this.classList.add('is-less');
+                  $this.innerText = textShowLess;
+                  if (window.innerWidth > 1024) {
+                    document.querySelector('[data-sub-collection-show-more]').style.setProperty('--max-height', 'unset');
+                  } else {
+                    document.querySelector('[data-sub-collection-show-more]').style.setProperty('--max-height-mb', 'unset');
+                  }
+              }
+          })
+        })
+      }
+    }
+    checkOverflow();
+		scrollToLastObserver.observe(lastLink)
+		scrollToFirstObserver.observe(firstLink)
+	})
+</script>

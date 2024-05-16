@@ -1,0 +1,72 @@
+{%- case settings.product_card_layout -%}
+    {%- when '01' -%}
+        {% render 'product-card',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '02' -%}
+        {% render 'product-card-02',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '03' -%}
+        {% render 'product-card-03',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '04' -%}
+        {% render 'product-card-04',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '05' -%}
+        {% render 'product-card-05',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '06' -%}
+        {% render 'product-card-06',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+    {%- when '07' -%}
+        {% render 'product-card-07',
+            product_card_product: product_card_product,
+            portrait_aspect_ratio: portrait_aspect_ratio,
+            serial: serial,
+            sectionId: sectionId,
+            media_size: media_size,
+            hasCountdown: hasCountdown,
+            loading: loading
+        %}
+{%- endcase -%}

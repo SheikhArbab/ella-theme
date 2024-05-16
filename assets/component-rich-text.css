@@ -1,0 +1,242 @@
+.rich-text__blocks h2{
+  font-size: var(--fontsize-heading-style);
+  color: var(--color-heading-style);
+}
+
+.rich-text__blocks .rich-text__sub {
+  color: var(--sub-heading-color-style);
+  font-size: var(--sub-heading-size-style);
+  font-weight: var(--font-weight-sub-heading-style);
+  margin-top: var(--margin-top-sub-heading-style);
+}
+
+.rich-text__blocks .rich-text__sub p {
+    margin: 0;
+}
+
+.rich-text__text, .rich-text__text p{
+  font-size: var(--fontsize-text-style);
+  color: var(--color-text-style);
+  margin: 0 auto;
+  max-width: var(--width-text-style);
+}
+
+.rich-text__blocks .rich-text__text {
+    margin-top: var(--margin-top-text-style);
+}
+
+.rich-text__text p strong{
+    font-weight: var(--font-weight-semibold);
+}
+
+.rich-text__blocks .button{
+  color: var(--color-button-style);
+  background: var(--bg-button-style);
+  border: 1px solid var(--border-button-style);
+  max-width: var(--width-button-style);
+  margin-top: var(--margin_top_button-style);
+    margin-bottom: 10px;
+}
+
+.rich-text__blocks .social-media-container {
+  margin-top: var(--social-margin-top);
+  margin-bottom: var(--social-margin-bottom);
+}
+
+.rich-text__blocks .social-media-container .link.list-social__link {
+  background: var(--social-icon-background-color);
+  padding: 9px;
+}
+
+.rich-text__blocks .social-media-container .link.list-social__link:hover {
+  background: var(--soical-icon-background-hover-color);
+}
+
+.rich-text__blocks .social-media-container .link.list-social__link .icon {
+  width: 26px;
+  height: 26px;
+  fill: var(--social-icon-color);
+}
+
+.rich-text__blocks .social-media-container .link.list-social__link:hover .icon {
+  fill: var(--social-icon-hover-color);
+}
+
+.rich-text__blocks .social-media-container .link.list-social__link::before {
+  box-shadow: 0 0 0 2px var(--social-icon-ring-color);
+}
+
+.rich-text__blocks * {
+    overflow-wrap: break-word;
+}
+
+/* Blocks */
+
+.rich-text__blocks > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.rich-text__blocks > * + * {
+    margin-top: 2rem;
+}
+
+.rich-text__blocks > * + a {
+    margin-top: 3rem;
+}
+
+.rich-text__blocks .btn--lessMore {
+    text-align: center;
+    margin-top: var(--margin_top_button-text-style);
+}
+
+.rich-text__blocks #rich-text__lessMore {
+    font-size: var(--fontsize-button-text-style);
+    font-weight: var(--fontweight-button-text-style);
+    display: inline-block;
+    color: var(--color-button-text-style);
+    background: var(--bg-button-text-style);
+    border: 1px solid var(--border-button-text-style);
+    max-width: calc(var(--width-button-text-style) + 2px);
+    padding-top: var(--padding_top_button-text-style);
+    padding-bottom: var(--padding_bottom_button-text-style);
+}
+
+.rich-text__blocks .rich-text__top {
+    margin-bottom: 20px;
+}
+
+.rich-text__blocks .rich-text__bottom {
+    display: none;
+}
+
+.rich-text__blocks .rich-text__bottom h5 {
+    margin-top: 0;
+}
+
+.rich-text__blocks .rich-text__content {
+    color: var(--color-content-style);
+    font-size: var(--fontsize-content-style);
+    max-width: var(--width-content-style);
+    text-align: var(--alignment-content-style);
+    margin: 0 auto;
+    margin-top: var(--margin-top-content-style);
+}
+
+.rich-text__blocks .message {
+    display: flex;
+    align-items: center;
+    justify-content: center;;
+}
+
+.rich-text__blocks .message .text-message {
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--heading-letter-spacing);
+    display: flex;
+    align-items: center;
+}
+
+.rich-text__blocks .message .text-message img {
+    margin-left: 8px;
+    margin-right: 8px;
+    position: relative;
+    top: -3px;
+}
+
+.rich-text__blocks .message .btn {
+    font-family: var(--btn-1-font-family);
+    color: var(--color-text-style);
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    margin-left: 4px;
+}
+
+/* Enable Column */
+.rich-text__blocks.enable_column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+    "left right"
+    "left right"
+    "left right";
+    column-gap: 30px;
+    padding-top: 25px;
+    padding-bottom: 28px;
+}
+.rich-text__blocks.enable_column h2 {
+    grid-area: left;
+    text-align: right;
+    line-height: calc(var(--heading-line-height)*var(--heading-line-height-style));
+}
+.rich-text__blocks.enable_column .rich-text__text {
+    text-align: left;
+    line-height: calc(var(--body-line-height)*var(--text-line-height-style));
+    padding-left: 97px;
+}
+@media (max-width: 1100px) {
+    .rich-text__blocks.enable_column .rich-text__text {
+        padding-left: 50px;
+    }
+}
+@media (max-width: 992px) {
+    .rich-text__blocks.enable_column .rich-text__text {
+        padding-left: 30px;
+    }
+}
+
+@media (max-width: 767px) {
+  .rich-text__blocks h2 {
+    font-size: var(--heading-size-mb-style);
+  }
+  .rich-text__blocks.enable_column {
+    display: block;
+  }
+  .rich-text__blocks.enable_column h2 {
+    text-align: left;
+    line-height: initial;
+  }
+  .rich-text__blocks.enable_column .rich-text__text {
+    padding-left: 0;
+    padding-top: 20px;
+  }
+  .body-custom-width.product-card-layout-02 .rich-text__blocks .message .btn {
+    margin-left: 0 !important;
+  }
+  .body-custom-width.product-card-layout-02 .rich-text__blocks .message img {
+    position: relative;
+    left: 6px;
+  }
+}
+
+@media (max-width: 551px) {
+  .rich-text__blocks .message {
+    display: flex;
+    row-gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .rich-text__blocks .message .text-message {
+      display: inline-flex;
+  }
+  
+  .rich-text__blocks .message .text-message img {
+      margin-left: 3px;
+      margin-right: 4px;
+  }
+}
+
+@media (min-width: 1025px){
+  .rich-text__blocks #rich-text__lessMore:hover {
+    color: var(--color-button-text-hover-style);
+    background: var(--bg-button-text-hover-style);
+    border: 1px solid var(--border-button-text-hover-style);
+  }
+
+  .rich-text__blocks .button:hover{
+    color: var(--color-button-hover-style);
+    background: var(--bg-button-hover-style);
+    border-color: var(--border-button-hover-style);
+  }
+}

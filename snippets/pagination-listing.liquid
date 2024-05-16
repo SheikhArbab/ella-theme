@@ -1,0 +1,109 @@
+{% comment %}
+    Renders a set of links for paginated results. Must be used within paginate tags.
+
+    Usage:
+    {% paginate results by 2 %}
+        {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
+    {% endpaginate %}
+
+    Accepts:
+    - paginate: {Object}
+    - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
+    - class: {String} (optional) Appended to container element's class attribute
+{% endcomment %}
+
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+
+{%- if paginate.parts.size > 0 -%}
+    <div class="{{ class | default: 'pagination-wrapper' }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <nav class="pagination style--{{ settings.pagination_style }} text-{{ settings.pagination_align }}{% if show_infinite_scrolling == 'infinite' %} pagination-infinite style-{{ settings.infinite_scroll_style }}{% endif %}" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+            <div class="pagination-page-item pagination-page-total">
+                <span>{{ 'sections.collection_template.start_count' | t }}</span>
+                <span data-total-start>{{ paginate.current_offset | plus: 1 }}</span>
+                <span>-</span>
+                {%- if paginate.next -%}
+                    <span data-total-end>{{ paginate.current_offset | plus: paginate.page_size }}</span>
+                {%- else -%}
+                    <span data-total-end>{{ paginate.items }}</span>
+                {%- endif -%}
+                <span>{{ 'sections.collection_template.end_count' | t : count : paginate.items }}</span>
+                {%- if paginate.next -%}
+                    {% liquid
+                        assign pg_current = paginate.current_offset | plus: paginate.page_size
+                        assign pg_total = paginate.items
+                        assign total_progress = pg_current | times: 100 | divided_by: pg_total | append: '%'
+                    %}
+                {%- else -%}
+                    {%- assign total_progress = '100%' -%}
+                {%- endif -%}
+                <div class="pagination-total-progress">
+                    <span style="width: {{ total_progress }}" class="pagination-total-item"></span>
+                </div>
+            </div>
+            {%- if show_infinite_scrolling == 'show_more' or show_infinite_scrolling == 'infinite' -%}
+                <div class="pagination-page-item pagination-page-infinite">
+                    <a class="{% if settings.infinite_scroll_style == '1' %}link link-underline{% else %}button button--secondary{% endif %}{% unless paginate.next %} disabled{% endunless %}"
+                        {% if paginate.next %}
+                            href="{{ paginate.next.url }}" data-href="{{ paginate.next.url }}"
+                            data-infinite-scrolling
+                            data-load-more="{{ 'sections.collection_template.show_more' | t }}"
+                            data-loading-more="{{ 'sections.collection_template.show_more' | t }}"
+                        {% else %}
+                            href="javascript:void(0)"
+                        {% endif %}
+                    >
+                        {%- if paginate.next -%}
+                            {{ 'sections.collection_template.show_more' | t }}
+                        {%- else -%}
+                            {{ 'sections.collection_template.no_more' | t }}
+                        {%- endif -%}
+                    </a>
+                </div>
+            {%-else -%}
+                <ul class="pagination__list list-unstyled" role="list">
+                    {%- if paginate.previous -%}
+                    <li class="pagination-arrow">
+                        <a href="{{ paginate.previous.url }}{{ anchor }}" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.previous' | t }}">
+                            {% if settings.pagination_style == '3' %}
+                            {% render 'icon-arrow-left' %}
+                            {% else %}
+                            {% render 'icon-caret' %}
+                            {% if settings.pagination_style == '1' %}
+                            <span class="arrow-text">{{ 'general.pagination.prev' | t}}</span>
+                            {% endif %}
+                            {% endif %}
+                        </a>
+                    </li>
+                    {%- endif -%}
+                    {%- for part in paginate.parts -%}
+                    <li class="pagination-num">
+                        {%- if part.is_link -%}
+                        <a href="{{ part.url }}{{ anchor }}" class="pagination__item link" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                        {%- else -%}
+                        {%- if part.title == paginate.current_page -%}
+                        <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                        {%- else -%}
+                        <span class="pagination__item">{{ part.title }}</span>
+                        {%- endif -%}
+                        {%- endif -%}
+                    </li>
+                    {%- endfor -%}
+                    {%- if paginate.next -%}
+                    <li class="pagination-arrow">
+                        <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.next' | t }}">
+                            {% if settings.pagination_style == '3' %}
+                            {% render 'icon-arrow-left' %}
+                            {% else %}
+                            {% if settings.pagination_style == '1' %}
+                            <span class="arrow-text">{{ 'general.pagination.next' | t}}</span>
+                            {% endif %}
+                            {% render 'icon-caret' %}
+                            {% endif %}
+                        </a>
+                    </li>
+                    {%- endif -%}
+                </ul>
+            {%- endif -%}
+        </nav>
+    </div>
+{%- endif -%}

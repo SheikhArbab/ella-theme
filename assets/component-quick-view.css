@@ -1,0 +1,232 @@
+.quickView .productView-top {
+    padding-right: 0;
+}
+
+.halo-quick-view-popup .halo-popup-wrapper {
+    padding: 30px 0 0 0;
+}
+
+.halo-quick-view-popup .halo-popup-content {
+    padding: 0 30px 30px 30px;
+}
+
+body.quick-view-show {
+    overflow-y: hidden;
+    /*height: 100%;*/
+}
+
+body.quick-view-show .background-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
+body.quick-view-show.size-chart-show .halo-quick-view-popup:before,
+body.quick-view-show.compare-color-show .halo-quick-view-popup:before,
+body.quick-view-show.ask-an-expert-show .halo-quick-view-popup:before {
+	content: "";
+    background-color: #232323cc;
+    position: absolute;
+    top: -1px;
+    width: 100%;
+    height: calc(100% + 2px);
+    z-index: 3;
+}
+
+body.quick-view-show.cart-sidebar-show .halo-cart-sidebar {
+	z-index: 102;
+}
+
+body.quick-view-show.cart-sidebar-show .background-overlay {
+	z-index: 101;
+}
+
+body.quick-view-show .halo-quick-view-popup {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.halo-quick-view-popup .halo-popup-close svg {
+    stroke: #fff;
+    stroke-width: 1px;
+}
+
+.halo-quick-view-popup .halo-quickView.layout-4 .productView-thumbnail-wrapper {
+	display: none;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-thumbnail {
+	padding: 0 7.5px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-title {
+    line-height: 30px;
+    position: relative;
+    top: -7px;
+    margin-bottom: 5px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-meta,
+.halo-quick-view-popup .productView-desc.halo-text-format {
+    margin-bottom: 12px;
+    font-size: var(--fontsize_short_desc);
+    color: var(--color_short_desc);
+}
+.halo-quick-view-popup .productView-desc.halo-text-format * {
+  color: var(--color_short_desc);
+}
+.halo-quick-view-popup .halo-quickView .productView-info {
+    margin-bottom: 17px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-price {
+    margin-bottom: 20px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-countDown {
+    margin-bottom: 18px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-countDown .text {
+    display: none;
+}
+
+.halo-quick-view-popup .halo-quickView .product-form__input+.product-form__input {
+    margin-top: 10px;
+}
+
+.halo-quick-view-popup .halo-quickView .product-form__input .form__label {
+    margin-bottom: 4px;
+}
+
+.halo-quick-view-popup .halo-quickView .halo-productReview .spr-badge-caption {
+    color: #3c3c3c;
+}
+
+.halo-quick-view-popup .halo-quickView .quantity_selector {
+    margin-bottom: 8px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-subtotal {
+    margin-bottom: 14px;
+    font-size: calc((var(--font-body-size)) + 1px);
+    font-weight: var(--font-weight-medium);
+}
+
+.halo-quick-view-popup .halo-quickView .productView-perks {
+    margin-bottom: 22px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-perks > div {
+    margin-left: 0;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-perks div + div {
+    margin-left: 20px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-payment {
+    margin-bottom: 15px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-groupTop {
+	margin-bottom: 13px;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-groupBottom {
+	margin-top: 0;
+}
+
+.halo-quick-view-popup .halo-quickView .halo-notifyMe {
+	padding: 15px 0;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-ViewingProduct .text {
+    position: relative;
+    top: -1px;
+}
+
+.halo-quick-view-popup .halo-quickView .product-option {
+    display: inherit;
+    margin: 0;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-property {
+	margin-bottom: 15px;
+}
+
+.halo-quick-view-popup .halo-quickView .product-form__label:hover .expand {
+    display: none;
+}
+
+.halo-quick-view-popup .productView-securityImage ul li {
+	margin-top: 15px;
+}
+
+.halo-quick-view-popup .product-form__label .tooltip {
+	display: none;
+}
+
+.size-chart-show .halo-quick-view-popup .halo-popup-wrapper > .halo-popup-close,
+.compare-color-show .halo-quick-view-popup .halo-popup-wrapper > .halo-popup-close,
+.ask-an-expert-show .halo-quick-view-popup .halo-popup-wrapper > .halo-popup-close {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+quantity-quick-view-input.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-soldProduct {
+    margin-left: 0;
+}
+
+.halo-quick-view-popup .halo-quickView .productView-rating + .productView-soldProduct {
+    margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+    .halo-quick-view-popup .halo-quickView .productView-action {
+        width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .quickView .halo-quickView-right {
+        position: sticky;
+        top: 0;
+    }
+
+    .quickView .productView-securityImage ul li {
+    	margin-top: 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .halo-quick-view-popup .halo-productView-left {
+        width: 54.645%;
+        padding-right: 30px;
+    }
+
+    .halo-quick-view-popup .halo-productView-right {
+        width: 45.355%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .halo-quick-view-popup .halo-popup-wrapper {
+        padding-top: 20px;
+    }
+
+    .halo-quick-view-popup .halo-popup-content {
+        padding: 0 50px 50px 50px;
+    }
+}

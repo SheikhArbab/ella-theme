@@ -1,0 +1,182 @@
+{%- liquid
+	assign tab_border_color = section.settings.tab_border_color
+	assign tab_border_color_rgb = section.settings.tab_border_color_rgb
+	if tab_border_color_rgb != blank
+		assign border_color = tab_border_color_rgb
+	else
+		assign border_color = tab_border_color
+	endif
+
+	assign isVerticalSidebar = false
+	if tab_layout == 'vertical_sidebar'
+		assign isVerticalSidebar = 'sidebar'
+	endif
+
+	assign isVerticalSidebarMobile = false
+	if tab_layout_mobile == 'vertical_sidebar'
+		assign isVerticalSidebarMobile = 'sidebar-mobile'
+	endif
+-%}
+<product-tab class="productView-tab layout-{{ tab_layout }} halo-product-tab" data-vertical="{{ isVerticalSidebar }}" data-vertical-mobile="{{ isVerticalSidebarMobile }}">
+	{%- if tab_layout == 'horizontal' or tab_layout == 'popup' -%}
+		<ul class="tabs tabs-horizontal list-unstyled disable-srollbar">
+			{%- for block in section.blocks -%}
+				{%- liquid
+					assign title = block.settings.title
+					assign key = block.settings.product_tab_key_metafield
+                    assign source = block.settings.product_custom_source
+					assign has_tab = false
+    
+                    if source == 'dynamic'
+                       assign meta_ref = key
+                    else
+                    	if product.metafields.c_f or product.metafields.custom
+                    		if product.metafields.c_f[key] != blank
+	                			assign meta_ref = product.metafields.c_f[key]
+	                		else
+	                			assign meta_ref = product.metafields.custom[key]
+                    		endif
+	                	endif
+                    endif 
+                   
+					if block.type == 'custom'
+						if block.settings.type == 'metafield'
+							if meta_ref
+				                assign has_tab = true
+				            else
+				            	assign has_tab = false
+				            endif
+				        else
+				        	assign has_tab = true
+				        endif
+					else
+						assign has_tab = true
+					endif
+				-%}
+				{%- if has_tab and title != blank -%}
+					<li class="tab">
+			            <a class="tab-title{% if block.type == 'description' and tab_layout == 'horizontal' %} is-open{% endif %}" href="#tab-{{ block.settings.title | escape | handleize }}" style="--border-color: {{ border_color }}">
+			                {{ block.settings.title | escape }}
+			            </a>
+			        </li>
+			    {%- endif -%}
+			{%- endfor -%}
+		</ul>
+	{%- endif -%}
+	<div class="tabs-contents tabs-contents-{{ tab_layout }} clearfix halo-text-format">
+		{%- for block in section.blocks -%}
+			{%- liquid
+				assign title = block.settings.title
+				assign has_tab = false
+				assign source = block.settings.product_custom_source
+				assign key = block.settings.product_tab_key_metafield
+
+				if source == 'dynamic'
+                   assign meta_ref = key
+                else
+                	if product.metafields.c_f or product.metafields.custom
+                		if product.metafields.c_f[key] != blank
+                			assign meta_ref = product.metafields.c_f[key]
+                		else
+                			assign meta_ref = product.metafields.custom[key]
+                		endif
+                	endif
+                endif 
+                
+				if block.type == 'custom'
+					if block.settings.type == 'metafield'
+						if meta_ref
+			                assign has_tab = true
+			                assign content = meta_ref
+			            else
+			            	assign has_tab = false
+			            endif
+			        else
+			        	assign has_tab = true
+			        	assign content = block.settings.content
+			        endif
+				else
+					assign has_tab = true
+					if block.type == 'description'
+                        assign current_variant = product.selected_or_first_available_variant
+                        if current_variant.metafields.c_f.variant_description != blank
+                            assign content = current_variant.metafields.c_f.variant_description
+                        else
+                            assign content = product.description
+                        endif
+					else block.type == 'review'
+						assign content = product.metafields.spr.reviews
+					endif
+				endif
+
+				if block.type == 'description' or block.type == 'review' or block.type == 'custom'
+					assign style_mobile = false
+					if block.settings.open_tab_mobile
+						assign style_mobile = 'show-mobile'
+					endif
+					if tab_layout_mobile == 'popup'
+						assign style_mobile = 'popup-mobile'
+					elsif tab_layout_mobile == 'vertical_sidebar'
+						assign style_mobile = 'sidebar-mobile'
+					endif
+				endif
+			-%}
+			{%- if has_tab and title != blank -%}
+				<div class="tab-content{% if block.type == 'description' %}{% if tab_layout == 'vertical' or tab_layout == 'horizontal' %} is-active{% endif %}{% endif %}" id="tab-{{ title | escape | handleize }}">
+					<div class="toggle-title{% if settings.product_page_layout == 'full_width_2' or template.suffix == 'template-full-width-2' %} title-content-full{% endif %}">
+		                <a class="toggleLink{% if style_mobile %} {{ style_mobile }}{% endif %}{% if block.type == 'description' and tab_layout == 'vertical' %} is-open{% endif %}" data-collapsible href="#tab-{{ title | escape | handleize }}-mobile">
+		                    <span class="text">
+		                        {{ title | escape }}
+		                    </span>
+		                    {% if icon_style_layout == 'style_1' %}	
+			                    <span class="icon-dropdown">
+			                    	{% if settings.product_page_layout == 'full_width_2' or template.suffix == 'template-full-width-2' %}
+			                    		{% render 'icon-down-2' %}
+			                    	{% else %}
+			                    		{% render 'icon-down' %}
+			                    	{% endif %}
+			                    </span>	
+		                    {% else %}	
+		                    	<span class="icon-plus">&nbsp;</span>
+		                    {% endif %}
+		                </a>
+		            </div>
+		            <div class="toggle-content{% if block.type == 'description' %}{% if tab_layout == 'vertical' or tab_layout == 'horizontal' %} is-active{% endif %}{% endif %}{% if style_mobile %} {{ style_mobile }}{% endif %}{% if block.settings.enable_btn_show_more %} toggle-content--height{% endif %}" id="tab-{{ title | escape | handleize }}-mobile"{% if block.settings.enable_btn_show_more %} style="--maximum-des-to-show: {{ block.settings.maximum_des_to_show | append: 'px'}}"{% endif %}{% if block.type == 'description' %} product-description-tab data-product-description-{{ product.id }}{% endif %}>
+						{%- if tab_layout == 'vertical_sidebar' or style_mobile == 'sidebar-mobile' or style_mobile == 'popup-mobile' -%}
+							<div class="tab-popup-header">
+								<h5>
+									<span class="text">{{ title | escape }}</span>
+								</h5>
+								<a class="pdViewTab-close pdViewTab-close-mobile" role="link" aria-disabled="true">x</a>
+							</div>
+							<div class="tab-popup-content">
+						{%- endif -%}
+							{%- if block.type == 'review' -%}
+								<div class="productView-review" id="shopify-product-reviews" data-id="{{ product.id }}">
+							{%- endif -%}
+							{{ content }}
+							{%- if block.settings.enable_btn_show_more -%}
+								{% assign letter = content | size %}
+								<div class="tab-showMore is-show" data-letter="{{ letter }}" data-des-max="{{ block.settings.maximum_des_to_show }}">
+									<a class="button button--secondary" href="#tab-{{ title | escape | handleize }}-mobile" data-show-more-text="{{ 'products.product.read_more' | t }}" data-show-less-text="{{ 'products.product.read_less' | t }}" data-show-more-toogle> 
+										{{ 'products.product.read_more' | t }}
+									</a>
+								</div>
+							{%- endif -%}
+							{%- if block.type == 'review' -%}
+								</div>
+							{%- endif -%}
+						{%- if tab_layout == 'vertical_sidebar' or style_mobile == 'sidebar-mobile' or style_mobile == 'popup-mobile' -%}
+							</div>
+						{%- endif -%}
+		            </div>
+					{%- if tab_layout == 'popup' -%}
+						<a class="pdViewTab-close" href="javascript:void(0)">x</a>
+					{%- endif -%}
+				</div>
+			{%- endif -%}
+		{%- endfor -%}
+	</div>
+</product-tab>
+<script src="{{ 'tabs.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'halo-faqs.js' | asset_url }}" defer="defer"></script>

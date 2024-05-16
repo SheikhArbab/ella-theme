@@ -1,0 +1,36 @@
+{% layout none %}
+
+<div class="item">
+  <a class="first-info" href="{{ product.url | within: collection }}" data-mobile-click>
+        {%- if product.featured_media -%}
+            {% render 'icon-external-link' %}
+            <img srcset="{{ product.featured_media | img_url: 'master' }}" src="{{ product.featured_media | img_url: 'master' }}" alt="{{ product.featured_media.alt }}" loading="lazy" class="motion-reduce hidden-mobile" sizes="auto"/>
+            <a class="hidden-desktop" href="{{ product.url | within: collection }}">
+              <img srcset="{{ product.featured_media | img_url: 'master' }}" src="{{ product.featured_media | img_url: 'master' }}" alt="{{ product.featured_media.alt }}" loading="lazy" class="motion-reduce" sizes="auto"/>
+            </a>
+        {%- else -%}
+          {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+    </a>
+    <div class="second-info">
+      <div class="first product-item" data-product-id="{{ product.id }}">
+            {%- if settings.show_vendor -%}
+                <div class="product-vendor">
+                    <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                    {{ product.vendor | link_to_vendor }}           
+            </div>
+            {%- endif -%} 
+            <a class="product-title link-underline" href="{{ product.url | within: collection }}">
+                <span class="text">{{ product.title | escape }}</span>
+        </a>
+             <div class="product-price">
+        {% render 'price',
+                    product: product,
+                    price_class: ''
+                %}
+      </div>
+      </div>
+        <a class="second" href="{{ product.url | within: collection }}"></a>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+{%- if product_card_product.featured_media -%}
+    {%- if variant_img != blank -%}
+        {%- if settings.quick_shop_type == '2' -%}
+            {%- assign width = product_card_product.featured_media.width -%}
+            {%- assign height = product_card_product.featured_media.width | divided_by: product_card_product.featured_media.aspect_ratio | round -%}
+            <img {% render 'lazyload',preview_img: product_card_product.featured_media, class: true, width: width, height: height %} />
+        {%- else -%}
+            {%- assign width = variant_img.width -%}
+            {%- assign height = variant_img.width | divided_by: variant_img.aspect_ratio | round -%}
+            <img {% render 'lazyload',preview_img: variant_img, class: true  %} />
+        {%- endif -%}
+    {%- else -%}
+        {%- assign width = product_card_product.featured_media.width -%}
+        {%- assign height = product_card_product.featured_media.width | divided_by: product_card_product.featured_media.aspect_ratio | round -%}
+        <img {% render 'lazyload',preview_img: product_card_product.featured_media, class: true  %} />
+    {%- endif -%}
+    {%- if product_card_product.media[1] != nil and settings.show_image_swap -%}
+        {%- if has_video != blank and settings.enable_hover_video_product_items -%}
+        {{ has_video[0] | video_tag: muted: true, loop: true, image_size: '50x' }}
+        {%- else -%}
+        {%- assign width = product_card_product.media[1].width -%}
+        {%- assign height = product_card_product.media[1].width | divided_by: product_card_product.media[1].aspect_ratio | round -%}
+        <img {% render 'lazyload',preview_img: product_card_product.media[1], class: true, width: width, height: height  %} />
+        {%- endif -%}
+    {%- endif -%}
+    {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+{%- else -%}
+    {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+    {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+{%- endif -%}

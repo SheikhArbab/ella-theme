@@ -1,0 +1,81 @@
+{%- liquid
+    assign sold_out = false
+    if product.available == false
+        assign sold_out = true
+    endif
+
+    assign variantCount = product.variants | size
+    assign option_name = product.options_with_values[0].name | downcase
+    assign product_swatch_option = settings.swatch | downcase
+
+    assign has_popup = false
+
+    if product.options_with_values.size == 1 and product_swatch_option contains option_name and settings.quick_shop_type == '1'
+        if settings.show_swatch
+            assign has_popup = false
+        else
+            assign has_popup = true
+        endif
+    else
+        assign has_popup = true
+    endif
+-%}
+<div class="card-action__group card-list__hidden">
+    <div class="card-action">
+        <form action="{{ routes.cart_url }}/add" method="post" class="variants" id="{{ id }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-product-id="{{ product.id }}" enctype="multipart/form-data">
+            {%- if sold_out -%}
+                {%- if settings.show_notify_form -%}
+                    <a class="button button-ATC is-notify-me" href="{{ product.url }}" data-btn-addToCart>{{ 'notify_form.general.label' | t }}</a>
+                {%- else -%}
+                    <a class="button button-ATC" href="{{ product.url }}" disabled="disabled">{{ 'products.product.out_of_stock' | t }}</a>
+                {%- endif -%}
+            {%- else -%}
+                {%- if variantCount > 1 and product.variants.first.title != 'Default Title' -%}
+                   {%- if settings.show_quick_shop -%}
+                        {%- if product.options_with_values.size == 1 and product_swatch_option contains option_name and settings.quick_shop_type == '1' -%}
+                            <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button class="button button-ATC" type="submit" data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-btn-addToCart>{{ 'products.product.add_to_cart' | t }}</button>
+                        {%- else -%}
+                            <a class="button button-ATC" href="{{ product.url }}" data-quickshop-popup>{{ 'products.product.quick_shop' | t }}</a>
+                          {%- endif -%}
+                    {%- else -%}
+                        <a class="button button-ATC" href="{{ product.url }}">{{ 'products.product.select_options' | t }}</a>
+                    {%- endif -%}
+                {%- else -%}
+                    <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    {%- liquid
+                        assign current_variant_grid = product.selected_or_first_available_variant
+                        assign first_inventory_grid = current_variant_grid.inventory_quantity
+                    -%}
+          
+                    {%- if first_inventory_grid > 0 -%}
+                        <button class="button button-ATC" type="submit" data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-btn-addToCart>{{ 'products.product.add_to_cart' | t }}</button>
+                    {%- else -%}
+                        <button class="button button-ATC" type="submit" data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-btn-addToCart>{{ 'products.product.pre_order' | t }}</button>
+                    {%- endif -%} 
+                {%- endif -%}
+            {%- endif -%}
+        </form>
+    </div>
+</div>
+<div class="card-action__group variants-popup card-list__hidden">
+    <div class="card-action variants-popup-form">
+        {%- if settings.show_quick_shop and product.available -%}
+            {%- if variantCount > 1 and product.variants.first.title != 'Default Title' -%}
+                {%- if has_popup -%}
+                    <div class="custom-scrollbar">
+                        {% render 'product-quick-shop-popup',
+                            product: product,
+                            id: id,
+                            list: list,
+                            position: position,
+                            sectionId: sectionId 
+                        %}
+                    </div>
+                {%- endif -%}
+            {%- endif -%}
+        {%- endif -%}
+    </div>
+</div>

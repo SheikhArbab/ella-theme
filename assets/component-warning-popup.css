@@ -1,0 +1,71 @@
+.halo-warning-popup  {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 80px 10px 65px;
+    min-height: 60px;
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background-color: var(--bg-warning);
+}
+
+.halo-warning-popup .halo-warning-content {
+    color: var(--color-warning);
+    font-size: calc(var(--font-body-size) + 1px);
+}
+
+body.has-warning .halo-warning-popup {
+    transform: translateY(0);
+    pointer-events: all;
+    opacity: 1;
+    visibility: visible;
+}
+
+.halo-warning-popup .halo-warning-icon .icon {
+    width: 25px;
+    height: 25px;
+    fill: var(--color-warning);
+}
+
+.halo-warning-popup .halo-popup-close {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    height: 100%;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.halo-warning-popup .halo-popup-close:hover {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.halo-warning-popup .halo-popup-close svg {
+    width: 24px;
+    height: 24px;
+    stroke: transparent;
+    fill: var(--color-warning);
+}
+
+@media (max-width: 1024px) {
+    .halo-warning-popup {
+        min-height: 62px;
+    }
+}
+
+@media (max-width: 768px) {
+    .halo-warning-popup {
+        padding: 10px 80px 10px 20px;
+    }
+}

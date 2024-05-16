@@ -1,0 +1,30 @@
+<div class="productView-property">
+	{%- if customization_option_1 != blank -%}
+		{%- liquid
+			assign property_id = product.id | append: customization_option_1 | handleize
+			assign property_name = customization_option_1 | escape
+			assign property_value = property_name
+			unless customization_option_hidden
+				assign property_value = property_value | prepend: '_'
+			endunless
+		-%}
+		<div class="product-form__input clearfix line-item-property__field">
+		  	<label for="{{ property_id }}" class="form-label form__label">{{ property_name }}</label>
+		  	<input id="{{ property_id }}" type="text" name="properties[{{ property_value }}]" class="form__input form-input">
+		</div>
+	{%- endif -%}
+	{%- if customization_option_2 != blank -%}
+		{%- liquid
+			assign property_id = product.id | append: customization_option_2 | handleize
+			assign property_name = customization_option_2 | escape
+			assign property_value = property_name
+			unless customization_option_hidden
+				assign property_value = property_value | prepend: '_'
+			endunless
+		-%}
+		<div class="product-form__input clearfix line-item-property__field">
+		  	<label for="{{ property_id }}" class="form-label form__label">{{ property_name }}</label>
+		  	<input id="{{ property_id }}" type="file" accept="image/*" name="properties[{{ property_value }}]" class="form__input form-input">
+		</div>
+	{%- endif -%}
+</div>

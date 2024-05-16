@@ -1,0 +1,38 @@
+{%- liquid
+    assign show_social_media = false
+
+    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank
+        assign show_social_media = true
+    endif
+-%}
+{%- if show_social_media -%}
+    <ul class="list-unstyled list-social clearfix" role="list">
+        {%- if settings.social_facebook_link != blank -%}
+            <li class="list-social__item"><a href="{{ settings.social_facebook_link }}" class="link link--text list-social__link icon-facebook">{%- render 'icon-facebook' -%} <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_instagram_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_instagram_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_instagram_link }}"{% endif %} class="link link--text list-social__link icon-instagram">{%- render 'icon-instagram' -%} <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_pinterest_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_pinterest_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_pinterest_link }}"{% endif %} class="link link--text list-social__link icon-pinterest">{%- render 'icon-pinterest' -%} <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_tiktok_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tiktok_link }}"{% endif %} class="link link--text list-social__link icon-tiktok">{%- render 'icon-tiktok' -%} <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_tumblr_link != blank -%}
+          <li class="list-social__item"><a {% if settings.social_tumblr_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tumblr_link }}"{% endif %} class="link link--text list-social__link icon-tumblr">{%- render 'icon-tumblr' -%} <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_snapchat_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_snapchat_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_snapchat_link }}"{% endif %} class="link link--text list-social__link icon-snapchat">{%- render 'icon-snapchat' -%} <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_youtube_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_youtube_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_youtube_link }}"{% endif %} class="link link--text list-social__link icon-youtube">{%- render 'icon-youtube' -%} <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_twitter_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_twitter_link }}"{% endif %} class="link link--text list-social__link icon-twitter">{%- render 'icon-twitter' -%} <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span></a></li>
+        {%- endif -%}
+        {%- if settings.social_vimeo_link != blank -%}
+            <li class="list-social__item"><a {% if settings.social_vimeo_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_vimeo_link }}"{% endif %} class="link link--text list-social__link icon-vimeo">{%- render 'icon-vimeo' -%} <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span></a></li>
+        {%- endif -%}
+    </ul>
+{%- endif -%}

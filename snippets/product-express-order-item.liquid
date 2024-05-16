@@ -1,0 +1,123 @@
+{%- assign on_sale = false -%}
+{%- if product.variants[0].compare_at_price > product.variants[0].price -%}
+  {%- assign on_sale = true -%}
+{%- endif -%}
+{%- assign sold_out = true -%}
+{%- if product.available -%}
+  {%- assign sold_out = false -%}
+{%- endif -%}
+<div class="inner product-item{% if sold_out %} sold-out{% endif %}{% if on_sale %} on-sale{% endif %}" data-product-id="product-{{ product.id }}">
+    <div class="inner-top">
+        <div class="column col-img text-center">
+            <div class="product-top">
+                <div class="product-image{% if product.images.size > 1 and settings.image_swap %} image-swap{% endif %}">
+                    <a href="{{ product.url | within: collection }}" class="product-grid-image" data-collections-related="/collections/{{collection.handle}}?view=related">
+                        {%- assign img_pr = product.featured_image.src | product_img_url: '200x' -%}
+                        {%- assign img_0 = product.images[0].src | product_img_url: '200x' -%}
+                        {%- assign img_1 = product.images[1].src | product_img_url: '200x' -%}
+                        {%- assign height_0 = 90 | divided_by: product.images[0].aspect_ratio | round -%}
+                        {%- assign height_1 = img_1.width | divided_by: img_1.aspect_ratio | round -%}
+                        {%- assign height_pr = 90 | divided_by: product.featured_image.aspect_ratio | round -%}
+                        {%- if product.images.size > 1 and settings.image_swap -%}
+                        <img src="{{ img_0 }}" alt="{{ product.images[0].alt | escape }}" class="images-one lazyload" data-src="{{ img_0 }}" data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ product.featured_image.aspect_ratio }}" data-sizes="auto" width="90" height="{{height_0}}">
+                        <span class="images-two"><img src="{{ img_1 }}" alt="{{ product.images[1].alt | escape }}" class="lazyload" data-src="{{ img_1 }}" data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ product.featured_image.aspect_ratio }}" data-sizes="auto" width="{{img_1.width}}" height="{{height_1}}"></span>
+                        {%- else -%}
+                        <img src="{{ img_pr }}" alt="{{ product.featured_image.alt | escape }}" data-src="{{ img_pr }}" class="lazyload" data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ product.featured_image.aspect_ratio }}" data-sizes="auto" width="90" height="{{height_pr}}">
+                        {%- endif -%}
+                    </a>
+
+                    {%- if settings.show_badge -%}
+                        {% render 'product-badge',
+                            product: product,
+                            class: 'card__badge',
+                            badge_detail: true,
+                            serial: serial
+                        %}
+                    {%- endif -%}
+                </div>
+            </div>
+        </div>
+        <div class="column col-prod">
+            {%- if settings.show_vendor -%}
+            <div class="product-vendor">{{ product.vendor | link_to_vendor }}</div>
+            {%- endif -%}
+
+            <a class="product-title" href="{{ product.url | within: collection }}"><span class="text">{{ product.title | escape }}{% if variant_selected != blank %} <span data-change-title> - {{ variant_selected }}</span>{% endif %}</span></a>
+        </div>
+        <div class="column col-price text-center">
+            <div class="card-price">
+                {% render 'price',
+                    product: product,
+                    price_class: '',
+                    hasCountdown: hasCountdown
+                %}
+            </div>
+        </div>
+        <div class="column col-qtt text-center">
+            {%- assign variantCount = product.variants | size -%}
+            {%- unless variantCount > 1 -%}
+            <div class="qty-group">
+                <button type="button" data-minus-quantity class="minus button"></button>
+                <label class="qty-label visually-hidden" for="quantity__{{ product.id }}">{{ 'products.product.quantity.label' | t }}</label>
+                <input type="number" id="quantity__{{ product.id }}" name="quantity" value="1" min="1">
+                <button type="button" data-plus-quantity class="plus button"></button>
+            </div>
+            {%- endunless -%}
+        </div>
+        <div class="column col-options text-center">
+            {% assign variantCount = product.variants | size %}
+            <form action="{{ routes.cart_url }}/add" method="post" class="variants" data-id="product-actions-{{ product.id }}" enctype="multipart/form-data">
+                {%- if sold_out -%}
+                    <button class="button add-to-cart-btn" type="submit" disabled="disabled" {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}>{{ 'products.product.unavailable' | t }}</button>
+                {%- else -%}
+                    {%- if variantCount > 1 -%}
+                        <a data-toggle-variant data-target="#product-options-{{ product.id }}" class="button button--primary show-options-btn" href="{{ product.url }}" title="{{ product.title }}" {% if settings.enable_multilang %}data-translate="sections.collection_template.show_variants"{% endif %}>{{ 'sections.collection_template.show_variants' | t }}</a>
+                    {%- else -%}
+                        <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                        <button data-express-addToCart class="button button--primary add-to-cart-btn" type="submit" {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}>{{ 'products.product.add_to_cart' | t }}</button>
+                    {%- endif -%}
+                {%- endif -%}
+            </form>
+            <div class="feedback-text" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+<div class="product-options" id="product-options-{{ product.id }}">
+    {% for variant in product.variants %}
+    <div class="options-items" id="variant-{{variant.id}}">
+        <div class="column col-img text-center"></div>
+        <div class="column col-prod">
+            {%- if variant.image.size != blank -%}
+            {%- assign height = 56 | divided_by: variant.image.aspect_ratio | round -%}
+            <img src="{{ variant.image.src | product_img_url: '56x' }}" alt="{{ variant.image.src | escape }}" width="56" height="{{height}}">
+            {%- else -%}
+            {%- assign height = 56 | divided_by: product.featured_image.aspect_ratio | round -%}
+            <img src="{{ product.featured_image.src | product_img_url: '56x' }}" alt="{{ product.featured_image.src | escape }}" width="56" height="{{height}}">
+            {%- endif -%}
+            <span class="options-title">{{ variant.title }}</span>
+        </div>
+        <div class="column col-price text-center">
+            <div class="card-price">{{ variant.price | money }}</div>
+        </div>
+        <div class="column col-qtt text-center">
+            <div class="qty-group">
+                <button type="button" data-minus-quantity class="minus button"></button>
+                <label class="qty-label visually-hidden" for="variant_{{ variant.id }}">{{ 'products.product.quantity.label' | t }}</label>
+                <input type="number" id="variant_{{ variant.id }}" name="quantity" value="1" min="1">
+                <button type="button" data-plus-quantity class="plus button"></button>
+            </div>
+        </div>
+        <div class="column col-options text-center">
+            <form action="{{ routes.cart_url }}/add" method="post" class="variants" data-id="product-actions-{{ variant.id }}" enctype="multipart/form-data">
+                {%- if variant.available -%}
+                <button data-express-addToCart class="button button--primary add-to-cart-btn" id="{{ variant.id }}" type="submit" {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}>{{ 'products.product.add_to_cart' | t }}</button>
+                <input type="hidden" name="id" value="{{ variant.id }}" />
+                {%- else -%}
+                <button class="button button--primary add-to-cart-btn" type="submit" disabled="disabled" {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}>{{ 'products.product.unavailable' | t }}</button>
+                {%- endif -%}
+            </form>
+            <div class="feedback-text" style="display:none;"></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

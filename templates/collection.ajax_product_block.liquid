@@ -1,0 +1,29 @@
+{% layout none %}
+
+{%- for tag in current_tags -%}
+    {%- if tag contains 'limit=' -%}
+        {%- assign limit = tag | remove: 'limit=' -%}
+    {%- elsif tag contains 'sectionId=' -%}
+        {%- assign sectionId = tag | remove: 'sectionId=' -%}
+    {%- elsif tag contains 'imageRatio=' -%}
+        {%- assign image_ratio = tag | remove: 'imageRatio=' -%}
+    {%- elsif tag contains 'swipe=' -%}
+        {%- assign swipe = tag | remove: 'swipe=' -%}
+    {%- elsif tag contains 'hasCountdown=' -%}
+        {%- assign hasCountdown = tag | remove: 'hasCountdown=' -%}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- for product in collections[collection.handle].products limit: limit -%}
+    <div class="product{% if swipe == 'true' %} slider__slide grid__item{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+        {% render 'product-grid-layout',
+            product_card_product: product,
+            portrait_aspect_ratio: '125',
+            serial: forloop.index,
+            sectionId: sectionId,
+            media_size: image_ratio,
+            hasCountdown: hasCountdown,
+            loading: true
+        %}
+    </div>
+{%- endfor -%}

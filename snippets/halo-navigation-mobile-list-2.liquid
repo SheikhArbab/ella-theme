@@ -1,0 +1,67 @@
+<div class="menu-lv__dropdownmenu menu-dropdown">
+    <ul class="menu-lv__list list-menu list-unstyled motion-reduce" role="list">
+        <li class="menu-lv-item menu-lv-2 nav-title-mobile text-center">
+            <span class="icon-dropdown">
+                {% render 'icon-arrow-nav' %}
+            </span>
+            <span class="menu-lv-2__action link focus-inset">
+                <span class="text">
+                    {{ menu_item_heading | escape }}
+                </span>
+            </span>
+        </li>
+        {% if show_banner %}
+            <a href="javascript:void(0)" class="image-zoom adaptive_height" style="padding-top: {{ 1 | divided_by: banner_lv_2.aspect_ratio | times: 100 }}%;">
+                <img {% render 'lazyload',preview_img: banner_lv_2 %} />
+                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+            </a>
+        {% endif %}
+        {% if show_nav_all %}
+            <li class="menu-lv-item menu-lv-2 text-left nav-all-mobile">
+                <a {% if menu_item_url == blank %} role="link" aria-disabled="true"{% else %} href="{{ menu_item_url }}"{% endif %} class="menu-lv-2__action list-menu__item list-menu__item--end link focus-inset">
+                    <span class="text">
+                        {{ 'general.navigation.go_to' | t }} {{ menu_item_heading | escape }}
+                    </span>
+                </a>
+            </li>
+        {% endif %}
+        {%- for i in (1..10) -%}
+            {% capture cap_show_item %}show_item_{{ i }}{% endcapture %}
+            {% capture cap_heading %}heading_{{ i }}{% endcapture %}
+            {% capture cap_image %}image_{{ i }}{% endcapture %}
+            {% capture cap_link %}link_{{ i }}{% endcapture %}
+
+            {%- liquid
+                assign show_item = block.settings[cap_show_item]
+                assign item_image = block.settings[cap_image]
+                assign item_heading = block.settings[cap_heading]
+                assign item_link = block.settings[cap_link]
+            -%}
+
+            {%- if show_item -%}
+                <li class="menu-lv-item menu-lv-2 text-left menu-lv-image">
+                    <a {% if item_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ item_link }}"{% endif %} class="menu-lv-2__action list-menu__item list-menu__item--end link focus-inset">
+                        {%- if item_heading != blank -%}
+                            <span class="text">
+                                {{ item_heading | escape }}
+                            </span>
+                        {%- endif -%}
+                        <span class="image image-adapt"
+                            {% if item_image != blank %}
+                                style="padding-top: {{ 1 | divided_by: item_image.aspect_ratio | times: 100 | append: '%' }}"
+                            {% else %}
+                                style="padding-top: 100%;"
+                            {% endif %}
+                        >
+                            {%- if item_image != blank -%}
+                                <img srcset="{{ item_image | img_url: 'master' }}" src="{{ item_image | img_url: 'master' }}" alt="{{ item_image.alt | default: shop.name | escape }}" loading="lazy">
+                            {%- else -%}
+                                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                            {%- endif -%}
+                        </span>
+                    </a>
+                </li>
+            {%- endif -%}
+        {%- endfor -%}
+    </ul>
+</div>

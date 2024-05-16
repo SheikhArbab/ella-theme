@@ -1,0 +1,66 @@
+{%- comment -%} 
+    lookbook_style is 1 or 2: 1 is card and 2 is small tooltip
+    top: position top
+    left: position left
+    show_dot_number: show the dot number on the select icon
+    show_dot_number_mobile: show the dot number on the select icon on mobile
+    lookbook_pos: set the position of the tooltip relative to the select icon
+    product: product for lookbook
+    show_plus_icon: to show + or simple disc,
+    num: 
+{%- endcomment -%}
+
+<{% if lookbook_style == "1" %}lookbook-dialog-dot{% else %}div{% endif %} class="select-icon select-icon-{{ num }}" data-lookbook-icon data-handle="{{ product }}" style="--top-position-{{ num }}: {{ top }};--left-position-{{ num }}: {{ left }}">
+    <span class="glyphicon{% if show_dot_number %} numbered{% endif %}{% if show_dot_number_mobile %} mb-numbered{% endif %}{% if show_dot_number == false and show_dot_number_mobile == false and show_plus_icon == true %} is-plus{% endif %}" data-num="{{num}}"></span> 
+    {%- if lookbook_style == "2" -%}
+        <div class="lookbook-modal to-{{ lookbook_pos }}">
+            <span class="pointer-left pointer"></span><span class="pointer-right pointer"></span><span class="pointer-bottom pointer"></span><span class="pointer-top pointer"></span>   
+            <div class="product-information__wrapper{% if right == 'left' %} text-right{% else %} text-left{% endif %}">
+                {%- if settings.show_vendor -%}
+                    <div class="product-information__group">
+                        {%- if settings.show_vendor -%}
+                            <div class="card-vendor"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span></div>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+                <a href="{{ product.url }}" class="product-title link-underline{% if settings.product_title_line_text != 'full' %} custom-title-ellipsis{% endif %}"><span class="text">{{ product.title }}</span></a>    
+                <div class="product-price price {% if product.compare_at_price != blank %}price--on-sale{% endif %}">
+                    {%- if product.compare_at_price == nil or product.compare_at_price == blank -%}
+                        <div class="regular-price price__regular">
+                            <div class='last-price price__last'>
+                                <span class="price-item price-item--regular">
+                                    {%- assign money_price = product.price | money -%}
+                                    
+                                    {%- if product.price_varies -%}
+                                        <span class="from-text">{{ 'products.product.price.from_price_html' | t: price: money_price   }}</span>
+                                    {%- else -%}
+                                        {{ money_price }}
+                                    {%- endif -%} 
+                                </span>
+                            </div>  
+                        </div>  
+                    {%- else -%}
+                        <div class="sale-price price__sale">
+                            <div class="price-at-compare price__compare"><span class="price-item price-item--regular"><span class="money">{{ product.compare_at_price | money }}</span></span></div>      
+                            <div class='last-price price__last'><span class="price-item price-item--sale"><span class="money">{{ product.price | money }}</span></span></div>
+                        </div>
+                    {%- endif -%}
+                    <a href="{{ product.url }}" class="icon-wrapper" aria-label="{{ 'general.navigation.go_to' | t }} {{ product.title }}">
+                        {% render 'icon-link-arrow-right' %}
+                    </a>
+                </div>
+            </div>  
+        </div>
+    {%- endif -%}
+    <dialog class="lookbook-dialog card" data-lookbook-dialog {% if lookbook_style != "1" %}style="display: none!important"{% endif %}>
+        {% render 'product-grid-layout',
+            product_card_product: product,
+            show_add_to_cart: true,
+            serial: forloop.index,
+            sectionId: section.id,
+            show_list: true,
+            loading: true
+        %}  
+        <button class="close-dialog-button" data-close-lookbook-dialog-button>&times;</button>
+    </dialog>
+</{% if lookbook_style == "1" %}lookbook-dialog-dot{% else %}div{% endif %}>

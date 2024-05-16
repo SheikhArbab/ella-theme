@@ -1,0 +1,11 @@
+{%- unless request.page_type == 'product' -%}
+	<noscript>{{ 'component-product.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endunless -%}
+<noscript>{{ 'component-quick-view.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="halo-popup halo-quick-view-popup customPopup-large" data-quick-view-popup id="halo-quick-view-popup" data-url-variants-quick-view="{{ 'variants-quick-view.js' | asset_url }}" data-url-style-product="{% unless request.page_type == 'product' %}{{ 'component-product.css' | asset_url }}{% endunless %}" data-url-style-quick-view="{{ 'component-quick-view.css' | asset_url }}">
+	<div class="halo-popup-wrapper">
+		<button type="button" class="halo-popup-close clearfix" data-close-quick-view-popup aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+	    <div class="halo-popup-content halo-popup-scroll custom-scrollbar"></div>
+	</div>
+</div>

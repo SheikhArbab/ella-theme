@@ -1,0 +1,42 @@
+{%- if block.settings.show_block -%}
+    {%- liquid
+        assign heading = block.settings.heading
+        assign image = block.settings.image
+        assign link = block.settings.link
+    -%}
+    <div class="sidebarBlock sidebar-image{% if show_collapse %} sidebarBlock-collapse{% endif %}">
+        {%- if show_collapse -%}
+            <div class="sidebarBlock-headingWrapper">
+        {%- endif -%}
+            {%- if heading != blank -%}
+                <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">{{ heading | escape }}</h2>
+            {%- endif -%}
+        {%- if show_collapse -%}
+            </div>
+            <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+        {%- endif -%}
+            <div class="sidebarBlock-content">
+                <div class="advertisement-image">
+                    {%- if link != blank -%}
+                        <a class="image" href="{{ link }}" aria-label="link">
+                    {%- else -%}
+                        <div class="image">
+                    {%- endif -%}
+                        {%- if image != blank -%}
+                            {%- assign height = image.width | divided_by: image.aspect_ratio | round -%}
+                            {{ image | image_url: width: 375 | image_tag: width: image.width, height: height, sizes: "100vw", widths: '165, 210, 288, 375' }}
+                        {%- else -%}
+                            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                        {%- endif -%}
+                    {%- if link != blank -%}
+                        </a>
+                    {%- else -%}
+                        </div>
+                    {%- endif -%}
+                </div>
+            </div>
+        {%- if show_collapse -%}
+            </div>
+        {%- endif -%}
+    </div>
+{%- endif -%}

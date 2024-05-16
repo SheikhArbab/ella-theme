@@ -1,0 +1,13 @@
+<lookbook-mobile-popup class="halo-lookbook-popup-mobile" data-lookbook-popup-mobile>
+    <div class="halo-popup-wrapper-mobile" data-lookbook-popup-mobile-wrapper>
+        <h2 class="mobile-popup-header">
+            <span>{{ 'lookbook.shop_look' | t }}</span>
+            <button type="button" data-close-lookbook-modal class="close close-modal" aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+        </h2>
+        <div class='items-scroll scroll-snap-mobile disable-srollbar'>
+            <div class="halo-popup-container-mobile" data-lookbook-mobile-images-container></div>
+        </div>
+    </div>    
+</lookbook-mobile-popup>
+
+{%- comment -%} // scroll-snap-mobile disable-srollbar {%- endcomment -%}

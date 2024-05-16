@@ -1,0 +1,24 @@
+{%- liquid 
+    assign text = block.settings.text
+    assign text_icon = block.settings.text_icon
+    assign text_description = block.settings.text_description
+    assign fontsize_text = block.settings.fontsize_text
+    assign color_title = block.settings.color_title
+-%}
+{%- if text != blank or text_icon != blank -%}
+    <p class="product__text title" {{ block.shopify_attributes }} 
+        style="--fontsize-text:{{ fontsize_text | append: 'px' }};
+        --color-title: {{ color_title }}"
+    >
+        {{- text -}}
+        {{- text_icon -}}
+    </p>
+{%- endif -%}
+{%- if text_description != blank -%}
+    <p class="product__text" {{ block.shopify_attributes }} 
+        style="--fontsize-text:{{ fontsize_text | append: 'px' }};
+        --color-title: {{ color_title }}"
+    >
+        {{- text_description -}}
+    </p>
+{%- endif -%}

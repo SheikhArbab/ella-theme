@@ -1,0 +1,49 @@
+{%- for block in section.blocks -%}
+    {%- if block.type == 'category' -%}
+        {% render 'halo-side-all-categories',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- elsif block.type == 'recent_post' -%}
+        {% render 'halo-side-recent-post',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- elsif block.type == 'recent_tag' -%}
+        {% render 'halo-side-recent-tag',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- elsif block.type == 'product_block' -%}
+        {% assign position = block.settings.position %}
+        {% if position != 'content' %}
+            {% render 'halo-side-product-block',
+                block: block,
+                show_collapse: show_collapse,
+                sidebar_collapse: sidebar_collapse,
+                position: position
+            %}
+        {% endif %}
+    {%- elsif block.type == 'image' -%}
+        {% render 'halo-side-image',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- elsif block.type == 'text' -%}
+        {% render 'halo-side-custom-text',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- elsif block.type == 'policies' -%}
+        {% render 'halo-side-policies',
+            block: block,
+            show_collapse: show_collapse,
+            sidebar_collapse: sidebar_collapse
+        %}
+    {%- endif -%}
+{%- endfor -%}

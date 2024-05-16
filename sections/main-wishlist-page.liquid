@@ -1,0 +1,720 @@
+<link rel="stylesheet" href="{{ 'component-wishlist.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-pagination.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-wishlist.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-pagination.css' | asset_url | stylesheet_tag }}</noscript>
+
+{{ 'component-toolbar.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-listing.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+    assign default_layout_desktop = section.settings.default_layout_desktop
+-%}
+
+<div data-section-id="{{ section.id }}" data-section-type="wishlist" id="WishlistSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="wishlist-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if show_breadcrumb -%}
+            {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+        {%- endif -%}
+        {%- if show_page_title -%}
+            <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                {{ page.title | escape }}
+            </h1>
+        {%- endif -%}
+        <div class="halo-page-content halo-wishlist-content">
+            <div class="wishlist-table-wrapper{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                <div class="product-listing" data-wishlist-container> 
+                    <wishlist-view class="wishlist-items-container" data-default-desktop-col="{{ default_layout_desktop }}">
+                        <div class="toolbar">
+                            <label class="toolbar-label">
+                                {{ 'sections.collection_template.view_as' | t }}
+                            </label>
+                            <div class="toolbar-item toolbar-viewAs clearfix" data-view-as>
+                                <span class="toolbar-icon icon-mode icon-mode-list active" data-col="1" role="button" aria-label="List" tabindex="0"></span>
+                                <span class="toolbar-icon icon-mode icon-mode-grid grid-2" data-col="2" role="button" aria-label="Grid 2" tabindex="0"></span>
+                                <span class="toolbar-icon icon-mode icon-mode-grid grid-3" data-col="3" role="button" aria-label="Grid 3" tabindex="0"></span>
+                                <span class="toolbar-icon icon-mode icon-mode-grid grid-4" data-col="4" role="button" aria-label="Grid 4" tabindex="0"></span>
+                                <span class="toolbar-icon icon-mode icon-mode-grid grid-5" data-col="5" role="button" aria-label="Grid 5" tabindex="0"></span>
+                            </div>  
+                        </div>  
+                        <div class="wishlist-items-display" data-wishlist-items-display></div>
+                        <div class="wishlist-items-display grid show productList" data-wishlist-items-grid-display></div>
+                    </wishlist-view>   
+                </div>  
+            </div>  
+            <div class="wishlist-footer pagination-right{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-wishlist-footer>
+                <a class="wishlist-share link link-underline" href="mailto:?subject= {{ page.title | strip_html }}&amp;body=" data-wishlist-share>
+                    <div class="mail-icon-container">
+                        {% render 'icon-mail' %}
+                    </div>
+                    <span class="text">
+                        {{ 'wishlist.general.share' | t }}            
+                    </span>
+                </a>
+                <ul class="pagination__list list-unstyled" role="list"  id="wishlist-paginate"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="product-wishlist-template{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="wishlist-row" data-wishlist-added="" data-product-id='' data-wishlist-row>
+        <div class="wishlist-rowItem wishlist-image text-left">
+            <div class="item">
+                <a class="item-image" href="" data-wishlist-image-link>
+                    <img srcset="" alt="" data-wishlist-image/>
+                </a>
+            </div>
+        </div>
+        <div class="wishlist-rowItem wishlist-meta text-left">
+            <div class="item">
+                <div class="item-info">
+                    <a class="item-title link link-underline" href="" data-wishlist-title-link>
+                        <span class="text" data-wishlist-title></span>
+                    </a>
+                </div>
+                <a class="item-vendor" href="" data-wishlist-vendor></a>
+                <div class="item-description" data-wishlist-description></div>
+            </div>
+        </div>
+        <div class="wishlist-rowItem wishlist-price text-left">
+            <div class="item-price">
+                <span class="money" data-wishlist-price></span>
+            </div>
+        </div>
+        <div class="wishlist-rowItem wishlist-add text-center">
+            <form 
+                action="/cart/add" 
+                method="post" 
+                class="variants" 
+                id="" 
+                data-id="" 
+                enctype="multipart/form-data"
+                data-wishlist-add-form
+            >   
+            </form>
+        </div>
+        <div class="wishlist-rowItem wishlist-remove text-center">
+            <a class="item-remove wishlist-added" href="#" data-wishlist-handle="" data-wishlist="" data-product-id="" data-wishlist-remove-item>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path   
+                        d="M 38.982422 6.9707031 A 2.0002 2.0002 0 0 0 37.585938 7.5859375 L 24 21.171875 L 10.414062 7.5859375 A 2.0002 2.0002 0 0 0 8.9785156 6.9804688 A 2.0002 2.0002 0 0 0 7.5859375 10.414062 L 21.171875 24 L 7.5859375 37.585938 A 2.0002 2.0002 0 1 0 10.414062 40.414062 L 24 26.828125 L 37.585938 40.414062 A 2.0002 2.0002 0 1 0 40.414062 37.585938 L 26.828125 24 L 40.414062 10.414062 A 2.0002 2.0002 0 0 0 38.982422 6.9707031 z"
+                    ></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+</template>
+
+<script>
+    class WishlistView extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            this.gridViewContainer = this.querySelector('[data-wishlist-items-grid-display]');
+            this.listPaginationButtons = document.getElementById('wishlist-paginate');
+            this.viewCols = [...this.querySelectorAll('[data-col]')];
+
+            this.wlpaggingContainer = document.getElementById('wishlist-paginate');
+            this.wishlistContainer = this.closest('[data-wishlist-container]');
+            this.wishlistFooter = document.querySelector('[data-wishlist-footer]');
+
+            this.viewCols.forEach(viewCol => {
+                viewCol.addEventListener('click', this.onViewColClick.bind(this));
+            })
+
+            window.addEventListener('resize', this.onResize.bind(this));
+
+            this.initWishlistPage();
+        }
+
+        getMaxColOnSize() {
+            const availableViewCols = this.viewCols.filter(view => {
+                return getComputedStyle(view, null).getPropertyValue('display') === 'inline-block';
+            }).map(view => Number(view.dataset.col))
+
+            return availableViewCols[availableViewCols.length - 1]
+        }
+
+        onResize() {
+            const selectedCol = Number(this.querySelector('[data-col].active').dataset.col);
+            const maxColNum = this.getMaxColOnSize();
+
+            if (selectedCol > maxColNum) {
+                this.viewCols.find(viewCol => Number(viewCol.dataset.col) === maxColNum).click();
+            } 
+        }
+
+        onViewColClick(e) {
+            const viewCol = e.target;
+            const col = Number(viewCol.dataset.col); 
+
+            this.switchViewListGrid(col === 1)
+            this.setPaginationAndHeadingView(col === 1);
+            this.paginationForList(col === 1)
+            this.setGridColumns(col)
+            this.setActiveViewCol(viewCol)
+        }       
+
+        switchViewListGrid(isList) {
+            if (isList) {
+                this.gridViewContainer.classList.add('productList');
+                return 
+            }
+
+            this.gridViewContainer.classList.remove('productList');
+        }
+
+        setGridColumns(col) {
+            this.gridViewContainer.style.setProperty('--grid-columns', col);
+        }
+
+        setActiveViewCol(colElement) {
+            this.viewCols.forEach(col => col.classList.remove('active'));
+            colElement.classList.add('active');
+        }
+
+        setPaginationAndHeadingView(isList) {
+            if (isList) {
+                this.listPaginationButtons.style.display = 'flex';
+                return;
+            }
+
+            this.listPaginationButtons.style.display = 'none';
+        }   
+
+        paginationForList(isList) {
+            const items = this.gridViewContainer.querySelectorAll('.product');
+            const currentPage = Number(this.listPaginationButtons.dataset.currentPage);
+
+            if (isList && currentPage) {
+                items.forEach((item, index) => {
+                    if (index >= (currentPage -1 ) * 3 && index < currentPage * 3) {
+                        $(item).show();
+                    } else {
+                        $(item).hide();
+                    }
+                })
+            } 
+            else {
+                items.forEach((item, index) => {
+                    $(item).show();
+                })  
+            }
+        }  
+
+        // For building wishlist page
+        async initWishlistPage (){
+            if (typeof(Storage) !== 'undefined') {
+                const wishlistList = localStorage.getItem('wishlistItem') ? JSON.parse(localStorage.getItem('wishlistItem')) : [];
+
+                if (wishlistList.length > 0) {
+                    try {
+                        await Promise.all(wishlistList.map((handle, index) => this.setProductForWishlistPage(handle, index, wishlistList.length)));
+                        this.updateShareWishlistViaMail();
+                        window.sharedFunctions?.calculateTranslateYHeight();
+                        this.calculateCard06Padding();
+
+                        this.gridViewContainer.classList.add('is-loaded');
+                        this.wishlistPagination();
+                        this.removeAndAddPaginationButtonEvents();
+                        this.setDefaultLayout();
+
+                        document.addEventListener('updatepagination', this.wishlistPagination.bind(this));
+                        document.addEventListener('updatewishlistmail', this.updateShareWishlistViaMail.bind(this));
+                        document.addEventListener('addwishlistitem', async (e) => {
+                            const handle = e.detail.handle;
+                            await this.setProductForWishlistPage(handle);
+                            this.wishlistPagination();
+                        });
+                    } catch(err) {
+                        console.error(err);
+                        showWarning(err.message);
+                    }
+                } else {    
+                    this.wishlistContainer.classList.add('is-empty').innerHTML = `\
+                        <div class="wishlist-content-empty text-center">\
+                            <span class="wishlist-content-text">${window.wishlist.empty}</span>\
+                            <div class="wishlist-content-actions">\
+                                <a class="button button-2 button-continue" href="${window.routes.collection_all}">\
+                                    ${window.wishlist.continue_shopping}\
+                                </a>\
+                            </div>\
+                        </div>\
+                    ` ;
+
+                    this.wishlistFooter.style.display = 'none';
+                }   
+            } else {
+                alert('Sorry! No web storage support..');
+            }
+        }
+
+        setDefaultLayout() {
+            const defaultDesktopCol = parseInt(this.dataset.defaultDesktopCol);
+            const maxCol = this.getMaxColOnSize();
+            const defaultCol = defaultDesktopCol <= maxCol ? defaultDesktopCol : maxCol;
+                
+            this.viewCols.find(viewCol => parseInt(viewCol.dataset.col) === defaultCol ).click();
+        }
+
+        async setProductForWishlistPage(handle, index, wishlistListLength) {
+            try {
+                const res = await fetch(`${window.routes.root}/products/${handle}?view=ajax_wishlist_card`)
+                const data = await res.text();
+
+                const productHTML = new DOMParser().parseFromString(data, 'text/html').getElementsByClassName('product')[0];
+
+                this.gridViewContainer.appendChild(productHTML);
+                productHTML.dataset.productHandle = handle;
+
+                const item = this.wishlistContainer.querySelector(`[data-wishlist][data-wishlist-handle="${handle}"]`);
+
+                if (item != null) {
+                    item.classList.add('wishlist-added');
+                    item.querySelector('.text').textContent = window.wishlist.added;
+                    item.classList.add('is-in-grid');
+                    productHTML.dataset.wishlistAdded = `wishlist-${item.dataset.productId}`;
+                    item.addEventListener('click', e => {
+                        e.target.closest('.product').remove();
+                    })
+                    
+                    if (index >= 3) {
+                        item.closest('.product').display = 'none';
+                    }
+                }
+
+                
+            } catch (err) {
+                console.error(err);
+                showWarning(err.message);
+            }
+        }
+
+        static getPaginationButton(totalPages) {
+            let paggingTpl;
+
+            if (window.pagination.style === 1) {
+                paggingTpl = '<li class="pagination-arrow prev disabled style-1"><a href="#" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"><svg class="icon thin-arrow" viewBox="0 0 50 50"><path d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z"></path></svg></span></a></li>';
+            } else if (window.pagination.style === 2) {
+                paggingTpl = '<li class="pagination-arrow prev disabled style-2"><a href="#" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z"></svg></span></a></li>';
+            } else {
+                paggingTpl = '<li class="pagination-arrow prev disabled style-3"><a href="#" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z"></svg><span class="arrow-text">'+ window.pagination.prev +'</span></a></li>';
+            }
+
+            for (let i = 0; i < totalPages; i++) {
+                const pageNum = i + 1;
+                if (i === 0) paggingTpl += '<li class="active pagination-num"><a class="pagination__item link" data-page="' + pageNum + '" href="'+ pageNum +'" title="'+ pageNum +'">' + pageNum + '</a></li>'
+                else paggingTpl += '<li class="pagination-num"><a class="pagination__item link" data-page="' + pageNum + '" href="'+ pageNum +'" title="'+ pageNum +'">' + pageNum + '</a></li>'
+            }
+
+            if (window.pagination.style === 1) {
+                paggingTpl += '<li class="pagination-arrow next style-1"><a href="#" class="pagination__item pagination__item--next pagination__item-arrow link"><svg class="icon thin-arrow" viewBox="0 0 50 50"><path d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z"></path></svg></span></a></li>';
+            } else if (window.pagination.style === 2) {
+                paggingTpl += '<li class="pagination-arrow next style-2"><a href="#" class="pagination__item pagination__item--next pagination__item-arrow link"><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z"></svg></span></a></li>';
+            } else {
+                paggingTpl += '<li class="pagination-arrow next style-3"><a href="#" class="pagination__item pagination__item--next pagination__item-arrow link"><span class="arrow-text">' + window.pagination.next +'</span><svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z"></svg></span></a></li>';
+            }
+
+            return paggingTpl;
+        }
+
+        wishlistPagination() {
+            const wishlistList = localStorage.getItem('wishlistItem') ? JSON.parse(localStorage.getItem('wishlistItem')) : [];
+            
+            this.wlpaggingContainer.setAttribute('data-current-page', 1);
+            while (this.wlpaggingContainer.firstChild) {
+                this.wlpaggingContainer.removeChild(this.wlpaggingContainer.firstChild);
+            }
+
+            if (!this.gridViewContainer.classList.contains('productList')) return;
+            this.gridViewContainer.classList.remove('is-loaded')
+
+            this.totalPages = Math.ceil(wishlistList.filter(item => item != null).length / 3);
+
+            if (this.totalPages <= 1) {
+                [...this.gridViewContainer.children].forEach(child => {
+                    child.style.display = 'block';
+                });
+                this.gridViewContainer.classList.add('is-loaded');
+                return;
+            }
+
+            const paggingTpl = WishlistView.getPaginationButton(this.totalPages);
+            this.wlpaggingContainer.insertAdjacentHTML('beforeend', paggingTpl);
+
+            this.paginateToPages();
+
+            this.gridViewContainer.classList.add('is-loaded');
+        }   
+
+        paginateToPages(nextPageNumber = null) {
+            const children = [...this.gridViewContainer.children];
+
+            if (nextPageNumber == null) {
+                children.forEach((element, index) => {
+                    if (index >= 3) {
+                        element.style.display = 'none';
+                    }
+                    else {
+                        element.style.display = 'block';
+                    }   
+                })
+                return;
+            } 
+
+            children.forEach((element, index) => {
+                if (index >= (nextPageNumber - 1) * 3 && index < nextPageNumber * 3) {
+                    element.style.display = 'block';
+                }
+                else {
+                    element.style.display = 'none';
+                }   
+            })
+
+            if (nextPageNumber === 1) {
+                this.wlpaggingContainer.querySelector('.prev').classList.add('disabled');
+                this.wlpaggingContainer.querySelector('.next').classList.remove('disabled');
+            }
+            else if (nextPageNumber === this.totalPages) {
+                this.wlpaggingContainer.querySelector('.next').classList.add('disabled');
+                this.wlpaggingContainer.querySelector('.prev').classList.remove('disabled');
+            }
+            else {
+                this.wlpaggingContainer.querySelector('.prev').classList.remove('disabled');
+                this.wlpaggingContainer.querySelector('.next').classList.remove('disabled');
+            }
+        }
+        
+        removeAndAddPaginationButtonEvents() {
+            $(this.wlpaggingContainer).off('click.wl-pagging').on('click.wl-pagging', 'li a', e => {
+                e.preventDefault();
+                const isPrev = e.currentTarget.parentElement.classList.contains('prev');
+                const isNext = e.currentTarget.parentElement.classList.contains('next');
+                let pageNumber = parseInt(e.currentTarget.dataset.page);
+
+                const currentButton = e.currentTarget.closest('#wishlist-paginate').querySelector('.active');
+                let curPage = parseInt(currentButton.querySelector('.link').dataset.page);
+
+                if (isPrev) {
+                    pageNumber = curPage - 1;
+                    if (pageNumber <= 0) pageNumber = 1;
+                }
+                
+                if (isNext) {
+                    pageNumber = curPage + 1;
+                    if (pageNumber > this.totalPages) pageNumber = this.totalPages;
+                }
+
+                this.wlpaggingContainer.dataset.currentPage = pageNumber;
+                this.paginateToPages(pageNumber);
+
+                currentButton.classList.remove('active');
+                this.wlpaggingContainer.querySelector(`[data-page="${pageNumber}"]`).parentElement.classList.add('active');
+            });
+        }
+
+        updateShareWishlistViaMail() {
+            const regex = /(<([^>]+)>)/ig;
+            const addedItems = document.querySelectorAll('[data-wishlist-added]');
+
+            const shareLinkElement = document.querySelector('[data-wishlist-share]');
+            let href = 'mailto:?subject= Wish List&body=';
+
+            addedItems.forEach((item, index) => {
+                const price = item.querySelector('.price__sale .price__last .price-item')?.textContent || item.querySelector('.price__regular .price__last .price-item')?.textContent;
+                const title = item.querySelector('[data-product-title]')?.dataset.productTitle;
+                const url = item.querySelector('[data-product-url]')?.dataset.productUrl;
+
+                href += encodeURIComponent(title + '\nPrice: ' + price?.replace(regex, '') + '\nLink: ' + window.location.protocol + '//' + window.location.hostname + url +'\n\n');
+            })
+
+            shareLinkElement.href = href;
+        }
+
+        calculateCard06Padding() {
+            if (!document.body.classList.contains('product-card-layout-06')) return;
+
+            const cardAction = document.querySelector('.card .card-action.card-grid__hidden');
+
+            if (cardAction != undefined) {
+                cardAction.classList.remove('card-grid__hidden');
+                const padding = cardAction.scrollHeight;
+                document.querySelector('[data-wishlist-items-grid-display]').style.setProperty('--card-06-padding', padding + 'px');
+                cardAction.classList.add('card-grid__hidden');
+            }
+        }
+    }
+    
+    customElements.define('wishlist-view', WishlistView);
+</script>
+
+<style type="text/css" media="screen">
+    #WishlistSection-{{ section.id }}{
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+
+    #WishlistSection-{{ section.id }} .wishlist-footer .wishlist-share {
+        display: flex; 
+        align-items: center;
+        gap: 15px;
+    }
+
+    @media (max-width: 1024px) {
+        #WishlistSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+
+        #WishlistSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+
+    @media (max-width: 550px) {
+        #WishlistSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #WishlistSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+        
+        #WishlistSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+{% schema %}
+    {
+        "name": "t:sections.main_wishlist.name",
+        "settings":
+        [
+            {
+                "type": "header",
+                "content": "t:sections.main_wishlist.settings.header__1"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": false
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.breadcrumb.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.breadcrumb.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.breadcrumb.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "fullwidth",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "select",
+                "id": "default_layout_desktop",
+                "label": "t:sections.main-collection-product-grid.settings.product.label__2",
+                "default": "3",
+                "options": [
+                    {
+                        "value": "1",
+                        "label": "t:sections.main-collection-product-grid.settings.product.options__1"
+                    },
+                    {
+                        "value": "2",
+                        "label": "t:sections.main-collection-product-grid.settings.product.options__2"
+                    },
+                    {
+                        "value": "3",
+                        "label": "t:sections.main-collection-product-grid.settings.product.options__3"
+                    },
+                    {
+                        "value": "4",
+                        "label": "t:sections.main-collection-product-grid.settings.product.options__4"
+                    },
+                    {
+                        "value": "5",
+                        "label": "t:sections.main-collection-product-grid.settings.product.options__5"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,29 @@
+{%- comment -%}
+  Format date Publish Blog
+  {{- article.published_at | date: "%a, %b %d, %y" -}}
+{%- endcomment -%}
+<div class="article-card">
+    <div class="article-card__image-wrapper">
+    {%- if article.image -%}
+        {%- assign image_alt = article.title | escape -%}
+        {%- assign preview_img = article.image -%}
+        <a href="{{article.url}}" class="image-zoom adaptive_height"  style="padding-top: {{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%">
+            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="
+            {%- if article.image.src.width >= 165 -%}{{ article.image.src | img_url: '165x' }} 165w,{%- endif -%}
+            {%- if article.image.src.width >= 360 -%}{{ article.image.src | img_url: '360x' }} 360w,{%- endif -%}
+            {%- if article.image.src.width >= 560 -%}{{ article.image.src | img_url: '560x' }} 560w,{%- endif -%}
+            {%- if article.image.src.width >= 570 -%}{{ article.image.src | img_url: '570x' }} 570w,{%- endif -%}
+            {%- if article.image.src.width >= 720 -%}{{ article.image.src | img_url: '720x' }} 720w,{%- endif -%}
+            {%- if article.image.src.width >= 940 -%}{{ article.image.src | img_url: '940x' }} 940w,{%- endif -%}
+            {%- if article.image.src.width >= 1066 -%}{{ article.image.src | img_url: '1066x' }} 1066w{%- endif -%}" sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ image_alt }}"{% if settings.enable_lazyload %} class="lazyload"{% endif %} />{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}</a>
+    {%- else -%}
+        <a href="{{article.url}}" class="image-zoom"><div class="not_img" style="--height_not_img: 370px">570 x 370px</div></a>
+    {%- endif -%}
+    </div>
+    <div class="article-card__info text-left">
+        <div class="article-card__author"><span class="article__date"><span class="text_on">{{ text_on }}</span>{{- article.published_at | date: "%b %d, %Y" -}}</span></div>
+        <h3 class="article-card__title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+        <div class="article-card__des">{{ article.excerpt_or_content | strip_html | truncatewords: limit_content_des }}</div>  
+        <div class="article-card__footer"><a href="{{article.url}}" class="article-card__link button">{{ 'blogs.article.read_more' | t }}</a></div>
+    </div>
+</div>

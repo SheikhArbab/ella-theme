@@ -1,0 +1,64 @@
+body.lang-currency-sidebar-show{
+	overflow: hidden;
+	/*height: 100%;*/
+}
+
+body.lang-currency-sidebar-show .halo-language-currency-sidebar{
+    transform: translate3d(0,0,0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.halo-language-currency-sidebar .halo-sidebar-wrapper{
+    padding-top: 10px;
+}
+
+.halo-language-currency-sidebar .dropdown-language, .halo-language-currency-sidebar .dropdown-currency{
+    display: block;
+    position: initial;
+    opacity: 1;
+    overflow: visible;
+    z-index: 1;
+    box-shadow: none;
+    pointer-events: auto;
+}
+
+.halo-language-currency-sidebar #HeaderLanguageList,
+.halo-language-currency-sidebar .currency-menu{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px 0px;
+}
+
+.halo-language-currency-sidebar .localization-form .disclosure__link{
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 15px 7px 0px;
+}
+
+.halo-language-currency-sidebar .halo-top-currency .currency-dropdown .dropdown-label, .halo-language-currency-sidebar .halo-top-language .disclosure__button{
+    display: none;
+}
+
+.halo-language-currency-sidebar .disclosure__item,
+.halo-language-currency-sidebar .halo-currency .currency-menu .dropdown-item{
+    width: 50%;
+    padding: 10px 10px 10px 20px;
+}
+
+.halo-language-currency-sidebar .title {
+    background: #f8f8f8;
+    padding: 10px 20px;
+    margin: 0;
+    font-size: var(--font-body-size);
+    text-transform: uppercase;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-link);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+}
+
+@media (min-width: 1025px){
+    
+}

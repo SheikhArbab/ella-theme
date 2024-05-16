@@ -1,0 +1,17 @@
+{%- comment -%} block__text_first: block__text_first {%- endcomment -%}
+<div class="footer-block__item footer-block__column footer-block__{{ block.type }} text-{{ text_align }} {{ block__text_first }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="{% if settings.banner_animation == 'effect_fade_up' %}--animation-order: {{ forloop.index }};{% endif %}--block-custom-width: {{block.settings.custom_width}}%;--block-margin-bottom: {{block.settings.mg_bottom | append: 'px'}}">
+  <div class="footer-block__mobile">
+    {%- if block.settings.heading != blank -%}
+      <h2 class="footer-block__heading" data-toggle-column-footer>{{- block.settings.heading | escape -}}</h2>
+    {%- endif -%}
+    {%- if block.settings.menu != blank -%}
+      <div class="footer-block__list">
+        <ul class="list-unstyled">
+          {%- for link in block.settings.menu.links -%}
+            <li><a{% if link.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ link.url }}"{% endif %} class="link link-underline list-menu__item--link"><span class="text">{{ link.title }}</span></a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

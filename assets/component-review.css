@@ -1,0 +1,45 @@
+.halo-productReview .spr-badge-starrating{
+    display: block;
+    margin-right: 0;
+}
+
+.halo-productReview .spr-badge-starrating .spr-icon{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 0;
+    letter-spacing: 0;
+    line-height: 1;
+    width: auto;
+    height: auto;
+    position: relative;
+    top: -3px;
+}
+
+.halo-productReview .spr-badge-starrating .spr-icon+.spr-icon{
+    margin-left: 0px;
+}
+
+.halo-productReview .spr-badge-starrating .spr-icon:before{
+    font-size: 18px;
+}
+
+.halo-productReview .spr-badge-starrating .spr-icon.spr-icon-star:before{
+    content: "\2605";
+    color: var(--product-review-full-color);
+}
+
+.halo-productReview .spr-badge-starrating .spr-icon.spr-icon-star-empty:before, .halo-productReview .spr-badge-starrating .spr-icon.spr-icon-star-half-alt:before{
+    content: "\2605";
+    color: var(--product-review-empty-color);
+}
+
+.halo-productReview .spr-badge-caption{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--body-line-height);
+    color: var(--color-text2);
+    margin: 0 0 0 10px;
+    text-transform: capitalize;
+}

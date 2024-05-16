@@ -1,0 +1,123 @@
+<link rel="stylesheet" href="{{ 'component-recently-viewed.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-recently-viewed.css' | asset_url | stylesheet_tag }}</noscript>
+{%- liquid
+    assign limit = settings.recently_viewed_limit
+    assign expire_day = settings.recently_viewed_expire
+    assign share = settings.show_recently_viewed_share
+    if share
+        assign show_social_media = false
+
+        if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.show_newsletter_popup
+            assign show_social_media = true
+        endif
+    endif
+    assign btn_top = settings.show_recently_viewed_top
+-%}
+<recently-viewed-popup class="halo-popup halo-recently-viewed-popup is-show" id="halo-recently-viewed-popup" data-product-to-show="{{ limit }}" data-expire-day="{{ expire_day }}">
+    {%- if settings.show_recently_viewed_popup -%}
+        <div class="halo-recently-viewed recently-viewed-list recently-viewed-tab" id="halo-recently-viewed-list">
+            <div class="recently-viewed-content">
+                <div class="recently-header">
+                    <h3 class="recently-viewed-title text-center">{{ 'recently_viewed.general.product_title' | t }}</h3>
+                    <button type="button" class="button__close" aria-label="{{ 'general.common.close' | t }}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M 38.982422 6.9707031 A 2.0002 2.0002 0 0 0 37.585938 7.5859375 L 24 21.171875 L 10.414062 7.5859375 A 2.0002 2.0002 0 0 0 8.9785156 6.9804688 A 2.0002 2.0002 0 0 0 7.5859375 10.414062 L 21.171875 24 L 7.5859375 37.585938 A 2.0002 2.0002 0 1 0 10.414062 40.414062 L 24 26.828125 L 37.585938 40.414062 A 2.0002 2.0002 0 1 0 40.414062 37.585938 L 26.828125 24 L 40.414062 10.414062 A 2.0002 2.0002 0 0 0 38.982422 6.9707031 z"></path></svg></button>
+                </div>
+                <div class="products-grid recently-viewed-product" id="recently-viewed-products-list">
+                    <div class="no-products" style="display:none;">{% render 'icon-no-product' %}<span class="text text-center">{{ 'recently_viewed.general.no_product' | t }}</span></div>
+                </div>
+            </div>
+        </div>
+    {%- endif -%}
+    {%- if show_social_media -%}
+        <div class="halo-recently-viewed recently-viewed-share recently-viewed-tab" id="halo-recently-viewed-share">
+            <div class="recently-viewed-content">
+                <div class="recently-header">
+                    <h3 class="recently-viewed-title text-center">{{ 'recently_viewed.general.share_title' | t }}</h3>
+                    <button type="button" class="button__close" aria-label="{{ 'general.common.close' | t }}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M 38.982422 6.9707031 A 2.0002 2.0002 0 0 0 37.585938 7.5859375 L 24 21.171875 L 10.414062 7.5859375 A 2.0002 2.0002 0 0 0 8.9785156 6.9804688 A 2.0002 2.0002 0 0 0 7.5859375 10.414062 L 21.171875 24 L 7.5859375 37.585938 A 2.0002 2.0002 0 1 0 10.414062 40.414062 L 24 26.828125 L 37.585938 40.414062 A 2.0002 2.0002 0 1 0 40.414062 37.585938 L 26.828125 24 L 40.414062 10.414062 A 2.0002 2.0002 0 0 0 38.982422 6.9707031 z"></path></svg></button>
+                </div>
+                <div class="media-grid recently-viewed-media text-center" id="recently-viewed-products-share">
+                    <ul class="list-unstyled list-social-2 clearfix">
+                        {%- if settings.social_facebook_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_facebook_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_facebook_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-facebook' -%} <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline" href="{{ settings.social_facebook_link }}" target="_blank"><span class="text">{{ 'general.social.links.facebook' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_instagram_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_instagram_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_instagram_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-instagram' -%} <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_instagram_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_instagram_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.instagram' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_pinterest_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_pinterest_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_pinterest_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-pinterest' -%}<span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_pinterest_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_pinterest_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.pinterest' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_tiktok_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_tiktok_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tiktok_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-tiktok' -%}<span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_tiktok_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tiktok_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.tiktok' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_tumblr_link != blank -%}
+                          <li class="list-social__item">
+                                <a {% if settings.social_tumblr_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tumblr_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-tumblr' -%}<span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_tumblr_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tumblr_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.tumblr' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_snapchat_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_snapchat_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_snapchat_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-snapchat' -%}<span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_snapchat_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_snapchat_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.snapchat' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_youtube_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_youtube_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_youtube_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-youtube' -%}<span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_youtube_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_youtube_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.youtube' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_twitter_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_twitter_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_twitter_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-twitter' -%}<span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_twitter_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_twitter_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.twitter' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_vimeo_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_vimeo_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_vimeo_link }}"{% endif %} class="link link--text list-social__link">{%- render 'icon-vimeo' -%}<span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span></a>
+                                <div class="info list-social__info text-left"><a class="link link-underline"{% if settings.social_vimeo_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_vimeo_link }}"{% endif %} target="_blank"><span class="text">{{ 'general.social.links.vimeo' | t }}</span></a></div>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.show_newsletter_popup -%}
+                            <li class="list-social__item mail-newsletter">
+                                <button type="button" data-open-newsletter-popup class="link link--text list-social__link" aria-label="{{ 'recently_viewed.general.newsletter' | t }}">{% render 'icon-mail' %}<span class="visually-hidden">{{ 'recently_viewed.general.newsletter' | t }}</span></button>
+                                <div class="info list-social__info text-left">
+                                    <button type="button" class="link link-underline" data-open-newsletter-popup aria-label="{{ 'recently_viewed.general.newsletter' | t }}"><span class="text">{{ 'recently_viewed.general.newsletter' | t }}</span></button>
+                                </div>
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {%- endif -%}
+    <div class="halo-recently-viewed recently-viewed-wrap" id="halo-recently-viewed-wrap">
+        {%- if settings.show_recently_viewed_popup -%}
+            <div class="recently-viewed-icon open-popup" data-target="halo-recently-viewed-list" role="recently" aria-label="recently-icon">{% render 'icon-recently-viewed' %}</div>
+        {%- endif -%}
+        {%- if show_social_media -%}
+            <div class="recently-viewed-icon open-popup" data-target="halo-recently-viewed-share" role="recently" aria-label="recently-icon">{% render 'icon-social-media' %}</div>
+        {%- endif -%}
+        {%- if settings.show_ask_an_expert and settings.ask_an_expert_show == 'all_page' -%}
+            <div class="recently-viewed-icon open-popup recently-viewed-icon-ask-an-mb" data-open-ask-an-expert role="recently" aria-label="recently-icon">{% render 'icon-ask-an-expert' %}</div>
+        {%- endif -%}
+        {%- if btn_top -%}
+            <back-to-top-button class="recently-viewed-icon" data-scroll-to-top>{% render 'icon-back-to-top' %}</back-to-top-button>
+        {%- endif -%}
+    </div>
+</recently-viewed-popup>
+<div class="recently-viewed-popup-mb content-align-{{ settings.recently_viewed_align_mb }}"></div>
+{{ 'recently-viewed-product.js' | asset_url | script_tag }}
+<script src="{{ 'halo-recently-viewed.js' | asset_url }}" defer="defer"></script>

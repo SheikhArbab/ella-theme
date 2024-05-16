@@ -1,0 +1,39 @@
+{%- if settings.show_someone_purchase -%}
+    <link rel="stylesheet" href="{{ 'component-someone-purchase.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript>{{ 'component-someone-purchase.css' | asset_url | stylesheet_tag }}</noscript>
+    {%- assign time = time | default: settings.someone_purchase_time | times: 1000 -%}
+    {%- assign products = settings.someone_purchase_products -%}
+    {%- assign locals = settings.someone_purchase_location | split: '|' -%}
+    {%- assign time_ago = settings.someone_purchase_time_item | split: '|' -%}
+    <style>
+    {%- if settings.type_body_font_size <= 14  -%}
+        .product-suggest .product-info .time{font-size: var(--font-body-size);line-height: calc(var(--font-body-size) + 8px)}
+    {%- else -%}
+        .product-suggest .product-info .time{font-size: calc(var(--font-body-size) - 2px);line-height: calc(var(--font-body-size) + 7px)}
+    {%- endif -%}  
+    </style>
+    <notification-popup class="halo-popup halo-notification-popup halo-popup-{{ settings.someone_purchase_position }}{% if settings.show_someone_purchase_mobile %} show_someone_purchase_mobile{% endif %}" data-notification-popup data-notification-time="{{ time }}" id="halo-notification-popup">
+        <button type="button" class="halo-popup-close customPopup-close clearfix" data-close-notification-popup aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+        <div class="halo-popup-content">
+            <div class="product-suggest clearfix">
+                <a class="product-image" href="#"></a>
+                <div class="product-info">
+                    <div class="text">{{ 'someone_purcharse.general.text_1' | t }}<a href="#" class="product-name link-underline"></a></div>
+                    <span class="time" data-time-text>{{ 'someone_purcharse.general.text_2' | t }}</span>
+                </div>
+            </div>
+            <div class="product-data hide">
+                {%- for product in products -%}
+                    <div class="data-product" data-image="{{ product.featured_image.src | img_url: '100x' }}" data-url="{{ product.url }}" data-title="{{ product.title }}" data-alt="{{ product.title }}"></div>
+                {%- endfor -%}
+                {%- for local in locals -%}
+                    <span class="data-local" data-local="{{ local }}"></span>
+                {%- endfor -%}
+                {%- for time in time_ago -%}
+                    <span class="data-time" data-time="{{ time }}"></span>
+                {%- endfor -%}
+            </div>
+        </div>
+    </notification-popup>
+    <script src="{{ 'halo-someone-purchase.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

@@ -1,0 +1,138 @@
+{%- liquid
+    assign show_dynamic_checkout = block.settings.show_dynamic_checkout
+    assign atc_animation = block.settings.atc_animation
+    assign atc_color = block.settings.atc_color
+    assign atc_border_color = block.settings.atc_border_color
+    assign atc_bg_color = block.settings.atc_bg_color
+    assign atc_bg_color_gradient = block.settings.atc_bg_color_gradient
+    assign atc_color_hover = block.settings.atc_color_hover
+    assign atc_border_color_hover = block.settings.atc_border_color_hover
+    assign atc_bg_color_hover = block.settings.atc_bg_color_hover
+    assign atc_bg_color_gradient_hover = block.settings.atc_bg_color_gradient_hover
+    assign bin_color = block.settings.bin_color
+    assign bin_border_color = block.settings.bin_border_color
+    assign bin_bg_color = block.settings.bin_bg_color
+    assign bin_bg_color_gradient = block.settings.bin_bg_color_gradient
+    assign bin_color_hover = block.settings.bin_color_hover
+    assign bin_border_color_hover = block.settings.bin_border_color_hover
+    assign bin_bg_color_hover = block.settings.bin_bg_color_hover
+    assign bin_bg_color_hover_gradient = block.settings.bin_bg_color_hover_gradient
+    assign gift_card_recipient_feature_active = false
+      if block.settings.show_gift_card_recipient and product.gift_card?
+        assign gift_card_recipient_feature_active = true
+      endif
+-%}
+<div class="productView-buttons">
+    {%- if gift_card_recipient_feature_active -%}
+      {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+    {%- endif -%}
+
+    {%- assign product_form_installment_id = 'product-form-installment-' | append: product.id -%}
+    {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {{ form | payment_terms }}
+    {%- endform -%}
+    {%- assign product_form_id = 'product-form-' | append: product.id -%}
+    <product-form class="productView-form product-form">
+        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <div class="productView-group">
+                {%- if check_show_qty == 'show_qty_2' -%}
+                    {%- if show_subtotal_text and subtotal_style == '1' -%}
+                        <div class="productView-subtotal">
+                            <span class="text">{{ 'sections.cart.subtotal' | t | append: ': ' }}</span>
+                            <span class="money-subtotal">{{ subtotal }}</span>
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                <div class="pvGroup-row">
+                    {%- if check_show_qty == 'show_qty_1' or check_show_qty == 'show_qty_2' -%}
+                        {%- liquid
+                            if check_show_qty == 'show_qty_1'
+                                assign check_hidden = true
+                            endif
+                        -%}
+                        {% render 'product-quantity', current_variant: current_variant, check_hidden: check_hidden, qty_style: qty_style, quantity_stt: 1 %}
+                    {%- endif -%}                    
+                    <div class="productView-groupTop">
+                        <div class="productView-action{% unless settings.show_wishlist %} productView-action-2{% endunless %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--atc-color: {{ atc_color }};--atc-bg-color: {% if atc_bg_color_gradient != blank %}{{ atc_bg_color_gradient }}{% else %}{{ atc_bg_color }}{% endif %};--atc-border-color: {{ atc_border_color }};--atc-color-hover: {{ atc_color_hover }};--atc-bg-color-hover: {% if atc_bg_color_gradient_hover != blank %}{{ atc_bg_color_gradient_hover }}{% else %}{{ atc_bg_color_hover }}{% endif %};--atc-border-color-hover: {{ atc_border_color_hover }}">
+                            <input type="hidden" name="id" value="{{ current_variant.id }}">
+                            <div class="product-form__buttons">
+                                {%- if current_variant.available -%}
+                                    {%- if current_variant.inventory_management -%}
+                                        {%- assign first_inventory = current_variant.inventory_quantity -%}
+                                        {%- liquid
+                                           if current_variant.available and first_inventory == 0
+                                             assign allowOutStockSale = true 
+                                           else
+                                             assign allowOutStockSale = false
+                                           endif
+                                        -%}
+                                        <button type="submit" name="add" data-btn-addToCart data-inventory-quantity="{{ current_variant.inventory_quantity }}" data-available="{{ allowOutStockSale }}" class="product-form__submit button button--primary an-{{ atc_animation }}{% if first_inventory == 0 %} button-text-change{% else %}{% if show_subtotal_text %} button-text-change{% endif %}{% endif %}{% if settings.animations_hover_elements == '3d-lift' or settings.animations_hover_elements == 'vertical-lift' %} button-not-animation{% endif %}" id="product-add-to-cart">
+                                            {%- if first_inventory > 0 -%}
+                                                {%- if show_subtotal_text and subtotal_style == '2' -%}
+                                                    {%- assign subtotal = subtotal | strip_html -%}
+
+                                                    {{ 'products.product.sub_total' | t : value : subtotal }}
+                                                {%- else -%}
+                                                    {{ 'products.product.add_to_cart' | t}}
+                                                {%- endif -%}
+                                            {%- else -%}
+                                                {{ 'products.product.pre_order' | t }}
+                                            {%- endif -%}
+                                        </button>
+                                    {%- else -%}
+                                        <button type="submit" name="add" data-btn-addToCart class="product-form__submit button button--secondary an-{{ atc_animation }}{% if show_subtotal_text %} button-text-change{% endif %}{% if settings.animations_hover_elements == '3d-lift' or settings.animations_hover_elements == 'vertical-lift' %} button-not-animation{% endif %}" id="product-add-to-cart">
+                                            {%- if show_subtotal_text and subtotal_style == '2' -%}
+                                                {%- assign subtotal = subtotal | strip_html -%}
+                                                {{ 'products.product.sub_total' | t : value : subtotal }}
+                                            {%- else -%}
+                                                {{ 'products.product.add_to_cart' | t}}
+                                            {%- endif -%}
+                                        </button>
+                                    {%- endif -%}
+                                {%- else -%}
+                                    <button type="submit" name="add" data-btn-addToCart class="product-form__submit button{% if settings.animations_hover_elements == '3d-lift' or settings.animations_hover_elements == 'vertical-lift' %} button-not-animation{% endif %}" id="product-add-to-cart" disabled>{{ 'products.product.sold_out' | t }}</button>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                        {%- if settings.show_wishlist -%}
+                            <div class="productView-wishlist clearfix{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                <a data-wishlist href="#" data-wishlist-handle="{{ product.handle }}" data-product-id="{{ product.id }}"><span class="visually-hidden">{{ 'wishlist.general.add' | t }}</span>{% render 'icon-heart' %}</a>
+                            </div>
+                        {%- endif -%}
+                        {%- if check_show_share == '2' -%}
+                            {% render 'halo-share', product: product, share_layout: check_show_share %}
+                        {%- endif -%}
+                    </div>
+                </div>
+                {%- if show_dynamic_checkout -%}
+                    <div class="productView-groupBottom{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {%- if settings.show_global_checkbox -%}
+                            <div class="productView-groupItem">
+                                {%- if settings.show_global_checkbox -%}
+                                    <div class="productView-checkbox global-checkbox">
+                                        <input class="global-checkbox--input" type="checkbox" name="conditions" id="product_conditions_{{ product.id }}" data-target="#product-checkout-{{ product.id }}">
+                                        <label class="global-checkbox--label form-label--checkbox" for="product_conditions_{{ product.id }}">{{ settings.global_checkbox_text }}</label>
+                                        {%- if settings.global_checkbox_link_text != blank -%}
+                                            <button type="button" data-term-condition>{{ settings.global_checkbox_link_text | escape }}</button>
+                                        {%- endif -%}
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                        {%- endif -%}
+                        <div class="productView-groupItem">
+                            <div class="productView-payment" {% if settings.show_global_checkbox %} disabled="disabled"{% endif %} id="product-checkout-{{ product.id }}" style="--bin-color: {{ bin_color }};--bin-bg-color: {% if bin_bg_color_gradient != blank %}{{ bin_bg_color_gradient }}{% else %}{{ bin_bg_color }}{% endif %};--bin-border-color: {{ bin_border_color }};--bin-color-hover: {{ bin_color_hover }};--bin-bg-color-hover: {% if bin_bg_color_hover_gradient != blank %}{{ bin_bg_color_hover_gradient }}{% else %}{{ bin_bg_color_hover }}{% endif %};--bin-border-color-hover: {{ bin_border_color_hover }}"> 
+                                {{ form | payment_button }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endform -%}
+    </product-form>
+    {%- if settings.show_notify_form -%}
+        <div class="productView-notifyMe halo-notifyMe{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" {% if product.variants.size > 1 %}style="display: none;"{% else %}{% if product.available %}style="display: none;"{% endif %}{% endif %}>
+            {% render 'halo-notify-sold-out', id: product.id, current_variant: current_variant %}
+        </div>
+    {%- endif -%}
+</div>

@@ -1,0 +1,195 @@
+.haloCalculatorShipping{
+    position: relative;
+    margin: 0 0 22px 0;
+    min-height: var(--free-shipping-min-height);
+}
+
+.cart-container .haloCalculatorShipping {
+    margin-bottom: 20px;
+}
+
+.previewModal .haloCalculatorShipping{
+    margin-bottom: 0;
+}
+
+.cart-content-item .haloCalculatorShipping{
+    margin-bottom: 18px;
+}
+
+.haloCalculatorShipping .progress{
+    position: relative;
+    margin: 0 0 8px 0;
+    font-size: 0;
+    letter-spacing: 0;
+}
+
+.skin-8 .haloCalculatorShipping .progress{
+    margin: 0 0 5px 0;
+}
+
+.quickCartWrap .haloCalculatorShipping .progress{
+    margin: 0 0 6px 0;
+}
+
+.haloCalculatorShipping .progress .progress_shipping{
+    height: var(--free-shipping-height);
+    background-color: var(--free-shipping-bg);
+    border: 0;
+    border-color: var(--free-shipping-bg);
+}
+
+/* .haloCalculatorShipping .progress .progress-meter{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: calc(var(--free-shipping-height) + 2px);
+    color: var(--color-white);
+} */
+
+.haloCalculatorShipping .progress.progress-free .progress_shipping{
+    border-color: var(--free-shipping-bg-4);
+}
+
+.haloCalculatorShipping .progress.progress-30 .progress_shipping{
+    border-color: var(--free-shipping-bg-1);
+}
+
+.haloCalculatorShipping .progress.progress-60 .progress_shipping{
+    border-color: var(--free-shipping-bg-2);
+}
+
+.haloCalculatorShipping .progress.progress-100 .progress_shipping{
+    border-color: var(--free-shipping-bg-3);
+}
+
+.haloCalculatorShipping .progress .progress-meter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.haloCalculatorShipping .progress.progress-free .progress-meter{
+    background-color: var(--free-shipping-bg-4);
+}
+
+.haloCalculatorShipping .progress.progress-30 .progress-meter{
+    background-color: var(--free-shipping-bg-1);
+}
+
+.haloCalculatorShipping .progress.progress-60 .progress-meter{
+    background-color: var(--free-shipping-bg-2);
+}
+
+.haloCalculatorShipping .progress.progress-100 .progress-meter{
+    background-color: var(--free-shipping-bg-3);
+}
+
+.haloCalculatorShipping .message {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: calc(var(--body-line-height) + 2);
+    color: var(--free-shipping-color);
+}
+
+.skin-5 .haloCalculatorShipping .message{
+    font-size: calc(var(--font-body-size) - 1px);
+}
+
+.skin-8 .haloCalculatorShipping .message{
+    font-size: calc(var(--font-body-size) - 1px);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+}
+
+
+.haloCalculatorShipping .message .text{
+    text-transform: capitalize;
+    /* text-decoration: underline; */
+    text-underline-position: under;
+}
+
+.haloCalculatorShipping .message.progress-free{
+    color: var(--free-shipping-bg-4);
+}
+
+.haloCalculatorShipping .message.progress-30{
+    color: var(--free-shipping-bg-1);
+}
+
+.haloCalculatorShipping .message.progress-60{
+    color: var(--free-shipping-bg-2);
+}
+
+.haloCalculatorShipping .message.progress-100{
+    color: var(--free-shipping-bg-3);
+}
+
+.skin-2 .haloCalculatorShipping .message,
+.skin-3 .haloCalculatorShipping .message,
+.skin-4 .haloCalculatorShipping .message,
+.skin-5 .haloCalculatorShipping .message{
+    color: var(--free-shipping-color)!important;
+}
+
+.haloCalculatorShipping.style-2{
+    text-align: center;
+}
+
+.haloCalculatorShipping.style-2 .progress {
+    margin-bottom: 11px;
+}
+
+.skin-3 .haloCalculatorShipping.style-2 .progress{
+    margin-bottom: 10px;
+}
+
+.haloCalculatorShipping.style-2 .message .text{
+    text-decoration: none;
+    color: var(--free-shipping-color-2)!important;
+}
+
+.skin-3 .haloCalculatorShipping.style-2 .message .text,
+.skin-4 .haloCalculatorShipping.style-2 .message .text{
+    font-weight: var(--font-weight-bold);
+}
+
+.skin-5 .haloCalculatorShipping.style-2 .message .text{
+    text-decoration: underline;
+}
+
+/*.haloCalculatorShipping.style-3 .progress .progress-meter{
+    text-align: center;
+    animation: 2s linear 0s infinite progress-bar-stripes;
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-size: 40px 40px;
+    transition: .9s linear;
+    transition-property: width,background-color;
+}*/
+
+.template-cart .haloCalculatorShipping.style-3 .progress .progress-meter,
+.cart-sidebar-show .haloCalculatorShipping.style-3 .progress .progress-meter {
+    text-align: center;
+    animation: 2s linear 0s infinite progress-bar-stripes;
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-size: 40px 40px;
+    transition: .9s linear;
+    transition-property: width,background-color;
+}
+
+@media (min-width: 768px) and (max-width: 1279px){
+    .cart-content-item .haloCalculatorShipping {
+        width: 100%;
+        padding: 0px 10px;
+    }
+}
+
+@media (min-width: 1025px){
+     .quickCartWrap .haloCalculatorShipping{
+        margin-bottom: 20px;
+    }
+}

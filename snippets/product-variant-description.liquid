@@ -1,0 +1,41 @@
+{%- assign propertySize = product.metafields.c_f.property.value | size -%}
+{%- if  product.has_only_default_variant != true -%}
+    {%- assign propertySize = current_variant.metafields.c_f.property.value | size -%}
+    {%- if propertySize > 0 -%}
+        <div class="productView-info productView-propertyInfo" id="product-property-{{ product.id }}">
+            <h2 class="productView-info-title">{{ 'products.product.measurements' | t }}</h2>
+            {%- for property in current_variant.metafields.c_f.property.value -%}
+                <div class="productView-info-item">
+                    <span class="productView-info-name">{{ property.first | capitalize }}:</span>
+                    <span class="productView-info-value">{{ property.last | capitalize }}</span>
+                </div>
+            {%- endfor -%}
+        </div>
+    {%- else -%}
+        {%- assign propertySize = product.metafields.c_f.property.value | size -%}
+        {%- if propertySize > 0 -%}
+            <div class="productView-info productView-propertyInfo" id="product-property-{{ product.id }}">
+                <h2 class="productView-info-title">{{ 'products.product.measurements' | t }}</h2>
+                {%- for property in product.metafields.c_f.property.value -%}
+                    <div class="productView-info-item">
+                        <span class="productView-info-name">{{ property.first | capitalize }}:</span>
+                        <span class="productView-info-value">{{ property.last | capitalize }}</span>
+                    </div>
+                {%- endfor -%}
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+{%- else -%}
+    {%- assign propertySize = product.metafields.c_f.property.value | size -%}
+    {%- if propertySize > 0 -%}
+        <div class="productView-info productView-propertyInfo" id="product-property-{{ product.id }}">
+            <h2 class="productView-info-title">{{ 'products.product.measurements' | t }}</h2>
+            {%- for property in product.metafields.c_f.property.value -%}
+                <div class="productView-info-item">
+                    <span class="productView-info-name">{{ property.first | capitalize }}:</span>
+                    <span class="productView-info-value">{{ property.last | capitalize }}</span>
+                </div>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+{%- endif -%}

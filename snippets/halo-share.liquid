@@ -1,0 +1,36 @@
+<{% if share_layout != '2' and share_layout != '3' %}div{% else %}share-button{% endif %} class="share-button halo-socialShare productView-share style-{{ share_layout }}">
+    {%- if share_layout == '2' or share_layout == '3' -%}
+        <div class="share-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--fade-in{% endif %}">
+            <button class="share-button__button button">{% render 'icon-share-2' %} <span>{{ 'general.share.share' | t }}</span></button>
+            <div class="share-button__fallback">
+                <div class="share-header">
+                    <h2 class="share-title"><span>{{ 'general.share.share' | t }}</span></h2>
+                    <button type="button" class="share-button__close" aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}<span>{{ 'general.common.close' | t }}</span></button>
+                </div>
+                <div class="wrapper-content">
+                    <label class="form-label">{{ 'general.share.copy_to_clipboard' | t }}</label>
+                    <div class="share-group">
+                        <div class="form-field">
+                            <input type="text" class="field__input" id="url" value="{{ shop.url | append: product.url }}" placeholder="{{ 'general.share.share_url' | t }}" data-url="{{ shop.url | append: product.url }}" onclick="this.select();" readonly>
+                            <label class="field__label hiddenLabels" for="url">{{ 'general.share.share_url' | t }}</label>
+                        </div>
+                        <button class="button button--primary button-copy">{% render 'icon-clipboard' %} {{ 'general.share.copy_to_clipboard' | t }}</button>
+                    </div>
+                    <span id="ShareMessage-{{ product.id }}" class="share-button__message hidden" role="status" aria-hidden="true">{{ 'general.share.success_message' | t }}</span>
+                    {%- if settings.enable_social_share != blank -%}
+                        {%- if share_layout == '2' or share_layout == '3' -%}
+                            <div class="share_toolbox clearfix"><label class="form-label">{{ 'general.share.share' | t }}</label> {% render 'social_share_icon' %}</div>
+                        {%- endif -%}
+                    {%- endif -%}
+                </div>
+            </div>
+        </div>
+    {%- else -%}
+        {%- if settings.enable_social_share != blank -%}
+            <div class="share_toolbox clearfix">{% render 'social_share_icon' %}</div>
+        {%- endif -%}
+    {%- endif -%}
+</{% if share_layout != '2' and share_layout != '3' %}div{% else %}share-button{% endif %}>
+{%- if share_layout == '2' or share_layout == '3' -%}
+    <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

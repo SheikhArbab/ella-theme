@@ -1,0 +1,862 @@
+{%- liquid
+    assign layout = settings.quick_view_layout
+    assign current_variant = product.selected_or_first_available_variant
+    assign variantCount = product.variants | size
+    assign featured_media_aspect_ratio = product.featured_media.aspect_ratio
+    if product.featured_media.aspect_ratio == nil
+        assign featured_media_aspect_ratio = 1
+    endif
+    assign media_size = settings.quick_view_product_image_ratio
+    assign portrait_aspect_ratio = settings.quick_view_portrait_aspect_ratio | append: '%'
+    assign show_quick_view_badge = settings.show_quick_view_badge
+
+    assign quick_view_picker_type = settings.quick_view_picker_type
+    assign show_subtotal = false
+-%}
+
+{%- if variantCount > 0 and product.has_only_default_variant != true -%}
+  <script>
+    window.quick_view_inven_array_{{ product.id }} = {
+      {%- for variant in product.variants -%}
+        '{{ variant.id }}': '{{ variant.inventory_quantity }}',
+      {%- endfor -%}
+    };
+
+    window.quick_shop_policy_array_{{ product.id }} = {
+      {%- for variant in product.variants -%}
+        '{{ variant.id }}': '{{ variant.inventory_policy }}',
+      {%- endfor -%}
+    };
+  </script>
+{%- endif -%}
+<script>
+  window.quick_view_subtotal = {
+    show: {{ show_subtotal }},
+    text: `{{ 'products.product.sub_total' | t : value : '[value]' }}`
+  };
+</script>
+<div class="productView quickshop halo-quickshop layout-{{ layout }}{% if product.media.size == 0 %} productView-no-media{% endif %}">
+  <div class="productView-top">
+    <div class="halo-productView-left halo-quickView-left productView-images clearfix on-mobile-hide" data-image-gallery>
+      <div class="productView-images-wrapper">
+        <div class="productView-image-wrapper">
+          {%- if show_quick_view_badge -%}
+            {% render 'product-badge'
+             , product: product,
+             class: 'productView-badge',
+             badge_detail: true,
+             serial: 1 %}
+          {%- endif -%}
+          <div class="productView-nav" data-image-gallery-main>
+            {%- for media in product.media -%}
+              {%- case media.media_type -%}
+                {%- when 'image' -%}
+                <div class="productView-image productView-image-{{ media_size }} filter-{{ media.alt | handle }}">
+                  <div
+                    class="productView-img-container product-single__media"
+                    data-media-id="{{ media.id }}"
+                    {% if product.featured_media %}
+                    {% if media_size == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                    style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                    {% if portrait_aspect_ratio != blank %}
+                    style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}>
+                    <div class="media">
+                      <img
+                        id="product-featured-image-{{ media.id }}"
+                        {% render 'lazyload', preview_img: media.preview_image, class: true %}
+                        title="{{ media.preview_image.alt | escape }}"
+                        data-main-image>
+                      {% if settings.enable_lazyload %}
+                        <span class="data-lazy-loading"></span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {%- when 'external_video' -%}
+                <div class="productView-image productView-image-{{ media_size }}">
+                  <div
+                    class="productView-img-container product-single__media"
+                    data-media-id="{{ media.id }}"
+                    {% if media_size == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                    style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                    {% if portrait_aspect_ratio != blank %}
+                    style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                    {% endif %}>
+                    {%- if media.host == 'youtube' -%}
+                      <div class="media has-video">
+                        <img
+                          srcset="https://i.ytimg.com/vi/{{ media.external_id }}/maxresdefault.jpg"
+                          src="https://i.ytimg.com/vi/{{ media.external_id }}/maxresdefault.jpg"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}"
+                          sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                          loading="lazy"
+                          data-sizes="auto">
+                      </div>
+                      <div class="productView-video youtube">
+                        <div data-youtube="{{ media.external_id }}"></div>
+                      </div>
+                    {%- else -%}
+                      <div class="media has-video">
+                        <img
+                          srcset="{{ media | img_url: 'master' }}"
+                          src="{{ media | img_url: 'master' }}"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}"
+                          sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                          loading="lazy"
+                          data-sizes="auto">
+                      </div>
+                      <div
+                        class="productView-video vimeo"
+                        data-vimeo>
+                        {{ media | external_video_tag }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                {%- when 'video' -%}
+                <div class="productView-image productView-image-{{ media_size }}">
+                  <div
+                    class="productView-img-container product-single__media"
+                    data-media-id="{{ media.id }}"
+                    {% if media_size == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                    style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                    {% if portrait_aspect_ratio != blank %}
+                    style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                    {% endif %}>
+                    <div class="media has-video">
+                      <img
+                        srcset="{{ media | img_url: 'master' }}"
+                        src="{{ media | img_url: 'master' }}"
+                        alt="{{ media.alt | escape }}"
+                        title="{{ media.alt | escape }}"
+                        sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                        loading="lazy"
+                        data-sizes="auto">
+                    </div>
+                    <div class="productView-video mp4" data-mp4>
+                      {{ media | video_tag: controls: true, image_size: 'master' }}
+                    </div>
+                  </div>
+                </div>
+                {%- when 'model' -%}
+                <div class="productView-image productView-image-{{ media_size }}">
+                  <div
+                    class="model-viewer-click productView-img-container product-single__media"
+                    {% if media_size == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                    style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                    {% if portrait_aspect_ratio != blank %}
+                    style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                    {% endif %}>
+                    {{ media | model_viewer_tag: image_size: '500x'
+                     , reveal: 'interaction',
+                     toggleable: true,
+                     data-model-id: media.id,
+                     auto-rotate: true,
+                     id: 'paused-change-demo' }}
+                  </div>
+                </div>
+              {%- else -%}
+                <div class="productView-image productView-image-{{ media_size }}">
+                  <div
+                    class="productView-img-container product-single__media"
+                    data-media-id="{{ media.id }}"
+                    {% if media_size == 'adapt' %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif media_size == 'square' %}
+                    style="padding-bottom: 100%;"
+                    {% elsif media_size == 'portrait' %}
+                    {% if portrait_aspect_ratio != blank %}
+                    style="padding-bottom: {{ portrait_aspect_ratio }};"
+                    {% endif %}
+                    {% endif %}>
+                    {{ media | media_tag }}
+                  </div>
+                </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        <div class="productView-thumbnail-wrapper">
+          <div class="productView-for clearfix">
+            {%- for media in product.media -%}
+              {%- case media.media_type -%}
+                {%- when 'image' -%}
+                <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                  <a
+                    class="productView-thumbnail-link"
+                    href="javascript:void(0)"
+                    data-image="{{ media | img_url: 'original' }}">
+                    <img
+                      src="{{ media | img_url: 'compact' }}"
+                      alt="{{ media.alt | escape }}"
+                      title="{{ media.alt | escape }}">
+                  </a>
+                </div>
+                {%- when 'external_video' -%}
+                <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                  <div class="productView-thumbnail-link">
+                    <img
+                      src="{{ media | img_url: 'compact' }}"
+                      alt="{{ media.alt | escape }}"
+                      title="{{ media.alt | escape }}">
+                  </div>
+                  <div class="productView-thumbnail-icon">
+                    {% render 'icon-video' %}
+                  </div>
+                </div>
+                {%- when 'video' -%}
+                <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                  <div class="productView-thumbnail-link">
+                    <img
+                      src="{{ media | media_tag | split: 'src="' | last | split: '">' | first }}"
+                      alt="{{ media.alt | escape }}"
+                      title="{{ media.alt | escape }}" />
+                  </div>
+                  <div class="productView-thumbnail-icon">
+                    {% render 'icon-video' %}
+                  </div>
+                </div>
+                {%- when 'model' -%}
+                <div class="productView-thumbnail" data-media-id="{{ product.id }}-{{ media.id }}">
+                  <div class="productView-thumbnail-link">
+                    <img
+                      src="{{ media | media_tag | split: 'poster="' | last | split: '">' | first }}"
+                      alt="{{ media.alt | escape }}"
+                      title="{{ media.alt | escape }}" />
+                  </div>
+                  <div class="productView-thumbnail-icon">
+                    {%- render 'icon-3d-model' -%}
+                  </div>
+                </div>
+              {%- else -%}
+                <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                  <div class="productView-thumbnail-link">
+                    {{ media | media_tag }}
+                  </div>
+                </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="halo-productView-right halo-quickView-right productView-details clearfix">
+      <div class="productView-product clearfix">
+        <div class="productView-images clearfix on-desktop-hide" data-image-gallery>
+          <div class="productView-images-wrapper">
+            <div class="productView-image-wrapper">
+              {%- if show_quick_view_badge -%}
+                {% render 'product-badge'
+                 , product: product,
+                 class: 'productView-badge',
+                 badge_detail: true,
+                 serial: 1 %}
+              {%- endif -%}
+              <div class="productView-nav" data-image-gallery-main>
+                {%- for media in product.media -%}
+                  {%- case media.media_type -%}
+                    {%- when 'image' -%}
+                    <div class="productView-image productView-image-{{ media_size }} filter-{{ media.alt | handle }}">
+                      <div
+                        class="productView-img-container product-single__media"
+                        data-media-id="{{ media.id }}"
+                        {% if product.featured_media %}
+                        {% if media_size == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                        style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}>
+                        <div class="media">
+                          <img
+                            id="product-featured-image-{{ media.id }}"
+                            {% render 'lazyload', preview_img: media.preview_image, class: true %}
+                            src="{{ media | img_url: 'master' }}"
+                            alt="{{ media.preview_image.alt | escape }}"
+                            title="{{ media.preview_image.alt | escape }}"
+                            sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                            loading="lazy"
+                            data-sizes="auto"
+                            data-main-image
+                            width="{{ media.preview_image.width }}"
+                            height="{{ media.preview_image.height }}">
+                        </div>
+                      </div>
+                    </div>
+                    {%- when 'external_video' -%}
+                    <div class="productView-image productView-image-{{ media_size }}">
+                      <div
+                        class="productView-img-container product-single__media"
+                        data-media-id="{{ media.id }}"
+                        {% if media_size == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                        style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                        {% endif %}
+                        {% endif %}>
+                        {%- if media.host == 'youtube' -%}
+                          <div class="media has-video">
+                            <img
+                              srcset="https://i.ytimg.com/vi/{{ media.external_id }}/maxresdefault.jpg"
+                              src="https://i.ytimg.com/vi/{{ media.external_id }}/maxresdefault.jpg"
+                              alt="{{ media.alt | escape }}"
+                              title="{{ media.alt | escape }}"
+                              sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                              loading="lazy"
+                              data-sizes="auto">
+                          </div>
+                          <div class="productView-video youtube">
+                            <div data-youtube="{{ media.external_id }}"></div>
+                          </div>
+                        {%- else -%}
+                          <div class="media has-video">
+                            <img
+                              srcset="{{ media | img_url: 'master' }}"
+                              src="{{ media | img_url: 'master' }}"
+                              alt="{{ media.alt | escape }}"
+                              title="{{ media.alt | escape }}"
+                              sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                              loading="lazy"
+                              data-sizes="auto">
+                          </div>
+                          <div class="productView-video vimeo" data-vimeo>
+                            {{ media | external_video_tag }}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                    {%- when 'video' -%}
+                    <div class="productView-image productView-image-{{ media_size }}">
+                      <div
+                        class="productView-img-container product-single__media"
+                        data-media-id="{{ media.id }}"
+                        {% if media_size == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                        style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                        {% endif %}
+                        {% endif %}>
+                        <div class="media has-video">
+                          <img
+                            srcset="{{ media | img_url: 'master' }}"
+                            src="{{ media | img_url: 'master' }}"
+                            alt="{{ media.alt | escape }}"
+                            title="{{ media.alt | escape }}"
+                            sizes="(min-width: 1200px) calc((1200px - 10rem) / 2), (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)"
+                            loading="lazy"
+                            data-sizes="auto">
+                        </div>
+                        <div class="productView-video mp4" data-mp4>
+                          {{ media | video_tag: controls: true, image_size: 'master' }}
+                        </div>
+                      </div>
+                    </div>
+                    {%- when 'model' -%}
+                    <div class="productView-image productView-image-{{ media_size }}">
+                      <div
+                        class="model-viewer-click productView-img-container product-single__media"
+                        {% if media_size == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                        style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                        {% endif %}
+                        {% endif %}>
+                        {{ media | model_viewer_tag: image_size: '500x'
+                         , reveal: 'interaction',
+                         toggleable: true,
+                         data-model-id: media.id,
+                         auto-rotate: true,
+                         id: 'paused-change-demo' }}
+                      </div>
+                    </div>
+                  {%- else -%}
+                    <div class="productView-image productView-image-{{ media_size }}">
+                      <div
+                        class="productView-img-container product-single__media"
+                        data-media-id="{{ media.id }}"
+                        {% if media_size == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                        style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                        style="padding-bottom: {{ portrait_aspect_ratio }};"
+                        {% endif %}
+                        {% endif %}>
+                        {{ media | media_tag }}
+                      </div>
+                    </div>
+                  {%- endcase -%}
+                {%- endfor -%}
+              </div>
+            </div>
+            <div class="productView-thumbnail-wrapper">
+              <div class="productView-for clearfix">
+                {%- for media in product.media -%}
+                  {%- case media.media_type -%}
+                    {%- when 'image' -%}
+                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                      <a
+                        class="productView-thumbnail-link"
+                        href="javascript:void(0)"
+                        data-image="{{ media | img_url: 'original' }}">
+                        <img
+                          src="{{ media | img_url: 'compact' }}"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}">
+                      </a>
+                    </div>
+                    {%- when 'external_video' -%}
+                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                      <div class="productView-thumbnail-link">
+                        <img
+                          src="{{ media | img_url: 'compact' }}"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}">
+                      </div>
+                      <div class="productView-thumbnail-icon">
+                        {% render 'icon-video' %}
+                      </div>
+                    </div>
+                    {%- when 'video' -%}
+                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                      <div class="productView-thumbnail-link">
+                        <img
+                          src="{{ media | media_tag | split: 'src="' | last | split: '">' | first }}"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}" />
+                      </div>
+                      <div class="productView-thumbnail-icon">
+                        {% render 'icon-video' %}
+                      </div>
+                    </div>
+                    {%- when 'model' -%}
+                    <div class="productView-thumbnail" data-media-id="{{ product.id }}-{{ media.id }}">
+                      <div class="productView-thumbnail-link">
+                        <img
+                          src="{{ media | media_tag | split: 'poster="' | last | split: '">' | first }}"
+                          alt="{{ media.alt | escape }}"
+                          title="{{ media.alt | escape }}" />
+                      </div>
+                      <div class="productView-thumbnail-icon">
+                        {%- render 'icon-3d-model' -%}
+                      </div>
+                    </div>
+                  {%- else -%}
+                    <div class="productView-thumbnail filter-{{ media.alt | handle }}" data-media-id="{{ product.id }}-{{ media.id }}">
+                      <div class="productView-thumbnail-link">
+                        {{ media | media_tag }}
+                      </div>
+                    </div>
+                  {%- endcase -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="productView-title">
+          <a href="{{ product.url }}">
+            {{ product.title | escape }}
+          </a>
+        </h1>
+        {%- if show_quick_view_short_description -%}
+          {%- liquid
+                        assign desc = product.description
+                        assign word_number = 50
+                    -%}
+          {% if product.metafields.c_f.short_description %}
+            {%- liquid
+              assign desc = product.metafields.c_f.short_description
+              assign word_number = 100000
+            -%}
+          {% else %}
+            {% assign word_number = 50 %}
+          {% endif %}
+        {%- endif -%}
+        {%- if show_countdown -%}
+          {%- if countdown_type == 'all_product' -%}
+            <div
+              class="productView-countDown countdown_{{ product.id }} clearfix"
+              data-countdown-id="{{ product.id }}"
+              data-countdown="{{ countdown_time }}">
+              <span class="text animated-loading">
+                <span>{{ settings.countdown_text }}</span>
+              </span>
+              <span class="num animated-loading">
+                <span>151<span>D</span>
+                </span>
+              </span>
+              <span class="num animated-loading">
+                <span>8<span>H</span>
+                </span>
+              </span>
+              <span class="num animated-loading">
+                <span>23<span>M</span>
+                </span>
+              </span>
+              <span class="num animated-loading">
+                <span>0<span>S</span>
+                </span>
+              </span>
+            </div>
+          {%- elsif countdown_type == 'collection_product' -%}
+            {%- liquid
+                            assign hasCountdown = false
+                            if countdown_collection != blank
+                                for collection in product.collections
+                                    assign collection_title = collection.title | downcase | handle
+                                    if collection_title == countdown_collection
+                                        assign hasCountdown = true
+                                    endif
+                                endfor
+                            endif
+                        -%}
+            {%- if hasCountdown -%}
+              <div
+                class="productView-countDown countdown_{{ product.id }} clearfix"
+                data-countdown-id="{{ product.id }}"
+                data-countdown="{{ countdown_time }}">
+                <span class="text animated-loading">
+                  <span>{{ settings.countdown_text }}</span>
+                </span>
+                <span class="num animated-loading">
+                  <span>151<span>D</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>8<span>H</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>23<span>M</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>0<span>S</span>
+                  </span>
+                </span>
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            {%- if product.metafields.c_f.countdown -%}
+              {% assign countdown_type = product.metafields.c_f.countdown %}
+              <div
+                class="productView-countDown countdown_{{ product.id }} clearfix"
+                data-countdown-id="{{ product.id }}"
+                data-countdown="{{ countdown_type }}">
+                <span class="text animated-loading">
+                  <span>{{ settings.countdown_text }}</span>
+                </span>
+                <span class="num animated-loading">
+                  <span>151<span>D</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>8<span>H</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>23<span>M</span>
+                  </span>
+                </span>
+                <span class="num animated-loading">
+                  <span>0<span>S</span>
+                  </span>
+                </span>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+        <div class="productView-price no-js-hidden clearfix" id="product-quick-view-price-{{ product.id }}">
+          {%- render 'price'
+            , product: product,
+            use_variant: true,
+            price_class: 'price--medium' -%}
+        </div>
+        <div class="productView-options">
+          {%- assign product_form_installment_id = 'product-quick-view-form-installment-' | append: product.id -%}
+          {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+            <input
+              type="hidden"
+              name="id"
+              value="{{ current_variant.id }}">
+            {{ form | payment_terms }}
+          {%- endform -%}
+          <div class="productView-variants halo-productOptions" id="product-quick-view-option-{{ product.id }}">
+            {%- if variantCount > 0 and product.has_only_default_variant != true -%}
+              {%- if quick_view_picker_type == 'button' -%}
+                {%- assign product_swatch_option = settings.swatch | downcase -%}
+                <variant-quick-shop-radios
+                  class="no-js-hidden product-option has-default"
+                  data-product="{{ product.id }}"
+                  data-url="{{ product.url }}">
+                  {%- for option in product.options_with_values -%}
+                    {%- liquid
+                      assign is_swatch = false
+                      assign option_name = option.name | downcase
+                      if product_swatch_option contains option_name
+                          assign is_swatch = true
+                      endif
+                      assign swatch_type = settings.swatch_type
+                      assign option_index = forloop.index0
+                    -%}
+                    <fieldset
+                      class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix"
+                      data-product-attribute="set-rectangle"
+                      data-option-index="{{ forloop.index0 }}">
+                      <legend class="form__label">
+                        {{ option.name | append: ':' }}
+                        <span data-header-option>
+                          {{ option.selected_value }}
+                        </span>
+                      </legend>
+                      {%- assign values = '' -%}
+                      {%- for variant in product.variants -%}
+                        {%- assign value = variant.options[option_index] -%}
+                        {%- unless values contains value -%}
+                          {%- liquid
+                            assign values = values | join: ';'
+                            assign values = values | append: ';' | append: value
+                            assign values = values | split: ';'
+                          -%}
+                          <input
+                            class="product-form__radio"
+                            type="radio"
+                            id="option-quick-view-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                            name="{{ option.name }}"
+                            value="{{ value | escape }}"
+                            {% if option.selected_value == value %}checked{% endif %}>
+                          {%- if is_swatch -%}
+                            {%- liquid
+                              assign enable_variant_image = false
+                              case swatch_type
+                                when 'variant_image'
+                                  assign background_image = variant.image.src | product_img_url: '40x'
+                                  if variant.image
+                                      assign enable_variant_image = true
+                                  endif
+                                when 'color'
+                                  assign background_image = value | handle | append: '.png' | file_url
+                                  assign enable_variant_image = true
+                                when 'metafields'
+                                  assign variant_color = variant.metafields.custom.variant_color
+                                  assign color_codes = false
+  
+                                  if variant_color
+                                    assign enable_variant_image = true
+                                  
+                                    if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                        assign color_codes = true
+                                        assign background_color = variant_color
+                                    else
+                                        assign background_image = variant_color | append: '.png' | file_url
+                                    endif
+                                  elsif variant.image
+                                    assign enable_variant_image = true
+                                    assign background_image = variant.image.src | product_img_url: '40x'
+                                  endif
+                              endcase
+                            -%}
+                            <label class="product-form__label {% if variant.available %} available{% else %} soldout{% endif %}" for="option-quick-view-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
+                              <span
+                                class="pattern"
+                                style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                              ></span>
+                            </label>
+                          {%- else -%}
+                            <label class="product-form__label{% if variant.available %} available{% else %} soldout{% endif %}" for="option-quick-view-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
+                              <span class="text">{{ value }}</span>
+                            </label>
+                          {%- endif -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    </fieldset>
+                  {%- endfor -%}
+                  <script type="application/json">
+                    {{ product.variants | json }}
+                  </script>
+                </variant-quick-shop-radios>
+              {%- else -%}
+                <variant-quick-shop-selects
+                  class="no-js-hidden product-option has-default"
+                  data-product="{{ product.id }}"
+                  data-url="{{ product.url }}">
+                  {%- for option in product.options_with_values -%}
+                    <div
+                      class="product-form__input product-form__input--dropdown"
+                      data-product-attribute="set-select"
+                      data-option-index="{{ forloop.index0 }}">
+                      <label class="form__label" for="option-quick-view-{{ forloop.index0 }}">
+                        {{ option.name | append: ':' }}
+                        <span data-header-option>
+                          {{ option.selected_value }}
+                        </span>
+                      </label>
+                      <div class="form__select select">
+                        <select
+                          id="option-quick-view-{{ forloop.index0 }}"
+                          class="select__select"
+                          name="options[{{ option.name | escape }}]">
+                          {%- for value in option.values -%}
+                            <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                              {{ value }}
+                            </option>
+                          {%- endfor -%}
+                        </select>
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                  <script type="application/json">
+                    {{ product.variants | json }}
+                  </script>
+                </variant-quick-shop-selects>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          <noscript>
+            <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+              <label class="form__label" for="Variants-{{ section.id }}">
+                {{ 'products.product.product_variants' | t }}
+              </label>
+              <div class="select">
+                <select
+                  name="id"
+                  id="Variants-{{ section.id }}"
+                  class="select__select"
+                  form="product-form">
+                  {%- for variant in product.variants -%}
+                    <option
+                      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                      {% if variant.available == false %}disabled{% endif %}
+                      value="{{ variant.id }}">
+                      {{ variant.title }}
+                      {%- if variant.available == false %}
+                        - {{ 'products.product.sold_out' | t }}{% endif %}
+                      - {{ variant.price | money | strip_html }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+          </noscript>
+          {%- assign product_form_id = 'product-quick-view-form-' | append: product.id -%}
+          <div class="productView-form product-form">
+            {%- form 'product', product, id: product_form_id, class: 'form productView-action', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <div class="productView-group">
+                <div class="productView-groupTop">
+                  <cart-update-quantity>
+                    <quantity-quick-shop-input class="productView-quantity quantity__group clearfix previewCartItem-qty">
+                      <label class="form-label quantity__label hiddenLabels" for="quantity-quick-view-{{ product.id }}">
+                        {{ 'products.product.quantity.label' | t }}
+                      </label>
+                      <a
+                        href="#"
+                        data-minus-quantity-cart=""
+                        class="minus btn-quantity"></a>
+                      <input
+                        class="form-input quantity__input quantity"
+                        type="number"
+                        name="quantity"
+                        min="1"
+                        value="1"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        id="quantity-quick-view-{{ product.id }}"
+                        data-product="{{ product.id }}"
+                        data-price="{{ current_variant.price }}"
+                        data-inventory-quantity="{{ current_variant.inventory_quantity }}">
+                      <a
+                        href="#"
+                        data-plus-quantity-cart=""
+                        class="plus btn-quantity"></a>
+                    </quantity-quick-shop-input>
+                  </cart-update-quantity>
+                  <div class="productView-action{% unless settings.show_wishlist %} productView-action-2{% endunless %}">
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ current_variant.id }}">
+                    <div class="product-form__buttons">
+                      {%- if current_variant.available -%}
+                        {%- if current_variant.inventory_management -%}
+                          {%- assign first_inventory = current_variant.inventory_quantity -%}
+                          <button
+                            type="submit"
+                            name="add"
+                            data-btn-addToCart
+                            class="product-form__submit button{% if first_inventory == 0 %} button-text-change{% else %}{% if show_subtotal %} button-text-change{% endif %}{% endif %}"
+                            id="product-quick-shop-add-to-cart">
+                            {%- if first_inventory > 0 -%}
+                              {{ 'products.product.add_to_cart' | t }}
+                            {%- else -%}
+                              {{ 'products.product.pre_order' | t }}
+                            {%- endif -%}
+                          </button>
+                        {%- else -%}
+                          <button
+                            type="submit"
+                            name="add"
+                            data-btn-addToCart
+                            class="product-form__submit button{% if show_subtotal %} button-text-change{% endif %}"
+                            id="product-quick-shop-add-to-cart">
+                            {{ 'products.product.add_to_cart' | t }}
+                          </button>
+                        {%- endif -%}
+                      {%- else -%}
+                        <button
+                          type="submit"
+                          name="add"
+                          data-btn-addToCart
+                          class="product-form__submit button"
+                          id="product-quick-shop-add-to-cart"
+                          disabled>
+                          {{ 'products.product.sold_out' | t }}
+                        </button>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endform -%}
+          </div>
+          <div class="productView-see-details">
+            <a class="button button-2" href="{{ product.url }}">{{ 'products.product.see_details' | t }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

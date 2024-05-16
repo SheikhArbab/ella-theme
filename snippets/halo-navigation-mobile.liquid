@@ -1,0 +1,449 @@
+{%- liquid
+    if section.blocks.size > 0 and section.settings.show_megamenu
+        assign megamenu = section.blocks | where: "type", "megamenu"
+    endif
+-%}
+<details class="menu-drawer-container">
+    <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+        <span>
+            {% render 'icon-hamburger' %}
+            {% render 'icon-close', class: 'icon icon-close' %}
+        </span>
+    </summary>
+    <div id="menu-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+        <div class="menu-drawer__inner-container">
+            <div class="menu-drawer__navigation-container">
+                <nav class="menu-drawer__navigation">
+                    <ul class="menu-drawer__menu list-menu" role="list">
+                        {%- for link in section.settings.menu.links -%}
+                            {%- liquid
+                                assign sale_item_lv1 = section.settings.sale_item_1 | split: "," | strip | downcase | handle
+                                assign sale_item_lv2 = section.settings.sale_item_2 | split: "," | strip | downcase | handle
+                                assign sale_item_lv3 = section.settings.sale_item_3 | split: "," | strip | downcase | handle
+                                assign title = link.title | escape | downcase | handle
+                                if section.settings.show_label
+                                    assign new_label = section.settings.new_label | split: "," | strip | downcase | handle
+                                    assign sale_label = section.settings.sale_label | split: "," | strip | downcase | handle
+                                    assign hot_label = section.settings.hot_label | split: "," | strip | downcase | handle
+                                endif
+                                for menuItem in megamenu
+                                    assign check_menu = false
+                                    assign item = menuItem.settings.item | escape | downcase | handle
+                                    case item
+                                        when title
+                                            assign check_menu = true
+                                            assign style = menuItem.settings.style
+                                            assign column = menuItem.settings.column
+                                           
+                                            assign show_banner = menuItem.settings.show_banner
+                                            if show_banner
+                                                assign show_banner_1 = menuItem.settings.show_banner_1
+                                                if show_banner_1
+                                                    assign banner_1 = menuItem.settings.banner_1
+                                                    assign banner_title_1 = menuItem.settings.banner_title_1
+                                                    assign banner_text_1 = menuItem.settings.banner_text_1
+                                                    assign banner_url_1 = menuItem.settings.banner_url_1
+                                                endif
+                                                assign show_banner_2 = menuItem.settings.show_banner_2
+                                                if show_banner_2
+                                                    assign banner_2 = menuItem.settings.banner_2
+                                                    assign banner_title_2 = menuItem.settings.banner_title_2
+                                                    assign banner_text_2 = menuItem.settings.banner_text_2
+                                                    assign banner_url_2 = menuItem.settings.banner_url_2
+                                                endif
+                                                assign show_banner_3 = menuItem.settings.show_banner_3
+                                                if show_banner_3
+                                                    assign banner_3 = menuItem.settings.banner_3
+                                                    assign banner_title_3 = menuItem.settings.banner_title_3
+                                                    assign banner_text_3 = menuItem.settings.banner_text_3
+                                                    assign banner_url_3 = menuItem.settings.banner_url_3
+                                                endif
+                                                assign show_banner_4 = menuItem.settings.show_banner_4
+                                                if show_banner_4
+                                                    assign banner_4 = menuItem.settings.banner_4
+                                                    assign banner_title_4 = menuItem.settings.banner_title_4
+                                                    assign banner_text_4 = menuItem.settings.banner_text_4
+                                                    assign banner_url_4 = menuItem.settings.banner_url_4
+                                                endif
+                                            endif
+                                            assign show_az_brand = menuItem.settings.show_az_brand
+                                            if show_az_brand
+                                                assign az_brand_title = menuItem.settings.az_brand_title
+                                                assign az_brand_link_text = menuItem.settings.az_brand_link_text
+                                                assign az_brand_url = menuItem.settings.az_brand_url
+                                            endif
+                                            assign show_product = menuItem.settings.show_product
+                                            if show_product
+                                                assign product_title = menuItem.settings.product_title
+                                                assign product_collection = menuItem.settings.product_collection
+                                                assign product_limit = menuItem.settings.product_limit
+                                                assign product_per_row = menuItem.settings.product_per_row
+                                            endif
+                                            break
+                                    endcase
+                                endfor
+                            -%}
+                            <li class="menu-mobile-lv-1 text-left{% if sale_item_lv1 contains title %} menu-sale{% endif %}">
+                                {%- if link.links != blank -%}
+                                    <details>
+                                        <summary class="menu--mobile-lv-1__action menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                                            <span class="text{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
+                                                {{ link.title | escape }}
+                                                {%- if new_label contains title -%}
+                                                    <span class="label new-label">
+                                                        {{ 'general.navigation.new_label' | t }}
+                                                    </span>
+                                                {%- elsif sale_label contains title -%}
+                                                    <span class="label sale-label">
+                                                        {{ 'general.navigation.sale_label' | t }}
+                                                    </span>
+                                                {%- elsif hot_label contains title -%}
+                                                    <span class="label hot-label">
+                                                        {{ 'general.navigation.hot_label' | t }}
+                                                    </span>
+                                                {%- endif -%}
+                                            </span>
+                                            <span class="symbol">
+                                                {% render 'icon-arrow' %}
+                                            </span>
+                                        </summary>
+                                        <div id="link-{{ link.title | escape }}" class="menu-drawer__submenu motion-reduce" tabindex="-1">
+                                            <div class="menu-drawer__inner-submenu">
+                                                <button class="menu-drawer__close-button text-center link link--text focus-inset" aria-expanded="true">
+                                                    <span class="symbol">
+                                                        {% render 'icon-arrow' %}
+                                                    </span>
+                                                    <span class="text">{{ link.title | escape }}</span>
+                                                </button>
+                                                <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                                    <li class="menu-mobile-lv-2 text-left">
+                                                        <a href="{{ link.url }}" class="menu--mobile-lv-2__action menu-drawer__menu-item link link--text list-menu__item focus-inset"{% if link.current %} aria-current="page"{% endif %}>
+                                                            <span class="text{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
+                                                                {{ 'general.navigation.go_to' | t }} {{ link.title | escape }}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    {%- for childlink in link.links -%}
+                                                        {% assign childtitle = childlink.title | escape | downcase | handle %}
+                                                        <li class="menu-mobile-lv-2 text-left{% if sale_item_lv2 contains childtitle %} menu-sale{% endif %}">
+                                                            {%- if childlink.links == blank -%}
+                                                                <a href="{{ childlink.url }}" class="menu--mobile-lv-2__action menu-drawer__menu-item link link--text list-menu__item focus-inset"{% if childlink.current %} aria-current="page"{% endif %}>
+                                                                    <span class="text{% if childlink.current %} menu-drawer__menu-item--active{% endif %}">
+                                                                        {{ childlink.title | escape }}
+                                                                    </span>
+                                                                </a>
+                                                            {%- else -%}
+                                                                <details>
+                                                                    <summary class="menu--mobile-lv-2__action menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                                                        <span class="text">{{ childlink.title | escape }}</span>
+                                                                        <span class="symbol">
+                                                                            {% render 'icon-arrow' %}
+                                                                        </span>
+                                                                    </summary>
+                                                                    <div id="childlink-{{ childlink.title | escape }}" class="menu-drawer__submenu motion-reduce">
+                                                                        <button class="menu-drawer__close-button text-center link link--text focus-inset" aria-expanded="true">
+                                                                            <span class="symbol">
+                                                                                {% render 'icon-arrow' %}
+                                                                            </span>
+                                                                            <span class="text">{{ childlink.title | escape }}</span>
+                                                                        </button>
+                                                                        <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                                                            <li class="menu-mobile-lv-3 text-left">
+                                                                                <a href="{{ childlink.url }}" class="menu--mobile-lv-3__action menu-drawer__menu-item link link--text list-menu__item focus-inset"{% if childlink.current %} aria-current="page"{% endif %}>
+                                                                                    <span class="text{% if childlink.current %} menu-drawer__menu-item--active{% endif %}">
+                                                                                        {{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+                                                                            {%- for grandchildlink in childlink.links -%}
+                                                                                {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                                                                <li class="menu-mobile-lv-3 text-left{% if sale_item_lv3 contains grandchildtitle %} menu-sale{% endif %}">
+                                                                                    <a href="{{ grandchildlink.url }}" class="menu--mobile-lv-3__action menu-drawer__menu-item link link--text list-menu__item focus-inset"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                                                                        <span class="text{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}">{{ grandchildlink.title | escape }}</span>
+                                                                                    </a>
+                                                                                </li>
+                                                                            {%- endfor -%}
+                                                                        </ul>
+                                                                    </div>
+                                                                </details>
+                                                            {%- endif -%}
+                                                        </li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                                {%- if check_menu -%}
+                                                    <div class="menu-drawer__menu list-megamenu">
+                                                        {%- if show_banner -%}
+                                                            <div class="menu-drawer__block menu-drawer__banner">
+                                                                {%- if show_banner_1 -%}
+                                                                    <div class="menu-drawer__banner-item">    
+                                                                        <div class="banner">
+                                                                            <a {% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="image">
+                                                                                {%- if banner_1 != blank -%}
+                                                                                    <img srcset="{{ banner_1 | img_url: 'master' }} 1x, {{ banner_1 | img_url: 'master', scale: 2 }} 2x"
+                                                                                    src="{{ banner_1 | img_url: 'master' }}"
+                                                                                    loading="lazy"
+                                                                                    alt="{{ banner_1.alt | default: shop.name | escape }}">
+                                                                                {%- else -%}
+                                                                                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                                                                                {%- endif -%}
+                                                                            </a>
+                                                                            {%- if banner_title_1 != blank or banner_text_1 != blank -%}
+                                                                                <div class="content text-center">
+                                                                                    {%- if banner_title_1 != blank -%}
+                                                                                        <h4 class="title">{{ banner_title_1 | escape }}</h4>
+                                                                                    {%- endif -%}
+                                                                                    {%- if banner_text_1 != blank -%}
+                                                                                        <a {% if banner_url_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_1 }}"{% endif %} class="link link-underline">
+                                                                                            <span class="text">{{ banner_text_1 | escape }}</span>
+                                                                                        </a>
+                                                                                    {%- endif -%}
+                                                                                </div>
+                                                                            {%- endif -%}
+                                                                        </div>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                                {%- if show_banner_2 -%}
+                                                                    <div class="menu-drawer__banner-item">    
+                                                                        <div class="banner">
+                                                                            <a {% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="image">
+                                                                                {%- if banner_2 != blank -%}
+                                                                                    <img srcset="{{ banner_2 | img_url: 'master' }} 1x, {{ banner_2 | img_url: 'master', scale: 2 }} 2x"
+                                                                                    src="{{ banner_2 | img_url: 'master' }}"
+                                                                                    loading="lazy"
+                                                                                    alt="{{ banner_2.alt | default: shop.name | escape }}">
+                                                                                {%- else -%}
+                                                                                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                                                                                {%- endif -%}
+                                                                            </a>
+                                                                            {%- if banner_title_2 != blank or banner_text_2 != blank -%}
+                                                                                <div class="content text-center">
+                                                                                    {%- if banner_title_2 != blank -%}
+                                                                                        <h4 class="title">{{ banner_title_2 | escape }}</h4>
+                                                                                    {%- endif -%}
+                                                                                    {%- if banner_text_2 != blank -%}
+                                                                                        <a {% if banner_url_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_2 }}"{% endif %} class="link link-underline">
+                                                                                            <span class="text">{{ banner_text_2 | escape }}</span>
+                                                                                        </a>
+                                                                                    {%- endif -%}
+                                                                                </div>
+                                                                            {%- endif -%}
+                                                                        </div>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                                {%- if show_banner_3 -%}
+                                                                    <div class="menu-drawer__banner-item">    
+                                                                        <div class="banner">
+                                                                            <a {% if banner_url_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_3 }}"{% endif %} class="image">
+                                                                                {%- if banner_3 != blank -%}
+                                                                                    <img srcset="{{ banner_3 | img_url: 'master' }} 1x, {{ banner_3 | img_url: 'master', scale: 2 }} 2x"
+                                                                                    src="{{ banner_3 | img_url: 'master' }}"
+                                                                                    loading="lazy"
+                                                                                    alt="{{ banner_3.alt | default: shop.name | escape }}">
+                                                                                {%- else -%}
+                                                                                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                                                                                {%- endif -%}
+                                                                            </a>
+                                                                            {%- if banner_title_3 != blank or banner_text_3 != blank -%}
+                                                                                <div class="content text-center">
+                                                                                    {%- if banner_title_3 != blank -%}
+                                                                                        <h4 class="title">{{ banner_title_3 | escape }}</h4>
+                                                                                    {%- endif -%}
+                                                                                    {%- if banner_text_3 != blank -%}
+                                                                                        <a {% if banner_url_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_3 }}"{% endif %} class="link link-underline">
+                                                                                            <span class="text">{{ banner_text_3 | escape }}</span>
+                                                                                        </a>
+                                                                                    {%- endif -%}
+                                                                                </div>
+                                                                            {%- endif -%}
+                                                                        </div>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                                {%- if show_banner_4 -%}
+                                                                    <div class="menu-drawer__banner-item">    
+                                                                        <div class="banner">
+                                                                            <a {% if banner_url_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_4 }}"{% endif %} class="image">
+                                                                                {%- if banner_4 != blank -%}
+                                                                                    <img srcset="{{ banner_4 | img_url: 'master' }} 1x, {{ banner_4 | img_url: 'master', scale: 2 }} 2x"
+                                                                                    src="{{ banner_4 | img_url: 'master' }}"
+                                                                                    loading="lazy"
+                                                                                    alt="{{ banner_4.alt | default: shop.name | escape }}">
+                                                                                {%- else -%}
+                                                                                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                                                                                {%- endif -%}
+                                                                            </a>
+                                                                            {%- if banner_title_4 != blank or banner_text_4 != blank -%}
+                                                                                <div class="content text-center">
+                                                                                    {%- if banner_title_4 != blank -%}
+                                                                                        <h4 class="title">{{ banner_title_4 | escape }}</h4>
+                                                                                    {%- endif -%}
+                                                                                    {%- if banner_text_4 != blank -%}
+                                                                                        <a {% if banner_url_4 == blank %} role="link" aria-disabled="true"{% else %} href="{{ banner_url_4 }}"{% endif %} class="link link-underline">
+                                                                                            <span class="text">{{ banner_text_4 | escape }}</span>
+                                                                                        </a>
+                                                                                    {%- endif -%}
+                                                                                </div>
+                                                                            {%- endif -%}
+                                                                        </div>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                            </div>
+                                                        {%- endif -%}
+                                                        {%- if show_az_brand -%}
+                                                            <div class="menu-drawer__block menu-drawer__brand">
+                                                                {%- if az_brand_title != blank -%}
+                                                                    <h3 class="menu-drawer__title text-left">
+                                                                        <span class="text">{{ az_brand_title | escape }}</span>
+                                                                    </h3>
+                                                                {%- endif -%}
+                                                                <div class="menu-drawer__content">
+                                                                    <ul class="azbrandsTable clearfix list-unstyled">
+                                                                        {% assign list_vendor = '' %}
+                                                                        {% assign array = "1-9|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z" | split: "|" %}
+                                                                        {%- for brand in shop.vendors -%}
+                                                                            {% assign first = brand | strip_html | capitalize | truncate: 1, '' %}
+                                                                            {%- unless list_vendor contains first -%}
+                                                                                {% assign list_vendor = list_vendor | append: first %}
+                                                                            {%- endunless -%}
+                                                                        {%- endfor -%}
+                                                                        {%- for item in array -%} 
+                                                                            <li>
+                                                                                {%- if forloop.first -%}
+                                                                                    {% if list_vendor contains '1' or list_vendor contains '2' or list_vendor contains '3' or list_vendor contains '4' or list_vendor contains '5' or list_vendor contains '6' or list_vendor contains '7' or list_vendor contains '8' or list_vendor contains '9' or list_vendor contains '0' %}
+                                                                                        <a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline is-active">
+                                                                                            <span class="text">{{ item }}</span>
+                                                                                        </a>
+                                                                                    {% else %}
+                                                                                        <a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline">
+                                                                                            <span class="text">{{ item }}</span>
+                                                                                        </a>
+                                                                                    {% endif %}
+                                                                                {%- else -%}
+                                                                                    <a href="{{ az_brand_url }}#{{ item | downcase }}" class="link link-underline{% if list_vendor contains item %} is-active{% endif %}">
+                                                                                        <span class="text">{{ item }}</span>
+                                                                                    </a>
+                                                                                {%- endif -%}
+                                                                            </li>
+                                                                        {%- endfor -%}
+                                                                    </ul>
+                                                                    {%- if az_brand_link_text -%}
+                                                                        <a {% if az_brand_url == blank %} role="link" aria-disabled="true"{% else %} href="{{ az_brand_url }}"{% endif %} class="menu-drawer__action link link-underline">
+                                                                            <span class="text">{{ az_brand_link_text | escape }}</span>
+                                                                        </a>
+                                                                    {%- endif -%}
+                                                                </div>
+                                                            </div>
+                                                        {%- endif -%}
+                                                    </div>
+                                                {%- endif -%}
+                                            </div>
+                                        </div>
+                                    </details>
+                                {%- else -%}
+                                    <a href="{{ link.url }}" class="menu--mobile-lv-1__action menu-drawer__menu-item list-menu__item link link--text focus-inset"{% if link.current %} aria-current="page"{% endif %}>
+                                        <span class="text{% if link.current %} menu-drawer__menu-item--active{% endif %}">
+                                            {{ link.title | escape }}
+                                        </span>
+                                    </a>
+                                {%- endif -%}
+                            </li>
+                        {%- endfor -%}
+                        {%- if shop.customer_accounts_enabled and section.settings.show_customer -%}
+                            <li class="menu-mobile-lv-1 menu-mobile-icon text-left">
+                                <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="menu--mobile-lv-1__action menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                                    {% render 'icon-account' %}
+                                    <span class="text">
+                                        {%- liquid
+                                            if customer
+                                              echo 'customer.account_fallback' | t
+                                            else
+                                              echo 'customer.log_in' | t
+                                            endif
+                                        -%}
+                                    </span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.show_wishlist and section.settings.show_wishlist -%}
+                            <li class="menu-mobile-lv-1 menu-mobile-icon text-left">
+                                <a href="{{ pages['wish-list'].url }}" class="menu--mobile-lv-1__action menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                                    {% render 'icon-heart' %}
+                                    <span class="text">
+                                        {{ 'wishlist.general.title' | t }}
+                                    </span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </nav>
+                <div class="menu-drawer__utility-links">
+                    <ul class="list list-social list-unstyled" role="list">
+                        {%- if settings.social_twitter_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_twitter_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_twitter_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-twitter' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_facebook_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_facebook_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_facebook_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-facebook' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_pinterest_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_pinterest_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_pinterest_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-pinterest' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_instagram_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_instagram_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_instagram_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-instagram' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_tumblr_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_tumblr_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_tumblr_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-tumblr' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_snapchat_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_snapchat_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_snapchat_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-snapchat' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_youtube_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_youtube_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_youtube_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-youtube' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if settings.social_vimeo_link != blank -%}
+                            <li class="list-social__item">
+                                <a {% if settings.social_vimeo_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ settings.social_vimeo_link }}"{% endif %} class="link link--text list-social__link" aria-describedby="a11y-external-message">
+                                    {%- render 'icon-vimeo' -%}
+                                    <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</details>

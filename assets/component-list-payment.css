@@ -1,0 +1,33 @@
+.list-payment {
+    font-size: 0;
+    letter-spacing: 0;
+}
+
+.list-payment__item{
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px 0px 5px 15px;
+}
+
+.list-payment__item img{
+    max-height: 24px;
+}
+
+.list-payment__item .icon{
+    width: auto;
+    height: 32px;
+    fill: currentColor;
+    stroke: transparent;
+}
+
+.list-payment__item:last-child{
+    margin-right: 0;
+}
+
+@media (max-width: 767px) {
+    .list-payment {
+        text-align: center;
+        padding: 0;
+        margin-top: 20px;
+    }
+}

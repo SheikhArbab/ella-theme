@@ -1,0 +1,158 @@
+{%- liquid
+    assign media_size = settings.product_block_image_ratio
+    if media_size == 'portrait'
+        assign portrait_aspect_ratio = settings.portrait_height
+    endif 
+
+    assign featured_media_aspect_ratio = product.featured_media.aspect_ratio
+    if product.featured_media.aspect_ratio == nil
+        assign featured_media_aspect_ratio = 1
+    endif
+
+    assign product_action_group = false
+    
+    assign sold_out = false
+    if product.available == false
+        assign sold_out = true
+    endif
+
+    assign variantCount = product.variants | size
+    assign option_name = product.options_with_values[0].name | downcase
+    assign product_swatch_option = settings.swatch | downcase
+
+    assign has_popup = false
+
+    if product.options_with_values.size == 1 and product_swatch_option contains option_name and settings.quick_shop_type == '1'
+        assign has_popup = false
+    else
+        assign has_popup = true
+    endif
+-%}
+<div class="product-item" data-product-id="{{ product.id }}">
+    <div class="card">
+        <div class="card-product{% if product.featured_media == nil %} card--text-only card--soft{% endif %}">
+            <div class="card-product__wrapper">
+                <a class="card-media card-media--{{ media_size }}{% if settings.show_image_swap %} media--hover-effect{% endif%}"
+                    href="{{ product.url | within: collection }}"
+                    {% if product.featured_media %}
+                        {% if media_size == 'adapt' %}
+                            style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                            style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                            {% if portrait_aspect_ratio != blank %}
+                                style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }};"
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                >
+                    {%- if product.featured_media -%}
+                        {%- if variant_img != blank -%}
+                            <img {% render 'lazyload',preview_img: variant_img, class: true  %} />
+                        {%- else -%}
+                            <img {% render 'lazyload',preview_img: product.featured_media, class: true  %} />
+                        {%- endif -%}
+                        {%- if product.media[1] != nil and settings.show_image_swap -%}
+                            <img {% render 'lazyload',preview_img: product.media[1], class: true  %} />
+                        {%- endif -%}
+                        {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+                    {%- else -%}
+                        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                    {%- endif -%}
+                </a>
+                {%- if settings.show_action -%}
+                    <div class="card-action">
+                        <form action="{{ routes.cart_url }}/add" method="post" class="variants" id="{{ id }}-{{ product.id }}-{{ sectionId }}" data-product-id="{{ product.id }}" enctype="multipart/form-data">
+                            {%- if sold_out -%}
+                                {%- if settings.show_notify_form -%}
+                                    <a class="button button-ATC is-notify-me" href="{{ product.url }}" data-btn-addToCart>
+                                        {{ 'notify_form.general.label' | t }}
+                                    </a>
+                                {%- else -%}
+                                    <a class="button button-ATC" href="{{ product.url }}" disabled="disabled">
+                                        {{ 'products.product.out_of_stock' | t }}
+                                    </a>
+                                {%- endif -%}
+                            {%- else -%}
+                                {%- if variantCount > 1 and product.variants.first.title != 'Default Title' -%}
+                                    {%- if product.options_with_values.size == 1 and product_swatch_option contains option_name and settings.show_swatch and settings.quick_shop_type == '1' -%}
+                                        <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                                        <input type="hidden" name="quantity" value="1" />
+                                        <button
+                                            class="button button-ATC"
+                                            type="submit"
+                                            data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}"
+                                            data-btn-addToCart
+                                        >
+                                            {{ 'products.product.add_to_cart' | t }}
+                                        </button>
+                                    {%- else -%}
+                                        <a class="button button-ATC" href="{{ product.url }}">
+                                            {{ 'products.product.select_options' | t }}
+                                        </a>
+                                    {%- endif -%}
+                                {%- else -%}
+                                    <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    {%- liquid
+                                        assign current_variant_grid = product.selected_or_first_available_variant
+                                        assign first_inventory_grid = current_variant_grid.inventory_quantity
+                                    -%}
+                          
+                                    {%- if first_inventory_grid > 0 -%}
+                                        <button
+                                            class="button button-ATC"
+                                            type="submit"
+                                            data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}"
+                                            data-btn-addToCart
+                                        >
+                                            {{ 'products.product.add_to_cart' | t }}
+                                        </button>
+                                    {%- else -%}
+                                        <button
+                                            class="button button-ATC"
+                                            type="submit"
+                                            data-form-id="#{{ id }}-{{ product.id }}-{{ sectionId }}"
+                                            data-btn-addToCart
+                                        >
+                                            {{ 'products.product.pre_order' | t }}
+                                        </button>
+                                    {%- endif -%} 
+                                {%- endif -%}
+                            {%- endif -%}
+                        </form>
+                    </div>
+                {%- endif -%}
+            </div>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-{{ settings.product_content_text_align }}">
+                {%- if settings.show_vendor -%}
+                    <div class="card-information__group card-information__group-2">
+                        {%- if settings.show_vendor -%}
+                            <div class="card-vendor">
+                                <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                                {{ product.vendor | link_to_vendor }}
+                            </div>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+                <a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}{% if variant_selected != blank %} card-title-change{% endif %}" href="{{ product.url | within: collection }}" data-product-title="{{ product.title | escape }}" data-product-url="{{ product.url | within: collection }}">
+                    <span class="text">
+                        {{ product.title | escape }}
+                        {% if variant_selected != blank %}
+                            <span data-change-title> - {{ variant_selected }}</span>
+                        {% endif %}
+                    </span>
+                </a>
+                <div class="card-price">
+                    {% render 'price',
+                        product: product,
+                        price_class: ''
+                    %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

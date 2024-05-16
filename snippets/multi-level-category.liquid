@@ -1,0 +1,263 @@
+{% if settings.enable_multilevel_categories %}
+<link rel="stylesheet" href="{{ 'component-multilevel-categories.css' | asset_url }}">
+<div class="themevale_MultiCategory_wrapper">
+    <div class="themevale_MultiCategory">
+        <nav id="navPages" style="display: none;">
+            {%- assign category_filter = settings.category_filter -%}
+            {% if linklists[category_filter].links.size > 0 %}
+                <ul>
+                    {% for link in linklists[category_filter].links %}
+                    <li {% if link.active %}class="active"{% endif %}>
+                        <a href="{{ link.url}}" title=" {{ link.title }}" >
+                            {{ link.title }}
+                        </a>
+                        {% if linklists[link.handle] != empty %}
+                            {% assign link_child = link.handle %}
+                            <ul>
+                                {% for link_child_item in linklists[link_child].links %}
+                                <li {% if link_child_item.current %}class="active"{% endif %}>
+                                    <a href="{{ link_child_item.url }}" data-value="{{ link_child_item.title | handle }}">
+                                        {{ link_child_item.title }}
+                                    </a>
+
+                                    {% if linklists[link_child_item.handle] != empty %}
+                                        {% assign link_child = link_child_item.handle %}
+                                        <ul>
+                                            {% for link_child_2 in linklists[link_child].links %}
+                                            <li {% if link_child_2.current %} class="active"{% endif %}>
+                                                <a href="{{ link_child_2.url }}" data-value="{{ link_child_2.title | handle }}">
+                                                    {{ link_child_2.title }}
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </nav>
+        <div class="themevale_multilevel-category-filter">    
+            <div class="form-wrapper">
+                <div class="form-field">
+                    <label class="form-label">{{ settings.category_filter_label1 }}</label>
+                    <span class="da-force-up form-select form-control">
+                        {{ settings.category_filter_label1 }}
+                    </span>
+                    <div class="dropdown-up" id="themevale_select-level-1">
+                        <ul>
+                            <li class="hide1" onclick="changeOptionAll(1)">{{ settings.category_filter_label1 }}</li>
+                        </ul>
+                    </div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-angle-down fa-w-8 fa-7x"><path fill="currentColor" d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" class=""></path></svg>
+                </div>
+                <div class="form-field">
+                    <label class="form-label">{{ settings.category_filter_label2 }}</label>
+                    <span class="da-force-up form-select form-control">
+                        {{ settings.category_filter_label2 }}
+                    </span>
+                    <div class="dropdown-up" id="themevale_select-level-2">
+                        <ul>
+                            <li class="hide1" onclick="changeOptionAll(2)">{{ settings.category_filter_label2 }}</li>
+                        </ul>
+                    </div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-angle-down fa-w-8 fa-7x"><path fill="currentColor" d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" class=""></path></svg>
+                </div>
+                <div class="form-field form-field-last">
+                    <label class="form-label">{{ settings.category_filter_label3 }}</label>
+                    <span class="da-force-up form-select form-control">
+                        {{ settings.category_filter_label3 }}
+                    </span>
+                    <div class="dropdown-up" id="themevale_select-level-3">
+                        <ul>
+                            <li class="hide1" onclick="changeOptionAll(3)">{{ settings.category_filter_label3 }}</li>
+                        </ul>
+                    </div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" class="svg-inline--fa fa-angle-down fa-w-8 fa-7x"><path fill="currentColor" d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z" class=""></path></svg>
+                </div>
+                <div class="group-button">
+                    <a class="btn btn--primary" href="javascript:void(0)" id="themevale_select-browse">{{ settings.category_filter_button }}</a>
+                    <a class="btn btn--primary" href="javascript:void(0)" id="themevale_clear-select">
+                        <svg id="icon-refresh" class="icon icon--big" viewBox="0 0 16 16">
+                            <path d="M2.083,9H0.062H0v5l1.481-1.361C2.932,14.673,5.311,16,8,16c4.08,0,7.446-3.054,7.938-7h-2.021 c-0.476,2.838-2.944,5-5.917,5c-2.106,0-3.96-1.086-5.03-2.729L5.441,9H2.083z"></path>
+                            <path d="M8,0C3.92,0,0.554,3.054,0.062,7h2.021C2.559,4.162,5.027,2,8,2c2.169,0,4.07,1.151,5.124,2.876 L11,7h2h0.917h2.021H16V2l-1.432,1.432C13.123,1.357,10.72,0,8,0z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="loading" style="display: none;">
+                <img src="{{ 'loading.svg' | asset_url }}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var first = true;
+    function getCategories(root) {
+        var result = new Array();
+        root.find(" > li").each(function() {
+            var link = jQuery(this).find(">a");
+            var node = {
+                'link': link.attr('href'),
+                'title': link.html(),
+                'children': getCategories(jQuery(this).find('> ul '))
+            };
+            result.push(node);
+        });
+        return result;
+    }
+    function setActive() {
+        var result = new Array();
+        var curLi = jQuery("nav#navPages >  ul").find('.active');
+        if(curLi.index() == -1) return false;
+        result.push(curLi.index());
+        curLi = curLi.parent().parent();
+        if(curLi.attr('id') != 'navPages'){
+            result.push(curLi.index());
+            curLi = curLi.parent().parent();
+            if(curLi.attr('id') != 'navPages'){
+                result.push(curLi.index());
+            }
+        }
+        return result;
+    }
+    function buildSelect(level, level_List) {
+        for (var i = level; i <= 4; i++) {
+            $('#themevale_select-level-' + i + ' ul li[data-value]').remove();
+        }
+        for (var i=0; i<level_List.length; i++) {
+            $('#themevale_select-level-' + level + ' ul').append("<li data-value='" + i + "' onclick='changeOption("+level+","+i+")'>" + level_List[i].title.trim() + "</li>");
+        }
+    }
+    function changeOptionAll(level) {
+        $('#themevale_select-level-'+level+' ul').children().removeClass('active');
+        var select_option = $('#themevale_select-level-'+level+' ul li:eq(0)').html();
+        $('#themevale_select-level-'+(level)).prev('.da-force-up.form-select').html( select_option );
+    }
+    function changeOption(level, num) {
+        if( num != null ){
+            var redirect = false;
+            if($('#themevale_select-level-'+level+' ul li[data-value="'+num+'"]').hasClass('active') == false){
+                redirect = true;
+            }
+            $('#themevale_select-level-'+level+' ul').children().removeClass('active');
+            $('#themevale_select-level-'+level+' ul').children().each(function(){
+                if($(this).attr('data-value') == num ){
+                    $(this).addClass('active');
+                    $('#themevale_select-level-'+level).prev('.da-force-up.form-select').text( $(this).text() );
+                }
+            });
+            resetDrop(level);
+            var level_List = list;
+            for (var i = 1; i <= level; i++) {
+                var index = parseInt($('#themevale_select-level-'+i+' ul').find(".active").attr('data-value'));
+                if( level_List[index]!= undefined ){
+                    level_List = level_List[index].children;
+                }
+            }
+
+            if(level == 3 && redirect == true){
+                $('#themevale_select-browse').trigger('click');
+            }
+            level = parseInt(level) + 1;
+            buildSelect(level, level_List);
+
+            
+            if( level_List.length && first == false) {
+                $('.themevale_multilevel-category-filter').find('.loading').show();
+                setTimeout(function() {
+                    $('#themevale_select-level-'+level).addClass('open');
+                    $('.themevale_multilevel-category-filter').find('.loading').hide();
+                }, 300);
+            }
+        }
+    }
+    function resetDrop(num) {
+        for (var i = num+1; i <= list.length; i++) {
+            var select_option = $('#themevale_select-level-'+i+' ul li:eq(0)').html();
+            $('#themevale_select-level-'+(i)).prev('.da-force-up.form-select').html( select_option );
+            $('#themevale_select-level-'+i+' ul').html('<li onclick="changeOptionAll('+i+')">'+select_option+'</li>');
+        }
+    }
+
+    var list = getCategories(jQuery("nav#navPages >  ul"));
+    var selectLevel1 = jQuery("#themevale_select-level-1 ul");
+    var selectLevel2 = jQuery("#themevale_select-level-2 ul");
+    var selectLevel3 = jQuery("#themevale_select-level-3 ul");
+
+    function MultiCategory() {
+        if (!$('.themevale_MultiCategory').length) {
+            return;
+        }
+
+        buildSelect(1, list);
+        
+        var level = 1;
+        if($("body").hasClass('template-index')){
+            jQuery.cookie('multiLevelCategory', '');
+        }
+        
+        if(jQuery.cookie('multiLevelCategory') != ''){
+            var active = jQuery.cookie('multiLevelCategory').split(",");
+            for(var i=0; i<active.length; i++){
+                changeOption(level, active[i])
+                level++;
+            }
+            $('.themevale_multilevel-category-filter').find('.loading').hide();
+            $(".dropdown-up").removeClass('open');
+        }
+
+        $(document).off('click','.da-force-up').on('click','.da-force-up', function(e) {
+            if($(this).parent().find(".dropdown-up").hasClass('open')) {
+                $(this).parent().find(".dropdown-up").removeClass('open');
+            } else {
+                $(".dropdown-up").removeClass('open');
+                $(this).parent().find(".dropdown-up").addClass('open');
+            }
+        });
+
+        $(window).click(function(e) {
+            var container = $(".da-force-up");
+            if (!container.is(e.target) && container.has(e.target).length === 0 ) {           
+                container.next(".dropdown-up").removeClass('open');
+            }       
+        });
+
+        $('#themevale_select-browse').click(function() {
+            var level_List = list;
+            var index = 0, url = "";
+            var menu = [];
+            for (var i = 1; i <= 3; i++) {
+                index = parseInt($('#themevale_select-level-'+i+' ul').find(".active").attr('data-value'));
+                if( !isNaN(index)){
+                    menu.push(index);
+                    url = level_List[index].link;
+                    if( level_List[index].children.length ) {
+                        level_List = level_List[index].children;
+                    }
+                            
+                }
+            }
+            jQuery.cookie('multiLevelCategory', menu, {expires:1, path:'/'});
+            location.href = url;
+        });
+
+        $('#themevale_clear-select').click(function() {
+            resetDrop(1);
+            var select_option = $('#themevale_select-level-1 ul li:eq(0)').html();
+            $('#themevale_select-level-1').prev('.da-force-up.form-select').html( select_option );
+            $('#themevale_select-level-1 ul').children().removeClass('active');
+        });
+        first = false;
+    }
+
+    window.addEventListener('load', () => {
+      MultiCategory();
+    })
+</script>
+{% endif %}

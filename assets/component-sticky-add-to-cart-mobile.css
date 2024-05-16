@@ -1,0 +1,173 @@
+/*.product-details {
+    overflow:hidden;
+}*/
+
+.sticky-product-mobile {
+    --border-color: #f5f5f5;
+}
+
+.product-details .product-option.sticky-product-mobile {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    background: white;
+    z-index: -1;
+    border-bottom: 1px solid var(--border-color);
+    transform: translateY(100%);
+    transition: transform 450ms ease-in-out;
+}
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-wishlist {
+    position: static;
+}
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding: 0;
+}
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-actions > form {
+    flex-grow: 1;
+}
+
+body.show-mobile-options {
+    overflow: hidden;
+}
+
+.show-mobile-options .background-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.show-mobile-options .productView-stickyCart.style-1 {
+    bottom: 0px !important;
+    z-index: 101 !important;
+}
+
+.sticky-product-mobile .productView-thumbnail-wrapper .productView-for {
+    padding: 0;
+    /* margin-right: -6px;
+    padding-right: 12px; */
+}
+
+.sticky-product-mobile .productView-thumbnail.slick-current .productView-thumbnail-link img {
+    opacity: 1;
+}
+
+.sticky-product-mobile .productView-thumbnail:not(.slick-current) .productView-thumbnail-link img {
+    opacity: 1;
+}
+
+.sticky-product-mobile .productView-thumbnail {
+    padding: 0 4px;
+}
+
+.sticky-product-mobile .productView-thumbnail-wrapper {
+    margin-top: 0px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.sticky-product-mobile .productView-thumbnail-wrapper .slick-list {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sticky-product-mobile .sticky-product-mobile-header {
+    height: 40px;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sticky-product-mobile .sticky-product-mobile-content {
+    padding: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: clip;
+}
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-product-close {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    padding: 0;
+}
+
+.productView-stickyCart.style-1 .sticky-product-close,
+.productView-stickyCart.style-1 .sticky-product-close svg {
+    width: 13px;
+    height: 13px;
+}
+ 
+/* .product-option.sticky-product-mobile {
+    padding-bottom: 60px;
+} */
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-info {
+    padding-left: 0;
+    width: unset;
+    margin-top: 10px;
+}
+
+.productView-stickyCart.style-1 .sticky-product-mobile .sticky-title {
+    margin-bottom: 1px;
+}
+
+.sticky-product-mobile .productView-options {
+    margin-top: 15px;
+}
+
+.sticky-product-mobile .product-form__swatch .form__label {
+    margin-bottom: 0;
+}
+
+.sticky-product-mobile  .product-form__input + .product-form__input {
+    margin-top: 0;
+}
+
+.product-details .product-option.sticky-product-mobile .sticky-title {
+    -webkit-line-clamp: var(--product-title-line-text);
+    font-size: calc(var(--product-title-font-size) + 2px);
+}
+
+@media screen and (max-width: 767px) {
+    .product-details .product-option.sticky-product-mobile {
+        display: block;
+    }
+
+    .show-mobile-options .product-option.sticky-product-mobile {
+        transform: translateY(0);
+    }
+
+    .show-mobile-options .productView-stickyCart.style-1 .sticky-right .sticky-actions form {
+        display: block;
+    }
+
+    .show-mobile-options .productView-stickyCart.style-1 .sticky-right .sticky-actions .empty-add-cart-button-wrapper {
+        display: none;
+    }
+
+    .sticky-product-close {
+        display: none;
+    }
+
+    .sticky-product-mobile .sticky-product-close {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .product-details.product-full-width {
+        overflow: visible;
+    }
+}

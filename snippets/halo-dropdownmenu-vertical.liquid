@@ -1,0 +1,106 @@
+<li class="menu-lv-item menu-lv-1 text-left no-megamenu {% if link.links != blank %}dropdown {% endif %} {% if sale_item_lv1 contains title %} menu-sale{% endif %}">
+    {%- if link.links != blank -%}
+        <a class="menu-lv-1__action  header__menu-item list-menu__item link focus-inset menu_mobile_link link-effect"{% if link.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ link.url }}"{% endif %}>
+
+            {% assign img = link.handle | downcase | replace: ' ', '-' | append: '.png' | file_url %}
+            <span class="icon-img">
+                <img src="{{ img }}" alt="{{ link.title }}" onError="style.display = 'none';">
+            </span>
+
+            <span class="text p-relative{%- if link.child_active %} header__active-menu-item{% endif %}">
+                {{ link.title | escape }}
+            </span>
+            <span class="icon-dropdown" data-toggle-menu-mb="">
+                {% render 'icon-caret-right' %}
+            </span>
+            {%- if new_label contains title -%}
+                <span class="label new-label">
+                    {{ 'general.navigation.new_label' | t }}
+                </span>
+            {%- elsif sale_label contains title -%}
+                <span class="label sale-label">
+                    {{ 'general.navigation.sale_label' | t }}
+                </span>
+            {%- elsif hot_label contains title -%}
+                <span class="label hot-label">
+                    {{ 'general.navigation.hot_label' | t }}
+                </span>
+            {%- endif -%}
+        </a>
+        <ul class="header__submenu list-menu list-menu--disclosure list-menu--disclosure-1 caption-large motion-reduce" role="list" >
+            <div class="bg_white">
+                <div class="nav-title-mobile text-center">
+                    <span class="icon-dropdown">
+                        {% render 'icon-arrow-nav' %}
+                    </span>
+                    {{ link.title | escape }}
+                </div>
+                <li class="menu-lv-item menu-lv-2 text-left navigation_all_mobile d-none">
+                    <a {% if link.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ link.url }}"{% endif %} class="menu-lv-2__action header__menu-item list-menu__item link link--text focus-inset caption-large"{% if childlink.current %} aria-current="page"{% endif %}>
+                        <span class="text{%- if link.child_active %} header__active-menu-item{% endif %}">
+                            {{ 'general.navigation.go_to' | t }} {{ link.title | escape }}
+                        </span>
+                    </a>
+                </li>
+                {%- for childlink in link.links -%}
+                    {% assign childtitle = childlink.title | escape | downcase | handle %}
+                    <li class="menu-lv-item menu-lv-2 text-left {% if childlink.links != blank %} dropdown{% endif %} {% if sale_item_lv2 contains childtitle %} menu-sale{% endif %}">
+                        {%- if childlink.links == blank -%}
+                            <a {% if childlink.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ childlink.url }}"{% endif %} class="menu-lv-2__action header__menu-item list-menu__item link link--text focus-inset caption-large"{% if childlink.current %} aria-current="page"{% endif %}>
+                                <span class="text{% if childlink.current %} list-menu__item--active{% endif %}">
+                                    {{ childlink.title | escape }}
+                                </span>
+                            </a>
+                        {%- else -%}
+                            <div class="site-nav-list-dropdown">
+                                <a class="menu-lv-2__action header__menu-item link link--text list-menu__item focus-inset caption-large menu_mobile_link_2 has-icon"{% if childlink.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ childlink.url }}"{% endif %}>
+                                    <span class="text{% if childlink.current %} list-menu__item--active{% endif %}">
+                                        {{ childlink.title | escape }}
+                                    </span>
+                                    <span class="icon-dropdown" data-toggle-menu-mb="">
+                                        {% render 'icon-caret-right' %}
+                                    </span>
+                                </a>
+                                <ul class="header__submenu list-menu--disclosure list-menu--disclosure-2 list-menu motion-reduce">
+                                    <div class="bg_white">
+                                        <div class="nav-title-mobile text-center">
+                                            <span class="icon-dropdown">
+                                                {% render 'icon-arrow-nav' %}
+                                            </span>
+                                            {{ link.title | escape }}
+                                        </div>
+                                        <li class="menu-lv-item menu-lv-3 text-left navigation_all_mobile d-none">
+                                                <a {% if childlink.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ childlink.url }}"{% endif %} class="menu-lv-3__action header__menu-item list-menu__item link link--text focus-inset caption-large">
+                                                    <span class="text">
+                                                         {{ 'general.navigation.go_to' | t }} {{ childlink.title | escape }}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {%- for grandchildlink in childlink.links -%}
+                                            {% assign grandchildtitle = grandchildlink.title | escape | downcase | handle %}
+                                            <li class="menu-lv-item menu-lv-3 text-left{% if sale_item_lv3 contains grandchildtitle %} menu-sale{% endif %}">
+                                                <a {% if grandchildlink.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ grandchildlink.url }}"{% endif %} class="menu-lv-3__action header__menu-item list-menu__item link link--text focus-inset caption-large"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                                    <span class="text{% if grandchildlink.current %} list-menu__item--active{% endif %}">
+                                                        {{ grandchildlink.title | escape }}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {%- endfor -%}
+                                    </div>
+                                </ul>
+                            </div>
+                        {%- endif -%}
+                    </li>
+                {%- endfor -%}
+            </div>
+        </ul>
+    {%- else -%}
+        <a {% if link.url == blank %} role="link" aria-disabled="true"{% else %} href="{{ link.url }}"{% endif %} class="menu-lv-1__action header__menu-item header__menu-item list-menu__item link link--text focus-inset link-effect"{% if link.current %} aria-current="page"{% endif %}>
+            {% assign img = link.handle | downcase | replace: ' ', '-' | append: '.png' | file_url %}
+            <span class="icon-img">
+                <img src="{{ img }}" alt="{{ link.title }}" onError="style.display = 'none';">
+            </span>
+            <span class="text p-relative{%- if link.current %} header__active-menu-item{% endif %}">{{ link.title | escape }}</span>
+        </a>
+    {%- endif -%}
+</li>

@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="{{ 'halo-product-list-view-popup.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'halo-product-list-view-popup.css' | asset_url | stylesheet_tag }}</noscript>
+<div class="halo-product-list-view-popup product-list" id="list-view-popup" data-product-list-view>
+    <h2 class="mobile-popup-header"><span>{{ 'products.product.select_options' | t }}</span><button type="button" data-close-product-list-modal class="close close-modal" aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button></h2>
+    <div class='halo-popup-content product-options-wrapper card-swatch card-action' data-product-options-wrapper data-quickshop></div>
+</div>
+<script>
+    const closeModalButton = document.querySelector('[data-close-product-list-modal]')
+    closeModalButton.addEventListener('click', () => {
+        document.body.classList.remove('quickshop-list-view-show')
+    })
+</script>

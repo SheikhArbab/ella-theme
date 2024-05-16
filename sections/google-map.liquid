@@ -1,0 +1,355 @@
+<link rel="stylesheet" href="{{ 'component-google-map.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-google-map.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign show_section = section.settings.show_custom_map
+-%}
+{%- if show_section -%}
+	{%- liquid
+        assign padding_top = section.settings.mg_top_desktop | append: 'px'
+        assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+        assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+        assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+        assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+        assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+        assign container = section.settings.container
+        assign block_title = section.settings.block_title
+        assign block_text = section.settings.block_text
+        assign block_align = section.settings.block_align
+        assign block_content = section.settings.block_content
+        assign block_max_width = section.settings.block_max_width
+
+        assign btn_text = section.settings.btn_text
+        assign btn_text_color = section.settings.btn_text_color
+        assign btn_bg_color = section.settings.btn_bg_color
+        assign btn_bg_color_gradient = section.settings.btn_bg_color_gradient
+        assign btn_border_color = section.settings.btn_border_color
+        assign btn_text_color_hover = section.settings.btn_text_color_hover
+        assign btn_bg_color_hover = section.settings.btn_bg_color_hover
+        assign btn_bg_color_hover_gradient = section.settings.btn_bg_color_hover_gradient
+        assign btn_border_color_hover = section.settings.btn_border_color_hover
+        assign btn_max_width = section.settings.btn_max_width
+        assign btn_link = section.settings.btn_link
+    -%}
+
+    <div class="custom-map{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="custom-map-{{ section.id }}">
+    	<div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+    		{%- if block_title != blank or block_text != blank or btn_text != blank -%}
+                <div class="block-header">
+                    <h2 class="title text-{{ block_align }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: 1;"{% endif %}>
+                        {{ block_title | escape }}
+                    </h2>
+                    {%- if block_text != blank -%}
+	                    <p class="desc text-{{ block_align }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: 2;"{% endif %}>
+	                    	{{ block_text | escape }}
+                        </p>
+	                {%- endif -%}
+                    {% if btn_text != blank %} 
+                        {% if settings.banner_animation == 'effect_fade_up' %}
+                        <div class="scroll-trigger animate--slide-in" style="--animation-order: 3;">
+                        {% endif %}
+                            <{% if btn_link != blank %}a href={{ btn_link.url }}{% else %}button{% endif %} class="map-btn button align-{{ block_align }}">
+                                {{ btn_text }}
+                            </{% if btn_link != blank %}a{% else %}button{% endif %}>
+                            {% if settings.banner_animation == 'effect_fade_up' %}
+                            </div>
+                            {% endif %}
+                    {% endif %}
+                </div>
+            {%- endif -%}
+            <div class="block-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: 4;"{% endif %}>
+            	{{ block_content }}
+            </div>
+    	</div>
+    </div>
+
+    <style type="text/css" media="screen">
+        #custom-map-{{ section.id }}{
+            padding-top: {{ padding_top }};
+            padding-bottom: {{ padding_bottom }};
+        }
+
+        #custom-map-{{ section.id }} .block-header .desc {
+            {% if block_align == 'center' %}
+                margin-right: auto;
+                margin-left: auto;
+                max-width: {{ block_max_width | append: 'px' }};
+            {% endif %}
+        }
+
+        #custom-map-{{ section.id }} .map-btn {
+            width: {{ btn_max_width | append: "px" }};
+
+            {% if btn_text_color != blank or btn_text_color != 'rgba(0,0,0,0)' %}
+                color: {{ btn_text_color }};
+            {% endif %}
+
+            {% if btn_bg_color != blank or btn_bg_color != 'rgba(0,0,0,0)' %}
+                background: {% if btn_bg_color_gradient != blank %}{{ btn_bg_color_gradient }}{% else %}{{ btn_bg_color }}{% endif %};
+            {% endif %}
+
+            {% if btn_border_color != blank or btn_bg_color != 'rgba(0,0,0,0)' %}
+                border: 1px solid {{ btn_border_color }};
+            {% endif %}
+        }
+        
+        #custom-map-{{ section.id }} .map-btn:hover {
+            {% if btn_text_color_hover != blank or btn_text_color_hover != 'rgba(0,0,0,0)' %}
+                color: {{ btn_text_color_hover }};
+            {% endif %}
+
+            {% if btn_bg_color_hover != blank or btn_bg_color_hover != 'rgba(0,0,0,0)' %}
+                background: {% if btn_bg_color_hover_gradient != blank %}{{ btn_bg_color_hover_gradient }}{% else %}{{ btn_bg_color_hover }}{% endif %};
+            {% endif %}
+
+            {% if btn_border_color_hover != blank or btn_bg_color_hover != 'rgba(0,0,0,0)' %}
+                border: 1px solid {{ btn_border_color_hover }};
+            {% endif %}
+        }
+
+        @media (max-width: 1024px) {
+            #custom-map-{{ section.id }}{
+                padding-top: {{ padding_top_tablet }};
+                padding-bottom: {{ padding_bottom_tablet }};
+            }
+        }
+
+        @media (max-width: 550px) {
+            #custom-map-{{ section.id }}{
+                padding-top: {{ padding_top_mobile }};
+                padding-bottom: {{ padding_bottom_mobile }};
+            }
+        }
+    </style>
+{%- endif -%}
+
+{% schema %}
+	{
+		"name": "t:sections.custom_map.name",
+		"settings": [
+			{
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_custom_map",
+                "label": "t:sections.custom_map.settings.enable_map",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "fullwidth",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "text",
+                "id": "block_title",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__1",
+                "default": "Google Map"
+            },
+            {
+                "type": "text",
+                "id": "block_text",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                "default": "Give customers details about the banner image(s) or content on the template."
+            },
+            {
+                "type": "select",
+                "id": "block_align",
+                "label": "t:sections.general.settings.block-title.label__3",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:settings_schema.typography.settings.typography.left"
+                },
+                {
+                    "value": "center",
+                    "label": "t:settings_schema.typography.settings.typography.center"
+                },
+                {
+                    "value": "right",
+                    "label": "t:settings_schema.typography.settings.typography.right"
+                }],
+                "default": "center"
+            },
+            {
+                "type": "range",
+                "id": "block_max_width",
+                "label": "t:sections.custom_map.settings.label__1",
+                "default": 400,
+                "min": 100,
+                "max": 1000,
+                "step": 10,
+                "unit": "t:sections.general.settings.padding.unit",
+                "info": "t:sections.custom_map.settings.info"
+            },
+            {
+                "type": "text",
+                "id": "btn_text",
+                "label": "t:settings_schema.typography.settings.typography.button_text",
+                "default": "Find A Store"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color",
+                "label": "t:settings_schema.colors.settings.colors_name.color"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg_color",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_bg_color_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            {
+                "type": "color",
+                "id": "btn_text_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.color_hover"
+            },
+            {
+                "type": "color",
+                "id": "btn_border_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.border_hover"
+            },
+            {
+                "type": "color",
+                "id": "btn_bg_color_hover",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover"
+            },
+            {
+                "type": "color_background",
+                "id": "btn_bg_color_hover_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_hover_gradient"
+            },
+            {
+                "type": "range",
+                "id": "btn_max_width",
+                "label": "t:sections.custom_map.settings.button.label__8",
+                "default": 205,
+                "min": 100,
+                "max": 500,
+                "step": 5,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "url",
+                "id": "btn_link",
+                "label": "t:sections.custom_map.settings.button.label__9"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.custom_map.settings.header__2"
+            },
+            {
+                "type": "html",
+                "id": "block_content",
+                "label": "t:sections.custom_map.settings.map_iframe"
+            }
+            
+		],
+        "presets": [
+            {
+                "name": "t:sections.custom_map.presets.name"
+            }
+        ],
+        "disabled_on": {
+            "groups": ["header"]
+        }
+	}
+{% endschema %}

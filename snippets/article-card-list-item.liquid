@@ -1,0 +1,5 @@
+<div class="article-card__info text-left">
+    <div class="article-card__author"><span class="article__date"><span class="text_on">{{ text_on }}</span>{{- article.published_at | date: "%b %d, %Y" -}}</span></div>  
+    <h3 class="article-card__title"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+    <div class="article-card__des">{{ article.excerpt_or_content | strip_html | truncatewords: limit_content_des }}</div>
+</div>

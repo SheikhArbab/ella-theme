@@ -1,0 +1,34 @@
+{% layout none %}
+
+{%- for tag in current_tags -%}
+    {%- if tag contains 'list_handle=' -%}
+        {%- assign list_handle = tag | remove: 'list_handle=' -%}
+    {%- elsif tag contains 'limit=' -%}
+        {%- assign limit = tag | remove: 'limit=' -%}
+    {%- elsif tag contains 'sectionId=' -%}
+        {%- assign sectionId = tag | remove: 'sectionId=' -%}
+    {%- elsif tag contains 'imageRatio=' -%}
+        {%- assign image_ratio = tag | remove: 'imageRatio=' -%}
+    {%- elsif tag contains 'swipe=' -%}
+        {%- assign swipe = tag | remove: 'swipe=' -%}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- if list_handle != blank -%}
+    {%- assign list_handle = list_handle | split: '%2C' -%}
+    {%- for handle in list_handle limit: limit -%}
+        {% assign product = all_products[handle] %}
+        {%- if product != blank -%}
+            <div class="product{% if swipe == 'true' %} slider__slide grid__item{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                {% render 'product-grid-layout',
+                    product_card_product: product,
+                    media_size: image_ratio,
+                    portrait_aspect_ratio: '125',
+                    serial: forloop.index,
+                    sectionId: sectionId,
+                    loading: true
+                %}
+            </div>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}

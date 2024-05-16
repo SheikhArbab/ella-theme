@@ -1,0 +1,37 @@
+.disclosure {
+    position: relative;
+}
+
+.disclosure__button {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    /*height: 4rem;*/
+    /*padding: 0 1.5rem 0 1.5rem;*/
+    /*font-size: 1.3rem;*/
+    background-color: transparent;
+}
+
+.disclosure__list {
+    /*margin-top: -0.5rem;
+    max-height: 19rem;
+    width: 100%;
+    min-width: 12rem;
+    overflow-y: auto;
+    position: absolute;
+    bottom: 100%;
+    transform: translateY(-1rem);*/
+    z-index: 2;
+    background-color: var(--bg-white);
+}
+
+.disclosure__item {
+    position: relative;
+}
+
+.disclosure__link {
+    display: block;
+    padding: 0.5rem 2.2rem;
+    text-decoration: none;
+    line-height: 1.8;
+}

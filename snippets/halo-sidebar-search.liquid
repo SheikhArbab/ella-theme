@@ -1,0 +1,34 @@
+<div class="halo-sidebar halo-sidebar-left halo-sidebar_search" id="search-form-mobile">
+    <a href="#" class="halo-sidebar-close" data-search-close-sidebar alt="{{ 'general.common.close' | t }}">{% render 'icon-close' %}{{ 'general.common.close' | t }}</a>
+    <div class="halo-sidebar-header text-left"><span class="title">{{ 'general.search.search' | t }}</span></div>
+    <div class="halo-sidebar-wrapper custom-scrollbar">
+        <predictive-search class="search-modal__form" data-loading-text="{{ 'accessibility.loading' | t }}" data-product-to-show="{{ settings.quick_search_to_show }}">
+            <details class="search_details">
+                <summary class="header__search-full" aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
+                    <button type="button" class="header-search-close" aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}</button>
+                    <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
+                        <div class="field">
+                            <input class="search__input field__input form-input-placeholder" id="Search-In-Modal-Sidebar" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.search_product' | t }}" autocomplete="off" {%- if settings.show_quick_search -%}role="combobox" aria-expanded="false" aria-owns="predictive-search-results-list" aria-controls="predictive-search-results-list" aria-haspopup="listbox" aria-autocomplete="list" autocorrect="off" autocomplete="off" autocapitalize="off" spellcheck="false"{%- endif -%}>
+                            <input type="hidden" name="options[prefix]" value="last">
+                            <label class="field__label hiddenLabels" for="Search-In-Modal-Sidebar">{{ 'general.search.search' | t }}</label>
+                            <button class="button search__button field__button focus-inset" aria-label="{{ 'general.search.search' | t }}">{% render 'icon-search' %}</button>
+                        </div>
+                        {%- if settings.show_quick_search -%}
+                            {%- if settings.show_search_trending or settings.show_search_product -%}
+                                {%- render 'quick-searching-trending-products' -%}
+                            {%- endif -%}
+                            {%- if settings.show_quick_search -%}
+                                {%- render 'predictive-search-results' -%}
+                            {%- endif -%}
+                        {%- endif -%}
+                    </form>
+                </summary>
+                <div class="search-modal modal__content{% if settings.show_quick_search %} quickSearch{% endif %}" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}">
+                    {%- if settings.show_quick_search -%}
+                        {% render 'halo-quick-search' %}
+                    {%- endif -%}
+                </div>
+            </details>
+        </predictive-search>
+    </div>
+</div>

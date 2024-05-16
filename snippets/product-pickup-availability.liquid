@@ -1,0 +1,25 @@
+<div class="productView-pickUp">
+    {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
+    {%- assign pick_up_availabilities = current_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+    <pickup-availability class="product__pickup-availabilities no-js-hidden"
+        {% if current_variant.available and pick_up_availabilities.size > 0 %} available{% endif %}
+        data-base-url="{{ shop.url }}{{ routes.root_url }}"
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        data-has-only-default-variant="{{ product.has_only_default_variant }}"
+    >
+        <template>
+            <pickup-availability-preview class="pickup-availability-preview">
+                {% render 'icon-unavailable' %}
+                <div class="pickup-availability-info">
+                    <p class="caption-large">
+                        {{ 'products.product.pickup_availability.unavailable' | t }}
+                    </p>
+                    <button class="pickup-availability-button button button--primary">
+                        {{ 'products.product.pickup_availability.refresh' | t }}
+                    </button>
+                </div>
+            </pickup-availability-preview>
+        </template>
+    </pickup-availability>
+</div>
+<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>

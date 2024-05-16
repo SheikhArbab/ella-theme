@@ -1,0 +1,190 @@
+.product-card-layout-03 .card-product .card-group-abs-center{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+    z-index: 3;
+    transform: translateY(-50%);
+    text-align: center;
+    transition: all .3s;
+}
+
+.product-card-layout-03 .card-product .card-group-abs-bottom{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+    z-index: 3;
+    transform: none;
+    text-align: center;
+    transition: all .3s;
+}
+
+.product-card-layout-03 .card-action{
+	transform: none;
+	position: initial;
+	max-width: 210px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+}
+
+.product-card-layout-03 .card-action .selector-wrapper{
+	padding: 0 0 15px;
+}
+
+.product-card-layout-03 .card-wishlist{
+	margin-bottom: 20px;
+}
+
+.product-card-layout-03 .card-wishlist .wishlist-icon{
+	display: inline-block;
+}
+
+.product-card-layout-03 .card-wishlist .text{
+	display: none !important;
+}
+
+.product-card-layout-03 .card-quickview:not(.card-quickviewIcon){
+	position: initial;
+	transform: none;
+}
+
+.product-card-layout-03 .card-quickview .quickview-button{
+	text-transform: uppercase;
+	font-weight: var(--font-weight-bold);
+	width: 100%;
+}
+
+.product-card-layout-03 .wrapper-item-size{
+	position: initial;
+	transform: none;
+	margin-bottom: 10px;
+}
+
+.product-card-layout-03 .productListing.productList .card-swatch{
+	margin-bottom: 22px;
+}
+
+.product-card-layout-03 .productListing.productList .card-information .card-compare{
+	padding-top: 0;
+}
+
+/* Quick Search */
+.quickSearchResultsBlock .card-group-abs-center, .quickSearchResultsBlock .card-group-abs-bottom{
+	display: none;
+}
+
+/* Layout Boxed */
+.body-boxed.product-card-layout-03 .card-quickview .quickview-button{
+	font-weight: var(--font-weight-normal);
+    text-decoration: underline;
+    text-underline-offset: 1px;
+}
+.body-boxed.product-card-layout-03 .card-action{
+	max-width: 170px;
+}
+
+/* Quick Shop Option 2 */
+.product-card-layout-03.quick_shop_option_2 .product-item.quickshop-popup-show .card-product .card-group-abs-center {
+	top: auto;
+	transform: none;
+	bottom: 0;
+}
+
+.product-card-layout-03.quick_shop_option_2 .product-item.quickshop-popup-show .card-action .variants-popup {
+	width: 100%;
+}
+
+.product-card-layout-03.quick_shop_option_2 .product-item.quickshop-popup-show .card-product .card-product__group {
+	z-index: 2;
+}
+
+.product-card-layout-03.quick_shop_option_2 .product-item.quickshop-popup-show .product-card__button2 {
+	left: 0;
+    width: 100%;
+}
+
+.product-card-layout-03 .product-item .card-action .variants-popup {
+	animation: none;
+}
+
+@media (max-width: 1024px){
+	.product-card-layout-03 .card-wishlist, .product-card-layout-03 .card-review{
+		display: none;
+	}
+
+    .product-card-layout-03 .card-wishlist.show-mb {
+      display: flex;
+    }
+
+	.product-card-layout-03 .card-product .card-group-abs-bottom{
+		display: none;
+	}
+
+	.product-card-layout-03 .card-product .card-group-abs-center{
+		top: auto;
+		bottom: 0;
+		transform: none;
+	}
+
+	.product-card-layout-03 .card-action{
+		max-width: 100%;
+		margin-bottom: 0;
+	}
+
+	.product-card-layout-03 .card-action .variants-popup{
+		width: 100%;
+	}
+}
+
+@media (min-width: 1025px){
+    .product-card-layout-03 .card-product__group .card-wishlist {
+      display: none;
+    }
+	
+	.product-card-layout-03 .card .card-group-abs-center{
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.product-card-layout-03 .card:hover .card-group-abs-center{
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.product-card-layout-03 .card:hover .card-action{
+		transform: none;
+	}
+
+	.product-card-layout-03 .card:hover .card-quickview:not(.card-quickviewIcon){
+		transform: none;
+	}
+
+	.product-card-layout-03 .card-action .variants-popup{
+		width: calc(100% - 20px);
+		left: 50%;
+	    transform: translateX(-50%);
+	    transition: all .3s;
+	}
+
+	.product-card-layout-03 .quickshop-popup-show .card-action .variants-popup {
+		opacity: 1;
+	}
+
+	.product-card-layout-03 .product-item.quickshop-popup-show .card-action .variants-popup{
+		left: 50%;
+	    transform: translateX(-50%);
+	}
+
+	.product-card-layout-03 .card-action .variants-popup-content{
+		padding: 25px 10px 60px 10px;
+	}
+
+	.product-card-layout-03 .product-card__button2{
+		bottom: 10px;
+		left: auto;
+    	width: calc(100% - 20px);
+	}
+
+}

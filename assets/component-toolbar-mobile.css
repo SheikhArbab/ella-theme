@@ -1,0 +1,108 @@
+.halo-sticky-toolbar-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    box-shadow: 0 0 9px rgb(0 0 0 / 12%);
+    transition: transform .6s;
+}
+
+.bottom-bar {
+    padding: 3px 15px 3px;
+    min-height: 60px;
+}
+
+.bottom-bar--list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    align-items: center;
+}
+
+.bottom-bar--list li > a {
+    padding: 7px 2px;
+    display: block;
+    pointer-events: auto;
+    text-align: center;
+}
+
+.bottom-bar--list li > a[data-cart-sidebar] {
+    position: relative;
+}
+
+.bottom-bar--list span {
+    display: block;
+    pointer-events: none;
+    font-weight: var(--font-weight);
+    font-size: var(--font-size);
+}
+
+.bottom-bar--list .icon + .text {
+    margin-top: 6px;
+    line-height: 1;
+}
+
+.bottom-bar--list svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
+
+.bottom-bar--list .icon.icon-collection {
+    padding: 1px;
+}
+
+.bottom-bar--list .block-content {
+    position: fixed;
+    top: 100%;
+    right: 0;
+    bottom: 0;
+    padding: 60px 10px 20px;
+    height: 100%;
+    z-index: 101;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: top var(--duration-default) ease,visibility var(--duration-default) ease;
+    background-color: var(--bg-white);
+}
+
+.bottom-bar--list .block-content.show {
+    opacity: 1;
+    visibility: visible;
+    top: 0;
+}
+
+.bottom-bar--list .bottom-bar--close {
+    right: 0px;
+    background: var(--bg-white);
+    border: none;
+}
+.bottom-bar--list .bottom-bar--close svg {
+    fill: var(--bg-black);
+    padding: 2px;
+}
+
+.bottom-bar--list .cart-count-bubble{
+    top: 0;
+    right: -7px;
+    background-color: var(--bg-bubble);
+}
+
+.bottom-bar--list .cart-count-bubble .text{
+    color: var(--color-bubble);
+}
+
+@media (max-width: 1024px){
+    .sticky-toolbar-mobile .footer{
+        padding-bottom: 60px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .halo-sticky-toolbar-mobile {
+        display: none;
+    }
+}

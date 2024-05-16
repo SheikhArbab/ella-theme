@@ -1,0 +1,78 @@
+{% liquid
+    if settings.enable_currencies
+        if settings.currency_type == 'shopify_payment'
+            assign enable_shopify_payments_currencies = true
+            assign enable_multiple_currencies = false
+            assign enable_auto_currency = false 
+        elsif settings.currency_type == 'multiple_currencies'
+            assign enable_shopify_payments_currencies = false
+            assign enable_multiple_currencies = true
+            assign enable_auto_currency = false 
+        elsif settings.currency_type == 'auto_currencies'
+            assign enable_shopify_payments_currencies = false
+            assign enable_multiple_currencies = false
+            assign enable_auto_currency = true 
+        endif
+    else 
+        assign enable_shopify_payments_currencies = false
+        assign enable_multiple_currencies = false
+        assign enable_auto_currency = false 
+    endif
+%}
+{%- if enable_multiple_currencies or enable_shopify_payments_currencies -%}
+<div class="halo-currency">
+	<link rel="stylesheet" href="{{ 'currency.css' | asset_url }}" media="all" onload="this.media='all'">
+	<noscript>{{ 'currency.css' | asset_url | stylesheet_tag }}</noscript>
+	{%- if enable_shopify_payments_currencies -%}
+		{% form 'currency' %}
+		<select name="currency" style="display:none;">
+		    {%- for currency in shop.enabled_currencies -%}
+		    {%- if currency == cart.currency -%}
+		    <option selected="true" value="{{ currency.iso_code }}">{{currency.iso_code}}</option>
+		    {%- else -%}
+		    <option value="{{ currency.iso_code }}">{{currency.iso_code}}</option>
+		    {%- endif -%}
+		    {%- endfor -%}
+		</select>
+		{% endform %}
+		<div class="currency-block">
+		    <div class="btn-group currency-dropdown shopify-currency">
+		    	<p class="title"> {{ 'currency.currency' | t }}</p>
+		        <div class="dropdown-menu currency-menu custom-scrollbar d-flex flex-align-center flex-wrap" id="currencies">
+		            {%- for currency in shop.enabled_currencies -%}
+		            <a class="dropdown-item{% if currency == cart.currency %} active {% endif %}" href="#" data-currency="{{currency.iso_code}}" role="button">
+		                {% assign currency_iso = currency.iso_code %} {% render 'icon_currency', currency_iso: currency_iso %} <span class="text" role="text" aria-label="currency">{{currency.iso_code}}</span>
+		            </a>
+		            {%- endfor -%}
+		        </div>
+		    </div>
+		</div>
+	{%- else -%}
+	{%- if enable_multiple_currencies -%}
+		<div class="currency-block">
+		    <div class="btn-group currency-dropdown">
+		    	<p class="title"> {{ 'currency.currency' | t }}</p>
+		        <div class="dropdown-menu currency-menu custom-scrollbar d-flex flex-align-center flex-wrap" id="currencies">
+		            {%- endif -%}
+		            {%- for i in (1..10) -%}
+		            {%- capture currency_unit %}currency_{{ i }}_unit{% endcapture -%}
+		            {%- assign currency_length = settings[currency_unit] | size -%}
+		            {%- capture currency_icon %}i-currency-{{ i }}{% endcapture -%}
+			            {%- if currency_length > 0 -%}
+				            <a class="dropdown-item{% if shop.currency == settings[currency_unit] %} active {% endif %}" href="#" data-currency="{{settings[currency_unit]}}" role="button">
+				                <span class="icon" role="text" aria-label="currency">{{ settings[currency_icon] }}</span> <span class="text" role="text" aria-label="currency">{{ settings[currency_unit]}}</span>
+				                {%- if icon == 'sort' -%}
+						            {% render 'icon-sort-down' %}
+						        {%- else -%}
+						            <svg role="img" xmlns="http://www.w3.org/2000/svg" id="Capa_1" enable-background="new 0 0 551.13 551.13" height="512" viewBox="0 0 551.13 551.13" width="512"><path d="m275.565 361.679-223.897-223.896h-51.668l275.565 275.565 275.565-275.565h-51.668z"/></svg>
+						        {%- endif -%}
+				            </a>
+			            {%- endif -%}
+		            {%- endfor -%}
+		        </div>
+		    </div>
+		</div>
+	{%- endif -%}
+</div>
+{%- endif -%}
+{% render 'halo-currency-js' %}

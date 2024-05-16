@@ -1,0 +1,134 @@
+{%- liquid
+    assign variantCount = product.variants | size
+    assign swatch_type = settings.swatch_type
+    assign colorList = ''
+    assign color = ''
+    assign count = 0
+-%}
+{%- if variantCount > 0  and product.has_only_default_variant != true -%}
+    <script>window.quick_view_inven_array_{{ product.id }} = {
+            {%- for variant in product.variants -%}
+                '{{ variant.id }}': '{{ variant.inventory_quantity }}',
+            {%- endfor -%}
+        };</script>
+{%- endif -%}
+<a href="#" class="variants-popup-close" data-cancel-quickshop-popup alt="{{ 'general.common.close' | t }}">{% render 'icon-close' %}{{ 'general.common.close' | t }}</a>
+<div class="variants-popup-content text-center" data-quickshop>
+    {%- assign formId = id | append: '-' | append: product.id -%}
+    <form action="{{ routes.cart_url }}/add" method="post" class="variants" id="swatch-{{ formId }}-{{ sectionId }}-{{ list }}" data-id="product-actions-{{ product.id }}{{ list }}" enctype="multipart/form-data">
+        {%- assign product_swatch_option = settings.swatch | downcase -%}
+        {%- for option in product.options_with_values -%}
+            {%- assign option_name = option.name | downcase -%}
+            {%- if product_swatch_option contains option_name -%}
+                <div class="selector-wrapper selector-wrapper-1 swatch option-color" data-option-index="0" data-option-position="{{ forloop.index | minus: 1 }}" {% unless list %}{% if settings.quick_shop_type == '1' %}{% if settings.show_swatch %}style="display: none;"{% endif %}{% else %}{% endif %}{% endunless %}>
+                    <label class="form-label">{{ option.name }}: <span class="label-value-{{ forloop.index }}">{{ option.selected_value }}</span></label>
+                    {%- liquid
+                        assign option_index = forloop.index
+                        assign option_index0 = forloop.index0
+                        assign values = ''
+                    -%}
+                    {%- for variant in product.variants -%}
+                        {%- assign value = variant.options[option_index0] -%}
+                        {%- unless values contains value -%}
+                            {%- liquid
+                                assign values = values | join: ';'
+                                assign values = values | append: ';' | append: value
+                                assign values = values | split: ';'
+                                assign value_2 = value | remove: " " | downcase
+
+                                assign enable_variant_image = false
+                                case swatch_type
+                                    when 'variant_image'
+                                        assign background_image = variant.image.src | product_img_url: '40x'
+                                        if variant.image
+                                            assign enable_variant_image = true
+                                        endif
+                                    when 'color'
+                                        assign background_image = value | handle | append: '.png' | file_url
+                                        assign enable_variant_image = true
+                                    when 'metafields'
+                                        assign variant_color = variant.metafields.custom.variant_color
+                                        assign color_codes = false
+        
+                                        if variant_color
+                                            assign enable_variant_image = true
+                                        
+                                            if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                                assign color_codes = true
+                                                assign background_color = variant_color
+                                            else
+                                                assign background_image = variant_color | append: '.png' | file_url
+                                            endif
+                                        elsif variant.image
+                                            assign enable_variant_image = true
+                                            assign background_image = variant.image.src | product_img_url: '40x'
+                                        endif
+                                endcase
+                            -%}
+                            <div class="swatch-element {{ value_2 }}{% if variant.available %} available{% else %} soldout{% endif %}" data-value="{{ value }}">
+                                <input class="single-option" type="radio" name="SingleOptionSelector-{{ option_index0 }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-index="option{{ option_index }}" value="{{ value | escape }}" id="SingleOptionSelector{{ option_index0 }}-{{ value }}-{{ product.id }}-{{ sectionId }}{{ list }}" {% unless variant.available %}disabled{% endunless %}>
+                                <label class="single-label" title="{{ value }}" for="SingleOptionSelector{{ option_index0 }}-{{ value }}-{{ product.id }}-{{ sectionId }}{{ list }}">
+                                    <span
+                                        class="pattern"
+                                        style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                    ></span>
+                                </label>
+                            </div>
+                        {%- endunless -%}
+                    {%- endfor -%}
+                </div>
+            {%- else -%}
+                <div class="selector-wrapper selector-wrapper-{% if position == 0 %}{{ forloop.index }}{% else %}{% if forloop.index == 1 %}2{% else %}3{% endif %}{% endif %} swatch" data-option-index="{% if position == 0 %}{{ forloop.index | minus: 1 }}{% else %}{% if forloop.index == 1 %}1{% else %}2{% endif %}{% endif %}">
+                    <label class="form-label">{{ option.name }}: <span class="label-value-{{ forloop.index }}">{{ option.selected_value }}</span></label>
+                    {%- liquid
+                        assign option_index = forloop.index
+                        assign option_index0 = forloop.index0
+                        assign values = ''
+                    -%}
+                    {%- for variant in product.variants -%}
+                        {%- assign value = variant.options[option_index0] -%}
+                        {%- unless values contains value -%}
+                            {%- liquid
+                                assign values = values | join: ';'
+                                assign values = values | append: ';' | append: value
+                                assign values = values | split: ';'
+                                assign value_2 = value | remove: " " | downcase
+                            -%}
+                            <div class="swatch-element {{ value_2 }}{% if variant.available %} available{% else %} soldout{% endif %}" data-value="{{ value }}">
+                                <input class="single-option" type="radio" name="SingleOptionSelector-{{ option_index0 }}-{{ product.id }}-{{ sectionId }}{{ list }}" data-index="option{{ option_index }}" value="{{ value | escape }}" id="SingleOptionSelector{{ option_index0 }}-{{ value }}-{{ product.id }}-{{ sectionId }}{{ list }}"{% unless variant.available %} disabled{% endunless %}>
+                                <label class="single-label" title="{{ value }}" for="SingleOptionSelector{{ option_index0 }}-{{ value }}-{{ product.id }}-{{ sectionId }}{{ list }}">{{ value }}</label>
+                                {%- if settings.show_notify_form -%}
+                                    <a class="single-action clearfix" href="#" data-open-notify-popup data-variant-id><span class="text">{{ 'notify_form.general.label' | t }}</span></a>
+                                {%- endif -%}
+                            </div>
+                        {% endunless %}
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+        {%- endfor -%}
+        <select name="id" id="ProductSelect-{{ product.id }}-{{ sectionId }}{{ list }}" class="selector-wrapper-hidden" style="display: none;">
+            {%- for variant in product.variants -%}
+                {%- if variant.available -%}
+                    <option value="{{ variant.id }}" data-value="{{ variant.id }}">{{ variant.title }}</option>
+                {%- else -%}
+                    <option disabled="disabled" data-value="{{ variant.id }}">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+                {%- endif -%}
+            {% endfor %}
+        </select>
+        {% if settings.quick_shop_type == '2' %}
+            <label class="form-label label-quantity-2">{{ 'products.product.quantity.label_1' | t }}</label>
+            <quickshop-update-quantity class="previewCartItem-qty quickshop-quantity">
+                <button type="button" name="minus" data-minus-quantity-quickshop class="minus btn-quantity"></button>
+                <input class="form-input quantity {{product}}" name="quantity" id="quickshop-update-{{ product.id }}" data-qtt-id1="quantity{{ product.id }}" value="1" type="number"{% if product.variant.inventory_management != null and product.variant.inventory_quantity > 0 %} data-inventory-quantity="{{ product.variant.inventory_quantity }}"{% endif %} data-product-card-quantity data-product-card-quantity-id="{{ product.id }}"/>
+                <button type="button" name="plus" data-plus-quantity-quickshop class="plus btn-quantity"></button>
+            </quickshop-update-quantity>
+        {% endif %}
+        <div class="product-card__button2">
+            <input type="hidden" name="quantity" value="1" />
+            <button data-btn-addToCart class="button button2 add-to-cart-btn" type="submit" data-form-id="#swatch-{{formId}}-{{sectionId}}-{{list}}">{{ 'products.product.add.label__2' | t }}</button>
+            {%- if settings.quick_shop_type == '2' -%}
+            <button data-cancel-quickshop-popup class="button button2 cancel-btn">{{ 'products.product.cancel' | t }}</button>
+            {%- endif -%}
+        </div>
+    </form>
+</div>

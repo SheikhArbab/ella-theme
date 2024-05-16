@@ -1,0 +1,31 @@
+{%- liquid
+    assign hot_stock_style = block.settings.hot_stock_style
+    assign spacing_top = block.settings.spacing_top
+    assign spacing_bottom = block.settings.spacing_bottom
+
+    if current_variant.inventory_management and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= productMaxStock
+        assign checkShowHotStock = true
+    else
+        assign checkShowHotStock = false
+    endif
+-%}
+
+<div class="productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
+    style="--spacing-top: {{ spacing_top | append: 'px' }};
+    --spacing-bottom: {{ spacing_bottom | append: 'px' }}"
+>
+    <div class="productView-hotStock style-{{ hot_stock_style }}{% unless checkShowHotStock %} is-hide{% endunless %}" data-hot-stock="{{ productMaxStock }}"{% if variantCount < 2 %} data-current-inventory="{{ current_variant.inventory_quantity }}"{% endif %}>
+        {%- if hot_stock_style == '2' -%}
+            <span class="hotStock-text">
+                {{ 'products.product.hot_stock_2' | t : inventory: current_variant.inventory_quantity }}
+            </span>
+            <div class="hotStock-progress">
+                <span class="hotStock-progress-item"></span>
+            </div>
+        {%- else -%}
+            <span class="hotStock-text">
+                {{ 'products.product.hot_stock' | t : inventory: current_variant.inventory_quantity }}
+            </span>
+        {%- endif -%}
+    </div>
+</div>

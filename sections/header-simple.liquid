@@ -1,0 +1,490 @@
+{{ 'component-header-simple.css' | asset_url | stylesheet_tag }}
+<header class="header header-simple" style="--spacing-l-r: {{ section.settings.padding_full_width }}px">
+    <div class="header-simple__content">
+        {%- for block in section.blocks -%}
+            <div class="header-simple__item header-simple__item--{{ block.type }}" style="--bg-color: {% if block.settings.bg_gradient != blank %}{{ block.settings.bg_gradient }}{% else %}{{ block.settings.bg_color }}{% endif %}; --p-top: {{ block.settings.padding_top }}px; --p-bottom: {{ block.settings.padding_bottom }}px">
+                <div class="container container-{{ section.settings.container }}">
+                    <div class="header-simple__block-wrapper" style="--layout: {{ block.settings.layout }}">
+                        {%- case block.type -%}
+                            {%-  when 'group_1' -%}
+                                <div class="header__language_currency text-left clearfix" style="--color: {{ block.settings.language_currency_color }}">
+                                    {%- if block.settings.show_language_currency -%}
+                                        {% if settings.enable_multilang_shopify or settings.enable_currencies %}
+                                            <div class="header__languageCurrency header-language_currency">
+                                                <button type="button" class="icon-languageCurrency header__icon" aria-label="Language Currency" data-lang-currency>{% render 'icon-globe' %}{% render 'icon-sort-down' %}</button>
+                                                <div class="top-language-currency">
+                                                    {%- if settings.enable_multilang_shopify -%}
+                                                        {% render 'halo-top-language', icon: 'sort' %}
+                                                    {%- endif -%}
+                                                    {%- if settings.enable_currencies -%}
+                                                        {% render 'halo-top-currency', icon: 'sort' %}
+                                                    {%- endif -%}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {%- endif -%}
+                                    <div class="custom-text-01" style="--color: {{ block.settings.customer_text_01_color }}">{{ block.settings.customer_text_01 }}</div>
+                                </div>
+                                <div class="header__icons text-right clearfix">
+                                    <div class="custom-text-02" style="--color: {{ block.settings.customer_text_02_color_1 }}; --color-2: {{ block.settings.customer_text_02_color_2 }}">{{ block.settings.customer_text_02 }}</div>
+                                </div>
+                            {%-  when 'group_2' -%}
+                                <div class="header__logo text-left clearfix" style="--logo-width: {% if block.settings.logo == blank %}auto; --logo-svg-width: {% endif %}{{ block.settings.logo_width }}px; --font-size: {{ block.settings.logo_font_size }}px; --font-weight: {{ block.settings.logo_font_weight }}; --color: {{ block.settings.logo_color }}">
+                                    <div class="header__heading">
+                                        <a href="{{ routes.root_url }}" class="header__heading-link focus-inset">
+                                            {%- if block.settings.logo != blank -%}
+                                                {%- liquid 
+                                                    assign logo = block.settings.logo
+                                                    assign logo_width = block.settings.logo_width
+                                                    assign logo_height = logo_width | divided_by: logo.aspect_ratio | round
+                                                    assign logo_alt = logo.alt | default: shop.name | escape
+                                                -%}
+                                                {{ logo | image_url: width: 300 | image_tag:
+                                                    class: 'header__heading-logo motion-reduce',
+                                                    widths: '50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300',
+                                                    height: logo_height,
+                                                    width: logo_width,
+                                                    alt: logo_alt
+                                                }}
+                                            {%- else -%}
+                                                <span class="h2 {{ block.settings.logo_text_transform }}">{% if block.settings.logo_text != blank %}{{ block.settings.logo_text }}{% else %}{{ shop.name }}{% endif %}</span>
+                                            {%- endif -%}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="header__icons text-right clearfix">
+                                    {%- if block.settings.customer_text_03 != blank -%}
+                                        <div class="custom-text-03" style="--color: {{ block.settings.customer_text_03_color }}; --border-color: {{ block.settings.customer_text_03_border_color }}">{{  block.settings.customer_text_03 }}</div>
+                                    {%- endif -%}
+                                    {% if block.settings.show_customer %}
+                                        <div class="header__iconItem header__group">
+                                            {%- if shop.customer_accounts_enabled and block.settings.show_customer -%}
+                                                {% if routes.account_login_url contains '/account/login' %}
+                                                    {% assign is_contained = true %}
+                                                {% else %}
+                                                    {% assign is_contained = false %}
+                                                {% endif %}
+                                                <div class="header__icon customer-links" style="--color: {{ block.settings.customer_color }}">
+                                                    <a href="{{ routes.account_login_url }}" class="header__icon header__icon--account link link--text"{% if is_contained %} data-open-auth-sidebar{% endif %}>
+                                                        <span class="text-user">
+                                                            {%- liquid
+                                                            if customer
+                                                            echo 'customer.account_fallback' | t
+                                                            else
+                                                            echo 'customer.log_in' | t
+                                                            endif
+                                                            -%}
+                                                        </span>
+                                                        {% render 'icon-account' %}
+                                                    </a>
+                                                </div>
+                                            {%- endif -%}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                        {%- endcase -%}
+                    </div>
+                </div>
+            </div>
+        {%- endfor -%}
+    </div>
+</header>
+
+<script defer>
+    if (window.innerWidth < 1025) {
+        let addCustomTextMenuMobile = () => {
+            const headerSimpleWrapper = document.querySelector('.header-simple__content'),
+                customText1 = headerSimpleWrapper.querySelector('.custom-text-01'),
+                customText2 = headerSimpleWrapper.querySelector('.custom-text-02'),
+                customText3 = headerSimpleWrapper.querySelector('.custom-text-03'),
+                html = `<div class="custom-text-01" style="${customText1.getAttribute('style')}">${customText1.innerHTML}</div><div class="custom-text-02" style="${customText2.getAttribute('style')}">${customText2.innerHTML}</div><div class="custom-text-03" style="${customText3.getAttribute('style')}">${customText3.innerHTML}</div>`;
+            
+            document.querySelector('.wrapper-links').innerHTML = html
+        }
+        
+        window.addEventListener('load', () => {
+            addCustomTextMenuMobile();
+        })
+    }
+</script>
+
+{% schema %}
+{
+    "name": "Header - Simple",
+    "limit": 1,
+    "class": "section-header-simple",
+    "settings": [
+        {
+            "type": "paragraph",
+            "content": "*You should only activate \/ use \"Header\" you want, don't use the redundant headers which may not optimize for performance."
+        },
+        {
+            "type": "select",
+            "id": "container",
+            "label": "t:sections.layout.container.option",
+            "default": "1170",
+            "options": [
+                {
+                    "value": "1170",
+                    "label": "t:sections.layout.container.option4"
+                },
+                {
+                    "value": "1370",
+                    "label": "t:sections.layout.container.option8"
+                },
+                {
+                    "value": "1470",
+                    "label": "t:sections.layout.container.option5"
+                },
+                {
+                    "value": "1570",
+                    "label": "t:sections.layout.container.option6"
+                },
+                {
+                    "value": "1770",
+                    "label": "t:sections.layout.container.option3"
+                },
+                {
+                    "value": "full",
+                    "label": "t:sections.layout.container.option2"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "padding_full_width",
+            "label": "t:sections.layout.container.padding_full_width",
+            "min": 0,
+            "max": 75,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0,
+            "info": "t:sections.layout.container.info_full_width"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "group_1",
+            "name": "Conversion & Text",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "select",
+                    "id": "layout",
+                    "label": "t:settings_schema.general.settings.pagination.layout",
+                    "default": "row",
+                    "options": [
+                        {
+                            "value": "row",
+                            "label": "Row"
+                        },
+                        {
+                            "value": "row-reverse",
+                            "label": "Row reverse"
+                        }
+                    ]
+                },
+                {
+                    "type": "color",
+                    "id": "bg_color",
+                    "label": "t:settings_schema.colors.settings.colors_name.background_color",
+                    "default": "#293355"
+                },
+                {
+                    "type": "color_background",
+                    "id": "bg_gradient",
+                    "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.language_currency"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_language_currency",
+                    "label": "t:sections.header.settings.navigation.label_3",
+                    "default": true
+                },
+                {
+                    "type": "color",
+                    "id": "language_currency_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#fff"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.customer_content_text_01"
+                },
+                {
+                    "type": "richtext",
+                    "id": "customer_text_01",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                    "default": "<p>Available 24/7 at <a href=\"tel:(018)%20900-6690/\">(018) 900-6690</a></p>"
+                },
+                {
+                    "type": "color",
+                    "id": "customer_text_01_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#fff"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.customer_content_text_02"
+                },
+                {
+                    "type": "richtext",
+                    "id": "customer_text_02",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                    "default": "<p><strong>First purchase offer: take 30% off shopwide.</strong> Code applied at checkout. Exclusion apply*</p>"
+                },
+                {
+                    "type": "color",
+                    "id": "customer_text_02_color_1",
+                    "label": "t:sections.header.settings.header_top.label__2",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "customer_text_02_color_2",
+                    "label": "t:sections.header.settings.header_top.label__3",
+                    "default": "#cad3f1"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.main-product.settings.general.spacing"
+                },
+                {
+                    "type": "range",
+                    "id": "padding_top",
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                    "unit": "px",
+                    "label": "t:sections.main-list-collections.settings.spacing.mg_top",
+                    "default": 8
+                },
+                {
+                    "type": "range",
+                    "id": "padding_bottom",
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                    "unit": "px",
+                    "label": "t:sections.main-list-collections.settings.spacing.mg_bottom",
+                    "default": 8
+                }
+            ]
+        },
+        {
+            "type": "group_2",
+            "name": "Logo, Text & Customer",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "select",
+                    "id": "layout",
+                    "label": "t:settings_schema.general.settings.pagination.layout",
+                    "default": "row",
+                    "options": [
+                        {
+                            "value": "row",
+                            "label": "Row"
+                        },
+                        {
+                            "value": "row-reverse",
+                            "label": "Row reverse"
+                        }
+                    ]
+                },
+                {
+                    "type": "color",
+                    "id": "bg_color",
+                    "label": "t:settings_schema.colors.settings.colors_name.background_color",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color_background",
+                    "id": "bg_gradient",
+                    "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header__4.content"
+                },
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.header.settings.logo.label__1"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "logo",
+                    "label": "t:settings_schema.quick_view.settings.header__2.content"
+                },
+                {
+                    "type": "range",
+                    "id": "logo_width",
+                    "min": 50,
+                    "max": 300,
+                    "step": 5,
+                    "unit": "t:sections.header.settings.logo_width.unit",
+                    "label": "t:sections.header.settings.logo_width.label__1",
+                    "default": 90
+                },
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.header.settings.menu_tab.label__3"
+                },
+                {
+                    "type": "textarea",
+                    "id": "logo_text",
+                    "label": "t:sections.header.settings.logo.label__7"
+                },
+                {
+                    "type": "range",
+                    "id": "logo_font_size",
+                    "label": "t:settings_schema.typography.settings.font_size.label",
+                    "min": 15,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "t:sections.header.settings.logo.unit",
+                    "default": 30
+                },
+                {
+                    "type": "select",
+                    "id": "logo_font_weight",
+                    "label": "t:settings_schema.typography.settings.font_weight.label",
+                    "default": "900",
+                    "options": [
+                    {
+                        "value": "400",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                    },
+                    {
+                        "value": "500",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                    },
+                    {
+                        "value": "600",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                    },
+                    {
+                        "value": "700",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                    },
+                    {
+                        "value": "800",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                    },
+                    {
+                        "value": "900",
+                        "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                    }]
+                },
+                {
+                    "type": "select",
+                    "id": "logo_text_transform",
+                    "label": "t:settings_schema.typography.settings.text_transform.label",
+                    "default": "uppercase",
+                    "options": [
+                    {
+                        "value": "capitalize",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__2"
+                    },
+                    {
+                        "value": "uppercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__3"
+                    },
+                    {
+                        "value": "lowercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__4"
+                    }]
+                },
+                {
+                    "type": "color",
+                    "id": "logo_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#232323"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.customer_content_text_01"
+                },
+                {
+                    "type": "richtext",
+                    "id": "customer_text_03",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                    "default": "<p><a href=\"https:\/\/1.envato.market\/dokaB20\/\" target=\"_blank\" title=\"Buy Ella Theme\"><strong>GET ELLA<\/strong><\/a><\/p><p><a href=\"https:\/\/1.envato.market\/dokaB20\/\" target=\"_blank\" title=\"Buy Ella Theme\">Only $89<\/a><\/p>"
+                },
+                {
+                    "type": "color",
+                    "id": "customer_text_03_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#ba7a2d"
+                },
+                {
+                    "type": "color",
+                    "id": "customer_text_03_border_color",
+                    "label": "t:settings_schema.colors.settings.colors_name.border_color",
+                    "default": "#ba7a2d"
+                },
+                {
+                    "type": "header",
+                    "content": "Customer"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_customer",
+                    "label": "t:sections.header.settings.header_icons.label__2",
+                    "default": true
+                },
+                {
+                    "type": "color",
+                    "id": "customer_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#232323"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.main-product.settings.general.spacing"
+                },
+                {
+                    "type": "range",
+                    "id": "padding_top",
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                    "unit": "px",
+                    "label": "t:sections.main-list-collections.settings.spacing.mg_top",
+                    "default": 19
+                },
+                {
+                    "type": "range",
+                    "id": "padding_bottom",
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                    "unit": "px",
+                    "label": "t:sections.main-list-collections.settings.spacing.mg_bottom",
+                    "default": 20
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Header - Simple",
+            "blocks": [
+                {
+                    "type": "group_1"
+                },
+                {
+                    "type": "group_2"
+                }
+            ]
+        }
+    ],
+    "enabled_on": {
+        "groups": ["header"]
+    }
+}
+{% endschema %}

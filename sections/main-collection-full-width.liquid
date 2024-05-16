@@ -1,0 +1,932 @@
+{{ 'component-grid.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-listing.css' | asset_url | stylesheet_tag }}
+
+{% render 'collection-full-width' %}
+
+{% render 'schema',
+    collection: collection
+%}
+
+{% schema %}
+{
+    "name": "t:sections.main-collection-product-grid.name",
+    "settings": [
+    {
+        "type": "header",
+        "content": "t:settings_schema.general.name"
+    },
+    {
+        "id": "colors_bg",
+        "type": "color",
+        "label": "t:settings_schema.colors.settings.colors_name.background_color"
+    },
+    {
+        "id": "colors_bg_gradient",
+        "type": "color_background",
+        "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+    },
+    {
+        "type": "select",
+        "id": "container",
+        "label": "t:sections.layout.container.option",
+        "default": "container",
+        "options": [
+            {
+                "value": "container",
+                "label": "t:sections.layout.container.option1"
+            },
+            {
+                "value": "1170",
+                "label": "t:sections.layout.container.option4"
+            },
+            {
+                "value": "1770",
+                "label": "t:sections.layout.container.option3"
+            },
+            {
+                "value": "fullwidth",
+                "label": "t:sections.layout.container.option2"
+            }
+        ]
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_top"
+    },
+    {
+        "type": "range",
+        "id": "mg_top_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "mg_top_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "mg_top_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "header",
+        "content": "t:sections.layout.margin_bottom"
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_desktop",
+        "label": "t:sections.layout.mg_desktop.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_tablet",
+        "label": "t:sections.layout.mg_tablet.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "range",
+        "id": "mg_bottom_mobile",
+        "label": "t:sections.layout.mg_mobile.label",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "t:sections.layout.mg_desktop.unit",
+        "default": 0
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__2.content"
+    },
+    {
+        "id": "show_sidebar",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-sidebar.settings.general.label__1"
+    },
+    {
+        "type": "checkbox",
+        "id": "show_sidebar_collapse",
+        "label": "t:sections.main-sidebar.settings.general.label__2",
+        "default": true
+    },
+    {
+        "type": "checkbox",
+        "id": "enable_sticky",
+        "label": "t:sections.main-sidebar.settings.general.label__5",
+        "default": false
+    },
+    {
+        "type": "select",
+        "id": "sidebar_layout",
+        "label": "t:sections.main-sidebar.settings.general.layout",
+        "default": "layout_1",
+        "options": 
+        [
+            {
+              "value": "layout_1",
+              "label": "t:settings_schema.typography.settings.typography.style_1"
+            },
+            {
+              "value": "layout_2",
+              "label": "t:settings_schema.typography.settings.typography.style_2"
+            }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "sidebar_collapse_default",
+        "label": "t:sections.main-sidebar.settings.general.label__4",
+        "default": "expand",
+        "options": 
+        [
+            {
+              "value": "expand",
+              "label": "t:sections.main-sidebar.settings.general.options__3"
+            },
+            {
+              "value": "close",
+              "label": "t:sections.main-sidebar.settings.general.options__4"
+            }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "sidebar_type",
+        "label": "t:sections.main-sidebar.settings.general.label__3",
+        "default": "vertical",
+        "options": 
+        [
+            {
+              "value": "vertical",
+              "label": "t:sections.main-sidebar.settings.general.options__1"
+            },
+            {
+              "value": "horizontal",
+              "label": "t:sections.main-sidebar.settings.general.options__2"
+            }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "sidebar_position",
+        "label": "t:sections.general.settings.position.label__1",
+        "default": "left",
+        "options": 
+        [
+            {
+              "value": "left",
+              "label": "t:sections.general.settings.position.options__1"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.general.settings.position.options__2"
+            }
+        ]
+    },
+    {
+        "type": "paragraph",
+        "content": "t:sections.main-sidebar.settings.general.paragraph__1.content"
+    },
+    {
+        "type": "select",
+        "id": "sidebar_heading_font",
+        "label": "t:settings_schema.typography.settings.font_type.label",
+        "options": [
+        {
+            "value": "font_1",
+            "label": "t:settings_schema.typography.settings.font_family__1.content"
+        },
+        {
+            "value": "font_2",
+            "label": "t:settings_schema.typography.settings.font_family__2.content"
+        }],
+        "default": "font_1"
+    },
+    {
+        "type": "range",
+        "id": "sidebar_heading_font_size",
+        "label": "t:settings_schema.typography.settings.font_size.label",
+        "min": 10,
+        "max": 30,
+        "step": 1,
+        "unit": "t:settings_schema.typography.settings.font_size.unit",
+        "default": 14
+    },
+    {
+        "type": "select",
+        "id": "sidebar_heading_font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "700",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "select",
+        "id": "sidebar_heading_text_transform",
+        "label": "t:settings_schema.typography.settings.text_transform.label",
+        "default": "uppercase",
+        "options": [
+        {
+            "value": "normal",
+            "label": "t:settings_schema.typography.settings.text_transform.options__1"
+        },
+        {
+            "value": "capitalize",
+            "label": "t:settings_schema.typography.settings.text_transform.options__2"
+        },
+        {
+            "value": "uppercase",
+            "label": "t:settings_schema.typography.settings.text_transform.options__3"
+        },
+        {
+            "value": "lowercase",
+            "label": "t:settings_schema.typography.settings.text_transform.options__4"
+        }]
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+        "id": "show_filter",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__1",
+        "info": "t:sections.main-collection-product-grid.settings.filter.info__1"
+    },
+    {
+        "type": "text",
+        "id": "filter_swatch",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__2",
+        "info": "t:sections.main-collection-product-grid.settings.filter.info__2",
+        "default": "Color"
+    },
+    {
+        "type": "select",
+        "id": "filter_swatch_type",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__3",
+        "default": "color",
+        "options": [
+        {
+            "value": "color",
+            "label": "t:sections.main-collection-product-grid.settings.filter.options__1"
+        },
+        {
+            "value": "png",
+            "label": "t:sections.main-collection-product-grid.settings.filter.options__2"
+        }]
+    },
+    {
+        "type": "text",
+        "id": "filter_rectangle",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__4",
+        "info": "t:sections.main-collection-product-grid.settings.filter.info__3",
+        "default": "Size"
+    },
+    {
+        "type": "select",
+        "id": "filter_display_type",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__6",
+        "options": [
+            {
+                "value": "scroll",
+                "label": "t:sections.main-collection-product-grid.settings.filter.options__3"
+            },
+            {
+                "value": "show-more",
+                "label": "t:sections.main-collection-product-grid.settings.filter.options__4"
+            }
+        ],
+        "default": "scroll"
+    },
+    {
+        "type": "range",
+        "id": "max_item_per_filter",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__5",
+        "min": 5, 
+        "max": 20,
+        "step": 1,
+        "default": 10,
+        "info": "t:sections.main-collection-product-grid.settings.filter.info__4"
+    },
+    {
+        "type": "text",
+        "id": "filter_label_all",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__8",
+        "info": "t:sections.main-collection-product-grid.settings.filter.info__5"
+    },
+    {
+        "type": "textarea",
+        "id": "filter_hidden_tag_list",
+        "label": "t:sections.main-collection-product-grid.settings.filter.label__7",
+        "info": "t:sections.main-sidebar.blocks.filter.settings.general.info"
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-toolbar.settings.header__1.content"
+    },
+    {
+        "id": "show_toolbar",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-toolbar.settings.general.label__1"
+    },
+    {
+        "id": "show_sorting",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-toolbar.settings.general.label__2"
+    },
+    {
+        "id": "show_item_per_page",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-toolbar.settings.general.label__3"
+    },
+    {
+        "id": "show_view_as",
+        "type": "checkbox",
+        "default": true,
+        "label": "t:sections.main-toolbar.settings.general.label__4"
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__4.content"
+    },
+    {
+        "type": "select",
+        "id": "products_per_page",
+        "label": "t:sections.main-collection-product-grid.settings.product.label__1",
+        "default": "20",
+        "options": [
+        {
+            "value": "10",
+            "label": "10"
+        },
+        {
+            "value": "15",
+            "label": "15"
+        },
+        {
+            "value": "20",
+            "label": "20"
+        },
+        {
+            "value": "25",
+            "label": "25"
+        },
+        {
+            "value": "30",
+            "label": "30"
+        },
+        {
+            "value": "50",
+            "label": "50"
+        }]
+    },
+    {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.main-collection-product-grid.settings.product.label__2",
+        "default": "3",
+        "options": [
+        {
+            "value": "1",
+            "label": "t:sections.main-collection-product-grid.settings.product.options__1"
+        },
+        {
+            "value": "2",
+            "label": "t:sections.main-collection-product-grid.settings.product.options__2"
+        },
+        {
+            "value": "3",
+            "label": "t:sections.main-collection-product-grid.settings.product.options__3"
+        },
+        {
+            "value": "4",
+            "label": "t:sections.main-collection-product-grid.settings.product.options__4"
+        },
+        {
+            "value": "5",
+            "label": "t:sections.main-collection-product-grid.settings.product.options__5"
+        }]
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.general.label__2"
+    },
+    {
+        "id": "show_infinite_scrolling",
+        "type": "select",
+        "default": "show_more",
+        "label": "t:sections.main-collection-product-grid.settings.general.label__2",
+        "options": [
+            {
+                "value": "pagination",
+                "label": "t:sections.main-collection-product-grid.settings.general.pagination"
+            },
+            {
+                "value": "show_more",
+                "label": "t:sections.main-collection-product-grid.settings.general.btn_show_more"
+            },
+            {
+                "value": "infinite",
+                "label": "t:sections.main-collection-product-grid.settings.general.infinite_scrolling"
+            }
+        ]
+    },
+    {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__5.content",
+        "info": "t:sections.main-collection-product-grid.settings.header__5.info"
+    },
+    {
+        "type" : "checkbox",
+        "id" : "show_banner",
+        "label" : "t:sections.main-collection-product-grid.settings.product.enable_banner",
+        "default" : false
+    },
+    {
+        "type" : "checkbox",
+        "id" : "show_banner_1",
+        "label" : "t:sections.main-collection-product-grid.settings.product.enable_banner_1",
+        "default" : true
+    },
+    {
+        "type": "text",
+        "id": "banner_position_1",
+        "label": "t:sections.main-collection-product-grid.settings.product.banner_position_1",
+        "default": "4",
+        "info": "t:sections.main-collection-product-grid.settings.product.info_1"
+    },    
+    {
+        "type" : "image_picker",
+        "id" : "img_banner1",
+        "label" : "t:sections.main-sidebar.blocks.image_gallery.settings.general.image_1"
+    },
+    {
+        "type": "url",
+        "id": "link_banner_1",
+        "label": "t:sections.main-sidebar.blocks.image_gallery.settings.general.link_1"
+    },
+    {
+        "type" : "checkbox",
+        "id" : "show_banner_2",
+        "label" : "t:sections.main-collection-product-grid.settings.product.enable_banner_2",
+        "default" : true
+    },
+    {
+        "type": "text",
+        "id": "banner_position_2",
+        "label": "t:sections.main-collection-product-grid.settings.product.banner_position_2",
+        "default": "5",
+        "info": "t:sections.main-collection-product-grid.settings.product.info_2"
+    },    
+    {
+        "type" : "image_picker",
+        "id" : "img_banner2",
+        "label" : "t:sections.main-sidebar.blocks.image_gallery.settings.general.image_2"
+    },
+    {
+        "type": "url",
+        "id": "link_banner_2",
+        "label": "t:sections.main-sidebar.blocks.image_gallery.settings.general.link_2"
+    },
+    {
+        "type" : "checkbox",
+        "id" : "show_banner_3",
+        "label" : "t:sections.main-collection-product-grid.settings.product.enable_banner_3",
+        "default" : true
+    },  
+    {
+        "type": "text",
+        "id": "banner_position_3",
+        "label": "t:sections.main-collection-product-grid.settings.product.banner_position_3",
+        "default": "12",
+        "info": "t:sections.main-collection-product-grid.settings.product.info_3"
+    },   
+    {
+        "type" : "image_picker",
+        "id" : "img_banner3",
+        "label" : "t:sections.main-sidebar.blocks.image_gallery.settings.general.image_3"
+    },
+    {
+        "type": "url",
+        "id": "link_banner_3",
+        "label": "t:sections.main-sidebar.blocks.image_gallery.settings.general.link_3"
+    }
+    ],
+    "blocks": [
+        {
+            "type": "filter",
+            "name": "t:sections.main-sidebar.blocks.filter.name",
+            "settings": [
+                {
+                    "type":"header",
+                    "content":"t:settings_schema.general.name"
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                    "default": "Filter Title"
+                },
+                {
+                    "type": "textarea",
+                    "id": "list_tags",
+                    "label": "t:sections.main-sidebar.blocks.filter.settings.general.label__3",
+                    "info": "t:sections.main-sidebar.blocks.filter.settings.general.info"
+                }
+            ]
+        },
+        {
+            "type": "category",
+            "name": "t:sections.main-sidebar.blocks.category.name",
+            "settings": [
+                {
+                    "type":"header",
+                    "content":"t:settings_schema.general.name"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_block",
+                    "label": "t:sections.main-sidebar.blocks.category.settings.general.label__1",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                    "default": "Categories"
+                },
+                {
+                    "type": "select",
+                    "id": "type",
+                    "label": "t:sections.main-sidebar.blocks.category.settings.general.label__3",
+                    "default": "1_level",
+                    "options": [
+                        {
+                            "value": "1_level",
+                            "label": "t:sections.main-sidebar.blocks.category.settings.general.options__1"
+                        },
+                        {
+                            "value": "3_level",
+                            "label": "t:sections.main-sidebar.blocks.category.settings.general.options__2"
+                        },
+                        {
+                            "value": "show_all",
+                            "label": "t:sections.main-sidebar.blocks.category.settings.general.options__3"
+                        }                    
+                    ]
+                },
+                {
+                    "type": "link_list",
+                    "id": "link_list",
+                    "label": "t:sections.main-sidebar.blocks.category.settings.general.label__4",
+                    "default": "main-menu"
+                }
+            ]
+        },
+        {
+            "type": "product_block",
+            "name": "t:sections.main-sidebar.blocks.product_block.name",
+            "settings": [
+                {
+                    "type":"header",
+                    "content":"t:settings_schema.general.name"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_block",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.label__1",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                    "default": "Featured Products"
+                },
+                {
+                    "type": "collection",
+                    "id": "product_block_collection",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.label__3"
+                },
+                {
+                    "type": "select",
+                    "id": "product_block_layout",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.layout",
+                    "options": [
+                    {
+                        "value": "grid",
+                        "label": "t:sections.main-sidebar.blocks.product_block.settings.general.grid"
+                    },
+                    {
+                        "value": "slider",
+                        "label": "t:sections.main-sidebar.blocks.product_block.settings.general.slider"
+                    }],
+                    "default": "slider"
+                },
+                {
+                    "type": "range",
+                    "id": "product_block_limit",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.label__5",
+                    "min": 1,
+                    "max": 20,
+                    "step": 1,
+                    "default": 8
+                },
+                {
+                    "type": "checkbox",
+                    "id": "product_block_dots",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.label__6",
+                    "default": false
+                },
+                {
+                    "type": "checkbox",
+                    "id": "product_block_arrows",
+                    "label": "t:sections.main-sidebar.blocks.product_block.settings.general.label__7",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "type": "image",
+            "name": "t:sections.main-sidebar.blocks.image.name",
+            "settings": [
+                {
+                    "type":"header",
+                    "content":"t:settings_schema.general.name"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_block",
+                    "label": "t:sections.main-sidebar.blocks.image.settings.general.label__1",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                    "default": "Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:sections.main-sidebar.blocks.image.settings.general.label__3",
+                    "info": "t:sections.main-sidebar.blocks.image.settings.general.info"
+                },
+                {
+                    "type": "url",
+                    "id": "link",
+                    "label": "t:sections.main-sidebar.blocks.image.settings.general.label__4"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "name": "t:sections.main-sidebar.blocks.text.name",
+            "settings": [
+                {
+                    "type": "checkbox",
+                    "id": "show_block",
+                    "label": "t:sections.main-sidebar.blocks.text.settings.general.label__1",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                    "default": "Custom Block"
+                },
+                {
+                    "type": "textarea",
+                    "id": "text",
+                    "label": "t:sections.main-sidebar.blocks.text.settings.general.label__3"
+                }
+            ]
+        },
+        {
+            "type": "lookbook",
+            "name": "t:sections.main-sidebar.blocks.lookbook_banner.name",
+            "settings": [
+                {
+                    "type": "checkbox",
+                    "id": "show_image",
+                    "label": "t:sections.main-sidebar.blocks.text.settings.general.show_image",
+                    "default": true
+                },
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.image",
+                    "info": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.info"
+                },
+                {
+                    "type": "url",
+                    "id": "link",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.link"
+                }, 
+                {
+                    "type": "checkbox",
+                    "id": "show_title",
+                    "label": "t:sections.main-header-collection.blocks.description.settings.description.label__4",
+                    "default": true
+                },
+                {
+                    "type": "select",
+                    "id": "page_title_alignment",
+                    "label": "t:sections.general.settings.page-title.label__2",
+                    "options": [
+                        {
+                            "value": "left",
+                            "label": "t:sections.general.settings.page-title.options__1"
+                        },
+                        {
+                            "value": "center",
+                            "label": "t:sections.general.settings.page-title.options__2"
+                        },
+                        {
+                            "value": "right",
+                            "label": "t:sections.general.settings.page-title.options__3"
+                        }],
+                    "default": "left"
+                },
+                {
+                    "type": "select",
+                    "id": "page_title_text_transform",
+                    "label": "t:sections.general.settings.page-title.label__3",
+                    "default": "none",
+                    "options": [
+                    {
+                        "value": "none",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__1"
+                    },
+                    {
+                        "value": "capitalize",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__2"
+                    },
+                    {
+                        "value": "uppercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__3"
+                    },
+                    {
+                        "value": "lowercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__4"
+                    }]
+                },
+                {
+                    "type": "range",
+                    "id": "fontsize_title",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.fontsize_title",
+                    "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 20
+                },
+                {
+                    "type": "range",
+                    "id": "margin_top_title",
+                    "label": "t:settings_schema.typography.settings.typography.title_margin_top",
+                    "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 30
+                },
+                {
+                    "type": "color",
+                    "id": "title_color",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.title_color",
+                    "default": "#232323"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_collection_description",
+                    "label": "t:sections.main-header-collection.blocks.description.settings.description.label__1",
+                    "default": true
+                },
+                {
+                    "type": "select",
+                    "id": "desc_alignment",
+                    "label": "t:sections.main-header-collection.blocks.description.settings.description.label__5",
+                    "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }],
+                    "default": "left"
+                },
+                {
+                    "type": "select",
+                    "id": "desc_pos",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.position",
+                    "options": [
+                        {
+                            "label": "t:settings_schema.typography.settings.typography.top",
+                            "value": "top"
+                        },
+                        {
+                            "label": "t:settings_schema.typography.settings.typography.bottom",
+                            "value": "bottom"
+                        }
+                    ],
+                    "default": "top"
+                },
+                {
+                    "type": "range",
+                    "id": "fontsize_des",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.fontsize_des",
+                    "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 12
+                },
+                {
+                    "type": "range",
+                    "id": "margin_top_des",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.margin_top_des",
+                    "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 12
+                },
+                {
+                    "type": "range",
+                    "id": "margin_bottom",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.margin_bottom",
+                    "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 25
+                },
+                {
+                    "type": "color",
+                    "id": "des_color",
+                    "label": "t:sections.main-sidebar.blocks.lookbook_banner.settings.general.des_color",
+                    "default": "#3c3c3c"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

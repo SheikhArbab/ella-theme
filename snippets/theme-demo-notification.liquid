@@ -1,0 +1,491 @@
+{%- unless request.design_mode -%}
+	{%- if request.host == 'new-ella-demo.myshopify.com' or request.host == 'new-ella-demo-11.myshopify.com' -%}
+		{%- liquid
+		    if settings.list_iso_rtl != blank
+		        assign locale_iso_code = request.locale.iso_code
+		        assign arr_list_rtl = settings.list_iso_rtl | remove:' ' | split:',' 
+		        if arr_list_rtl contains locale_iso_code
+		            assign enable_iso_rtl = true
+		        else
+		            assign enable_iso_rtl = false
+		        endif
+		    endif
+		-%}
+		<style type="text/css" media="screen">
+			.admin-popup-iframe{
+				display: none;
+			    border-radius: 8px;
+			    box-shadow: 0 0 3px rgba(0,0,0,.1), 0 4px 20px rgba(0,0,0,.15);
+			    color: var(--color-white);
+			    position: fixed;
+			    right: 1rem;
+			    bottom: 7rem;
+			    transform: scale(.95);
+			    transform-origin: bottom right;
+			    z-index: 1000;
+			    max-width: 295px;
+			    background-color: var(--bg-black);
+			    overflow: hidden;
+			}
+
+			.admin-popup-btn{
+				-webkit-appearance: none;
+			    appearance: none;
+			    background: none;
+			    border: none;
+			    color: inherit;
+			    cursor: pointer;
+			    display: flex;
+			    font-family: var(--font-body-family);
+		    	font-size: var(--font-body-size);
+		    	font-weight: var(--font-weight-normal);
+			    justify-content: space-between;
+			    align-items: center;
+			    line-height: inherit;
+			    margin: 0;
+			    padding: 0;
+			    position: relative;
+			    text-align: left;
+			}
+
+			.admin-popup-btn .text{
+				display: block;
+			    margin-left: 0.5rem;
+			    margin-right: 0.5rem;
+			}
+
+			.admin-popup-btn .icon{
+				display: inline-block;
+			    vertical-align: top;
+			    position: relative;
+			    line-height: 1;
+			    font-size: 0;
+	    		letter-spacing: 0;
+			}
+
+			.admin-popup-btn .icon svg{
+				display: block;
+			    width: 20px;
+			    height: 20px;
+			    transition: unset!important;
+			}
+
+			.admin-popup-btn .icon:before{
+				content: '';
+				display: none;
+				background-color: #303036;
+			    border-radius: 50%;
+			    height: 32px;
+			    width: 32px;
+			}
+
+			.admin-popup-iframe:not(.is-active) .admin-popup-btn{
+				padding: 10px 8px;
+	    		width: 100%;
+			}
+
+			.admin-popup-iframe:not(.is-active):hover{
+				background-color: #303036;
+			}
+
+			.admin-popup-iframe.is-active .admin-popup-btn{
+				font-size: calc(var(--font-size) + 4px);
+			    padding: 20px 20px 0 20px;
+			    margin-bottom: 12px;
+			    width: 100%;
+			}
+
+			.admin-popup-iframe.is-active .admin-popup-btn .text{
+				margin-left: 0;
+			}
+
+			.admin-popup-iframe.is-active .admin-popup-btn .icon svg{
+				position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    transform: translate(-50%, -50%) rotate(180deg);
+			}
+
+			.admin-popup-iframe.is-active .admin-popup-btn .icon:before{
+				display: block;
+			}
+
+			.admin-popup-btn:after{
+				border-radius: 5px;
+			    bottom: -0.0625rem;
+			    box-shadow: 0 0 0 -0.0625rem rgb(69, 143, 255);
+			    content: "";
+			    display: block;
+			    left: -0.0625rem;
+			    pointer-events: none;
+			    position: absolute;
+			    right: -0.0625rem;
+			    top: -0.0625rem;
+			    transition: box-shadow .1s cubic-bezier(0.25, 0.1, 0.2);
+			    z-index: 1;
+			}
+
+			.admin-popup-btn:focus-visible:after{
+			    box-shadow: 0 0 0 0.125rem rgb(69, 143, 255);
+				outline: 0.0625rem solid rgba(0,0,0,0);
+			}
+
+			.admin-popup-content{
+				opacity: 0;
+			    pointer-events: none;
+			    position: relative;
+			    transform: translateY(50%);
+			    visibility: hidden;
+			    height: 0;
+			    width: 0;
+			}
+
+			.admin-popup-content ul{
+				margin-top: 20px;
+				margin-bottom: 0;
+			}
+
+			.admin-popup-content li{
+				display: inline-block;
+				vertical-align: top;
+				margin: 0 0 10px 0;
+				font-size: var(--font-size);
+			    font-weight: var(--font-weight-normal);
+			}
+
+			.admin-popup-content li:last-child{
+				margin-bottom: 0;
+			}
+
+			.admin-popup-content li a{
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+			    position: relative;
+	    		color: var(--color-white);
+			}
+
+			.admin-popup-content li a .icon{
+				display: inline-block;
+			    vertical-align: top;
+			    position: relative;
+			    line-height: 1;
+			    font-size: 0;
+			    letter-spacing: 0;
+			}
+
+			.admin-popup-content li a .text{
+				display: block;
+				margin-left: 10px;
+			}
+
+			.admin-popup-content li a .icon svg{
+				display: block;
+			    width: 16px;
+			    height: 16px;
+			    transition: unset!important;
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    transform: translate(-50%, -50%);
+			}
+
+			.admin-popup-content li a .icon:before{
+				content: '';
+				display: block;
+			    background-image: linear-gradient(to right, #2e1dd3 0%, #5d2eee 51%, #6a33f5 100%);
+			    box-shadow: 0px 3px 10px 0px rgb(35, 25, 204, .3);
+			    border-radius: 50%;
+			    height: 32px;
+			    width: 32px;
+			}
+
+			.admin-popup-iframe.is-active .admin-popup-content{
+				display: flex;
+			    flex-direction: column;
+			    padding: 0 20px 20px 20px;
+			    pointer-events: auto;
+			    visibility: visible;
+			    width: 100%;
+			    height: auto;
+			    opacity: 1;
+	    		transform: translateY(0);
+			}
+
+			/**/
+
+			.admin-popup-content .rtl-theme {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+			}
+
+			.admin-popup-content .rtl-theme:hover {
+				cursor: pointer;
+			}
+
+			.admin-popup-content .rtl-theme:hover .switch-rtl:before {
+				background-position: right center;
+    			background-image: linear-gradient(to right, #2e1dd3 0%, #2e1dd3 100%);
+			}
+			
+			.admin-popup-content .rtl-theme .text {
+				padding-left: 10px;
+			}
+			
+			.switch-rtl{
+				display: inline-block;
+			    vertical-align: top;
+			    position: relative;
+			    line-height: 1;
+			    font-size: 0;
+			    letter-spacing: 0;
+			}
+
+			.switch-rtl input{
+				display: none;
+			}
+
+			.switch-rtl:before {
+				content: '';
+			    display: block;
+			    background-image: linear-gradient(to right, #2e1dd3 0%, #5d2eee 51%, #6a33f5 100%);
+			    box-shadow: 0px 3px 10px 0px rgb(35 25 204 / 30%);
+			    border-radius: 50%;
+			    height: 32px;
+			    width: 32px;
+			}
+
+			.switch-rtl .check-switch{
+				display: block;
+				position: absolute;
+				width: 18px;
+				height: 18px;
+				top: 50%;
+				left: 9px;
+				transform: translate(3%,-50%);
+				transition: all .3s;
+				cursor: pointer;
+			}
+
+			.switch-rtl .check-switch:before{
+				content: "";
+			    position: absolute;
+			    top: 0;
+			    left: -2px;
+			    border: 2px solid #fff;
+			    width: 18px;
+			    height: 18px;
+			    /*background-color: #eb4f37;*/
+			    background-color: transparent;
+			    border-radius: 50%;
+			}
+
+			.switch-rtl .check-switch:after{
+				content: "";
+			    display: block;
+			    position: absolute;
+			    top: 3px;
+    			left: 1px;
+			    width: 12px;
+			    height: 12px;
+			    background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' data-prefix='far' data-icon='check' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' class='svg-inline--fa fa-check fa-w-16 fa-3x'%3E%3Cpath fill='%23ffffff' d='M435.848 83.466L172.804 346.51l-96.652-96.652c-4.686-4.686-12.284-4.686-16.971 0l-28.284 28.284c-4.686 4.686-4.686 12.284 0 16.971l133.421 133.421c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-28.284-28.284c-4.686-4.686-12.284-4.686-16.97 0z' class=''%3E%3C/path%3E%3C/svg%3E");
+			    background-size: cover;
+			    background-position: center;
+			    line-height: 1;
+			    transition: transform .3s ease-out;
+			    opacity: 0;
+			    transform: scale(.9);
+			}
+			
+			.switch-rtl-checked .check-switch:before {
+				/*background-color: #44cc66;*/
+				background-color: transparent;
+			}
+
+			.switch-rtl-checked .check-switch:after {
+				opacity: 1;
+    			transform: scale(1);
+			}
+
+			@media (min-width: 551px) {
+				.admin-popup-iframe{
+					display: block;
+				}
+			}
+
+			@media (min-width: 1025px){
+				.admin-popup-content li a:hover .icon:before{
+					background-position: right center;
+	    			background-image: linear-gradient(to right, #2e1dd3 0%, #2e1dd3 100%);
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				.admin-popup-iframe {
+				    transition: .2s;
+				}
+
+				.admin-popup-content{
+					transition-delay: .2s,.1s,.2s;
+				    transition-duration: .3s,.4s,.45s;
+				    transition-property: visibility,transform,opacity;
+				}
+			}
+		</style>
+	    <div class="admin-popup-iframe">
+	        <button class="admin-popup-btn">
+	        	<span class="text">
+	        		Discover now !
+	        	</span>
+	        	<span class="icon">
+	        		<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" role="presentation">
+	        			<path d="M6.902 12h6.196c.751 0 1.172-.754.708-1.268l-3.098-3.432c-.36-.399-1.055-.399-1.416 0l-3.098 3.433c-.464.513-.043 1.267.708 1.267Z"></path>
+	        		</svg>
+	        	</span>
+	        </button>
+	        <div class="admin-popup-content">
+	        	<span class="content">If you would like to open your store with Shopify, please give us a chance to experience with <strong>Ella</strong>!</span>
+		        <ul class="list-unstyled">
+		        	<li>
+		        		<a href="https://1.envato.market/dokaB2" title="Buy Ella" target="_blank">
+		        			<span class="icon">
+			        			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false" role="presentation">
+			        				<path d="M444.52 3.52L28.74 195.42c-47.97 22.39-31.98 92.75 19.19 92.75h175.91v175.91c0 51.17 70.36 67.17 92.75 19.19l191.9-415.78c15.99-38.39-25.59-79.97-63.97-63.97z"/>
+			        			</svg>
+		        			</span>
+		        			<span class="text">Buy Ella</span>
+		        		</a>
+		        	</li>
+		        	<li>
+		        		<a href="https://shopify.pxf.io/Jry3Ve" title="Open a Store for FREE" target="_blank">
+		        			<span class="icon">
+			        			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 616 512" aria-hidden="true" focusable="false" role="presentation">
+			        				<path d="M602 118.6L537.1 15C531.3 5.7 521 0 510 0H106C95 0 84.7 5.7 78.9 15L14 118.6c-33.5 53.5-3.8 127.9 58.8 136.4 4.5.6 9.1.9 13.7.9 29.6 0 55.8-13 73.8-33.1 18 20.1 44.3 33.1 73.8 33.1 29.6 0 55.8-13 73.8-33.1 18 20.1 44.3 33.1 73.8 33.1 29.6 0 55.8-13 73.8-33.1 18.1 20.1 44.3 33.1 73.8 33.1 4.7 0 9.2-.3 13.7-.9 62.8-8.4 92.6-82.8 59-136.4zM529.5 288c-10 0-19.9-1.5-29.5-3.8V384H116v-99.8c-9.6 2.2-19.5 3.8-29.5 3.8-6 0-12.1-.4-18-1.2-5.6-.8-11.1-2.1-16.4-3.6V480c0 17.7 14.3 32 32 32h448c17.7 0 32-14.3 32-32V283.2c-5.4 1.6-10.8 2.9-16.4 3.6-6.1.8-12.1 1.2-18.2 1.2z"/>
+			        			</svg>
+			        		</span>
+		        			<span class="text">Open a Store for FREE</span>
+		        		</a>
+		        	</li>
+		        	<li>
+		        		<a href="https://halosoft.gitbook.io/ella-documentation/" title="Theme Documentation" target="_blank">
+		        			<span class="icon">
+			        			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" aria-hidden="true" focusable="false" role="presentation">
+			        				<path d="M542.22 32.05c-54.8 3.11-163.72 14.43-230.96 55.59-4.64 2.84-7.27 7.89-7.27 13.17v363.87c0 11.55 12.63 18.85 23.28 13.49 69.18-34.82 169.23-44.32 218.7-46.92 16.89-.89 30.02-14.43 30.02-30.66V62.75c.01-17.71-15.35-31.74-33.77-30.7zM264.73 87.64C197.5 46.48 88.58 35.17 33.78 32.05 15.36 31.01 0 45.04 0 62.75V400.6c0 16.24 13.13 29.78 30.02 30.66 49.49 2.6 149.59 12.11 218.77 46.95 10.62 5.35 23.21-1.94 23.21-13.46V100.63c0-5.29-2.62-10.14-7.27-12.99z"/>
+			        			</svg>
+			        		</span>
+		        			<span class="text">Online Documentation</span>
+		        		</a>
+		        	</li>
+		        	<li>
+		        		<a href="https://halosoft.ticksy.com/" title="Contact Us" target="_blank">
+		        			<span class="icon">
+			        			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false" role="presentation">
+			        				<path d="M192 208c0-17.67-14.33-32-32-32h-16c-35.35 0-64 28.65-64 64v48c0 35.35 28.65 64 64 64h16c17.67 0 32-14.33 32-32V208zm176 144c35.35 0 64-28.65 64-64v-48c0-35.35-28.65-64-64-64h-16c-17.67 0-32 14.33-32 32v112c0 17.67 14.33 32 32 32h16zM256 0C113.18 0 4.58 118.83 0 256v16c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16v-16c0-114.69 93.31-208 208-208s208 93.31 208 208h-.12c.08 2.43.12 165.72.12 165.72 0 23.35-18.93 42.28-42.28 42.28H320c0-26.51-21.49-48-48-48h-32c-26.51 0-48 21.49-48 48s21.49 48 48 48h181.72c49.86 0 90.28-40.42 90.28-90.28V256C507.42 118.83 398.82 0 256 0z"/>
+			        			</svg>
+			        		</span>
+		        			<span class="text">Contact Us</span>
+		        		</a>
+		        	</li>
+		        	<li class="rtl-theme">
+						<label class="switch-rtl{% if settings.enable_layout_rtl and enable_iso_rtl %} switch-rtl-checked{% endif %}">
+							<input type="checkbox" {% if settings.enable_layout_rtl and enable_iso_rtl %} checked {% endif %}/>
+							<div class="check-switch"></div>
+						</label>
+						<span class="text">Right to Left</span>
+					</li>
+		        </ul>
+	        </div>
+	    </div>
+	    <script type="text/javascript">
+	    	function setCookie(cname, cvalue, exdays){
+			    const d = new Date();
+			    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+			    const expires = 'expires=' + d.toUTCString();
+			    document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+			}
+
+			function getCookie(cname) {
+			    const name = cname + '=';
+			    const ca = document.cookie.split(';');
+
+			    for (var i = 0; i < ca.length; i++) {
+			        var c = ca[i];
+			        while (c.charAt(0) === ' ') {
+			            c = c.substring(1);
+			        }
+			        if (c.indexOf(name) === 0) {
+			            return c.substring(name.length, c.length);
+			        }
+			    }
+
+			    return '';
+			}
+
+			function deleteCookie(name, value) {
+			    setCookie(name, value, 0)
+			}
+
+
+	    	(() =>{
+	    		var element = document.querySelector('.admin-popup-btn'),
+					input = document.querySelector('.rtl-theme');
+
+				if (getCookie('cookie-rtl') === 'closed'){
+					document.documentElement.setAttribute('dir', 'rtl');
+					document.body.classList.add('layout_rtl');
+					document.querySelector('.switch-rtl input').checked = true;
+					document.querySelector('.switch-rtl').classList.add('switch-rtl-checked');
+
+					window.rtl_slick = true;
+					$('.slick-slider').slick('slickSetOption', 'rtl', true);
+					$('.slick-slider').slick('refresh');
+				}
+
+	            element.addEventListener('click', (event) => {
+	            	event.preventDefault();
+	            	event.stopPropagation();
+
+	            	event.currentTarget.closest('.admin-popup-iframe').classList.toggle('is-active');
+	            });
+
+				input.addEventListener('click', (event) => {
+					event.preventDefault();
+					event.stopPropagation();
+
+					var rtlContainer = event.target.closest('.rtl-theme') || event.target.matches('.rtl-theme');
+					if (rtlContainer == null) return;
+
+					var _target = rtlContainer.querySelector('.switch-rtl');
+					var rtlcheckBox = rtlContainer.querySelector('input[type="checkbox"]');
+
+					rtlcheckBox.checked = !rtlcheckBox.checked
+
+					if(rtlcheckBox.checked) {
+						_target.classList.add('switch-rtl-checked');
+
+						document.documentElement.setAttribute('dir', 'rtl');
+						document.body.classList.add('layout_rtl');
+
+						setCookie('cookie-rtl', 'closed', 1);
+
+						window.rtl_slick = true;
+						$('.slick-slider').slick('slickSetOption', 'rtl', true);
+						$('.slick-slider').slick('refresh');
+					} else {
+						_target.classList.remove('switch-rtl-checked');
+
+						document.documentElement.setAttribute('dir', 'ltr');
+						document.body.classList.remove('layout_rtl');
+
+						deleteCookie('cookie-rtl', 'closed');
+
+						window.rtl_slick = false;
+						$('.slick-slider').slick('slickSetOption', 'rtl', false);
+						$('.slick-slider').slick('refresh');
+					}
+				});
+	        })();
+	    </script>
+	{%- endif -%}
+{%- endunless -%}

@@ -1,0 +1,76 @@
+{%- assign handle_metafields =  product_combo | split: ',' -%}
+<link rel="stylesheet" href="{{ 'component-product-combo.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-product-combo.css' | asset_url | stylesheet_tag }}</noscript>
+{%- liquid
+    assign image_ratio = section.settings.block_image_ratio
+    assign portrait_aspect_ratio = 148
+    assign atc_animation = block.settings.atc_animation
+    assign atc_color = block.settings.atc_color
+    assign atc_border_color = block.settings.atc_border_color
+    assign atc_bg_color = block.settings.atc_bg_color
+    assign atc_bg_color_gradient = block.settings.atc_bg_color_gradient
+    assign atc_color_hover = block.settings.atc_color_hover
+    assign atc_border_color_hover = block.settings.atc_border_color_hover
+    assign atc_bg_color_hover = block.settings.atc_bg_color_hover
+    assign atc_bg_color_gradient_hover = block.settings.atc_bg_color_gradient_hover
+-%}
+<product-combo class="halo-product-combo frequently-bought-together-block" data-product-bundle data-product-combo id="halo-product-combo" data-showshare="{{ show_share }}" style="--spacing-top: {{ spacing_top }};--spacing-bottom: {{ spacing_bottom }}" data-combo-discount-rate="{{ combo_discount_rate }}">
+    <div class="bundle-product">
+        {%- assign product_form_combo_id = 'product-form-combo-' | append: product.id -%}
+        {%- form 'product', product, id: product_form_combo_id, class: 'combo-form' -%}
+            <div class="bundle-product-wrapper has-halo-block-loader">
+                <div class="bundle-product-list combo-item-list">
+                    {%- for handle in handle_metafields limit: 10 -%}
+                        {%- liquid
+                            assign handle_bundle = handle | strip
+                            assign product = all_products[handle_bundle]
+                        -%}
+                        {%- render 'product-combo-item', product: product, product_style: product_style, image_ratio: image_ratio, portrait_aspect_ratio: portrait_aspect_ratio, first: false, picker_type: picker_type -%}
+                    {%- endfor -%}
+                </div>
+                <div class="bundle-product-right">
+                    {%- if has_perks -%}
+                        <div class="productView-perks">
+                            {%- if show_size_chart and has_size_chart -%}
+                                <div class="productView-sizeChart">
+                                    <a class="link link-underline" href="javascript:void(0)" data-open-size-chart-popup>{% render 'icon-size-chart-2' %} <span class="text">{{ 'size_chart.general.text' | t }}</span></a>
+                                </div>
+                            {%- endif -%}
+                            {%- if show_compare_color and isColor and compare_layout == '1' -%}
+                                <div class="productView-compareColor style-{{ compare_layout }}">
+                                    <button type="button" class="link link-underline" aria-label="{{ 'compare_color.general.title' | t }}" data-open-compare-color-popup>{% render 'icon-compare-color-2' %} <span class="text">{{ 'compare_color.general.title' | t }}</span></button>
+                                </div>
+                            {%- endif -%}
+                            {%- if settings.show_ask_an_expert -%}
+                                <div class="productView-askAnExpert">
+                                    <a class="link link-underline" href="javascript:void(0)" data-open-ask-an-expert>
+                                        {%- if settings.ask_an_expert_icon != blank -%}
+                                            {{ settings.ask_an_expert_icon }}
+                                        {%- endif -%}
+                                        <span class="text">{{ 'ask_an_expert.general.text' | t}}</span></a>
+                                </div>
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                    <div class="combo-product-actions">
+                        <div class="combo-product-action">
+                            <input data-combo-addToCart type="submit" name="add" data-form-id="{{ product_form_combo_id | prepend : '#' }}" class="button button--primary button-bundle productView-action an-{{ atc_animation }}{% unless settings.show_wishlist %} productView-action-2{% endunless %}" value="{{ 'products.product.add_to_cart' | t}}" style="--atc-color: {{ atc_color }};--atc-bg-color: {{ atc_bg_color }};--atc-border-color: {{ atc_border_color }};--atc-color-hover: {{ atc_color_hover }};--atc-bg-color-hover: {{ atc_bg_color_hover }};--atc-border-color-hover: {{ atc_border_color_hover }}">
+                        </div>
+                        {%- if settings.show_wishlist -%}
+                            <div class="productView-wishlist clearfix">
+                                <a data-wishlist href="#" data-wishlist-handle="{{ product.handle }}" data-product-id="{{ product.id }}"><span class="visually-hidden">{{ 'wishlist.general.add' | t }}</span>{% render 'icon-heart' %}</a>
+                            </div>
+                        {%- endif -%}
+                        {%- if check_show_share == '2' -%}
+                            {% render 'halo-share',
+                                product: product,
+                                share_layout: check_show_share
+                            %}
+                        {%- endif -%}
+                    </div>
+                </div>
+            </div>
+        {%- endform -%}
+    </div>
+</product-combo>
+<script src="{{ 'product-combo.js' | asset_url }}" defer></script>

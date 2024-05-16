@@ -1,0 +1,583 @@
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css' rel='stylesheet' />
+
+<!-- Geocoder plugin -->
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+
+<!-- Turf.js plugin -->
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+
+{% render 'store-locator-style', section: section %}
+
+{% liquid 
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+
+    assign bounding_box = section.settings.bounding_box
+    assign map_style = section.settings.map_style
+    assign enable_custom_marker = section.settings.enable_custom_marker
+    assign custom_marker_image = section.settings.custom_marker_image
+    assign marker_width = section.settings.marker_width | append: 'px'
+    assign marker_height = section.settings.marker_height | append: 'px'
+    assign distance_unit = section.settings.distance_unit
+    assign map_pitch = section.settings.map_pitch
+    assign map_bearing = section.settings.map_bearing
+
+    assign popup_header_background_color = section.settings.popup_header_color
+    assign popup_header_gradient = section.settings.popup_header_gradient
+    assign popup_header_color = section.settings.popup_header_text_color 
+
+    assign address_fs = section.settings.address_font_size | append: 'px'
+    assign address_fw = section.settings.address_font_weight
+    assign address_color = section.settings.address_text_color
+    assign address_color_hover = section.settings.address_text_color_hover 
+
+    assign info_fs = section.settings.info_font_size | append: 'px'
+    assign info_fw = section.settings.info_font_weight
+    assign info_color = section.settings.info_text_color 
+%}
+
+<div data-section-id="{{ section.id }}" data-section-type="store-locator" id="StoreLocatorSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="store-locator-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if show_breadcrumb -%}
+            {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+        {%- endif -%}
+        {%- if show_page_title -%}
+            <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                {{ page.title | escape }}
+            </h1>
+        {%- endif -%}
+        <section id="find-a-store" class="page-find-a-store"
+            style="
+                --popup-header-bg: {% if popup_header_gradient != blank %}{{ popup_header_gradient }}{% elsif popup_header_background_color %}{{ popup_header_background_color }}{% endif %};
+                --popup-header-color: {% if popup_header_color != blank %}{{ popup_header_color }}{% endif %};
+                
+                --address-fs: {{ address_fs }};
+                --address-fw: {{ address_fw }};
+                --address-color: {% if address_color != blank %}{{ address_color }}{% endif %};
+                --address-color-hover: {% if address_color_hover != blank %}{{ address_color_hover }}{% endif %};
+
+                --info-fs: {{ info_fs }};
+                --info-fw: {{ info_fw }};
+                --info-color: {% if info_color != blank %}{{ info_color }}{% endif %};
+            "
+        >
+            {% if section.blocks.size > 0 %}
+                <div class="page-content find-a-store{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                    <div class="bottom-content-find">
+                        <div class="HL-ColLeft{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-listings-wrapper>
+                            <div class="InfoFind">              
+                                <div class="InfoFindInner ENV_maps_list listings" id="listings"></div>
+                            </div>
+                        </div>
+                        <div class="HL-ColRight{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            <div 
+                                class="map" 
+                                id='map' 
+                                height="600" 
+                                data-map-style="{{ map_style  }}" 
+                                data-distance-unit="{{ distance_unit }}" 
+                                data-pitch="{{ map_pitch }}" 
+                                data-bearing="{{ map_bearing }}"
+                                data-bounding-box="{{ bounding_box }}"
+                            ></div>
+                        </div>  
+                    </div>
+                </div>
+            {% else %}
+                <div class="page-content find-a-store no-store text-center{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                    <h3>
+                        {{ 'find_a_store.no_stores' | t}}
+                    </h3>   
+                </div>  
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+{% render 'store-locator-script', section: section %}
+
+{% schema %}
+    {
+        "name": "Find A Store",
+        "class": "section-find-a-store",
+        "settings": [
+            {
+                "type": "header",
+                "content": "t:sections.main_wishlist.settings.header__1"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": false
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.breadcrumb.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.breadcrumb.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.breadcrumb.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "fullwidth",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.store_locator.settings.content__1"
+            },
+            {
+                "type": "textarea",
+                "id": "bounding_box",
+                "label": "t:sections.store_locator.settings.label__1",
+                "default": "-171.791110603, 18.91619, -66.96466, 71.3577635769",
+                "info": "t:sections.store_locator.settings.info__1"
+            },
+            {
+                "type": "select",
+                "id": "map_style",
+                "label": "t:sections.store_locator.settings.label__2",
+                "default": "monochrome",
+                "options": [
+                    {
+                        "value": "streets",
+                        "label": "t:sections.store_locator.settings.option__1"
+                    },
+                    {
+                        "value": "monochrome",
+                        "label": "t:sections.store_locator.settings.option__2"
+                    },
+                    {
+                        "value": "outdoors",
+                        "label": "t:sections.store_locator.settings.option__3"
+                    },
+                    {
+                        "value": "navigation",
+                        "label": "t:sections.store_locator.settings.option__4"
+                    },  
+                    {
+                        "value": "satellite_streets",
+                        "label": "t:sections.store_locator.settings.option__5"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "map_pitch",
+                "label": "t:sections.store_locator.settings.label__3",
+                "min": 0,
+                "max": 85,
+                "step": 1,
+                "default": 60,
+                "unit": "px"
+            },  
+            {
+                "type": "range",
+                "id": "map_bearing",
+                "label": "Map Bearing",
+                "min": -180,
+                "max": 180,
+                "step": 5,
+                "default": 0,
+                "unit": "px"
+            },
+            {   
+                "type": "select",
+                "id": "distance_unit",
+                "label": "t:sections.store_locator.settings.label__5",
+                "default": "miles",
+                "options": [
+                    {
+                        "value": "miles",
+                        "label": "Miles"
+                    },
+                    {   
+                        "value": "kilometers",
+                        "label": "Kilometers"
+                    }
+                ]
+            },
+            {
+                "type": "paragraph",
+                "content": "t:sections.store_locator.settings.content__2"
+            },
+            {   
+                "type": "checkbox",
+                "id": "enable_custom_marker",
+                "label": "t:sections.layout.display_block",
+                "default": false
+            },
+            {
+                "type": "image_picker",
+                "label": "t:sections.image-banner.blocks.customImg.name",
+                "id": "custom_marker_image"
+            },
+            {
+                "type": "range",
+                "id": "marker_width",
+                "label": "t:settings_schema.typography.settings.typography.icon_width",
+                "min": 5,
+                "max": 100,
+                "step": 1,
+                "default": 32,
+                "unit": "px"
+            },
+            {
+                "type": "range",
+                "id": "marker_height",
+                "label": "t:settings_schema.typography.settings.typography.icon_height",
+                "min": 5,
+                "max": 100,
+                "step": 1,
+                "default": 32,
+                "unit": "px"
+            },
+            {
+                "type": "paragraph",
+                "content": "t:sections.store_locator.settings.content__3"
+            },
+            {
+                "type": "color",
+                "id": "popup_header_color",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color",
+                "default": "#91c949"
+            },
+            {
+                "type": "color_background",
+                "id": "popup_header_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            }, 
+            {
+                "type": "color",
+                "label": "t:settings_schema.typography.settings.typography.text_color",
+                "id": "popup_header_text_color",
+                "default": "#fff"
+            },  
+            {
+                "type": "paragraph",
+                "content": "t:sections.main_contact.settings.contact_info.label__4"
+            },
+            {
+                "type": "range",
+                "id": "address_font_size",
+                "label": "t:settings_schema.typography.settings.font_size.label",
+                "min": 1,
+                "max": 50,
+                "default": 16,
+                "step": 1,
+                "unit": "px"
+            },
+            {
+                "type": "select",
+                "id": "address_font_weight",
+                "label": "t:settings_schema.typography.settings.font_weight.label",
+                "default": "700",
+                "options": [
+                {
+                    "value": "400",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                },
+                {
+                    "value": "500",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                },
+                {
+                    "value": "600",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                },
+                {
+                    "value": "700",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                },
+                {
+                    "value": "800",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                },
+                {
+                    "value": "900",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                }]
+            },
+            {
+                "type": "color",
+                "id": "address_text_color",
+                "label": "t:settings_schema.typography.settings.typography.text_color",
+                "default": "#00853e"
+            },
+            {       
+                "type": "color",
+                "id": "address_text_color_hover",
+                "label": "t:settings_schema.typography.settings.typography.text_color_hover",
+                "default": "#8cc63f"
+            },
+            {
+                "type": "paragraph",
+                "content": "t:settings_schema.quick_view.settings.header__7.content"
+            },
+            {
+                "type": "range",
+                "id": "info_font_size",
+                "label": "t:settings_schema.typography.settings.font_size.label",
+                "min": 1,
+                "max": 50,
+                "default": 16,
+                "step": 1,
+                "unit": "px"
+            },  
+            {
+                "type": "select",
+                "id": "info_font_weight",
+                "label": "t:settings_schema.typography.settings.font_weight.label",
+                "default": "400",
+                "options": [
+                {
+                    "value": "400",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__1"
+                },
+                {
+                    "value": "500",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__2"
+                },
+                {
+                    "value": "600",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__3"
+                },
+                {
+                    "value": "700",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__4"
+                },
+                {
+                    "value": "800",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__5"
+                },
+                {
+                    "value": "900",
+                    "label": "t:settings_schema.typography.settings.font_weight.options__6"
+                }]
+            },
+            {
+                "type": "color",
+                "id": "info_text_color",
+                "label": "t:settings_schema.typography.settings.typography.text_color",
+                "default": "#00853e"
+            }   
+            ],  
+            "blocks": [
+            {
+                "type": "item",
+                "name": "t:sections.store_locator.block.name",
+                "settings": [
+                {
+                    "type": "textarea",
+                    "id": "phone_formatted",
+                    "label": "t:sections.store_locator.block.settings.f_phone",
+                    "info": "e.g: (202) 387-9338"
+                },
+                {
+                    "type": "textarea",
+                    "id": "address",
+                    "label": "t:sections.main_contact.settings.contact_info.label__4"
+                },
+                {
+                    "type": "textarea",
+                    "id": "city",
+                    "label": "t:sections.store_locator.block.settings.city"
+                },
+                {
+                    "type": "textarea",
+                    "id": "country",
+                    "label": "t:sections.store_locator.block.settings.country"
+                },
+                {
+                    "type": "textarea",
+                    "id": "cross_street",
+                    "label": "t:sections.store_locator.block.settings.cross_street"
+                },
+                {
+                    "type": "text",
+                    "id": "postal_code",
+                    "label": "t:sections.store_locator.block.settings.postal_code"
+                },
+                {
+                    "type": "textarea",
+                    "id": "state",
+                    "label": "t:sections.store_locator.block.settings.state"
+                },
+                {
+                    "type" : "text",
+                    "id" : "lat",
+                    "label": "t:sections.store_locator.block.settings.lat"
+                }, 
+                {
+                    "type" : "text",
+                    "id" : "lng",
+                    "label": "t:sections.store_locator.block.settings.lng"
+                }
+                ]
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,11 @@
+<div class="halo-popup newsletter-success-modal customPopup-small" data-newsletter-success-modal id="newsletter-success-modal">
+    <div class="halo-popup-wrapper">
+        <button type="button" class="close close-modal" aria-label="{{ 'cart.ajax_cart.close' | t }}">{% render 'icon-close' %}</button>
+        <div class="halo-modal-body success">
+            <p class="form-message form-message--success" tabindex="-1" data-form-status>{% render 'icon-check'%} <span> {{ 'newsletter.success' | t }}</span></p>
+        </div>
+        <div class="halo-modal-body error">
+            <p class="form-message form-message--error" tabindex="-1" data-form-status>{% render 'icon-error' %} <span>{{ 'newsletter.error' | t }}</span></p>
+        </div>
+    </div>
+</div>

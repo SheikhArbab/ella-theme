@@ -1,0 +1,23 @@
+{% comment %}
+    Renders a product card placeholder
+    Usage:
+    {% render 'product-card-placeholder' %}
+{% endcomment %}
+<div class="product-item{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+    <div class="card">
+        <div class="card-product card--text-only card--soft">
+            <div class="card-product__wrapper">
+                <div class="card-media card-media--square">{{ 'product-' | append: index | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            </div>
+            <div class="card-information">
+                <div class="card-information__wrapper text-{{ settings.product_content_text_align }}">
+                    {%- if settings.show_vendor -%}
+                        <div class="card-vendor text-{{ settings.product_content_text_align }}"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>{{ 'products.product.vendor' | t }}</div>
+                    {%- endif -%}
+                    <h3 class="card__heading"><a class="card-title link-underline {{ settings.product_title_text_transform }}{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %} text-{{ settings.product_content_text_align }}" role="link" aria-disabled="true" title="{{ 'onboarding.product_title' | t }}">{{ 'onboarding.product_title' | t }}</a></h3>
+                    <div class="card-information__group"><div class="card-price">{% render 'price' %}</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

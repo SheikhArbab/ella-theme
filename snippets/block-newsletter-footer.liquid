@@ -1,0 +1,169 @@
+{%- liquid
+    assign check_text = block.settings.check_text
+    assign button_text = block.settings.button_text
+    assign button_width = block.settings.button_width | append: 'px'
+    assign input_text = block.settings.input_text
+-%}
+
+<{% if check_text %}form-has-check{% else %}div{% endif %} class="footer-block__newsletter-item footer-block__newsletter-form">
+    {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="newsletter-form__field-wrapper">
+            <div class="field">
+                <label class="field__label hiddenLabels" for="NewsletterForm--{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+                <input id="NewsletterForm--{{ section.id }}" type="email" name="contact[email]" class="field__input form-input-placeholder" value="{{ form.email }}" aria-required="true" autocorrect="off" autocapitalize="off" autocomplete="email"{% if form.errors %} autofocus aria-invalid="true" aria-describedby="ContactFooter-error"{% elsif form.posted_successfully? %} aria-describedby="ContactFooter-success"{% endif %} placeholder="{{ input_text }}">
+            </div>
+            {%- if block.settings.enable_deep_button_border -%}
+            <div class="submit-button-wrapper">
+            {%- endif -%} 
+            <button type="submit" {% if check_text != blank %}disabled{% endif %} class="button newsletter-form__button" name="commit" id="Subscribe--{{ section.id }}" aria-label="{{ 'newsletter.button_label' | t }}" style="--button-width: {{ button_width }}">{{ button_text }}</button>   
+            {%- if block.settings.enable_deep_button_border -%}
+            </div>
+            {%- endif -%}
+        </div>      
+        {%- if check_text != blank -%}
+        <div class="form--check">
+            <input type="checkbox" id="check_newsletter">
+            <label for="check_newsletter">{{ block.settings.check_text }}</label>
+        </div>
+        {%- endif -%}
+        {%- if form.errors -%}
+            <div class="newsletter-form__message newsletter-form__message--error form__message" id="ContactFooter-error">
+                {% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+            </div>
+        {%- endif -%}
+        {%- if form.posted_successfully? -%}
+        <script>
+            $(document).ready(function() {
+                var newsletterSuccessPopup = (function() {
+                    var popup = $('.newsletter-success-modal');
+                    var close = popup.find('.close');
+                    var success = popup.find('.success');
+                    var error = popup.find('.error');
+                    var overlay = $('.background-overlay');
+                    popup.show();
+                    overlay.show();
+                    error.hide();
+                    success.show();
+                    $.cookie('emailSubcribeModal', 'closed', {
+                        expires: 1,
+                        path: '/'
+                    });
+                    close.off('click').on('click', function() {
+                        popup.fadeOut();
+                        overlay.hide();
+                    });
+                    overlay.off('click').on('click', function() {
+                        popup.fadeOut();
+                        overlay.hide();
+                    });
+                })();
+                var newURL = location.href.split("?")[0];
+                window.history.pushState('object', document.title, newURL);
+            })
+        </script>
+        {%- else -%}
+            <script>
+                $(document).ready(function() {
+                    if (window.location.href.indexOf('newsletter&form_type=customer') > -1) {
+                        var newsletterSuccessPopup = (function() {
+                            var popup = $('.newsletter-success-modal');
+                            var close = popup.find('.close');
+                            var success = popup.find('.success');
+                            var error = popup.find('.error');
+                            var overlay = $('.background-overlay');
+                            popup.show();
+                            overlay.show();
+                            error.show();
+                            success.hide();
+                            $.cookie('emailSubcribeModal', 'closed', {
+                                expires: 1,
+                                path: '/'
+                            });
+                            close.off('click').on('click', function() {
+                                popup.fadeOut();
+                                overlay.hide();
+                            });
+                            overlay.off('click').on('click', function() {
+                                popup.fadeOut();
+                                overlay.hide();
+                            });
+                        })();
+                        var newURL = location.href.split("?")[0];
+                        window.history.pushState('object', document.title, newURL);
+                    }
+                })
+            </script>
+        {%- endif -%}
+    {%- endform -%}
+</{% if check_text %}form-has-check{% else %}div{% endif %}>
+{%- if check_text != blank -%}
+<script>
+    class NewsletterForm extends HTMLElement {
+        constructor() {
+            super();
+            this.querySelector('.form--check label').addEventListener('click', this.onClickChecked.bind(this))
+        }
+        onClickChecked(e) {
+            (e.target.closest('.form--check').querySelector('input').checked) ?
+            this.querySelector('.newsletter-form__button').setAttribute('disabled', true) :
+            this.querySelector('.newsletter-form__button').removeAttribute('disabled');
+        }
+    }
+    customElements.define('form-has-check', NewsletterForm);
+</script>
+{%- endif -%}
+<style>
+    {%- liquid
+        assign input_color = block.settings.input_color
+        assign input_color_bg = block.settings.input_color_bg
+        assign input_color_border = block.settings.input_color_border
+
+        assign button_color = block.settings.button_color
+        assign button_color_bg = block.settings.button_color_bg
+        assign button_color_bg_gradient = block.settings.button_color_bg_gradient
+        assign button_color_border = block.settings.button_color_border
+        assign button_color_hover = block.settings.button_color_hover
+        assign button_color_bg_hover = block.settings.button_color_bg_hover
+        assign button_color_border_hover = block.settings.button_color_border_hover
+        assign button_color_bg_gradient_hover = block.settings.button_color_bg_gradient_hover
+        assign enable_button_custom_border = block.settings.enable_deep_button_border
+
+        assign check_text_color = block.settings.check_text_color
+        assign check_text_fontsize = block.settings.check_text_fontsize | append: 'px'
+        assign check_text_fontsize_mb = block.settings.check_text_fontsize | minus: 2 | append: 'px'
+        assign check_input_color = block.settings.check_input_color
+    -%}
+    .footer-block__newsletter .field__input {color: {{ input_color }};background-color: {{ input_color_bg }};border: 1px solid {{ input_color_border }};font-size: var(--footer-link-font-size)}
+    .footer-block__newsletter .field__input::-webkit-input-placeholder {color: {{ input_color }};font-size: var(--footer-link-font-size)}
+    .footer-block__newsletter .field__input:-ms-input-placeholder {color: {{ input_color }};font-size: var(--footer-link-font-size)}
+    .footer-block__newsletter .field__input::placeholder {color: {{ input_color }};font-size: var(--footer-link-font-size)}
+    .footer-block__newsletter .newsletter-form__button {color: {{ button_color }};fill: {{ button_color }};border: 1px solid {{ button_color_border }};
+        {%- if button_color_bg_gradient != blank -%}
+            background: {{ button_color_bg_gradient }};
+        {%- else -%}
+            background-color: {{ button_color_bg }};
+        {%- endif -%}
+    }
+    .footer-7 .footer-block__newsletter .newsletter-form__field-wrapper .button svg {fill: {{ button_color }}}
+    .footer-7 .footer-block__newsletter .newsletter-form__field-wrapper .button:hover svg {fill: {{ button_color_hover }}}
+    .footer-block__newsletter .newsletter-form__button:hover {color: {{ button_color_hover }};border: 1px solid {{ button_color_border_hover }};
+        {%- if button_color_bg_gradient_hover != blank -%}
+            background: {{ button_color_bg_gradient_hover }};
+        {%- else -%}
+            background-color: {{ button_color_bg_hover }};
+        {%- endif -%}
+    }
+    .footer-block__newsletter .form--check p,.footer-block__newsletter .form--check a {color: {{ check_text_color }};font-size: {{ check_text_fontsize }};cursor: pointer}
+    .footer-block__newsletter .form--check label:before,.footer-block__newsletter .form--check label:after {border-color: {{ check_input_color }}}
+    .newsletter__style2 .newsletter-form__field-wrapper {border: 1px solid {{ check_input_color }};padding: 10px}
+    {%- if enable_button_custom_border -%}
+        .footer-block__newsletter .footer-block__newsletter-form .submit-button-wrapper {width: 150px;height: calc(var(--btn-1-line-height) + var(--btn-1-padding-top) + var(--btn-1-padding-bottom)+ 2px);background-color: {{ button_color }};border: 1px solid {{ button_color_border }};transition: background-color var(--duration-default) ease}   
+        .footer-block__newsletter .footer-block__newsletter-form .newsletter-form__button {width: 146px;padding-top: calc(var(--btn-1-padding-top) - 1px);padding-bottom: calc(var(--btn-1-padding-bottom) - 1px);border: none}
+        .submit-button-wrapper:hover {background-color: {{ button_color_hover }}}
+        @media (min-width: 1200px) and (max-width: 1399px) {.column-5 .footer-block__newsletter .footer-block__newsletter-form .newsletter-form__button{margin-top:0}.footer-block__newsletter .footer-block__newsletter-form .submit-button-wrapper{margin-top:5px;padding-bottom:2px;padding-right:2px}}
+        @media (max-width: 551px) {.footer-block__newsletter .newsletter-form__button {padding-top: 10px !important;padding-bottom: 10px !important}}
+    {%- endif -%}
+    @media (max-width: 1024px) {.footer-block__newsletter .form--check p,.footer-block__newsletter .form--check a {font-size: {{ check_text_fontsize_mb }}}}
+    @media (min-width: 1025px){.newsletter__style2 .newsletter-form__field-wrapper #NewsletterForm--footer, .newsletter__style2 .newsletter-form__field-wrapper [id^="NewsletterForm--"]{padding-top: 21px; padding-bottom: 21px}}
+</style>

@@ -1,0 +1,122 @@
+{%- liquid
+    assign product_swatch_option = settings.swatch | downcase
+    assign option_count = 0
+    for option in product.options_with_values
+        assign option_count = option_count | plus: 1
+    endfor
+-%}
+{%- for option in product.options_with_values -%}
+    {%- liquid
+        assign is_swatch = false
+        assign option_index = forloop.index0
+        assign option_name = option.name | downcase
+        if product_swatch_option contains option_name
+            assign is_swatch = true
+        endif
+        assign values = ''
+    -%}
+    {% if picker_type != 'dropdown' %}
+        <div class="swatch clearfix {% if is_swatch %} swatch-label-color {% elsif option_name != 'color' %} select-style {% else %} normal-style {% endif %} {% if  option_name != 'color' and option_count > 2 %} half-line {% endif %}" data-option-idx="{{ option_index }}" data-option-name="{{ option_name }}" data-picker-type="{{ picker_type }}">
+            <div class="swatch-label{% if is_swatch %} swatch-label-color{% endif %}">{{ option.name }}: <span data-header-option>{{ option.selected_value }}</span></div>
+            {%- unless option_name == 'color' -%}
+                <div class="select-container" data-select-container>
+                    <div data-header-option>{{ option.selected_value }}</div>
+                    <div class="select-options">
+            {%- endunless -%}
+            {%- if option_name == 'color' and is_swatch -%}
+                <div class="color-swatches-container">
+            {%- endif -%}
+            {%- for variant in product.variants -%}
+                {%- liquid
+                    assign current_variant = product.selected_or_first_available_variant
+                    assign value = variant.options[option_index]
+                -%}
+                {%- unless values contains value -%}
+                    {%- liquid
+                        assign values = values | join: ';'
+                        assign values = values | append: ';' | append: value
+                        assign values = values | split: ';'
+                    -%}
+                    <div class="swatch-element{% if is_swatch %} color{% endif %} {{ value | handle }} {{ current_variant.title }}" data-value="{{ value | escape }}" data-option-name="{{ option.name }}">
+                        <input class="single-option-selector option" data-variant="{{ variant.id }}" {% if option.selected_value == value %}checked{% endif %} id="combo-swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}" type="radio" name="option-{{ option_index }}-{{ product.id }}" value="{{ value | escape }}"/>
+                        {%- if is_swatch -%}
+                            {%- liquid
+                                assign swatch_type = settings.swatch_type
+                                assign enable_variant_image = false
+                                case swatch_type
+                                    when 'variant_image'
+                                        assign background_image = variant.image.src | product_img_url: '40x'
+                                        if variant.image
+                                            assign enable_variant_image = true
+                                        endif
+                                    when 'color'
+                                        assign background_image = value | handle | append: '.png' | file_url
+                                        assign enable_variant_image = true
+                                    when 'metafields'
+                                        assign variant_color = variant.metafields.custom.variant_color
+                                        assign color_codes = false
+
+                                        if variant_color
+                                            assign enable_variant_image = true
+                                        
+                                            if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                                assign color_codes = true
+                                                assign background_color = variant_color
+                                            else
+                                                assign background_image = variant_color | append: '.png' | file_url
+                                            endif
+                                        elsif variant.image
+                                            assign enable_variant_image = true
+                                            assign background_image = variant.image.src | product_img_url: '40x'
+                                        endif
+                                endcase
+                            -%}
+                            <label class="label" for="combo-swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}" data-swatch-type="{{ settings.swatch_type }}">
+                                <span
+                                    class="pattern"
+                                    style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                ></span>
+                                <span class="visually-hidden">{{ value | escape }}</span><span class="expand">{{ value | escape }}</span>
+                            </label>
+                        {%- else -%}
+                            <label class="label combo-item-label" for="combo-swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}"><span class="text">{{ value }}</span></label>
+                        {%- endif -%}
+                    </div>
+                {%- endunless -%}
+            {%- endfor -%}
+            {%- unless option_name == 'color' -%}
+                    </div>
+                </div>
+            {%- endunless -%}
+            {%- if option_name == 'color' and is_swatch -%}
+                </div>
+            {%- endif -%}
+        </div>
+    {%- else -%}
+        <div class="swatch clearfix {% if is_swatch %} swatch-label-color {% elsif option_name != 'color' %} select-style {% else %} normal-style {% endif %} {% if  option_name != 'color' and option_count > 2 %} half-line {% endif %}" data-option-idx="{{ option_index }}" data-option-name="{{ option_name }}" data-picker-type="{{ picker_type }}">
+            <div class="swatch-label{% if is_swatch %} swatch-label-color{% endif %}">{{ option.name }}: <span data-header-option>{{ option.selected_value }}</span></div>
+            <div class="select-container" data-select-container>
+                <div data-header-option>{{ option.selected_value }}</div>
+                <div class="select-options">
+                    {%- for variant in product.variants -%}
+                        {%- liquid
+                            assign current_variant = product.selected_or_first_available_variant
+                            assign value = variant.options[option_index]
+                        -%}
+                        {%- unless values contains value -%}
+                            {%- liquid
+                                assign values = values | join: ';'
+                                assign values = values | append: ';' | append: value
+                                assign values = values | split: ';'
+                            -%}
+                            <div class="swatch-element {{ value | handle }} {{ current_variant.title }}" data-value="{{ value | escape }}" data-option-name="{{ option.name }}">
+                                <input class="single-option-selector option" data-variant="{{ variant.id }}" {% if option.selected_value == value %}checked{% endif %} id="combo-swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}" type="radio" name="option-{{ option_index }}-{{ product.id }}" value="{{ value | escape }}"/>
+                                <label class="label combo-item-label" for="combo-swatch-{{ option_index }}-{{ value | handle }}-{{ product.id }}"><span class="text">{{ value }}</span></label>
+                            </div>
+                        {%- endunless -%}
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    {%- endif -%}
+{%- endfor -%}

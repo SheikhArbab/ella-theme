@@ -1,0 +1,101 @@
+{% comment %}
+    Documentation - http://docs.shopify.com/support/your-website/navigation/creating-a-breadcrumb-navigation
+{% endcomment %}
+
+{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
+
+{%- unless template == 'index' -%}
+    <breadcrumb-component class="breadcrumb-container style--line_clamp_1{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <nav class="breadcrumb breadcrumb-{{ alignment }}" role="navigation" aria-label="breadcrumbs">
+        <a class="link home-link" href="{{ routes.cart_url | split: '/cart' | first | append: '/'  }}">{{ 'general.breadcrumb.home' | t }}</a>  
+            {%- if template contains 'product' -%} 
+                {%- if collection -%}
+                    <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                    {%- if collection.handle -%}
+                        <span>{{ collection.title | split: '|' | first | link_to: collection.url }}</span>
+                    {%- endif -%}
+                {%- endif -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span>{{ product.title | split: '|' | first }}</span>
+            {%- elsif template contains 'collection' and collection.handle -%}
+                {%- if current_tags -%}
+                    <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                    <span class="bd-title" style="display: flex;">
+                        <span>{{ collection.title | split: '|' | first | link_to: collection.url }}</span>
+                        <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                        {% assign bd_tags = current_tags | join: " + " %}
+                        <span>{{ bd_tags | split: '|' | first }}</span>
+                    </span>
+                {%- else -%}
+                    <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                    <span class="bd-title"><span>{{ collection.title | split: '|' | first | link_to: collection.url }}</span></span>
+                {%- endif -%}
+            {%- elsif template == 'cart' -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span> 
+                <span>{{ 'sections.cart.title' | t }}</span>
+            {%- elsif template == 'article' -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span>{{ blog.title | split: '|' | first | link_to: blog.url }}</span>
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span class="{{ article.title }}">{{ article.title | split: '|' | first }}</span>
+            {%- elsif template contains 'page' -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span>{{ page.title | split: '|' | first }}</span>
+            {%- elsif template == 'search' -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span>{{ 'general.search.title' | t }}</span>
+            {%- else -%}
+                <span class="separate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></span>
+                <span>{{ page_title | split: '|' | first }}</span>
+            {%- endif -%}
+            <span class="observe-element" style="width: 1px; height: 1px; background: transparent; display: inline-block; flex-shrink: 0;"></span>
+        </nav>
+    </breadcrumb-component>
+    <script type="text/javascript">
+        if (typeof breadcrumbComponentDeclare == 'undefiend') {
+            class BreadcrumbComponent extends HTMLElement {
+                constructor() {
+                    super();
+                }
+
+                connectedCallback() {
+                    this.firstLink = this.querySelector('.link.home-link')
+                    this.lastLink = this.querySelector('.observe-element')
+                    this.classList.add('initialized');
+                    this.initObservers();
+                }
+
+                static createHandler(position = 'first', breadcrumb = null) {
+                    const handler = (entries, observer) => {
+                        entries.forEach(entry => {
+                            if (breadcrumb == null) return observer.disconnect();
+                            if (entry.isIntersecting ) {
+                                breadcrumb.classList.add(`disable-${position}`);
+                            } else {
+                                breadcrumb.classList.remove(`disable-${position}`);
+                            }
+                        })
+                    }
+                    return handler;
+                }
+
+                initObservers() {
+                    const scrollToFirstHandler = BreadcrumbComponent.createHandler('first', this);
+                    const scrollToLastHandler = BreadcrumbComponent.createHandler('last', this);
+                    
+                    this.scrollToFirstObserver = new IntersectionObserver(scrollToFirstHandler, { threshold: 1 });
+                    this.scrollToLastObserver = new IntersectionObserver(scrollToLastHandler, { threshold: 0.6 });
+
+                    this.scrollToFirstObserver.observe(this.firstLink);
+                    this.scrollToLastObserver.observe(this.lastLink);
+                }
+            }   
+
+            window.addEventListener('load', () => {
+                customElements.define('breadcrumb-component', BreadcrumbComponent);
+            })
+
+            var breadcrumbComponentDeclare = BreadcrumbComponent;
+        }
+    </script>
+{%- endunless -%}

@@ -1,0 +1,22 @@
+<div class="product-item product-item--loadingNoInfo">
+    <div class="card">
+        <div class="card-product">
+            <div class="card-product__wrapper">
+                <div class="card-media animated-loading" style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }}">
+                </div>
+            </div>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-{{ settings.product_content_text_align }}">
+                {%- if settings.show_vendor -%}
+                    <div class="card-information__group card-information__group-2 animated-loading">
+                      <div class="card-vendor"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span> {{ 'products.product.vendor' | t }}</div>
+                    </div>
+                {%- endif -%}
+                
+                <a class="card-title link-underline animated-loading {{ settings.product_title_text_transform }}{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}" role="link" aria-disabled="true"><span class="text">{{ 'onboarding.product_title' | t }}</span></a>
+                <div class="card-price animated-loading">{% render 'price' %}</div>
+            </div>
+        </div>
+    </div>
+</div>

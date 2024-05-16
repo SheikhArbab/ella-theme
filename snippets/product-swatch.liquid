@@ -1,0 +1,90 @@
+{%- liquid
+    assign variantCount = product.variants | size
+    assign swatch_type = settings.swatch_type
+    assign colorList = ''
+    assign color = ''
+    assign count = 0
+-%}
+{%- if variantCount > 1 and product.variants.first.title != 'Default Title' -%}
+    <div class="card-swatch text-{{ settings.product_content_text_align }} clearfix{% if settings.quick_shop_type == '2' %} quick_shop_type_2{% endif %}" id="product-swatch-{{ product.id }}">
+        <ul class="swatch list-unstyled">
+            {%- for variant in product.variants -%}
+                {%- capture color -%}
+                    {{ variant.options[index] }}
+                {%- endcapture -%}
+                {%- unless colorList contains color -%}
+                    {%- liquid
+                        assign text = color | handleize
+                        assign enable_variant_image = false
+                        case swatch_type
+                            when 'variant_image'
+                                assign background_image = variant.image.src | product_img_url: '40x'
+                                if variant.image
+                                    assign enable_variant_image = true
+                                endif
+                            when 'color'
+                                assign background_image = color | handle | append: '.png' | file_url
+                                assign enable_variant_image = true
+                            when 'metafields'
+                                assign variant_color = variant.metafields.custom.variant_color
+                                assign color_codes = false
+
+                                if variant_color
+                                    assign enable_variant_image = true
+                                
+                                    if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                        assign color_codes = true
+                                        assign background_color = variant_color
+                                    else
+                                        assign background_image = variant_color | append: '.png' | file_url
+                                    endif
+                                elsif variant.image
+                                    assign enable_variant_image = true
+                                    assign background_image = variant.image.src | product_img_url: '40x'
+                                endif
+                        endcase
+                    -%}
+                    {%- if count < 4 -%}
+                        <li class="item">
+                            <div class="item-wrapper clearfix">
+                                <label{% if product.options_with_values.size == 1 %} data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}" {% endif %} class="swatch-label{% unless settings.quick_shop_type == '2' %}{% if count == 0 %} is-active{% endif %}{% endunless %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null -%} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                    <span
+                                        class="pattern"
+                                        style="background-color: {{ color | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                    ></span>
+                                    {{ text }}
+                                </label>
+                                <span class="tooltip">{{ color | escape }}</span>
+                            </div>
+                        </li>
+                    {%- else -%}
+                        {%- if count == 4 -%}
+                            <li class="group-swatch" style="display: none">
+                        {%- endif -%}
+                            <div class="item-wrapper clearfix">
+                                <label{% if product.options_with_values.size == 1 %} data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}"{% endif %} class="swatch-label{% unless settings.quick_shop_type == '2' %}{% if count == 0 %} is-active{% endif %}{% endunless %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null %} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                    <span
+                                        class="pattern"
+                                        style="background-color: {{ color | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                    ></span>
+                                    {{ text }}
+                                </label>
+                                <span class="tooltip">{{ color | escape }}</span>
+                            </div>
+                        {%- if forloop.last -%}
+                            </li>
+                        {%- endif -%}
+                    {%- endif -%}
+                    {%- assign count = count | plus : 1 -%}
+                    {%- capture tempList -%}
+                        {{ colorList | append: color | append: ' ' }}
+                    {%- endcapture -%}
+                    {%- assign colorList = tempList -%}
+                {%- endunless -%}
+            {%- endfor -%}
+            {%- if count > 4 -%}
+                <li class="item-swatch-more item"><button type="button" class="number-showmore" title="More Color"><span>+</span> <span class="text-number">{{ count | minus : 4 }}</span></button></li>
+            {%- endif -%}
+        </ul>
+    </div>
+{%- endif -%}

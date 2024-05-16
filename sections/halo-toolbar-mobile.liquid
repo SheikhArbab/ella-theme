@@ -1,0 +1,259 @@
+{%- if section.settings.display_section -%}
+{{ 'component-toolbar-mobile.css' | asset_url | stylesheet_tag }}
+<div class="halo-sticky-toolbar-mobile">
+    <div class="bottom-bar">
+        <ul class="bottom-bar--list">
+            {%- liquid 
+                assign font_size = section.settings.font_size | append: 'px'
+                assign font_weight = section.settings.font_weight
+                assign icon_size = section.settings.icon_size | append: 'px'
+            -%}
+
+            {%- for block in section.blocks -%}
+                {%- liquid
+                    assign icon = block.settings.icon
+                    assign text = block.settings.text
+                    assign action_icon = block.settings.action_to
+                    if block.type == 'link'
+                        assign link = block.settings.link
+                    else
+                        assign link = blank
+                    endif
+                -%}
+                {%- if icon != blank or text != blank -%}
+                    <li class="list-item" style="--font-size: {{ font_size }}; --font-weight: {{ font_weight }}; --icon-size: {{ icon_size }}">
+                        <a {% if link == blank %} role="link" aria-disabled="true"{% else %} href="{{ link }}"{% endif %} {% if block.type == 'content' %}data-bar-{{block.type}}{% elsif block.type == 'action' %}{% if action_icon == 'cart' %}data-cart-sidebar{% elsif action_icon == 'search' %}data-search-mobile{% elsif action_icon == 'account' %}data-open-auth-sidebar{% endif %}{% endif %}><span class="icon">{{icon}}</span> <span class="text">{{text}}</span>
+                            {%- if action_icon == 'cart' -%}
+                                <div class="cart-count-bubble" style="--color-bubble: {{ section.settings.bg_color }}; --bg-bubble: {{ section.settings.color_icon }}">
+                                    {%- if cart.item_count < 100 -%}
+                                        <span class="text" aria-hidden="true" data-cart-count>{{ cart.item_count }}</span>
+                                    {%- endif -%}
+                                    <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+                                </div>
+                            {%- endif -%}
+                        </a>
+                        {%- if block.type == 'content' -%}
+                            <div class="block-content bottom-bar--content" id="{{ block.id }}">
+                                <button type="button" class="bottom-bar--close halo-sidebar-close clearfix" data-close-content-sidebar aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}{{ 'general.common.close' | t }}</button>
+                                <div class="rte">{{ block.settings.content }}</div>
+                            </div>
+                        {% endif %}
+                    </li>
+                {%- endif -%}
+            {%- endfor -%}
+        </ul>
+    </div>
+</div>
+<style>
+    {%- liquid
+        assign color_icon = section.settings.color_icon
+        assign bg_color = section.settings.bg_color
+        assign bg_color_gradient = section.settings.bg_color_gradient
+        assign border_color = section.settings.border_color
+    -%}
+    .halo-sticky-toolbar-mobile {background: {% if bg_color_gradient != blank %}{{bg_color_gradient}}{% else %}{{bg_color}}{% endif %};border: 1px solid {{border_color}}}
+    .halo-sticky-toolbar-mobile span {color: {{color_icon}}}
+    .halo-sticky-toolbar-mobile span.icon svg {fill: {{color_icon}}}
+</style>
+<script>
+    const buttons = document.querySelectorAll('[data-bar-content]');
+    if (buttons.length) {
+        buttons.forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                if (event.target.nextSibling.classList.contains('show')) {
+                    event.target.nextSibling.classList.remove('show');
+                    document.querySelector('body').classList.remove('show-sidebar-content');
+                } else {
+                    event.target.nextSibling.classList.add('show');
+                    document.querySelector('body').classList.add('show-sidebar-content');
+                }
+            })
+        });
+        document.querySelectorAll('[data-close-content-sidebar]').forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.target.closest('.bottom-bar--content').classList.remove('show');
+            });
+        })
+    }
+    $('body').addClass('sticky-toolbar-mobile');
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+    "name": "t:sections.sticky_toolbar_mobile.name",
+    "tag": "section",
+    "blocks": 5,
+    "settings": [
+    {
+        "type": "checkbox",
+        "id": "display_section",
+        "label": "t:sections.layout.display_block",
+        "default": true
+    },
+    {
+        "type": "paragraph",
+        "content": "t:sections.sticky_toolbar_mobile.settings.paragraph"
+    },
+    {
+        "type": "range",
+        "id": "font_size",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "min": 8,
+        "max": 20,
+        "step": 1,
+        "unit": "t:sections.footer.settings.footer_top.pdtop_footer_top.unit",
+        "default": 12
+    },
+    {
+        "type": "select",
+        "id": "font_weight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "default": "500",
+        "options": [
+        {
+            "value": "400",
+            "label": "t:settings_schema.typography.settings.font_weight.options__1"
+        },
+        {
+            "value": "500",
+            "label": "t:settings_schema.typography.settings.font_weight.options__2"
+        },
+        {
+            "value": "600",
+            "label": "t:settings_schema.typography.settings.font_weight.options__3"
+        },
+        {
+            "value": "700",
+            "label": "t:settings_schema.typography.settings.font_weight.options__4"
+        },
+        {
+            "value": "800",
+            "label": "t:settings_schema.typography.settings.font_weight.options__5"
+        },
+        {
+            "value": "900",
+            "label": "t:settings_schema.typography.settings.font_weight.options__6"
+        }]
+    },
+    {
+        "type": "range",
+        "id": "icon_size",
+        "label": "t:settings_schema.typography.settings.typography.icon_size",
+        "min": 10,
+        "max": 30,
+        "step": 1,
+        "unit": "t:sections.footer.settings.footer_top.pdtop_footer_top.unit",
+        "default": 20
+    },
+    {
+        "type": "header",
+        "content": "t:settings_schema.general.name"
+    },
+    {
+        "type" : "color",
+        "id" : "color_icon",
+        "label": "t:sections.sticky_toolbar_mobile.settings.color_icon",
+        "default" : "#232323"
+    },
+    {
+        "type" : "color",
+        "id" : "border_color",
+        "label": "t:settings_schema.colors.settings.colors_name.border_color",
+        "default" : "#fff"
+    },
+    {
+        "type" : "color",
+        "id" : "bg_color",
+        "label": "t:settings_schema.colors.settings.colors_name.background_color",
+        "default" : "#fff"
+    },
+    {
+        "type" : "color_background",
+        "id" : "bg_color_gradient",
+        "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+    }
+    ],
+    "blocks": [
+        {
+            "type": "link",
+            "name": "t:sections.sticky_toolbar_mobile.blocks.link.name",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "icon",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__17_1"
+                },
+                {
+                    "type": "text",
+                    "id": "text",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+                },
+                {
+                    "type": "url",
+                    "id": "link",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__5"
+                }
+            ]
+        },
+        {
+            "type": "content",
+            "name": "t:sections.sticky_toolbar_mobile.blocks.content.name",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "icon",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__17_1"
+                },
+                {
+                    "type": "text",
+                    "id": "text",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+                },
+                {
+                    "type": "textarea",
+                    "id": "content",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__18"
+                }
+            ]
+        },
+        {
+            "type": "action",
+            "name": "t:sections.sticky_toolbar_mobile.blocks.action.name",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "icon",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__17_1"
+                },
+                {
+                    "type": "text",
+                    "id": "text",
+                    "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+                },
+                {
+                    "type" : "select",
+                    "id" : "action_to",
+                    "label" : "t:sections.sticky_toolbar_mobile.blocks.action.action_to.option",
+                    "options": [
+                        {
+                            "value": "cart",
+                            "label": "t:sections.sticky_toolbar_mobile.blocks.action.action_to.option1"
+                        },
+                        {
+                            "value": "account",
+                            "label": "t:sections.sticky_toolbar_mobile.blocks.action.action_to.option2"
+                        },
+                        {
+                            "value": "search",
+                            "label": "t:sections.sticky_toolbar_mobile.blocks.action.action_to.option3"
+                        }
+                    ],
+                    "default": "cart"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

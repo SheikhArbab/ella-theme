@@ -1,0 +1,41 @@
+{%- assign variantCount = product.variants | size -%}
+{%- if product.available and variantCount > 0 -%} 
+<div class="wrapper-item-size card-product__group text-center">
+    <ul class="sizes-list">
+        {%- for option in product.options -%}
+            {%- assign is_size = false -%}
+            {%- assign downcased_option = option | downcase -%}
+            {%- if downcased_option contains 'size' -%}
+                {%- assign option_index = forloop.index0 -%}
+                {%- assign option_count = 0 -%}
+                {%- assign values = '' -%}
+
+                {%- for variant in product.variants -%}
+                    {%- assign value = variant.options[option_index] -%}
+                    {%- unless values contains value -%}
+                        {%- if variant.available -%}
+                            {%- if option_count > 0 -%}
+                                {%- assign values = values | join: '|' | append: '|' -%}
+                            {%- endif -%}
+                            {%- assign values = values | append: value -%}
+                            {%- assign values = values | split: '|' | sort -%}
+                            {%- assign option_count = values | size -%}
+
+                            {%- if option_count <= 4 -%}
+                            <li class="size-item"><a title="{{value}}" href="{{ product.url}}?variant={{ variant.id }}">{{ value }}</a></li>
+                            {%- endif -%}
+                        {%- endif -%}
+                    {%- endunless -%}
+                {%- endfor -%}
+
+                {%- if option_count >= 4 -%}   
+                    {%- unless option_count == 4 -%}
+                        <li class="item-size-more hide-count-5"><a href="{{ product.url}}" title="More Size">+ {{ option_count | minus : 4 }}</a></li>
+                    {%- endunless -%}
+                    <li class="item-size-more show-count-5" style="display: none;"><a href="{{ product.url}}" title="More Size">+ {{ option_available.size | minus :3 }}</a></li>
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+    </ul>
+</div>
+{%- endif -%}

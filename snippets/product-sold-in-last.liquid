@@ -1,0 +1,9 @@
+<div class="productView-soldProduct{%unless product.available %} soldout{% endunless %}" data-sold-out-product data-item="{{ sold_in_number }}" data-hours="{{ sold_in_hours }}" style="display: none;">
+    {% render 'icon-fire-2' %}
+    <span class="text">
+        <span data-sold-out-number>2</span>
+        {{ 'products.product.sold_in_last.text_1' | t }}
+        <span data-sold-out-hours>8</span>
+        {{ 'products.product.sold_in_last.text_2' | t }}
+    </span>
+</div>

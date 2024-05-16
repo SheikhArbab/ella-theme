@@ -1,0 +1,13 @@
+<div class="quickSearchResultsWrap" style="display: none;" data-product-to-show="{{ settings.quick_search_to_show }}">
+	<div class="loadingOverlay"></div>
+	<div class="quickSearchResults custom-scrollbar">
+		<div class="container">
+			{%- if settings.show_search_trending or settings.show_search_product -%}
+				{%- render 'quick-searching-trending-products' -%}
+			{%- endif -%}
+			{%- if settings.show_quick_search -%}
+				{%- render 'predictive-search-results' -%}
+			{%- endif -%}
+		</div>
+	</div>
+</div>

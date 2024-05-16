@@ -1,0 +1,66 @@
+{% liquid
+    assign enable_bg_social = block.settings.enable_bg_social
+    assign social_margin_top = block.settings.social_margin_top | append: 'px'
+    assign social_heading = block.settings.social_heading 
+
+    assign social_color = block.settings.social_color
+    assign social_border_color = block.settings.social_border_color
+    assign social_background_color = block.settings.social_background_color
+    assign social_background_color_gradient = block.settings.social_background_color_gradient
+
+    assign social_color_hover = block.settings.social_color_hover
+    assign social_border_color_hover = block.settings.social_border_color_hover
+    assign social_background_color_hover = block.settings.social_background_color_hover
+    assign social_background_color_gradient_hover = block.settings.social_background_color_gradient_hover
+    assign social_box_hover_color = block.settings.social_box_hover_color
+
+    assign social_icon_width = block.settings.social_icon_width
+    assign social_icon_padding = block.settings.social_icon_padding
+    assign social_icon_border_width = block.settings.social_icon_border_width
+    assign social_icon_margin_right = block.settings.social_icon_margin_right | append: 'px'
+    assign social_position = block.settings.social_position | plus: 0   
+    
+    assign show_payment = block.settings.show_payment 
+    assign social_block_width = 25
+    if block.settings.social_block_width != blank and block.settings.social_block_width != nil
+        assign social_block_width = block.settings.social_block_width
+    endif 
+%}
+<style>
+    .footer-block__list-social.enable_bg_social .list-social__link.icon-facebook{background:#385a9a!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-instagram{background:#3e739d!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-pinterest,.footer-block__list-social.enable_bg_social .list-social__link.icon-tumblr,.footer-block__list-social.enable_bg_social .list-social__link.icon-youtube{background:#ec2327!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-tiktok{background:#000!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-snapchat{background:#e3da6d!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-twitter{background:#31b1df!important}.footer-block__list-social.enable_bg_social .list-social__link.icon-vimeo{background:#4593d7!important}
+    .footer-block__list-social .list-social__item{margin-right: {{ social_icon_margin_right }}}   
+    .footer-block__list-social .list-social__link:before {box-shadow: 0 0 0 2px {{ social_box_hover_color }}}
+
+    .footer-block__list-social .list-social__link {color: {{ social_color }} !important;background: {% if social_background_color_gradient != blank %}{{ social_background_color_gradient }}{% else %}{{ social_background_color }}{% endif %};border: {{ social_icon_border_width | append: 'px' }} solid {{ social_border_color }};padding: {{ social_icon_padding | append: 'px' }}}
+
+    .footer-block__list-social .list-social__link svg {fill: {{ social_color }} !important;width: {{ social_icon_width | append: 'px' }} !important;height: {{ social_icon_width | append: 'px' }} !important}
+{%- if social_border_color == 'rgba(0,0,0,0)' or social_border_color == blank -%}
+    .footer-block__list-social .list-social {margin-left: -13px}
+    .layout_rtl .footer-block__list-social .list-social {margin-right: -13px;margin-left: 0px}
+{%- endif -%}
+    @media (min-width: 1025px){
+        .footer-block__list-social .list-social__link:hover{color: {{social_color_hover}};border-color: {{social_border_color_hover}};background: {% if social_background_color_gradient_hover != blank %}{{ social_background_color_gradient_hover }}{% else %}{{ social_background_color_hover }}{% endif %}}
+        .footer-block__list-social .list-social__link:hover svg{fill: {{social_color_hover}} !important}
+    }
+    @media (max-width: 1024px){
+    {%- if social_position == 1 -%}
+        .footer-block__list-social .list-social__item{margin: 0 7px 6px 0}
+    {%- endif -%}
+    }
+</style>
+{%- unless social_is_nested -%}
+    <div class="footer-block__item footer-block__column footer-block__social_media text-{{ text_align }} {{ block__text_first }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--block-custom-width: {{ social_block_width }}%; --block-margin-bottom: 0px">
+{%- endunless -%}
+<div class="footer-block__list-social{% if enable_bg_social %} enable_bg_social{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" style="--margin-top: {{ social_margin_top }}">
+    {%- if social_heading != blank -%}
+        <h2 class="footer-block__heading">{{- social_heading | escape -}}</h2>       
+    {%- endif -%}
+    <div class="item clearfix">{% render 'halo-social-media-icons' %}</div>  
+</div>
+{%- if show_payment and social_is_nested == false -%}
+    {% render 'footer-payment', block: block %}
+{%- endif -%}    
+
+{%- unless social_is_nested -%}
+</div>
+{%- endunless -%}

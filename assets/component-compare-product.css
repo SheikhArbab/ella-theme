@@ -1,0 +1,166 @@
+.halo-compareProduct {
+	display: none;
+	position: fixed;
+    top: auto;
+    bottom: 130px;
+    right: 30px;
+    z-index: 100;
+    pointer-events: auto;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 7px 0 rgba(0,0,0,.2);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.halo-compareProduct-content{
+    padding: 30px;
+}
+
+.halo-compareProduct-table{
+    position: relative;
+    max-height: 100%;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.compareTable{
+    border: 1px solid #e6e6e6;
+    border-collapse: collapse;
+    table-layout: fixed;
+    position: relative;
+}
+
+.compareTable td,
+.compareTable th{
+    border: 1px solid #e6e6e6;
+    border-spacing: 0;
+}
+
+.compareTable-heading{
+    padding: 17px 15px 13px 15px;
+    background-color: var(--bg-white);
+    text-align: center;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    line-height: var(--body-line-height);
+    letter-spacing: var(--color-text);
+}
+
+.compareTable-headingText{
+    white-space: nowrap;
+}
+
+.compareTable-row{
+    vertical-align: top;
+}
+
+.compareTable-product{
+    padding: 30px;
+    min-width: 250px;
+}
+
+.compareTable-product .card{
+    overflow: inherit;
+}
+
+.compareTable-item{
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    color: var(--color-text2);
+    padding: 1.25rem 1rem;
+    min-width: 150px;
+}
+
+.compareTable-item.compareTable-desc{
+    min-width: 250px;
+}
+
+.compareTable-removeProduct{
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    padding: 7px;
+    background-color: var(--color-global);
+    border: 1px solid var(--color-global);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.compareTable-removeProduct svg{
+    width: 100%;
+    height: 100%;
+    fill: var(--bg-white);
+    stroke: transparent;
+}
+
+.compareTable-optionLabel,
+.compareTable-optionValue{
+    display: inline;
+    vertical-align: top;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text2);
+    text-transform: capitalize;
+}
+
+.compareTable-optionLabel{
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+}
+
+.compareTable-collection{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.compareTable-option + .compareTable-option{
+    margin-top: 12px;
+}
+
+.halo-compare-product-popup .halo-popup-wrapper{
+	padding: 22px 0 0 0;
+}
+
+.halo-compare-product-popup .halo-popup-wrapper .halo-compareProduct-content{
+    padding-top: 0;
+}
+
+body.compare-product-show{
+	overflow: hidden;
+	/*height: 100%;*/
+}
+
+body.compare-product-show .background-overlay{
+	opacity: 1;
+    pointer-events: all;
+    z-index: 101;
+}
+
+body.compare-product-show .halo-compare-product-popup{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(-50%,-50%,0);
+    z-index: 102;
+}
+
+@media (min-width: 1025px) {
+	.halo-compareProduct {
+		display: block;
+	}
+
+	.halo-compareProduct.is-show{
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+	}
+}

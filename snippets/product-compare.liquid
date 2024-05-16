@@ -1,0 +1,24 @@
+<div class="{{ class }}" data-product-compare data-product-compare-handle="{{ product.handle }}" data-product-compare-id="{{ product.id }}">
+	{%- if settings.product_compare_type == 'default' -%}
+		{% assign compare_class = 'compare-button' %}
+	{%- else -%}
+		{% assign compare_class = 'compare-icon' %}
+	{%- endif -%}
+	<div class="{{ compare_class }}">
+	    <input {% if sectionId %}id="compare-{{ product.id }}-{{ sectionId }}{% if check %}-list{% endif %}"{% else %}id="compare-{{ product.id }}{% if check %}-list{% endif %}"{% endif %} class="compare-checkbox" type="checkbox" name="compare" value="{{ product.handle }}"/>
+	    <label class="compare-label{% if settings.product_compare_type == 'default' %} form-label--checkbox{% endif %}" {% if sectionId %}for="compare-{{ product.id }}-{{ sectionId }}{% if check %}-list{% endif %}"{% else %} for="compare-{{ product.id }}{% if check %}-list{% endif %}"{% endif %}>
+	    	{%- if settings.product_compare_type == 'icon' -%}
+	    		{%- if settings.product_card_layout == '04' and settings.product_compare_type == 'icon' -%}
+	    			<span class="text_1">
+	    		{%- else -%}
+	    			<span class="text">
+	    		{%- endif -%}
+	    	{%- endif -%}
+	    			<span>{{ 'compare.general.title' | t }}</span>
+	    	{%- if settings.product_compare_type == 'icon' -%}
+	    		</span>
+	    		{% render 'icon-compare' %}
+	    	{%- endif -%}
+	   	</label>
+	</div>
+</div>

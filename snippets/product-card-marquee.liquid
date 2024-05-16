@@ -1,0 +1,41 @@
+{%- if settings.show_product_marquee -%}
+    {%- liquid
+        assign product_marquee_type = settings.product_marquee_type
+        if product_marquee_type == 'text'
+            assign product_marquee_text = settings.product_marquee_text
+        elsif product_marquee_type == 'metafield'
+            if product.metafields.c_f.product_card_marquee
+                assign product_marquee_text = product.metafields.c_f.product_card_marquee
+            endif
+        elsif product_marquee_type == 'sale-text'
+            assign current_variant = product.selected_or_first_available_variant
+            if current_variant.compare_at_price > current_variant.price
+                assign product_marquee_text = 'products.product.on_sale_text' | t
+            endif
+        else            
+            assign current_variant = product.selected_or_first_available_variant
+            if current_variant.compare_at_price > current_variant.price
+                assign sale_text = 'products.product.off_text' | t
+                assign product_marquee_text = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round | append: '%'
+                assign product_marquee_text = product_marquee_text | append: sale_text
+            endif
+        endif
+    -%}             
+        
+    {%- if product_marquee_text != blank -%}
+        <div class="card-marquee marquee-{{ product_marquee_type }}" style="--product-marquee-background-color: {{ settings.product_marquee_background_color }};--product-marquee-text-color: {{ settings.product_marquee_text_color }};--product-marquee-text-size: {{ settings.product_marquee_text_size | append: 'px' }};--product-marquee-text-mobile-size: {{ settings.product_marquee_text_mobile_size | append: 'px' }};--product-marquee-text-weight: {{ settings.product_marquee_text_weight }};--product-marquee-text-transform: {{ settings.product_marquee_text_transform }};--product-marquee-text-style: {{ settings.product_marquee_text_style }};--product-marquee-speed: {{ settings.product_marquee_speed }}">   
+            <div class="marquee-box">
+                <div class="banner-marquee">
+                    {%- for i in (1..10) -%}
+                            <span class="banner-marquee__item text">{{ product_marquee_text }}</span>
+                    {%- endfor -%}
+                </div>
+                <div class="banner-marquee">
+                    {%- for i in (1..10) -%}
+                            <span class="banner-marquee__item text">{{ product_marquee_text }}</span>
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    {%- endif -%}
+{%- endif -%}

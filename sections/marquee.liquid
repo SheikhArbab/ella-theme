@@ -1,0 +1,247 @@
+{%- if section.blocks.size > 0 -%}
+    {{ 'section-marquee.css' | asset_url | stylesheet_tag }}
+
+    {%- liquid
+        assign padding_top = section.settings.padding_top
+        assign padding_bottom = section.settings.padding_bottom
+        assign icon = section.settings.icon
+        assign limitItems = 12 | divided_by: section.blocks.size
+    -%}
+
+    <div class="marquee marque-border--{{ section.settings.border }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--fade-in{% endif %}" data-limitItems="{{ limitItems }}" style="--padding-top: {{ padding_top }}px; --padding-bottom: {{ padding_bottom }}px; --padding-top-tablet: {{ padding_top | times: 0.75 | round: 0 }}px; --padding-bottom-tablet: {{ padding_bottom | times: 0.75 | round: 0 }}px; --padding-top-mobile: {{ padding_top | times: 0.5 | round: 0 }}px; --padding-bottom-mobile: {{ padding_bottom | times: 0.5 | round: 0 }}px; --minus-spacing-top: {{ section.settings.minus_spacing_top }}px; --background: {% if section.settings.mq_gradient != blank %}{{ section.settings.mq_gradient }}{% else %}{{ section.settings.mq_background }}{% endif %}; --text-size: {{ section.settings.text_size }}px; --text-size-mb: {{ section.settings.text_size_mb }}px; --gap-blocks: {{ section.settings.gap_blocks | times: 0.5 }}px; --border-color: {{ section.settings.border_color }}; --border-color-mb: {{ section.settings.border_color_mb }}; --icon-color: {{ section.settings.icon_color }}; --icon-color-mb: {{ section.settings.icon_color_mb }}; --time-scroll: {{ 5 | times: section.blocks.size }}s">
+        {%- for i in (1..limitItems) -%}
+            <div class="marquee__list">
+                {%- for block in section.blocks -%}
+                    {%- if icon != 'none' -%}
+                        <span class="marquee__icon">
+                            {%- if icon == 'thunder' -%}
+                                {% render 'icon-thunder' %}
+                            {%- elsif icon == 'fire' -%}
+                                {% render 'icon-fire-2' %}
+                            {%- endif -%}
+                        </span>
+                    {%- endif -%}
+                    {%- if block.settings.text != blank -%}
+                        <span class="marquee__item" style="--color: {{ block.settings.color }}; --color-mb: {{ block.settings.color_mb }}">{{ block.settings.text }}</span>
+                    {%- endif -%}
+                {%- endfor -%}
+            </div>
+        {%- endfor -%}
+    </div>
+    <script>
+        const elementToAnimateMarquee = document.querySelector('.marquee');
+        function toggleActiveClass() {
+          const viewportHeight = window.innerHeight;
+          const elementRect = elementToAnimateMarquee.getBoundingClientRect();
+
+          if (elementRect.top < viewportHeight && elementRect.bottom >= 0) {
+            elementToAnimateMarquee.classList.add('active-screen');
+          } else {
+            elementToAnimateMarquee.classList.remove('active-screen');
+          }
+        }
+
+        window.addEventListener('scroll', toggleActiveClass);
+        toggleActiveClass();
+    </script>
+{%- endif -%}
+
+{% schema %}
+    {
+        "name": "t:sections.marquee.name",
+        "max_blocks": 5,
+        "tag": "section",
+        "class": "section",
+        "settings": [
+            {
+                "type": "color",
+                "id": "mq_background",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "mq_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            {
+                "type": "range",
+                "id": "text_size",
+                "label": "t:settings_schema.typography.settings.typography.text_font_size",
+                "min": 10,
+                "max": 60,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 40
+            },
+            {
+                "type": "range",
+                "id": "gap_blocks",
+                "label": "t:sections.marquee.settings.gap_blocks",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 20
+            },
+            {
+                "type": "select",
+                "id": "border",
+                "label": "t:settings_schema.typography.settings.typography.border",
+                "default": "none",
+                "options": [
+                    {
+                        "value": "none",
+                        "label": "None"
+                    },
+                    {
+                        "value": "top",
+                        "label": "t:settings_schema.typography.settings.typography.top"
+                    },
+                    {
+                        "value": "bottom",
+                        "label": "t:settings_schema.typography.settings.typography.bottom"
+                    },
+                    {
+                        "value": "top_bottom",
+                        "label": "t:settings_schema.typography.settings.typography.top_bottom"
+                    }
+                ]
+            },
+            {
+                "type": "color",
+                "id": "border_color",
+                "default": "#000000",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            {
+                "type": "select",
+                "id": "icon",
+                "label": "t:settings_schema.typography.settings.typography.icon",
+                "default": "thunder",
+                "options": [
+                    {
+                        "value": "none",
+                        "label": "None"
+                    },
+                    {
+                        "value": "thunder",
+                        "label": "Thunder"
+                    },
+                    {
+                        "value": "fire",
+                        "label": "Fire"
+                    }
+                ]
+            },
+            {
+                "type": "color",
+                "id": "icon_color",
+                "default": "#000000",
+                "label": "t:settings_schema.typography.settings.typography.icon_color"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.mg_mobile.label"
+            },
+            {
+                "type": "range",
+                "id": "text_size_mb",
+                "label": "t:settings_schema.typography.settings.typography.text_font_size_mb",
+                "min": 10,
+                "max": 60,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 30
+            },
+            {
+                "type": "color",
+                "id": "border_color_mb",
+                "default": "#000000",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color_mb"
+            },
+            {
+                "type": "color",
+                "id": "icon_color_mb",
+                "default": "#000000",
+                "label": "t:settings_schema.typography.settings.typography.icon_color_mb"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main-product.settings.general.spacing"
+            },
+            {
+                "type": "range",
+                "id": "padding_top",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "t:sections.main-list-collections.settings.spacing.mg_top",
+                "default": 20
+            },
+            {
+                "type": "range",
+                "id": "padding_bottom",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "t:sections.main-list-collections.settings.spacing.mg_bottom",
+                "default": 20
+            },
+            {
+                "type": "range",
+                "id": "minus_spacing_top",
+                "label": "t:sections.product_block.settings.general.minus_spacing_top",
+                "default": 0,
+                "min": -200,
+                "max": 0,
+                "step": 2,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "info": "t:sections.slide-show.blocks.image.info_enable_custom_position"
+            }
+        ],
+        "blocks": [
+            {
+                "type": "marquee",
+                "name": "t:sections.marquee.blocks.name",
+                "settings": [
+                    {
+                        "type": "richtext",
+                        "id": "text",
+                        "label": "t:sections.image-banner.blocks.image.settings.content.label__16",
+                        "default": "<p>Welcome to our store</p>"
+                    },
+                    {
+                        "type": "color",
+                        "id": "color",
+                        "default": "#000000",
+                        "label": "t:settings_schema.colors.settings.colors_name.color"
+                    },
+                    {
+                        "type": "color",
+                        "id": "color_mb",
+                        "default": "#000000",
+                        "label": "t:settings_schema.colors.settings.colors_name.color_mobile"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "t:sections.marquee.presets.name",
+                "blocks": [
+                    {
+                        "type": "marquee"
+                    },
+                    {
+                        "type": "marquee"
+                    },
+                    {
+                        "type": "marquee"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

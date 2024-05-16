@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="{{ 'component-ask-an-expert.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-ask-an-expert.css' | asset_url | stylesheet_tag }}</noscript>
+{%- if settings.ask_an_expert_show == 'all_page' -%}
+	<style type="text/css">
+		.halo-ask-an-expert-banner{display: block;position: fixed;right: {{ settings.postion_right }};top: auto;bottom: 125px;z-index: 98;max-width: 40px}
+		.halo-ask-an-expert-banner button{display: block;position: relative;border: none;background: none;padding: 0}
+		.halo-ask-an-expert-banner .wrap{display: inline-block;vertical-align: top;width: 40px;height: 40px;text-align: center;background: var(--color-global);border-radius: 50%;padding: 10px}
+		.halo-ask-an-expert-banner .wrap:before{content: "";position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: -1;border-radius: 50%;opacity: .2;background-color: var(--color-global);animation: zoom-animation 1.5s ease-in-out infinite}
+		.halo-ask-an-expert-banner svg{display: block;fill: currentColor;stroke: transparent}
+		.halo-ask-an-expert-banner .icon{width: 100%;height: 100%;fill: var(--bg-white);stroke: transparent}
+		.halo-ask-an-expert-banner .placeholder-svg{display: none;max-height: 100px}
+		@media (max-width: 767px){.halo-ask-an-expert-banner{display: none}}
+		@media (min-width: 551px){
+			.halo-ask-an-expert-banner{max-width: 180px;overflow: hidden;bottom: 90px}
+			.halo-ask-an-expert-banner button{overflow: hidden}
+			.halo-ask-an-expert-banner .wrap{display: none}
+			.halo-ask-an-expert-banner .placeholder-svg,.halo-ask-an-expert-banner img{display: block}
+		}
+		@media (min-width: 1025px){
+			.halo-ask-an-expert-banner{right: {{ settings.postion_right }};bottom: {{ settings.postion_bottom }}}
+			.halo-ask-an-expert-banner .link:before{content: "";width: 100%;height: 100%;top: 100%;right: 0;left: auto;z-index: 2;transform: none;position: absolute;transition: var(--anchor-transition);background-color: rgba(0,0,0,.25);background: linear-gradient(to bottom,transparent 0,rgba(0,0,0,.25) 100%)}
+			.halo-ask-an-expert-banner .link:hover:before{top: 0}
+		}
+	</style>
+	<div class="halo-ask-an-expert-banner">
+	    <button type="button" data-open-ask-an-expert{% if settings.ask_an_expert_banner != blank %} class="link"{% endif %} aria-label="{{ 'ask_an_expert.general.button' | t}}">
+		    {%- if settings.ask_an_expert_banner != blank -%}
+		        {% assign image =  settings.ask_an_expert_banner %}
+		        <img srcset="{{ image | img_url: 'master' }}" src="{{ image | img_url: 'master' }}" loading="lazy"  alt="{{ image.alt | default: shop.name | escape }}">
+		    {%- else -%}
+		    	{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+		    {%- endif -%}
+	    </button>
+	</div>
+{%- endif -%}
+<div class="halo-popup halo-ask-an-expert-popup customPopup-medium" data-ask-an-expert-popup id="halo-ask-an-expert-popup">
+    <div class="halo-popup-wrapper">
+    	<div class="halo-popup-header">
+            <button type="button" class="halo-popup-close clearfix" data-close-ask-an-expert aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %} {{ 'general.common.close' | t }}</button>
+            {%- if settings.ask_an_expert_header != blank -%}
+	            <h5 class="halo-popup-title text-center">{{ settings.ask_an_expert_header | escape }}</h5>
+	        {%- endif -%}
+    	</div>
+        <div class="halo-popup-content halo-popup-scroll custom-scrollbar">
+			{%- form 'contact', id: 'ask_an_expert_form', class: 'halo-ask-an-expert-form contact-form' -%}
+				{%- if form.posted_successfully? -%}
+					<div class="form-message" data-form-message="ask">
+						<div class="alertBox alertBox--success">
+							<p class="alertBox-message">
+								{{ 'ask_an_expert.general.success' | t }}
+							</p>
+						</div>
+					</div>
+				{%- elsif form.errors -%}
+					<div class="form-message" data-form-message="ask">
+						<div class="alertBox alertBox--error">
+							<p class="alertBox-message">
+								<ul>
+									{% for field in form.errors %}
+										<li>
+											{{ form.errors.translated_fields[field] | capitalize }} - {{ form.errors.messages[field] }}
+										</li>
+									{% endfor %}
+								</ul>
+							</p>
+						</div>
+					</div>
+				{%- endif -%}
+			{%- endform -%}
+		</div>
+    </div>
+</div>

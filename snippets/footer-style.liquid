@@ -1,0 +1,181 @@
+<style>
+  {%- liquid
+      assign footer_top_bg = section.settings.footer_top_bg
+      assign footer_top_bg_gradient = section.settings.footer_top_bg_gradient
+      assign footer_top_bg = section.settings.footer_top_bg
+      assign footer_top_color = section.settings.footer_top_color_link
+      assign footer_top_color_hover = section.settings.footer_top_color_link_hover
+      assign footer_top_title_color = section.settings.footer_top_title_color
+      assign footer_top_bg_img = section.settings.footer_top_bg_img | img_url: 'master'
+      assign footer_top_bg_position_x =  section.settings.footer_top_bg_position_x
+      assign footer_top_bg_position_y =  section.settings.footer_top_bg_position_y
+      assign footer_top_bg_repeat =  section.settings.footer_top_bg_repeat
+      assign footer_top_bg_attachment =  section.settings.footer_top_bg_attachment
+      assign footer_top_bg_size =  section.settings.footer_top_bg_size
+      assign footer_border_item =  section.settings.footer_border_item
+      assign footer_bottom_bg = section.settings.footer_bottom_bg
+      assign footer_bottom_bg_gradient = section.settings.footer_bottom_bg_gradient
+      assign footer_bottom_color = section.settings.footer_bottom_color
+      assign pdtop_footerTop = section.settings.pdtop_footer_top
+      assign pdbottom_footerTop = section.settings.pdbottom_footer_top
+      assign pdtop_footerBottom = section.settings.pdtop_footer_bottom
+      assign pdbottom_footerBottom = section.settings.pdbottom_footer_bottom
+      assign column_reverse = section.settings.column_reverse
+      assign payment_position = section.settings.payment_position | plus: 0
+      assign bg_color_promotion = section.settings.bg_color_promotion
+      assign color_content_text = section.settings.color_content_text
+      assign button_color_register = section.settings.button_color_register
+      assign button_color_border_register = section.settings.button_color_border_register
+      assign button_color_bg_register = section.settings.button_color_bg_register
+      assign button_color_bg_gradient_register = section.settings.button_color_bg_gradient_register
+      assign button_color_hover_register = section.settings.button_color_hover_register
+      assign button_color_border_hover_register = section.settings.button_color_border_hover_register
+      assign button_color_bg_hover_register = section.settings.button_color_bg_hover_register
+      assign button_color_bg_gradient_hover_register = section.settings.button_color_bg_gradient_hover_register
+  -%}
+  .footer {
+      {%- if section.settings.type_footer_heading == 'font_1' -%}
+          --footer-heading-font-family: var(--font-family-1);
+      {%- else -%}
+          --footer-heading-font-family: var(--font-family-2);
+      {%- endif -%} --footer-heading-font-size : {{ section.settings.type_footer_heading_font_size | append: 'px' }};--footer-heading-font-weight : {{ section.settings.type_footer_heading_font_weight }};
+      --footer-heading-line-height : {{ section.settings.type_footer_heading_line_height | append: 'px' }};--footer-heading-letter-spacing : {{ section.settings.type_footer_heading_letter_spacing }};--footer-heading-text-transform : {{ section.settings.type_footer_heading_text_transform }};
+      {%- if section.settings.type_footer_link == 'font_1' -%}
+          --footer-link-font-family: var(--font-family-1);
+      {%- else -%}
+          --footer-link-font-family: var(--font-family-2);
+      {%- endif -%}--footer-link-font-size : {{ section.settings.type_footer_link_font_size | append: 'px' }};--footer-link-font-weight : {{ section.settings.type_footer_link_font_weight }};--footer-link-line-height : {{ section.settings.type_footer_link_line_height | append: 'px' }};--footer-link-letter-spacing : {{ section.settings.type_footer_link_letter_spacing }};--footer-link-text-transform : {{ section.settings.type_footer_link_text_transform }};--footer-heading-font-style:{{ section.settings.type_footer_heading_font_style }}}
+  .footer-block__item {margin-bottom: var(--block-margin-bottom)}
+  .footer__content-top {padding-top: {{ pdtop_footerTop | append: 'px' }};padding-bottom: {{ pdbottom_footerTop | append: 'px' }};{%- if section.settings.enable_border_footer_top -%}border-top: 1px solid {{ section.settings.border_footer_top_color }}{%- endif -%}}
+  .footer-1 .list-social__item {margin-bottom: 15px}
+  .footer-1 .footer-block__list-social .list-social {margin-left: 0}
+  .footer-02 .footer__content-top {padding-top: {{ pdtop_footerTop | append: 'px' }};padding-bottom: {{ pdbottom_footerTop | append: 'px' }}}
+  .footer-7 .footer__content-top { {%- if section.settings.enable_border_footer_top -%}border-top: 1px solid {{ section.settings.border_footer_top_color }}{%- endif -%} }
+  .footer-7 .footer__content-text {background: {{ bg_color_promotion }}}
+  .footer-7 .footer__content-text .footer_text-wrapper p {color: {{ color_content_text }}}
+  .footer-7 .footer__content-text .footer_text-wrapper a.button {color: {{ button_color_register }};border: 1px solid {{ button_color_border_register }};{%- if button_color_bg_gradient_register != blank -%}background: {{ button_color_bg_gradient_register }}{%- else -%}background-color: {{ button_color_bg_register }}{%- endif -%}}
+  .footer-7 .footer-block__details .rte h3,.footer-7 .footer-block__newsletter .footer-block__subheading .icon {fill: {{ footer_top_title_color }}}
+  {%- if footer_top_bg != 'rgba(0,0,0,0)' and footer_top_bg != blank -%}
+  .footer__content-top{background: {% if footer_top_bg_gradient != blank %}{{ footer_top_bg_gradient }}{% else %}{{ footer_top_bg }}{% endif %}}
+  {%- endif -%}
+  {%- if footer_top_title_color != 'rgba(0,0,0,0)' and footer_top_title_color != blank -%}
+  .footer-block__column .footer-block__heading,.footer-block__newsletter .footer-block__heading,.footer-block__newsletter .footer-block__subheading .text-store {color: {{ footer_top_title_color }}}
+  {%- endif -%}
+  {%- if footer_top_color != 'rgba(0,0,0,0)' and footer_top_color != blank -%}
+  .list-menu__item--link,.footer-block__details,.footer-block__details a,.footer-block__newsletter .footer-block__subheading,.footer-block__newsletter .footer-block__subheading a {color: {{ footer_top_color }}}
+  {%- endif -%}
+  {%- if footer_top_bg_img != blank and section.settings.show_footer_top_bg_img -%}
+  .footer__content-top.footer__content-bg{background: url({{ footer_top_bg_img }});background-position: {{ footer_top_bg_position_x }} {{ footer_top_bg_position_y }};background-repeat: {{ footer_top_bg_repeat }};background-attachment: unset;background-size: {{ footer_top_bg_size }}}
+  {%- endif -%}
+  {%- if footer_layout == 1 -%}
+    .footer-block__newsletter .newsletter-form__button {box-shadow: none;}
+  {%- endif-%}
+  {%- if footer_layout == 2 -%}
+    {%- if block_newsletter.settings.enable_border_bottom -%}
+        .footer-2 .footer-block__newsletter {
+          border-right: 1px solid {{ block_newsletter.settings.border_block_color }}
+        }
+        .layout_rtl .footer-2 .footer-block__newsletter {border-right: none;border-left: 1px solid {{ block_newsletter.settings.border_block_color }}}
+    {%- endif -%}
+    .footer-2 .footer-block__newsletter .footer-block__newsletter-form {max-width: 600px}
+    .footer-2 .footer-block__newsletter.newsletter__style2 .footer-block__newsletter-form .field {margin-right: 0}
+  {%- endif-%}
+  {%- if footer_layout == 3 -%}
+    {%- if section.settings.enable_border_footer_top and section.settings.footer_top_border_thickness != blank -%}
+        .footer__content-top {border-top: none}
+        .footer__content-top .container .halo-row {position: relative}
+        .footer__content-top .container .halo-row::after  {content: "";position: absolute;width: 97%;left: 0;transform: translateX(1.5%);top: calc(-1px * {{ section.settings.pdtop_footer_top }});height: {{ section.settings.footer_top_border_thickness | append: 'px' }};background-color: {{ section.settings.border_footer_top_color }}}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if footer_layout == 6 -%}
+    .footer-6 .footer-block__newsletter .footer-block__heading {font-size: var(--footer-heading-font-size);text-transform: capitalize}
+    .footer-6 .footer-block__bottom.not_flex .footer__column--info{margin-top: 15px}
+    .footer-6 .list-social__item {margin: 3px 15px 3px 0}
+    .footer-6 .footer__bottom .footer-block__newsletter .newsletter-form__field-wrapper {padding: 10px 0}
+    .footer-6 .footer__bottom .footer-block__newsletter .field__input,.footer-6 .footer__bottom .footer-block__newsletter .newsletter-form__button {box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.15) !important}
+    .footer-6 .footer__content-top-2 .footer-block__newsletter {padding-left: 10px}
+    .layout_rtl .footer-6 .footer__content-top-2 .footer-block__newsletter {padding-left: 0px;padding-right: 10px}
+
+    @media (max-width: 991px) {
+        .footer-6 .footer-block__item:nth-child(n+5){margin-top: 0}
+    }
+    @media (min-width: 1025px) {
+        .footer-6 .footer-block__bottom .footer-block__newsletter {display: flex;justify-content: center;align-items: center}
+        .footer-6 .footer-block__bottom .footer-block__newsletter h2 {margin-right: 20px !important}
+        .footer-6 .footer-block__bottom .footer-block__newsletter .footer-block__newsletter-form {margin: 0;width: auto}
+        .footer-6 .footer-block__bottom .footer-block__newsletter .footer-block__newsletter-form .field {width: 245px}
+        .footer-6 .footer-block__bottom .footer-block__newsletter .footer-block__newsletter-form .newsletter-form__button {width: 120px}
+        .footer-6 .footer__content-top-2 {display: flex;flex-direction: row;align-items: flex-start;justify-content: space-between}
+        .footer-6 .footer__content-top-2 .footer-block__newsletter {padding-left: 0;flex: 1}
+        .footer-6 .footer__content-top-2 .footer-block__newsletter > div {display: flex;align-items: center;justify-content: flex-start;gap: 16px}
+        .footer-6 .footer__content-top-2 .footer-block__newsletter > div .item {display: flex;align-items: center;justify-content: center;gap: 5px}
+        .footer-6 .footer__content-top-2 .footer-block__newsletter .footer-block__heading {text-transform: capitalize;margin-bottom: 0}
+        .footer-6 .footer__content-top-2 .footer-block__newsletter .field {width: 245px}
+        .footer-6 .footer__content-top-2 {padding: 0px 0 34px 0;margin-top: 40px;padding-top: 25px;padding-bottom: 5px;border-top: 1px solid {{ block_newsletter.settings.border_top_color }}}
+        .footer-6 .footer__content-top-2 .footer-block__social_media {padding-left: 0;padding-right: 0;width: max-content}
+      }
+    @media (max-width: 1024px) {
+        .footer-6 .footer__content-top-2 {flex-direction: row;display: flex;align-items: center;justify-content: space-between}
+    }
+    @media (max-width: 767px) {
+        .footer-6 .footer-block__bottom .footer-block__newsletter .footer-block__newsletter-form {margin: 15px auto 10px}
+        .footer-policies-block .halo-row.scroll-snap-mobile .halo-item{margin-top: 0 !important}
+        .footer-policies-block .halo-row .halo-item:not(.slider__slide){margin-top: 15px}
+        .footer-policies-block .halo-row .halo-item:first-child{margin-top: 0}
+        .footer-6 .footer__content-top-2 {flex-direction: column}
+    }
+  {%- endif -%}
+  @media (max-width: 767px){
+    {%- if footer_top_bg != 'rgba(0,0,0,0)' and footer_top_bg != blank -%}
+      {%- if footer_top_title_color != 'rgba(0,0,0,0)' and footer_top_title_color != blank -%}
+        .footer-block__mobile .footer-block__heading{border-color: {{ footer_top_title_color }}}
+        .footer-block__mobile .footer-block__heading:before,.footer-block__mobile .footer-block__heading:after{background-color: {{ footer_top_title_color }}}
+      {%- endif -%}
+    {%- endif -%}
+
+    .footer-1 .footer__content-top {
+      padding-bottom: {% if pdbottom_footerTop > 50 %}{{ pdbottom_footerTop | minus: 20 | append: 'px' }}{% else %}{{ pdbottom_footerTop | append: 'px'}}{% endif %}
+    }
+  }
+  @media (max-width: 550px){
+      {%- if footer_top_bg != 'rgba(0,0,0,0)' and footer_top_bg != blank -%}
+          {%- if footer_top_title_color != 'rgba(0,0,0,0)' and footer_top_title_color != blank -%}
+              .footer-block__mobile .footer-block__heading{border-color: {{ footer_top_title_color }}}
+              .footer-block__mobile .footer-block__heading:before,.footer-block__mobile .footer-block__heading:after{background-color: {{ footer_top_title_color }}}
+          {%- endif -%}
+      {%- endif -%}
+
+      {%- if payment_position == 4 -%}
+          .footer-block__list-payment ul{text-align: left}
+      {%- endif -%}
+  }
+  @media (min-width: 1025px){
+    .footer .container-full {padding-left: var(--spacing-l-r);padding-right: var(--spacing-l-r)}
+    {%- if footer_top_bg != 'rgba(0,0,0,0)' and footer_top_bg != blank -%}
+      {%- if footer_top_color_hover != 'rgba(0,0,0,0)' and footer_top_color_hover != blank -%}
+        .list-menu__item--link:hover{color: {{ footer_top_color_hover }}}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if footer_top_bg_img != blank -%}
+        .footer__content-top.footer__content-bg{background-attachment: {{ footer_top_bg_attachment }}}
+    {%- endif -%}
+    .footer-7 .footer__content-text .footer_text-wrapper a.button:hover {color: {{ button_color_hover_register }};border: 1px solid {{ button_color_border_hover_register }};
+      {%- if button_color_bg_gradient_hover_register != blank -%}
+          background: {{ button_color_bg_gradient_hover_register }};
+      {%- else -%}
+          background-color: {{ button_color_bg_hover_register }};
+      {%- endif -%}
+    }
+    .footer__content-top.enable_border_column .footer-block__item:after {background: {{ footer_border_item }}}
+  }
+  @media (min-width: 1800px){
+      {%- if social_position == 5 -%}
+        {%- if column_reverse -%}
+            .footer__payment .list-payment{padding-right: 30px}
+        {%- endif -%}
+      {%- endif -%}
+  }
+  @media (min-width: 767px) {
+      .footer-7 .footer-block__newsletter .footer-block__subheading {margin-top: {{ block_newsletter.settings.mg_top_des | append: 'px' }}}
+  }
+</style>

@@ -1,0 +1,7 @@
+<div style="display: none;" data-quantity-product-id="{{ product.id }}">
+    {
+        {%- for variant in product.variants -%}
+            "{{- variant.id -}}": "{{- variant.inventory_quantity -}}"{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+    }     
+</div> 

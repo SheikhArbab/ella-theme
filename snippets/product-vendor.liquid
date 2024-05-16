@@ -1,0 +1,12 @@
+{%- liquid 
+    assign fontsize_text = block.settings.fontsize_text
+    assign color_title = block.settings.color_title
+    assign text_transform = block.settings.text_transform
+-%}
+<div class="product__vendor" 
+    style="--fontsize-text:{{ fontsize_text | append: 'px' }};
+    --color-title: {{ color_title }};
+    --text-transform: {{ text_transform }}" 
+>
+    {{ product.vendor | link_to_vendor }}
+</div>

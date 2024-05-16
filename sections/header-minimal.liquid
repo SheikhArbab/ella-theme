@@ -1,0 +1,227 @@
+{{ 'component-header-minimal.css' | asset_url | stylesheet_tag }}
+<header class="header header-minimal" style="--spacing-l-r: {{ section.settings.padding_full_width }}px; --bg-color: {% if section.settings.header_bg_gradient != blank %}{{ section.settings.header_bg_gradient }}{% else %}{{ section.settings.header_bg }}{% endif %}; --p-top: {{ section.settings.padding_top }}px; --p-bottom: {{ section.settings.padding_bottom }}px">
+    <div class="container container-{{ section.settings.container }}">
+        <div class="header-minimal__content header-minimal__content-size--{{ section.blocks.size }}">
+            {%- for block in section.blocks -%}
+                <div class="header-minimal__item">
+                    {%- case block.type -%}
+                        {%-  when 'group_1' -%}
+                            <div class="header__social-media" style="--color: {{ block.settings.color }}">{% render 'halo-social-media-icons' %}</div>
+                        {%-  when 'group_2' -%}
+                            <div class="header__icons text-right clearfix" style="--language-currency-color: {{ block.settings.language_currency_color }}; --language-currency-bg: {{ block.settings.language_currency_bg }}; --cart-color-item: {{ block.settings.cart_color_item }}; --cart-bg-item: {{ block.settings.cart_bg_item }}; --cart-item-font-size: {{ block.settings.cart_item_font_size }}px">
+                                {%- if block.settings.show_language_currency -%}
+                                    {%- if settings.enable_multilang_shopify or settings.enable_currencies -%}
+                                        <div class="header-language_currency{% unless settings.enable_multilang_shopify %} no-language{% endunless %}{% unless settings.enable_currencies %} no-currency{% endunless %}">
+                                            <div class="top-language-currency">
+                                                {%- if settings.enable_multilang_shopify -%}
+                                                    {% render 'halo-top-language' %}
+                                                {%- endif -%}
+                                                {%- if settings.enable_currencies -%}
+                                                    {% render 'halo-top-currency' %}
+                                                {%- endif -%}
+                                            </div>
+                                        </div>
+                                    {%- endif -%}
+                                {%- endif -%}
+                                {%- if block.settings.show_cart -%}
+                                    <a {% if settings.show_quick_cart %}data-cart-sidebar role="link" aria-disabled="true"{% else %}href="{{ routes.cart_url }}"{% endif %} class="header__icon header__icon--cart link link--text focus-inset" id="cart-icon-bubble">
+                                        {% render 'icon-cart-02' %}
+                                        <div class="cart-count-bubble">
+                                            {%- if cart.item_count < 100 -%}
+                                                <span class="text" aria-hidden="true" data-cart-count>{{ cart.item_count }}</span>
+                                            {%- endif -%}
+                                            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+                                        </div>
+                                    </a>
+                                {%- endif -%}
+                            </div>
+                    {%- endcase -%}
+                </div>
+            {%- endfor -%}
+        </div>
+    </div>
+</header>
+
+{% schema %}
+{
+    "name": "Header - Minimal",
+    "limit": 1,
+    "class": "section-header-minimal",
+    "settings": [
+        {
+            "type": "paragraph",
+            "content": "*You should only activate \/ use \"Header\" you want, don't use the redundant headers which may not optimize for performance."
+        },
+        {
+            "type": "select",
+            "id": "container",
+            "label": "t:sections.layout.container.option",
+            "default": "1170",
+            "options": [
+                {
+                    "value": "1170",
+                    "label": "t:sections.layout.container.option4"
+                },
+                {
+                    "value": "1370",
+                    "label": "t:sections.layout.container.option8"
+                },
+                {
+                    "value": "1470",
+                    "label": "t:sections.layout.container.option5"
+                },
+                {
+                    "value": "1570",
+                    "label": "t:sections.layout.container.option6"
+                },
+                {
+                    "value": "1770",
+                    "label": "t:sections.layout.container.option3"
+                },
+                {
+                    "value": "full",
+                    "label": "t:sections.layout.container.option2"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "padding_full_width",
+            "label": "t:sections.layout.container.padding_full_width",
+            "min": 0,
+            "max": 75,
+            "step": 5,
+            "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+            "default": 0,
+            "info": "t:sections.layout.container.info_full_width"
+        },
+        {
+            "type": "color",
+            "id": "header_bg",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color",
+            "default": "#26292d"
+        },
+        {
+            "type": "color_background",
+            "id": "header_bg_gradient",
+            "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.main-product.settings.general.spacing"
+        },
+        {
+            "type": "range",
+            "id": "padding_top",
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "label": "t:sections.main-list-collections.settings.spacing.mg_top",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "padding_bottom",
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "label": "t:sections.main-list-collections.settings.spacing.mg_bottom",
+            "default": 0
+        }
+    ],
+    "blocks": [
+        {
+            "type": "group_1",
+            "name": "Social Media",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "color",
+                    "id": "color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#fff"
+                }
+            ]   
+        },
+        {
+            "type": "group_2",
+            "name": "Conversion & Cart",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.language_currency"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_language_currency",
+                    "label": "t:sections.header.settings.navigation.label_3",
+                    "default": true
+                },
+                {
+                    "type": "color",
+                    "id": "language_currency_color",
+                    "label": "t:sections.header.settings.header_top.label__4",
+                    "default": "#323232"
+                },
+                {
+                    "type": "color",
+                    "id": "language_currency_bg",
+                    "label": "t:settings_schema.colors.settings.colors_name.background_color",
+                    "default": "#DDBDB0"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.header.settings.header_top.cart"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_cart",
+                    "label": "t:sections.header.settings.header_icons.label__4",
+                    "default": true
+                },
+                {
+                    "type": "color",
+                    "id": "cart_color_item",
+                    "label": "t:sections.header.settings.header_top.color_items_cart",
+                    "default": "#323232"
+                },
+                {
+                    "type": "color",
+                    "id": "cart_bg_item",
+                    "label": "t:sections.header.settings.header_top.background_color_items_cart",
+                    "default": "#DDBDB0"
+                },
+                {
+                    "type": "range",
+                    "id": "cart_item_font_size",
+                    "label": "t:sections.header.settings.header_top.font_size_cart_item",
+                    "min": 10,
+                    "max": 25,
+                    "step": 1,
+                    "unit": "t:sections.header.settings.logo.unit",
+                    "default": 14
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Header - Minimal",
+            "blocks": [
+                {
+                    "type": "group_1"
+                },
+                {
+                    "type": "group_2"
+                }
+            ]
+        }
+    ],
+    "enabled_on": {
+        "groups": ["header"]
+    }
+}
+{% endschema %}

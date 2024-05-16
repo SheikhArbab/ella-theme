@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="{{ 'component-quick-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-quick-cart.css' | asset_url | stylesheet_tag }}</noscript>
+<div class="halo-sidebar halo-sidebar-right halo-cart-sidebar" id="halo-cart-sidebar">
+    <button type="button" class="halo-sidebar-close button-effect" data-close-cart-sidebar aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %} {{ 'general.common.close' | t }}</button>
+    <div class="halo-sidebar-header text-left">
+		<span class="title">{{ 'sections.cart.my_cart' | t }}</span>
+		<div class="wrapper-cartCount"><span class="cartCount" data-cart-count>{{ cart.item_count }}</span> <span>{{ 'sections.cart.items' | t }}</span></div>
+	</div>
+    <div class="halo-sidebar-wrapper custom-scrollbar {{cart.items}}">
+      	{%- if settings.show_calculator_free_shipping_message -%}
+          <div class="previewCartMessage">{% render 'free-shipping-component' %}</div>
+        {%- endif -%}
+		<cart-coupon-discount data-is-sidebar="true">
+			<template data-discount-icon>{% render 'icon-discount' %}</template>
+			<template data-discounted-price-template>
+				<span class="previewCartItem-saving-price"><s class="before-discount-price" data-original-price-display>{{ item.original_price | money }}</s><span class="discounted-price" data-current-price-display>{{ item.final_price | money }}</span></span> 
+			</template>
+			<div class="previewCart-wrapper"></div>
+		</cart-coupon-discount>
+  	</div>
+</div>
+<script src="{{ 'halo-toolcart.js' | asset_url }}" defer="defer"></script>

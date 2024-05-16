@@ -1,0 +1,74 @@
+{%- comment -%}
+  Format date Publish Blog
+  {{- article.published_at | date: "%a, %b %d, %y" -}}
+{%- endcomment -%}
+<div class="article-card{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+    <div class="article-card__image-wrapper" style="--margin-bottom: {{ margin_bottom_image | append: 'px' }}">
+    {%- if article.image -%}
+        {%- assign image_alt = article.title | escape -%}
+        {%- assign preview_img = article.image -%}
+        <a href="{{article.url}}" class="image-zoom adaptive_height" style="padding-top: {{ 1 | divided_by: preview_img.aspect_ratio | times: 100 }}%">
+            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="
+            {%- if article.image.src.width >= 165 -%}{{ article.image.src | img_url: '165x' }} 165w,{%- endif -%}
+            {%- if article.image.src.width >= 360 -%}{{ article.image.src | img_url: '360x' }} 360w,{%- endif -%}
+            {%- if article.image.src.width >= 560 -%}{{ article.image.src | img_url: '560x' }} 560w,{%- endif -%}
+            {%- if article.image.src.width >= 570 -%}{{ article.image.src | img_url: '570x' }} 570w,{%- endif -%}
+            {%- if article.image.src.width >= 720 -%}{{ article.image.src | img_url: '720x' }} 720w,{%- endif -%}
+            {%- if article.image.src.width >= 940 -%}{{ article.image.src | img_url: '940x' }} 940w,{%- endif -%}
+            {%- if article.image.src.width >= 1066 -%}{{ article.image.src | img_url: '1066x' }} 1066w{%- endif -%}" sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ image_alt }}" {% if settings.enable_lazyload %}class="lazyload"{% endif %} />
+            {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+        </a>
+    {%- else -%}
+        <a href="{{article.url}}" class="image-zoom"><div class="not_img" style="--height_not_img: 370px">570 x 370px</div></a>
+    {%- endif -%}
+    </div>
+    <div class="article-card__info text-{{ text_align }}">
+        {%- if block_item_style == 'style_2' -%}
+            <div class="article-wrapper">
+                <div class="article-card__author{% if enable_blog_button %} enable_button{% endif %}" style="--margin-bottom: {{ margin_bottom_info | append: 'px' }}">               
+                    {%- if blog_show_author -%}
+                    <span class="article__author"><span class="text_by">{{ text_by }}</span>{{article.author}}</span>
+                    {%- endif -%}
+                    {%- if blog_show_date -%}
+                    <span class="article__date"><span class="text_on">{{ text_on }}</span>{{- article.published_at | date: "%b %d, %Y" -}}</span>
+                    {%- endif -%}                
+                </div>
+                
+                {%- if show_more_pos == 'right_title' -%}
+                <div class="article-card-header d-flex flex-jc-between flex-align-start gap-col-30">
+                    <h3 class="article-card__title" style="--margin-bottom: {{ margin_bottom_title | append: 'px' }}"><a class="link-effect p-relative" href="{{ article.url }}"><span class="text">{{ article.title }}</span></a></h3>
+                    <a href="{{article.url}}" class="article-card__link article-card__link-right link-effect min-w-100 text-right{% if enable_blog_button %} button{% endif %}"><span class="text p-relative">{{ 'blogs.article.read_more' | t }}</span>{%- if blog_show_more_icon == 'arrow-right' -%}{% render 'icon-arrow-right-2', class: 'ml-5' %}{%- elsif blog_show_more_icon == 'chevron-right' -%}{% render 'icon-arrow-right', class: 'ml-5' %}{% elsif blog_show_more_icon == 'angles-right' %}{% render 'icon-angles-right', class: 'ml-5' %}{% endif %}</a>
+                </div>
+            {%- else -%}
+                <h3 class="article-card__title" style="--margin-bottom: {{ margin_bottom_title | append: 'px' }}"><a class="link-effect p-relative" href="{{ article.url }}"><span class="text">{{ article.title }}</span></a></h3>
+            {%- endif -%}
+            </div>
+        {%- else -%}
+            {%- if show_more_pos == 'right_title' -%}
+                <div class="article-card-header d-flex flex-jc-between flex-align-start gap-col-30">
+                    <h3 class="article-card__title" style="--margin-bottom: {{ margin_bottom_title | append: 'px' }}"><a class="link-effect p-relative" href="{{ article.url }}"><span class="text">{{ article.title }}</span></a></h3>
+                    <a href="{{article.url}}" class="article-card__link article-card__link-right link-effect min-w-100 text-right{% if enable_blog_button %} button{% endif %}"><span class="text p-relative">{{ 'blogs.article.read_more' | t }}</span>{%- if blog_show_more_icon == 'arrow-right' -%}{% render 'icon-arrow-right-2', class: 'ml-5' %}{%- elsif blog_show_more_icon == 'chevron-right' -%}{% render 'icon-arrow-right', class: 'ml-5' %}{% elsif blog_show_more_icon == 'angles-right' %}{% render 'icon-angles-right', class: 'ml-5' %}{% endif %}</a>
+                </div>
+            {%- else -%}
+                <h3 class="article-card__title" style="--margin-bottom: {{ margin_bottom_title | append: 'px' }}"><a class="link-effect p-relative d-inline-block" href="{{ article.url }}"><span class="text">{{ article.title }}</span></a></h3>
+            {%- endif -%}
+            <div class="article-card__author{% if enable_blog_button %} enable_button{% endif %}" style="--margin-bottom: {{ margin_bottom_info | append: 'px' }}">               
+                {%- if blog_show_author -%}
+                <span class="article__author"><span class="text_by">{{ text_by }}</span>{{article.author}}</span>
+                {%- endif -%}
+
+                {%- if blog_show_date -%}
+                <span class="article__date"><span class="text_on">{{ text_on }}</span>{{- article.published_at | date: "%b %d, %Y" -}}</span>
+                {%- endif -%}                
+            </div>
+        {%- endif -%}
+        {%- if blog_show_des -%}
+        <div class="article-card__des" style="--margin-bottom: {{ margin_bottom_des | append: 'px' }}">{{ article.excerpt_or_content | strip_html | truncatewords: limit_content_des }}</div>
+        {%- endif -%}
+        {%- if show_more_pos == 'under_content' -%}
+        <div class="article-card__footer">
+            <a href="{{article.url}}" class="article-card__link{% if enable_blog_button %} button{% endif %}">{{ 'blogs.article.read_more' | t }}{%- if blog_show_more_icon == 'arrow-right' -%}{% render 'icon-arrow-right-2' %}{%- elsif blog_show_more_icon == 'chevron-right' -%}{% render 'icon-arrow-right' %}{% elsif blog_show_more_icon == 'angles-right' %}{% render 'icon-angles-right' %}{% endif %}</a>
+        </div>
+        {%- endif -%}
+    </div>
+</div>

@@ -1,0 +1,93 @@
+{%- if block.settings.show_block -%}
+    {%- liquid
+        assign heading = block.settings.heading
+        assign type = block.settings.type
+    -%}
+    <div class="sidebarBlock sidebar-categories{% if show_border %} sidebarBlock-border{% endif %}{% if show_collapse %} sidebarBlock-collapse{% endif %}">
+        {%- if show_collapse -%}
+            <div class="sidebarBlock-headingWrapper">
+        {%- endif -%}
+            {%- if heading != blank -%}
+                <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                    {{ heading | escape }}
+                </h2>
+            {%- else -%}
+                {%- if show_collapse -%}
+                    <h2 class="sidebarBlock-heading{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}">
+                        BLock Heading
+                    </h2>
+                {%- endif -%}
+            {%- endif -%}
+        {%- if show_collapse -%}
+            </div>
+            <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+        {%- endif -%}
+            <div class="sidebarBlock-content">
+                <ul class="all-categories-list list-unstyled" role="menu">
+                    {% assign collection_list = block.settings.link_list | handleize %}
+                    {%- if type == 'show_all' -%}
+                        {%- for collection_list in collections limit: 20 -%}
+                            <li class="navPages-item{% if collection.handle == collection_list.handle %} current-cate is-clicked{% endif %}" role="menuitem">
+                                <a class="navPages-action link link-underline" href="{{ collection_list.url }}" aria-label="link">
+                                    <span class="text">{{ collection_list.title | escape }}</span>
+                                </a>
+                            </li>
+                        {%- endfor -%}
+                    {%- elsif type == '1_level' -%}
+                        {%- for link in linklists[collection_list].links limit: 9 -%}
+                            <li class="navPages-item{% if link.active or link.child_active %} current-cate is-clicked{% endif %}" role="menuitem">
+                                <a class="navPages-action link link-underline" href="{{ link.url }}" aria-label="link">
+                                    <span class="text">{{ link.title | escape }}</span>
+                                </a>
+                            </li>
+                        {%- endfor -%}
+                    {%- else -%}
+                        {%- for link in linklists[collection_list].links -%}
+                            <li class="navPages-item{% if link.active %} current-cate is-clicked{% endif %}" role="menuitem">
+                                {%- if linklists[link.handle] == empty -%}
+                                    <a class="navPages-action link link-underline" href="{{ link.url }}" aria-label="link">
+                                        <span class="text">{{ link.title | escape }}</span>
+                                    </a>
+                                {%- else -%}
+                                    <a class="navPages-action link link-underline has-subMenu" href="{{ link.url }}" aria-label="link">
+                                        <span class="text">{{ link.title }}</span>
+                                    </a>
+                                    <span class="icon-dropdown" role="button" aria-label="{{ 'accessibility.dropdown' | t }}" tabindex="0">
+                                        <span class="icon-plus"></span>
+                                    </span>
+                                    <ul class="dropdown-category-list navPages-level-2 list-unstyled" role="list">
+                                        {%- for link_child_item in linklists[link.handle].links -%}
+                                            <li class="navPage-subMenu-item{% if link_child_item.active or link_child_item.child_active %} current-cate is-clicked{% endif %}">
+                                                {%- if linklists[link_child_item.handle] == empty -%}
+                                                    <a class="navPage-subMenu-action link link-underline navPages-action" href="{{ link_child_item.url }}" aria-label="link">
+                                                        <span class="text">{{ link_child_item.title }}</span>
+                                                    </a>
+                                                {%- else -%}
+                                                    <a class="navPage-subMenu-action navPages-action link link-underline has-subMenu" href="{{ link_child_item.url }}" aria-label="link">
+                                                        <span class="text">{{ link_child_item.title }}</span>
+                                                    </a>
+                                                    <span class="icon-dropdown" role="button" aria-label="{{ 'accessibility.dropdown' | t }}" tabindex="0">
+                                                        <span class="icon-plus"></span>
+                                                    </span>
+                                                    <ul class="dropdown-category-list navPages-level-3 list-unstyled" role="list">
+                                                        {%- for n in linklists[link_child_item.handle].links -%}
+                                                            <li class="navPage-subMenu-item{% if n.active %} current-cate is-clicked{% endif%}">
+                                                                <a class="navPage-subMenu-action navPages-action link link-underline" href="{{ n.url }}" aria-label="link">{{ n.title }}</a>
+                                                            </li>
+                                                        {%- endfor -%}
+                                                    </ul>
+                                                {%- endif -%}
+                                            </li>
+                                        {%- endfor -%}
+                                    </ul>
+                                {%- endif -%}
+                            </li>
+                        {%- endfor -%}
+                    {%- endif -%}
+                </ul>
+            </div>
+        {%- if show_collapse -%}
+            </div>
+        {%- endif -%}
+    </div>
+{%- endif -%}

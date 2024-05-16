@@ -1,0 +1,73 @@
+<div class="productView-countDown-wrapper">
+    {%- if countdown_type == 'all_product' -%}
+        <div class="productView-countDown countdown_{{ product.id }} style-{{ countdown_style }} clearfix" data-countdown-id="{{ product.id }}" data-countdown="{{ countdown_time }}">
+            <span class="text animated-loading">
+                <span>{{ settings.countdown_text }}</span>
+            </span>
+            <span class="num animated-loading">
+                <span>151<span>D</span></span>
+            </span>
+            <span class="num animated-loading">
+                <span>8<span>H</span></span>
+            </span>
+            <span class="num animated-loading">
+                <span>23<span>M</span></span>
+            </span>
+            <span class="num animated-loading">
+                <span>0<span>S</span></span>
+            </span>
+        </div>
+    {%- elsif countdown_type == 'collection_product' -%}
+        {%- liquid
+            assign hasCountdown = false
+            if countdown_collection != blank
+                for collection in product.collections
+                    assign collection_handle = collection.handle
+                    if collection_handle == countdown_collection
+                        assign hasCountdown = true
+                    endif
+                endfor
+            endif
+        -%}
+        {%- if hasCountdown -%}
+            <div class="productView-countDown countdown_{{ product.id }} style-{{ countdown_style }} clearfix" data-countdown-id="{{ product.id }}" data-countdown="{{ countdown_time }}">
+                <span class="text animated-loading">
+                    <span>{{ settings.countdown_text }}</span>
+                </span>
+                <span class="num animated-loading">
+                    <span>151<span>D</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>8<span>H</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>23<span>M</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>0<span>S</span></span>
+                </span>
+            </div>
+        {%- endif -%}
+    {%- else -%}
+        {%- if product.metafields.c_f.countdown -%}
+            {% assign countdown_type = product.metafields.c_f.countdown %}
+            <div class="productView-countDown countdown_{{ product.id }} style-{{ countdown_style }} clearfix" data-countdown-id="{{ product.id }}" data-countdown="{{ countdown_type }}">
+                <span class="text animated-loading">
+                    <span>{{ settings.countdown_text }}</span>
+                </span>
+                <span class="num animated-loading">
+                    <span>151<span>D</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>8<span>H</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>23<span>M</span></span>
+                </span>
+                <span class="num animated-loading">
+                    <span>0<span>S</span></span>
+                </span>
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+</div>

@@ -1,0 +1,474 @@
+{{ 'component-main-search.css' | asset_url | stylesheet_tag }}
+{{ 'component-search-block.css' | asset_url | stylesheet_tag }}
+
+{% liquid 
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign container = section.settings.container
+    assign padding_full_width = section.settings.padding_full_width | append: 'px'
+
+    assign search_block_title = section.settings.search_block_title
+    assign enable_border_title = section.settings.enable_border_title.enable_border_title
+    assign color_title = section.settings.color_title
+    assign fontsize_title = section.settings.fontsize_title | append: 'px'
+    assign fontsize_title_mb = section.settings.fontsize_title_mb | append: 'px'
+    assign margin_bottom_title = section.settings.margin_bottom_title | append: 'px'
+    assign title_text_transform = section.settings.title_text_transform
+
+    assign search_block_des = section.settings.search_block_des
+    assign color_des = section.settings.color_des
+    assign margin_bottom_des = section.settings.margin_bottom_des | append: 'px'
+    assign fontsize_des = section.settings.fontsize_des | append: 'px'
+
+    assign text_align = section.settings.text_align
+    assign content_align = section.settings.content_align 
+    assign search_block_placeholder = section.settings.search_block_placeholder
+
+    assign content_max_width = section.settings.content_max_width | append: 'px'
+    assign search_input_color = section.settings.search_input_color
+    assign search_input_bg = section.settings.search_input_bg 
+    assign search_input_gradient = section.settings.search_input_gradient
+    assign search_input_border = section.settings.search_input_border
+    assign search_input_align = section.settings.search_input_align
+
+    assign padding_top_input = section.settings.padding_top_input | append: 'px'
+    assign padding_bottom_input = section.settings.padding_bottom_input | append: 'px'
+%}
+
+<div class="search-block-section{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="search-block-section-{{ section.id }}" data-id="{{ section.id }}" data-title="{{ search_block_title }}">
+    <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+        <div class="search-block align-{{ content_align }}" style="--content-max-width: {{ content_max_width }};
+                                                                    --input-padding-top: {{ padding_top_input }};
+                                                                    --input-padding-bottom: {{ padding_bottom_input }};">
+            <div class="block-header">
+                {% if search_block_title != blank %}
+                    <h2 class="title search-block-title text-{{ text_align }} {% if enable_border_title %}has_border{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
+                        style="--title-color: {{ color_title }};
+                        --title-fs: {{ fontsize_title }};
+                        --title-fs-mb: {{ fontsize_title_mb }};
+                        --title-margin-bottom: {{ margin_bottom_title }};  
+                        --title-transform: {{ title_text_transform }};                      
+                        "
+                    > 
+                        <span>{{ search_block_title | escape }}</span>
+                    </h2>
+                {% endif %}
+                {% if search_block_des != blank %}
+                    <p class="desc search-block-des text-{{ text_align }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
+                        style="--desc-color: {{ color_des }};
+                        --desc-margin-bottom: {{ margin_bottom_des }};
+                        --des-fs: {{ fontsize_des }};
+                        "
+                    >
+                        <span>{{ search_block_des }}</span>
+                    </p>
+                {% endif %}
+            </div>
+            <form action="{{ routes.search_url }}" method="get" role="search" class="search-form{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                <input type="hidden" name="type" value="{{ search.terms | escape }}">
+                <input type="hidden" name="options[prefix]" value="last" />
+                <div class="form-field form-fieldInline">
+                    <label class="form-label hiddenLabels" for="Search-Block" aria-hidden="true">
+                        {{ search_block_title }}
+                    </label>
+                    <input
+                        class="search__input form-input form-input-placeholder input-align-{{ search_input_align }}"
+                        id="Search-Block"
+                        type="search"
+                        name="q"
+                        value="{{ search.terms | escape }}"
+                        {% if search.performed %}
+                            autofocus
+                        {% endif %}
+                        placeholder="{{ search_block_placeholder }}"
+                        style="--input-color: {% if search_input_color != blank %}{{ search_input_color }}{% endif %};
+                            --input-bg: {% if search_input_gradient != blank %}{{ search_input_gradient}}{% elsif search_input_bg != blank %}{{ search_input_bg }}{% endif %};
+                            --input-border: {% if search_input_border != blank %}{{ search_input_border }}{% endif %};
+                            "
+                    >
+                    <button type="submit" class="search__button field__button button button--primary" aria-label="{{ 'general.search.search' | t }}">
+                        {% render 'icon-search' %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style type="text/css" media="screen">
+    #search-block-section-{{ section.id }} {
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+
+    {% if container == 'fullwidth' %}
+        #search-block-section-{{ section.id }} .container-full {
+            padding-left: {{ padding_full_width }};
+            padding-right: {{ padding_full_width }};
+        }
+    {% endif %}
+
+    @media (max-width: 1024px) {
+        #search-block-section-{{ section.id }} {
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+    }
+
+    @media (max-width: 767px) {
+        #search-block-section-{{ section.id }} .block-header .title {
+            font-size: {{ fontsize_title_mb }};
+        }
+    }
+
+    @media (max-width: 550px) {
+        #search-block-section-{{ section.id }} {
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+</style>
+
+{% schema %}
+	{
+		"name": "t:sections.search_block.name",
+		"settings": [
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "fullwidth",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "padding_full_width",
+                "label": "t:sections.layout.container.padding_full_width",
+                "min": 0,
+                "max": 50,
+                "step": 5,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 0,
+                "info": "t:sections.layout.container.info_full_width"
+            },
+            {
+                "type": "select",
+                "id": "text_align",
+                "label": "t:sections.footer.settings.footer_top.footer_top_text_align.option",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:settings_schema.typography.settings.typography.left"
+                },
+                {
+                    "value": "center",
+                    "label": "t:settings_schema.typography.settings.typography.center"
+                },
+                {
+                    "value": "right",
+                    "label": "t:settings_schema.typography.settings.typography.right"
+                }],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "content_align",
+                "label": "t:sections.general.settings.block-title.label__3",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:settings_schema.typography.settings.typography.left"
+                },
+                {
+                    "value": "center",
+                    "label": "t:settings_schema.typography.settings.typography.center"
+                },
+                {
+                    "value": "right",
+                    "label": "t:settings_schema.typography.settings.typography.right"
+                }],
+                "default": "center"
+            },
+            {
+                "type": "range",
+                "id": "content_max_width",
+                "label": "t:sections.custom_map.settings.label__1",
+                "default": 400,
+                "min": 100,
+                "max": 1000,
+                "step": 10,
+                "unit": "t:sections.general.settings.padding.unit",
+                "info": "t:sections.custom_map.settings.info"
+            },
+            {
+                "type": "range",
+                "id": "padding_top_input",
+                "label": "t:sections.layout.mg_input.mg_top_input",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 12
+            },
+            {
+                "type": "range",
+                "id": "padding_bottom_input",
+                "label": "t:sections.layout.mg_input.mg_bottom_input",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 13
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "text",
+                "id": "search_block_title",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__1",
+                "default": "Search For Something Special..."
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_border_title",
+                "label": "t:sections.spotlight_block.blocks.image.enable_border_title",
+                "default": true
+            },
+            {
+                "type" : "color",
+                "id" : "color_title",
+                "label": "t:sections.layout.color.color_title",
+                "default" : "#232323"
+            },
+            {
+                "type": "range",
+                "id": "margin_bottom_title",
+                "label": "t:sections.layout.mg_bottom_title.label",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 45
+            },
+            {
+                "type": "range",
+                "id": "fontsize_title",
+                "label": "t:sections.layout.fontsize.fontsize_title.label",
+                "min": 10,
+                "max": 50,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 16
+            },
+            {
+                "type": "range",
+                "id": "fontsize_title_mb",
+                "label": "t:sections.layout.fontsize.fontsize_title.label_mb",
+                "min": 10,
+                "max": 50,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 22
+            },
+            {
+                "type": "select",
+                "id": "title_text_transform",
+                "label": "t:settings_schema.typography.settings.text_transform.label",
+                "default": "uppercase",
+                "options": [
+                    {
+                        "value": "none",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__1"
+                    },
+                    {
+                        "value": "capitalize",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__2"
+                    },
+                    {
+                        "value": "uppercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__3"
+                    },
+                    {
+                        "value": "lowercase",
+                        "label": "t:settings_schema.typography.settings.text_transform.options__4"
+                    }
+                ]
+            },
+            {
+                "type" : "textarea",
+                "id" : "search_block_des",
+                "label" : "t:sections.image-banner.blocks.image.settings.content.label__2"
+            },
+            {
+                "type" : "color",
+                "id" : "color_des",
+                "label": "t:sections.layout.color.color_des",
+                "default" : "#3c3c3c"
+            },
+            {
+                "type": "range",
+                "id": "margin_bottom_des",
+                "label": "t:settings_schema.typography.settings.typography.des_margin_bottom",
+                "min": 0,
+                "max": 60,
+                "step": 1,
+                "unit": "t:sections.footer.settings.footer_bottom.pdtop_footer_bottom.unit",
+                "default": 30
+            },
+            {
+                "type": "range",
+                "id": "fontsize_des",
+                "label": "t:sections.layout.fontsize.fontsize_des.label",
+                "min": 10,
+                "max": 50,
+                "step": 1,
+                "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+                "default": 16
+            },
+            {
+                "type": "paragraph",
+                "content": "t:sections.search_block.settings.search_field"
+            },
+            {
+                "type": "color",
+                "id": "search_input_color",
+                "label": "t:settings_schema.colors.settings.colors_name.color"
+            },
+            {
+                "type": "color",
+                "id": "search_input_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "search_input_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            {
+                "type": "color",
+                "id": "search_input_border",
+                "label": "t:settings_schema.colors.settings.colors_name.border_color"
+            },
+            { 
+                "type": "text",
+                "id": "search_block_placeholder",
+                "label": "t:sections.search_block.settings.search_block_placeholder",
+                "default": "Search entire store here"
+            },
+            {
+                "type": "select",
+                "id": "search_input_align",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__21",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:settings_schema.typography.settings.typography.left"
+                },
+                {
+                    "value": "center",
+                    "label": "t:settings_schema.typography.settings.typography.center"
+                },
+                {
+                    "value": "right",
+                    "label": "t:settings_schema.typography.settings.typography.right"
+                }],
+                "default": "center"
+            }
+		], 
+        "presets": [
+            {
+                "name": "t:sections.search_block.presets.name"
+            }
+        ],
+        "disabled_on": {
+            "groups": ["header"]
+        }
+	}
+{% endschema %}

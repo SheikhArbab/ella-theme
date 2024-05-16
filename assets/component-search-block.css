@@ -1,0 +1,101 @@
+.search-block-section .form-fieldInline {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-block-section .search-form {
+    width: 100%;
+    max-width: unset;
+}
+
+.search-block-section .search-form .button {
+    position: absolute;
+    right: 0;
+    background-color: transparent;
+    color: currentColor;
+    border: none;
+    width: 63px;
+    height: 100%;
+    transition: background-color var(--duration-short) ease;
+}
+
+.search-block-section .search-form .button:hover {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.search-block-section .search-form .button svg {
+    fill: currentColor;
+    transform: scale(1.5) rotate(-90deg);
+    position: relative;
+    top: -1px;
+}
+
+.search-block-section .search-block {
+    max-width: var(--content-max-width);
+}
+
+.search-block-section .search-block .block-header {
+    width: 100%;
+}
+
+.search-block-section .search-block.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-block-section .search-block.align-left {
+    margin-right: auto;
+}
+
+.search-block-section .search-block.align-right {
+    margin-left: auto;
+}
+
+.search-block-section .search-block-title {
+    color: var(--title-color);
+    font-size: var(--title-fs);
+    margin-bottom: var(--title-margin-bottom);
+    text-transform: var(--title-transform);
+}
+
+.search-block-section .search-block-des {
+    color: var(--desc-color);
+    margin-bottom: var(--desc-margin-bottom);
+    font-size: var(--des-fs);
+}
+
+.search-block-section .search-form .search__input {
+    --side-padding: 55px;
+    color: var(--input-color);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    padding-right: var(--side-padding);
+    width: 100%;
+    padding-top: var(--input-padding-top);
+    padding-bottom: var(--input-padding-bottom);
+}
+
+.search-block-section .search-form .search__input::placeholder {
+    color: var(--input-color);
+}
+
+.search-block-section .search-form .search__input.input-align-left {
+    text-align: left;
+}
+
+.search-block-section .search-form .search__input.input-align-center {
+    text-align: center;
+    padding-left: var(--side-padding);
+}
+
+.search-block-section .search-form .search__input.input-align-right {
+    text-align: right;
+}
+
+.search-block-section .search-form input[type="search"]::-webkit-search-decoration,
+.search-block-section .search-form input[type="search"]::-webkit-search-cancel-button,
+.search-block-section .search-form input[type="search"]::-webkit-search-results-button,
+.search-block-section .search-form input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance:none;
+}

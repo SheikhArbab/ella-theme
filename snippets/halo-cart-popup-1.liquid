@@ -1,0 +1,45 @@
+{%- unless settings.show_quick_cart -%}
+    <link rel="stylesheet" href="{{ 'component-quick-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endunless -%}
+<link rel="stylesheet" href="{{ 'component-add-to-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- unless settings.show_quick_cart -%}
+    <noscript>{{ 'component-quick-cart.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endunless -%}
+<noscript>{{ 'component-add-to-cart.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="halo-popup halo-add-to-cart-popup halo-popup-right customPopup-tiny" data-add-to-cart-popup id="halo-add-to-cart-popup">
+    <button type="button" class="halo-popup-close clearfix" data-close-add-to-cart-popup aria-label="{{ 'general.common.close' | t }}">
+        {% render 'icon-close' %}
+    </button>
+    <div class="halo-popup-content">
+        <div class="product-added clearfix">
+            <a class="product-image" href=""></a>
+            <div class="product-info">
+                <div class="product-title">
+                    <a class="title" href=""></a>
+                    <span class="text">{{ 'products.product.add_to_cart_success_message' | t }}</span>
+                </div>
+                <div class="product-action clearfix">
+                    <a class="button button-2 button-continue"
+                        {% if settings.quick_cart_redirect_button == 'go_back' %}
+                            role="link" aria-disabled="true"
+                            onclick="window.history.back();"
+                        {% elsif settings.quick_cart_redirect_button == 'link_to' %}
+                            href="{{ settings.quick_cart_redirect_button_link }}"
+                        {% else %}
+                            role="link" aria-disabled="true"
+                            onclick="window.location.reload();"
+                        {% endif %}
+                    >
+                        {{ 'sections.cart.continue_shopping' | t }}
+                    </a>
+
+                    <a class="button button-2 button-view-cart" href="{{ routes.cart_url }}">
+                        {{ 'sections.cart.view_cart' | t }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

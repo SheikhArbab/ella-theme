@@ -1,0 +1,433 @@
+<link rel="stylesheet" href="{{ 'component-aztable.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-aztable.css' | asset_url | stylesheet_tag }}</noscript>
+
+<script src="{{ 'halo-aztable.js' | asset_url }}" defer></script>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop 
+    assign padding_bottom = section.settings.mg_bottom_desktop 
+    assign padding_top_tablet = section.settings.mg_top_tablet 
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet 
+    assign padding_top_mobile = section.settings.mg_top_mobile 
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile 
+    assign container = section.settings.container
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign display_brands_slider = section.settings.display_brands_slider
+    assign style = section.settings.style
+-%}
+
+<aztable-items class="aztable-items{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-section-id="{{ section.id }}" data-section-type="brands" id="BrandsSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="halo-page-header">
+        <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+            {%- if show_breadcrumb -%}
+                {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+            {%- endif -%}
+            {%- if show_page_title -%}
+                <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                    {{ page.title | escape }}
+                </h1>
+            {%- endif -%}
+            {% if display_brands_slider and section.blocks.size > 0 %}
+                <div class="logo-brands{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-loader-script="{{ 'halo.slide-page-brand.js' | asset_url }}">
+                  <div class="row brands-slider" data-page-brands-slider data-dots="false" data-arrows="true" data-rows="{% if settings.layout_style == 'layout_style_fullwidth' %}6{% else %}5{% endif %}">
+                    {% for block in section.blocks %}
+                    {% liquid 
+                        assign brand_image = block.settings.brand_image
+                        assign brand_name = block.settings.brand_name
+                        assign brand_link = block.settings.link_to_vendor
+                    %}
+                    <div class="brand-image-container{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                      <a title="{{ brand_name }}"{% if brand_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ brand_link }}"{% endif %}>
+                        {% if brand_image != blank %}
+                        <img src="{{ brand_image | image_url: width: 200 }}" alt="{{ brand_image.alt }}" loading='lazy' width='{{ brand_image.width }}' height='{{ brand_image.height }}' />
+                        {% else %}
+                        <div class="not_img" style="font-size: 16px;">
+                          186 x 74px
+                        </div> 
+                        {% endif %} 
+                      </a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+            {% assign array = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|#" | split: "|" %}
+            <div class="wrapper-AZTable">
+                <ul id="haloAZTable" class="haloAZTable style-{{ style }} list-unstyled {% if style == '1' %}visible-all{% endif %} scroll-snap-mobile disable-srollbar">
+                    <li data-letter="all" class="all-letter is-active">
+                        <a href="javascript:void(0)" role="button">{{ 'brands_page.general.all' | t }}</a>
+                    </li>
+                    {%- for item in array -%}
+                        <li data-letter="{{ item | downcase }}" class="disable{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            <a href="#az-code-{{ item | downcase }}" data-href="{{ item | downcase }}" role="button">{{ item | downcase }}</a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="halo-page-content halo-brands-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'full' %}container-full{% else %}container{% endif %}">
+            <div id="haloAZWrapper" class="haloAZWrapper active-all{% if style == '1' %} visible-all{% endif %}">
+                {%- for item in array -%}
+                    <div class="az-group{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-letter="{{ item | downcase }}" id="az-code-{{ item | downcase }}">
+                        <h3 class="az-group-title text-left">{{ item | downcase }}</h3>
+                        <ul class="az-group-list list-unstyled" role="list"></ul>
+                    </div>
+                {%- endfor -%}
+            </div>
+        </div>
+    </div>
+</aztable-items>
+
+<style type="text/css" media="screen">
+    #BrandsSection-{{ section.id }}{
+        padding-top: {{ padding_top | append: 'px' }};
+        padding-bottom: {{ padding_bottom | append: 'px' }};
+    }
+
+    #BrandsSection-{{ section.id }} .halo-page-header{
+        background-color: var(--navigation-bg);
+    }
+
+    @media (max-width: 1024px) {
+        #BrandsSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet | append: 'px' }};
+            padding-bottom: {{ padding_bottom_tablet | append: 'px' }};
+        }
+
+        #BrandsSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+
+    @media (max-width: 550px) {
+        #BrandsSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile | append: 'px' }};
+            padding-bottom: {{ padding_bottom_mobile | append: 'px' }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #BrandsSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+        
+        #BrandsSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    const azWrapper = $('#haloAZWrapper')
+    const azNavigation = $('#haloAZTable')
+
+    getAllBrands();
+
+    function getAllBrands() {
+        let brandGroup, brand;
+        {%- for vendor in shop.vendors -%}
+            {% assign letter = vendor | strip_html | downcase | truncate: 1, '' %}
+
+            {%- if section.settings.type == 'vendor' -%}
+                {% assign link = vendor | link_to_vendor %}
+                brand = `{{ link }}`;
+            {%- else -%}
+                brand = `<a href="/collections/{{ vendor | handleize }}">{{ vendor | downcase }}</a>`;
+            {%- endif -%}
+            
+            {%- if letter == '1' or letter == '2' or letter == '3' or letter == '4' or letter == '5' or letter == '6' or letter == '7' or letter == '8' or letter == '9' or letter == '0' -%}
+                brandGroup = azWrapper.find('.az-group[data-letter="#"] ul');
+            {%- else -%}
+                brandGroup = azWrapper.find('.az-group[data-letter="{{ letter }}"] ul');
+            {%- endif -%}
+
+            brandGroup.append('<li class="brand" data-az-letter="{{ letter }}">\
+                    '+ brand +'\
+                </li>'
+            );
+        {%- endfor -%}
+
+        parseBrandList();
+    }
+
+    function parseBrandList() {
+        azWrapper.find('.az-group').each((index, element) => {
+            const letter = $(element).data('letter');
+
+            if($('.az-group-list', element).children().length > 0){
+                azNavigation.find(`[data-letter="${letter}"]`).removeClass('disable').addClass('has-letter');
+            }
+        });
+    }
+
+    window.addEventListener('load', () => {
+        const collectionLinksElement = document.querySelector('.wrapper-AZTable')
+        const collectionLinksList = [...collectionLinksElement.querySelectorAll('ul li')]
+        const firstLink = collectionLinksList[0]
+        const lastLink = collectionLinksList.pop()
+        
+        collectionLinksElement.classList.add('initialized')
+
+        const scrollToLastObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                collectionLinksElement.classList.add('disable-last')
+            } else {
+                collectionLinksElement.classList.remove('disable-last')
+            }
+        }, {
+            threshold: 0.6
+        })
+
+        const scrollToFirstObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                collectionLinksElement.classList.add('disable-first')
+            } else {
+                collectionLinksElement.classList.remove('disable-first')
+            }
+        }, {
+            threshold: 0.6
+        })
+
+        scrollToLastObserver.observe(lastLink)
+        scrollToFirstObserver.observe(firstLink)
+    })
+
+</script>
+
+{% schema %}
+	{
+		"name": "t:sections.main-brands.name",
+        "settings":
+        [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.breadcrumb.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.breadcrumb.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.breadcrumb.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "checkbox",
+                "id": "display_brands_slider",
+                "label": "t:sections.main-brands.settings.label__2",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "type",
+                "label": "t:sections.main-brands.settings.label__3",
+                "default": "vendor",
+                "options": [
+                {
+                    "value": "vendor",
+                    "label": "t:sections.main-brands.settings.option__1"
+                },
+                {
+                    "value": "collection",
+                    "label": "t:sections.main-brands.settings.option__2"
+                }]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            }
+        ],
+        "blocks": [
+            {
+                "name": "t:sections.main-brands.blocks.brand-image.name",
+                "type": "image_picker",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "brand_image",
+                        "label": "t:sections.main-brands.blocks.brand-image.settings.label__1"
+                    },
+                    {
+                        "type": "text",
+                        "id": "brand_name",
+                        "label": "t:sections.main-brands.blocks.brand-image.settings.label__2"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link_to_vendor",
+                        "label": "t:sections.main-brands.blocks.brand-image.settings.label__3"
+                    }
+                ]
+            }
+        ]
+	}
+{% endschema %}

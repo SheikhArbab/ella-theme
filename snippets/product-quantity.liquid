@@ -1,0 +1,23 @@
+{%- if qty_style == '1' -%}
+	<quantity-input class="productView-quantity quantity__group quantity__group--{{ quantity_stt }} quantity__style--{{ qty_style }} clearfix{% if check_hidden %} hidden{% endif %}">
+	    <label class="form-label quantity__label" for="quantity-{{ product.id }}{%- if quantity_stt > 1 -%}-{{ quantity_stt }}{%- endif -%}">
+	        {{ 'products.product.quantity.label__2' | t }}
+	    </label>
+	    <div class="quantity__container">
+		    <button type="button" name="minus" class="minus btn-quantity">
+		    	<span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+		    </button>
+		    <input class="form-input quantity__input" type="number" name="quantity" min="1" value="1" inputmode="numeric" pattern="[0-9]*" id="quantity-{{ product.id }}{%- if quantity_stt > 1 -%}-{{ quantity_stt }}{%- endif -%}" data-product="{{ product.id }}" data-price="{{ current_variant.price }}">
+		    <button type="button" name="plus" class="plus btn-quantity">
+		    	<span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+		    </button>
+	    </div>
+	</quantity-input>
+{%- elsif qty_style == '2' -%}
+	<quantity-input class="productView-quantity quantity__group quantity__group--{{ quantity_stt }} quantity__style--{{ qty_style }} clearfix{% if check_hidden %} hidden{% endif %}">
+	    <label class="form-label quantity__label" for="quantity-{{ product.id }}{%- if quantity_stt > 1 -%}-{{ quantity_stt }}{%- endif -%}">
+	        {{ 'products.product.quantity.label__2' | t }}
+	    </label>
+	    <input class="form-input quantity__input" type="number" name="quantity" min="1" value="1" inputmode="numeric" pattern="[0-9]*" id="quantity-{{ product.id }}{%- if quantity_stt > 1 -%}-{{ quantity_stt }}{%- endif -%}" data-product="{{ product.id }}" data-price="{{ current_variant.price }}">
+	</quantity-input>
+{%- endif -%}

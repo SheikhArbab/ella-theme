@@ -1,0 +1,506 @@
+{% liquid 
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+
+    assign bounding_box = section.settings.bounding_box
+    assign map_style = section.settings.map_style
+    assign enable_custom_marker = section.settings.enable_custom_marker
+    assign custom_marker_image = section.settings.custom_marker_image
+    assign marker_width = section.settings.marker_width | append: 'px'
+    assign marker_height = section.settings.marker_height | append: 'px'
+    assign distance_unit = section.settings.distance_unit
+    assign map_pitch = section.settings.map_pitch
+    assign map_bearing = section.settings.map_bearing
+
+    assign popup_header_background_color = section.settings.popup_header_color
+    assign popup_header_gradient = section.settings.popup_header_gradient
+    assign popup_header_color = section.settings.popup_header_text_color 
+
+    assign address_fs = section.settings.address_font_size | append: 'px'
+    assign address_fw = section.settings.address_font_weight
+    assign address_color = section.settings.address_text_color
+    assign address_color_hover = section.settings.address_text_color_hover 
+
+    assign info_fs = section.settings.info_font_size | append: 'px'
+    assign info_fw = section.settings.info_font_weight
+    assign info_color = section.settings.info_text_color 
+%}
+
+<style>
+    {% comment %} START MAP STYLING {% endcomment %}
+    .page-find-a-store a.mapboxgl-ctrl-logo,
+    .page-find-a-store .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+        display: none!important;
+    }
+
+    .page-find-a-store .mapboxgl-canvas {
+        display: block!important;
+        height: 100%;
+    }
+    
+    .page-find-a-store .map {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .page-find-a-store .listings {
+        height: 100%;
+        overflow: auto;
+        padding-bottom: 30px;
+    }
+      
+    .page-find-a-store .listings .item {
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+        text-decoration: none;
+    }
+      
+    .page-find-a-store .listings .item:last-child { border-bottom: none; }
+      
+    .page-find-a-store .listings .item .title {
+        display: block;
+        color: var(--address-color);
+        font-weight: 700;
+        font-size: var(--address-fs);
+        font-weight: var(--address-fw);
+    }
+      
+    .page-find-a-store .listings .item .title small { font-weight: 400; }
+      
+    .page-find-a-store .listings .item.active .title,
+    .page-find-a-store .listings .item .title:hover { color: var(--address-color-hover); }
+      
+    .page-find-a-store .listings .item.active {
+        background-color: #f8f8f8;
+    }
+    
+    .page-find-a-store .listings .item .title + div {
+        font-size: var(--info-fs);
+        font-weight: var(--info-fw);
+        color: var(--info-color);
+    }
+        
+    .page-find-a-store ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+        border-left: 0;
+        background: rgba(0, 0, 0, 0.1);
+    }
+      
+    .page-find-a-store ::-webkit-scrollbar-track {
+        background: none;
+    }
+      
+    .page-find-a-store ::-webkit-scrollbar-thumb {
+        background: #00853e;
+        border-radius: 0;
+    }
+    
+    {% comment %} END MAP STYLING {% endcomment %}
+    
+    {% comment %} START MAP POPUP AND LINK {% endcomment %}
+    /* Marker tweaks */
+    .page-find-a-store .mapboxgl-popup-close-button {
+        top: -10px;
+        font-size: 20px;
+        font-weight: var(--font-weight-normal);
+        color: var(--popup-header-color);
+    }
+      
+    .page-find-a-store .mapboxgl-popup-content {
+        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+        padding: 0;
+        width: 260px;
+    }
+      
+    .page-find-a-store .mapboxgl-popup-content h3 {
+        background: var(--popup-header-bg);
+        color: var(--popup-header-color);
+        margin: 0;
+        padding: 10px;
+        padding-right: 20px;
+        border-radius: 3px 3px 0 0;
+        font-weight: var(--address-fw);
+        font-size: var(--address-fs);
+        margin-top: -15px;
+        line-height: 1.75em;
+    }
+        
+    .page-find-a-store .mapboxgl-popup-content h4 {
+        margin: 0;
+        padding: 10px;
+        font-size: var(--info-fs);
+        font-weight: var(--info-fw);
+        line-height: 1.75em;
+    }
+      
+    .page-find-a-store .mapboxgl-popup-content div {
+        padding: 10px;
+    }
+      
+    .page-find-a-store .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+        margin-top: 15px;
+    }
+        
+    .page-find-a-store .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+        border-bottom-color: #91c949;
+    }
+    
+    .page-find-a-store .marker {
+        border: none;
+        cursor: pointer;
+        
+        display: block;
+        visibility: visible;
+        opacity: 1;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+    
+        {% unless enable_custom_marker %}
+            height: 56px;
+            width: 56px;    
+            background-image: url({{ 'green-marker.png' | asset_url }});
+        {% else %}  
+            height: {{ marker_height }};
+            width: {{ marker_width }};   
+            background-image: url({{ custom_marker_image | image_url }});
+        {% endunless %}
+    }
+    
+    .page-find-a-store .mapboxgl-popup {
+        padding-bottom: 50px;
+        max-width: 270px !important;
+    }
+    
+    .page-find-a-store .mapboxgl-popup-tip {
+        display: block;
+    }
+
+    .page-find-a-store .mapboxgl-marker svg {
+        height: 2rem;
+        width: 2rem;
+    }
+    {% comment %} END MAP POPUP AND LINK {% endcomment %}
+    
+    {% comment %} START Store Sorting {% endcomment %}
+    .page-find-a-store .mapboxgl-ctrl-geocoder {
+        border: 0;
+        border-radius: 0;
+        position: relative;
+        top: 0;
+        max-width: 800px;
+        margin-top: 0;
+    }
+      
+    .page-find-a-store .mapboxgl-ctrl-geocoder > div {
+        min-width: 100%;
+        margin-left: 0;
+    }
+    
+    .page-find-a-store .mapboxgl-ctrl-top-left {
+        top: 10px;
+    }
+    {% comment %} END Store Sorting {% endcomment %}
+    
+    .page-find-a-store .title--large {
+        margin-bottom: 60px;
+    }
+    
+    .page-content.find-a-store {
+        width: 100%;
+        overflow: hidden
+    }
+    
+    .top-content-find {
+        display: flex;
+        width: 100%;
+    }
+    
+    .find-a-store .left-content-find {
+        width: 50%;
+        padding-bottom: 65px;
+    }
+    
+    .find-a-store .right-content-find {
+        width: 50%;
+        padding-top: 42px;
+    }
+    
+    .find-a-store .left-content-find span {
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 0;
+        text-transform: capitalize;
+        color: #172532;
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    .find-a-store .left-content-find p{
+      margin-bottom: 0;
+      width: 55%;
+    }
+    
+    .ENV_maps__div {
+        min-height: 600px !important;
+    }
+    
+    .ENV_maps_elist {
+        margin-bottom: 10px;
+    }
+       
+    .ENV_maps__div_search {
+        position: relative;
+        margin-bottom: 72px;
+        width: 100%;
+    }
+    
+    .ENV_maps__div_search .form-wrapper {
+        position: relative;
+        width: calc(100% - 165px);
+    }
+    
+    .ENV_maps__div_search .form-wrapper .icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 15px;
+        color: #a78f6b;
+        fill: #a78f6b;
+    }
+    
+    .ENV_maps__div_search span:before {
+        content: 'Search';
+    }
+    
+    .ENV_maps__div_search input#ENV_maps__input_search {
+        margin-bottom: 10px;
+        max-width: 100%;
+    }
+    /* width */
+    .InfoFind::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    /* Track */
+    .InfoFind::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+     
+    /* Handle */
+    .InfoFind::-webkit-scrollbar-thumb {
+        background: #172532; 
+    }
+    
+    /* Handle on hover */
+    .InfoFind::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+    
+    .InfoFindInner.ENV_maps_list > div:hover h4{
+      background-image: linear-gradient(transparent 97%, #947d5c 3%);
+      background-repeat: repeat-x;
+      background-position-y: -14px;
+    }
+    
+    .ENV_maps__div_search .btn:hover {
+        opacity: 0.7;
+    }
+    
+    .ENV_maps_window.ENV_maps_html .name {   
+        font-size: 13px;
+        font-weight: bold;
+    }
+    
+    .ENV_maps_window.ENV_maps_html .text h4 {
+        margin: 0;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    
+    .ENV_maps_window.ENV_maps_html .text a {   
+        font-size: 13px;
+        text-decoration: none;
+    }
+    
+    .HL-ContactForm .HL-ColRight {
+        display: block;
+        overflow: hidden;
+        margin-bottom: 20px;
+        float: right;
+    }
+    
+    .InfoFind {
+        max-height: 600px;
+        overflow-y: scroll;
+        {% comment %} border: 1px solid #ececec; {% endcomment %}
+        border-radius: 3px;
+    }
+    
+    .TitleHeading {
+        margin-bottom: 0px;
+        border-bottom: 1px solid transparent!important;
+        font-size: 20px;
+        margin-top: 20px;
+        padding: 0 0 5px 0;
+        font-weight: bold;
+    }
+    
+    .InfoFindInner.ENV_maps_list > div {
+        display: block;
+        padding: 10px 10px 10px 25px;
+        border-bottom: 1px solid #ececec;
+    }
+    
+    .InfoFind.ENV_maps_list .ENV_maps_elist > span, .InfoFindInner.ENV_maps_list .ENV_maps_elist > span {
+        overflow: hidden;
+        line-height: 20px;
+        font-size: 16px;
+        color: #787878;
+    }
+    
+    .ENV_maps_elist.ENV_maps_html > span.name > strong {
+        display: block;
+        padding: 10px 5px 15px;
+        text-align: center;
+        clear: both;
+        font-weight: 700;
+        font-size: 18px;
+    }
+    
+    .ENV_maps_elist strong {
+        font-weight: 400;
+        margin-top: 9px;
+        display: block;
+    }
+    
+    .InfoFind.ENV_maps_list > div h4, .InfoFindInner.ENV_maps_list > div h4 {
+        margin-bottom: 0;
+        padding-bottom: 15px;
+        display: inline-block;
+        font-weight: 400;
+        margin-top: 10px;
+        text-transform: capitalize;
+        letter-spacing: 0;
+        font-size: 16px;
+        font-style: italic;
+    }
+    
+    .InfoFind.ENV_maps_list .ENV_maps_elist > span a, .InfoFindInner.ENV_maps_list .ENV_maps_elist > span a {
+        text-decoration: none;
+    }
+    
+    #StoreLocatorSection-{{ section.id }} {
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }   
+    
+    @media (max-width: 550px) {
+        #StoreLocatorSection-{{ section.id }} {
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+    
+    @media (max-width: 1024px){
+        #StoreLocatorSection-{{ section.id }} {
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+        
+        .find-a-store .left-content-find p {
+            width: 85%;
+        }
+    
+        .find-a-store .right-content-find {
+            padding-top: 42px;
+        }
+    }
+    @media (max-width: 991px){
+        .page-find-a-store {
+            margin-top: 25px;
+        }
+    
+        .page-find-a-store .listings {
+            padding-bottom: 10px;
+        }
+    
+        .HL-ColRight {
+            height: 65vh;
+            flex-shrink: 0;
+            flex-grow: 1;
+            margin-top: 10px;
+        }
+    
+        .find-a-store .left-content-find {
+            width: 100%;
+            padding-bottom: 20px;
+        }
+    
+        .find-a-store .right-content-find {
+          width: 100%;
+          padding-top: 0;
+        }
+    
+        .ENV_maps__div_search {
+            margin-bottom: 30px;
+        }
+    }
+    @media (max-width: 768px){
+        .InfoFind {
+            max-height: 305px;
+        }
+    
+        .top-content-find {
+            display: block;
+        }
+    
+        .page-find-a-store .mapboxgl-ctrl-top-left {
+            width: 100%;
+        }
+    
+        .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
+            margin-right: 10px;
+            max-width: calc(100% - 20px);
+        }
+    
+        .mapboxgl-ctrl-top-right .mapboxgl-ctrl {
+            margin-top: 70px;
+        }
+    }   
+    @media (min-width: 992px){
+        .bottom-content-find {
+            display: flex;
+            height: 600px;
+            gap: 15px;
+        }   
+    
+        .page-find-a-store {
+            margin-top: 30px;
+        }
+    
+        .HL-ColLeft {
+            width: 310px;
+        }
+    
+        .HL-ColRight {
+            width: calc(100% - 310px);
+        }
+    }
+</style>

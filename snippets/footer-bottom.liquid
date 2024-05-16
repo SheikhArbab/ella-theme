@@ -1,0 +1,39 @@
+{% comment %} Receive block, type_footer_link_font_size {% endcomment %}
+{% liquid
+  assign footer_bottom_bg = block.settings.footer_bottom_bg
+  assign footer_bottom_bg_gradient = block.settings.footer_bottom_bg_gradient
+  assign footer_bottom_color = block.settings.footer_bottom_color
+  assign show_payment = block.settings.show_payment
+%}
+<style>
+  {%- if footer_bottom_bg != 'rgba(0,0,0,0)' and footer_bottom_bg != blank -%}
+      .footer__content-bottom{background: {% if footer_bottom_bg_gradient != blank %}{{ footer_bottom_bg_gradient }}{% else %}{{ footer_bottom_bg }}{% endif %}}
+  {%- endif -%}
+  .footer__content-bottom {padding-top: {{ block.settings.pdtop_footer_bottom | append: 'px' }};padding-bottom: {{ block.settings.pdbottom_footer_bottom | append: 'px' }};
+      {%- if block.settings.border_top -%}
+      border-top: 1px solid {{ block.settings.border_top_color }};
+      {%- endif -%}
+  }
+  {%- if footer_bottom_color != 'rgba(0,0,0,0)' and footer_bottom_color != blank -%}
+      .copyright__content{color: {{ footer_bottom_color }}}
+  {%- endif -%}
+</style>
+<div class="footer__content-bottom">
+  <div class="container container-{{ container }}">
+    <div class="footer-block__bottom {% unless block.settings.enable_layout_grid %}not_flex{% endunless %} {% if show_payment == false %}not_payment{% endif %}">
+      {%- if block.settings.show_copyright -%}
+        <div class="footer__column-item footer__copyright">
+          <div class="copyright__content" style="--font-size: {{ type_footer_link_font_size }}px; --text-color: {{ block.settings.copyright_content_color }}">{{ block.settings.copyright_content | default: ' ' }}</div>
+        </div>
+      {%- endif -%}
+      {%- if block.settings.show_shop_name -%}
+        <div class="footer__column-item footer__shop_name"><small class="copyright__content">{{ block.settings.shop_name }}</small></div>
+      {%- endif -%}
+      <div class="footer__column footer__column--info">
+        {%- if show_payment -%}
+          {% render 'footer-payment', block: block %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

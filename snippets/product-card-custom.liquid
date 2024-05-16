@@ -1,0 +1,69 @@
+{%- liquid
+    assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+    assign product_swatch_option = settings.swatch | downcase
+    assign variant_img = ''
+    for option in product_card_product.options_with_values
+        assign option_name = option.name | downcase
+        if product_swatch_option contains option_name
+            assign variant_selected = option.selected_value
+            for variant in product_card_product.variants limit: 1
+                if variant.image != null  
+                    assign variant_img = variant.image
+                endif
+            endfor
+            break
+        else
+            assign variant_selected = nil
+        endif
+    endfor
+-%}
+
+<div class="product-item product-item-custom" data-product-id="product-{{ product_card_product.id }}" data-json-product='{{ product_card_product | json | escape }}'>
+    <div class="card">
+        <div class="card-product{% if product_card_product.featured_media == nil %} card--text-only card--soft{% endif %}">
+            <a class="card-media"
+                href="{{ product_card_product.url | within: collection }}"
+                {% if product_card_product.featured_media %}
+                    style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                {% endif %}
+            >
+            {%- if product_card_product.featured_media -%}
+                <img {% render 'lazyload',preview_img: product_card_product.featured_media, class: true  %} />
+                {% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}
+            {%- else -%}
+                {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+            </a>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-left">
+                {%- if settings.show_vendor -%}
+                    <div class="card-vendor">
+                        <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                        {{ product_card_product.vendor | link_to_vendor }}
+                    </div>
+                {%- endif -%}
+                <a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}{% if variant_selected != blank %} card-title-change{% endif %}" href="{{ product_card_product.url }}">
+                    <span class="text">
+                        {{ product_card_product.title | escape }}
+                        {% if variant_selected != blank %}
+                            <span data-change-title> - {{ variant_selected }}</span>
+                        {% endif %}
+                    </span>
+                </a>
+                {%- if settings.show_review -%}
+                    <div class="card-review clearfix halo-productReview">
+                        <span class="shopify-product-reviews-badge" data-id="{{ product_card_product.id }}"></span>
+                    </div>
+                {%- endif -%}
+                <div class="card-price">
+                    {% render 'price',
+                        product: product_card_product,
+                        price_class: ''
+                    %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

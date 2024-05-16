@@ -1,0 +1,143 @@
+{%- liquid
+    assign position = settings.badge_postion
+
+    if settings.show_sale_badge
+        assign sale_badge = false
+        assign sale_badge_type = settings.sale_badge_type
+        if badge_detail
+            assign current_variant = product.selected_or_first_available_variant
+            if current_variant.compare_at_price > current_variant.price
+                assign sale_badge = true
+            endif
+        else
+            if product.compare_at_price_min > product.price_min
+                assign sale_badge = true
+            endif
+        endif
+    endif
+
+    if settings.show_sold_out_badge
+        assign sold_out_badge = false
+        if product.available == false
+            assign sold_out_badge = true
+        endif
+    endif
+
+    if settings.show_custom_badge
+        assign custom_badge = false
+        for tag in product.tags
+            assign tag_handle = tag | handle
+            if tag_handle == 'label'
+                assign custom_badge = true
+            endif
+        endfor
+    endif
+
+    if settings.show_bundle_badge
+        assign bundle_badge = false
+        if product.metafields.c_f.grouped_sub_product and settings.show_bundle_badge
+            assign bundle_badge = true
+        endif
+    endif
+
+    if settings.show_new_badge
+        assign new_badge = false
+        assign new_badge_type = settings.new_badge_type
+        if new_badge_type == 'auto'
+            assign new_badge = true
+            assign date_published = product.published_at | date:'%s'
+            assign date_now = 'now' | date:'%s'
+            assign date_minus = date_now | minus: date_published
+            assign date_difference = date_minus | divided_by: 86400
+            assign new_badge_limit = settings.new_badge_limit
+            assign new_badge_time = settings.new_badge_time
+        else
+            for tag in product.tags
+            assign tag_handle = tag | handle
+                if tag_handle == 'new'
+                    assign new_badge = true
+                endif
+            endfor
+        endif
+    endif
+-%}
+{%- if sale_badge or sold_out_badge or custom_badge or bundle_badge or new_badge -%}
+    <div class="{{ class }} badge-{{ position }} halo-productBadges halo-productBadges--{{ position }} date-{{ date_minus }} date1-{{ date_difference }}" data-new-badge-number="{{ new_badge_limit }}">
+        {%- if new_badge -%}
+            {%- if new_badge_type == 'auto' -%}
+                {%- if date_difference < new_badge_time -%}
+                    {%- if serial <= new_badge_limit -%}
+                        <span class="badge new-badge" aria-hidden="true">
+                            {{ 'products.product.new' | t }}
+                        </span>
+                    {%- endif -%}
+                {%- endif -%}
+            {%- else -%}
+                <span class="badge new-badge" aria-hidden="true">
+                    {{ 'products.product.new' | t }}
+                </span>
+            {%- endif -%}
+        {%- endif -%}
+        {%- if sale_badge -%}
+            <span class="badge sale-badge" aria-hidden="true">
+                {%- if sale_badge_type == 'discount' -%}
+                    {%- if badge_detail -%}
+                        -{{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%
+                    {%- else -%}
+                        {% liquid 
+                            assign list_compare = product.variants | where: 'compare_at_price'
+                            assign compare = 0
+                            for variant in list_compare
+                                assign saving = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+                                if saving > compare
+                                    assign compare = saving
+                                endif
+                            endfor
+                            if compare  < 1
+                                assign compare = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round
+                            endif
+                        %}
+                        -{{ compare | append: '%'}}
+                    {%- endif -%}
+                {%- elsif sale_badge_type == 'text_discount' -%}
+                    {{ 'products.product.on_sale' | t }}
+                    {%- if badge_detail -%}
+                        {{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%
+                    {%- else -%}
+                        {% liquid 
+                            assign list_compare = product.variants | where: 'compare_at_price'
+                            assign compare = 0
+                            for variant in list_compare
+                                assign saving = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+                                if saving > compare
+                                    assign compare = saving
+                                endif
+                            endfor
+                            if compare  < 1
+                                assign compare = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round
+                            endif
+                        %}
+                        {{ compare | append: '%'}}
+                    {%- endif -%}
+                {%- else -%}
+                    {{ 'products.product.on_sale' | t }}
+                {%- endif -%}
+            </span>
+        {%- endif -%}
+        {%- if sold_out_badge -%}
+            <span class="badge sold-out-badge" aria-hidden="true">
+                {{ 'products.product.sold_out' | t }}
+            </span>
+        {%- endif -%}
+        {%- if custom_badge -%}
+            <span class="badge custom-badge" aria-hidden="true">
+                {{ 'products.product.custom' | t }}
+            </span>
+        {%- endif -%}
+        {%- if bundle_badge -%}
+            <span class="badge bundle-badge" aria-hidden="true">
+                {{ 'products.product.bundle' | t }}
+            </span>
+        {%- endif -%}
+    </div>
+{%- endif -%}

@@ -1,0 +1,25 @@
+{%- unless settings.show_quick_view -%}
+	{%- unless request.page_type == 'product' -%}
+		<link rel="stylesheet" href="{{ 'component-product.css' | asset_url }}" media="print" onload="this.media='all'">
+	{%- endunless -%}
+	<link rel="stylesheet" href="{{ 'component-quick-view.css' | asset_url }}" media="print" onload="this.media='all'">
+	
+	{%- unless request.page_type == 'product' -%}
+		<noscript>{{ 'component-product.css' | asset_url | stylesheet_tag }}</noscript>
+	{%- endunless -%}
+	<noscript>{{ 'component-quick-view.css' | asset_url | stylesheet_tag }}</noscript>
+{% endunless %}
+
+<link rel="stylesheet" href="{{ 'component-quickshop-popup-option-3.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-quickshop-popup-option-3.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="halo-popup halo-quickshop-popup" data-quickshop-popup-option-3 id="halo-quickshop-popup-option-3">
+	<div class="halo-popup-wrapper">
+		<button type="button" class="halo-popup-close clearfix" data-close-quick-shop-popup aria-label="{{ 'general.common.close' | t }}">
+	        {% render 'icon-close' %}
+	    </button>
+	    <div class="halo-popup-content is-quick-shop halo-popup-scroll custom-scrollbar"></div>
+	</div>
+</div>
+
+<script src="{{ 'variants-quick-shop-option-3.js' | asset_url }}" defer="defer"></script>

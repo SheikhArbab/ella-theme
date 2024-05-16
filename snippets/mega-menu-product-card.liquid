@@ -1,0 +1,84 @@
+{% comment %}
+    Renders a product card
+
+    Accepts:
+    - product_card_product: {Object} Product Liquid object (optional)
+    - media_size: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+    - show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+    - add_image_padding: {Boolean} Enables padding on the image to space out the grid
+    - show_vendor: {Boolean} Show the product vendor. Default: false
+
+    Usage:
+    {% render 'product-card', show_vendor: section.settings.show_vendor %}
+{% endcomment %}
+{%- liquid
+    assign product_swatch_option = settings.swatch | downcase
+    assign isColor = false
+    assign variant_img = ''
+    for option in product_card_product.options_with_values
+        assign option_name = option.name | downcase
+        if product_swatch_option contains option_name
+            assign isColor = true
+            assign index = forloop.index0
+            assign position = forloop.index | minus: 1
+            assign variant_selected = option.selected_value
+            for variant in product_card_product.variants limit: 1
+                if variant.image != null  
+                    assign variant_img = variant.image
+                endif
+            endfor
+          break
+        else 
+            assign position = 0
+            assign variant_selected = nil
+        endif
+    endfor
+-%}
+<div class="product-item{% if settings.enable_custom_layout_card %} enable_custom_layout_card{% endif %}" data-product-id="{{ product_card_product.id }}" data-json-product='{{ product_card_product | json | escape }}'>
+    <div class="card b-zero">
+        <div class="card-product{% if product_card_product.featured_media == nil %} card--text-only card--soft{% endif %}">
+            <div class="card-product__wrapper">
+                {%- liquid
+                    assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+                    if product_card_product.featured_media.aspect_ratio == nil
+                        assign featured_media_aspect_ratio = 1
+                    endif
+                -%}
+                <a class="card-media card-media--{{ media_size }} m-lr-auto{% if settings.show_image_swap %} media--hover-effect1{% endif%} {% if settings.enable_lazyload %}adaptive_height animated-loading1{% endif %}" {% if product_card_product.url != blank %}href="{{ product_card_product.url | within: collection }}"{% else %}role="link" aria-disabled="true"{% endif %}{% if product_card_product.featured_media %}{% if media_size == 'adapt' %} style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"{% elsif media_size == 'square' %} style="padding-bottom: 100%;"{% elsif media_size == 'portrait' %}{% if portrait_aspect_ratio != blank %} style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }}"{% endif %}{% endif %}{% endif %}>
+                    {%- if product_card_product.featured_media -%}
+                        {%- if variant_img != blank -%}
+                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if variant_img.width >= 165 -%}{{ variant_img | img_url: '165x' }} 165w,{%- endif -%}{%- if variant_img.width >= 360 -%}{{ variant_img | img_url: '360x' }} 360w{%- endif -%}"{% unless settings.enable_lazyload %} src="{{ variant_img | img_url: '360x' }}"{% endunless %} sizes="(min-width: 1100px) 360px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ variant_img.alt | escape }}" loading="lazy" class="motion-reduce{% if settings.enable_lazyload %} lazyload{% endif %}">
+                        {%- else -%}
+                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if product_card_product.featured_media.width >= 165 -%} {{ product_card_product.featured_media | img_url: '165x' }} 165w,{%- endif -%}{%- if product_card_product.featured_media.width >= 360 -%} {{ product_card_product.featured_media | img_url: '360x' }} 360w{%- endif -%}"{% unless settings.enable_lazyload %} src="{{ product_card_product.featured_media | img_url: '360x' }}"{% endunless %} sizes="(min-width: 1100px) 360px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ product_card_product.featured_media.alt | escape }}" loading="lazy" class="motion-reduce{% if settings.enable_lazyload %} lazyload{% endif %}">
+                        {%- endif -%}
+                        {%- if product_card_product.media[1] != nil and settings.show_image_swap -%}
+                            <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{%- if product_card_product.media[1].width >= 165 -%} {{ product_card_product.media[1] | img_url: '165x' }} 165w,{%- endif -%}{%- if product_card_product.media[1].width >= 360 -%}{{ product_card_product.media[1] | img_url: '360x' }} 360w{%- endif -%}" {% unless settings.enable_lazyload %}src="{{ product_card_product.media[1] | img_url: '360x' }}"{% endunless %} sizes="(min-width: 1100px) 360px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)" alt="{{ product_card_product.media[1].alt | escape }}" loading="lazy" class="motion-reduce{% if settings.enable_lazyload %} lazyload{% endif %}">
+                        {%- endif -%}
+                    {%- else -%}
+                        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %} {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                    {%- endif -%}</a>
+            </div>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-center">
+                {%- if settings.show_vendor -%}
+                    <div class="card-information__group card-information__group-2">
+                        {%- if settings.show_vendor -%}
+                            <div class="card-vendor"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span> {{ product_card_product.vendor | link_to_vendor }}</div>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+                <a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}{% if variant_selected != blank %} card-title-change{% endif %}" {% if product_card_product.url != blank %}href="{{ product_card_product.url | within: collection }}"{% else %}role="link" aria-label="true"{% endif %} data-product-title="{{ product_card_product.title | escape }}" data-product-url="{{ product_card_product.url | within: collection }}"><span class="text">{{ product_card_product.title | escape }}{% if variant_selected != blank %}<span data-change-title> {% if settings.style_text_color_varriant == '01' %}-{% endif %} {{ variant_selected }}</span>{% endif %}</span></a>
+                <div class="card-price">{% render 'price', product: product_card_product, price_class: 'd-block' %}</div>
+                {%- if settings.show_swatch and isColor -%}{% render 'product-swatch', product: product_card_product, index: index %}{%- endif -%}
+            </div>
+            {%- if settings.show_action -%}
+                <div class="card-action text-center p-relative opacity-1">
+                    <form action="{{ routes.cart_url }}/add" method="post" class="variants" id="{{ id }}-{{ product_card_product.id }}-{{ sectionId }}" data-product-id="{{ product_card_product.id }}" enctype="multipart/form-data">
+                        <a class="button button-ATC w-auto d-inline-block minw-auto" {% if product_card_product.url != blank %}href="{{ product_card_product.url | within: collection }}"{% else %}role="link" aria-label="true"{% endif %}>{{ 'products.product.shop_now' | t }}</a>
+                    </form>
+                </div>
+            {%- endif -%}
+        </div>
+    </div>
+</div>

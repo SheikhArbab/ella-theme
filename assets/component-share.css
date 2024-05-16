@@ -1,0 +1,330 @@
+.share-button {
+    display: block;
+    position: relative;
+}
+
+.share-button__button{
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+    min-width: 175px;
+    border-color: var(--form-input-border);
+    color: var(--form-input-color);
+    background-color: var(--form-input-bg);
+    box-shadow: none !important
+}
+
+.share-button__button .icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: top;
+}
+
+.share-button__fallback {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    padding: 2rem;
+    top: auto;
+    left: 0;
+    z-index: 999;
+    width: 300px;
+    background: var(--bg-white);
+    box-shadow: 0 3px 7px rgb(0,0,0,.2);
+    top: var(--share-desk-top);
+    left: var(--share-desk-left);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.share-button__fallback.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    animation: animateMenuOpen var(--duration-default) ease;
+}
+
+.share-button__fallback .button {
+    margin-top: 10px;
+}
+
+.share-button__fallback .icon-clipboard {
+    height: 1.4rem;
+    width: 1.8rem;
+}
+
+.share-button__message:not(:empty) {
+    display: block;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    text-align: center;
+    line-height: var(--body-line-height);
+    letter-spacing: var(--body-letter-spacing);
+    color: var(--color-text2);
+    margin: 10px 0 0 0;
+}
+
+.at-share-btn-elements .at-icon-wrapper{
+    width: 22px!important;
+    height: 22px!important;
+    padding: 0!important;
+    margin: 0 8px 0 0!important;
+}
+
+.at-share-btn-elements .at-icon-wrapper svg{
+    width: 100%!important;
+    height: 100%!important;
+    fill: var(--icon)!important;
+}
+
+.at-share-btn-elements .at-icon-wrapper:last-child{
+    margin-right: 0!important;
+}
+
+.halo-share-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.halo-share-3 .productView-title {
+    padding-right: 15px;
+}
+
+.productView-share {
+    display: inline-block;
+    position: relative;
+}
+
+.productView-share.style-3 {
+    line-height: 1;
+}
+
+.productView-share.style-2 .share-button__button {
+    border: none;
+    min-width: auto;
+    font-size: 0;
+    padding: 14px 0 14px 15px !important;
+    line-height: 1;
+}
+
+.productView-share.style-2 .share-button__button svg {
+    margin-right: 0;
+}
+
+.productView-share.style-3 .share-button__button {
+    border: none;
+    padding: 0;
+    text-align: left;
+    min-width: auto;
+    text-transform: capitalize;
+    color: var(--text-cart);
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 2px;
+}
+
+.productView-share.style-3 .share-button__button span {
+    text-decoration: underline;
+    text-underline-offset: 0.1rem;
+}
+
+.share-button__fallback .share-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.share-button__fallback .share-group .form-field {
+    width: calc(100% - 56px);
+}
+
+.share-button__fallback .share-group .button {
+    width: 46px;
+    margin: 0 0 0 10px;
+    min-width: auto;
+    align-items: flex-start;
+    font-size: 0;
+}
+
+.share-button__fallback .share_toolbox {
+    margin-top: 15px;
+}
+
+.share-button__close {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: 0;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.share-content .share-header .share-title{
+    display: none;
+}
+
+.modal-share-open {
+    overflow: hidden;
+    padding-inline-end: 16px;
+}
+
+.modal-share-open .background-overlay{
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 101;
+}
+
+.modal-share-open .product-details .productView-sticky .halo-productView-right {
+    position: inherit;
+    z-index: inherit;
+    transition: top ease .15
+}
+
+.halo-quick-view-popup .share-button__fallback {
+    position: absolute;
+    --share-desk-top: 100%;
+    --share-desk-left: auto;
+    right: 0%;
+}
+
+/* Share Icon */
+.social-share {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+}
+
+.social-share li {
+    list-style: none;
+    margin-right: 20px;
+}
+
+.social-share li svg {
+    width: 18px;
+    height: 18px;
+}
+
+@media(max-width:1024px){
+    .productView-share.style-2 .share-button__fallback,
+    .productView-share.style-3 .share-button__fallback {
+        left: auto;
+        right: 0;
+        bottom: 0;
+        top: auto;
+    }
+    
+    .modal-share-open{
+        overflow: hidden;
+        padding-inline-end: 0px;
+    }
+
+    .modal-share-open .background-overlay{
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-share-open .product-details .productView-sticky .halo-productView-right {
+        position: inherit;
+        z-index: inherit;
+        transition: top ease .15
+    }
+
+    .product-details .share-button__fallback{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 999;
+        transform: translateY(100%);
+        transition: transform var(--duration-default) ease-in-out;
+        animation: none!important;
+        display: block;
+        padding: 0;
+    }
+
+    .product-details .share-button__fallback.is-open{
+        transform: translateY(0);
+    }
+
+    .product-details .share-content .share-header .share-title{
+        display: block;
+    }
+
+    .product-details .share-content .share-header .share-title{
+        font-weight: var(--font-weight-semibold);
+        font-size: calc(var(--font-body-size) + 2px);
+        text-transform: uppercase;
+        padding: 0;
+        margin: 0;
+        max-height: min(var(--header-height), auto);
+        box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.21);
+        padding: 8px 10px;
+    }
+
+    .product-details .share-content .wrapper-content{
+        padding: 11px 10px;
+    }
+
+    .product-details .share-content .share-button__close {
+        top: 9px;
+        right: 10px;
+    }
+
+    .product-details .share-content .share-button__close svg{
+        width: 15px;
+        height: 16px;
+    }
+
+    .product-details .share-content .at-share-btn-elements .at-icon-wrapper{
+        width: 25px!important;
+        height: 25px!important;
+    }
+
+    .product-details .share-content .field__input{
+        padding-top: 13px;
+        padding-bottom: 13px;
+    }
+
+    .product-details .share-button__fallback .share-group .button{
+        width: 50px;
+    }
+
+    .product-details .share-button__fallback .icon-clipboard {
+        height: 1.4rem;
+        width: 1.8rem;
+        margin: 0 auto;
+        padding-left: 4px;
+    }
+}
+
+@media(max-width: 767px) {
+    .halo-share-3 {
+        align-items: flex-start;
+    }
+
+    .productView-share.style-3 .share-button__button span {
+        display: none;
+    }
+}
+
+@media (max-width: 550px) {
+    .productView-share.style-2 .share-button__button {
+        padding: 14px 0 14px 10px !important;
+    }
+}
+
+@media (min-width: 551px) {
+    .product-full-width .productView-share.style-2 .share-button__button,
+    .product-full-width-2 .productView-share.style-2 .share-button__button {
+        padding: 14px 15px 14px 0 !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .halo-share-3 .productView-title {
+        padding-right: 30px;
+    }
+}

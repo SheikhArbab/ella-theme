@@ -1,0 +1,212 @@
+.halo-product-list-view-popup {
+    --w-product-swatch-custom-mb: 30px;
+    --h-product-swatch-custom-mb: 30px;
+    
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    background-color: white;
+    transform: translateY(150%);
+    transition: transform 250ms ease-in-out;
+    pointer-events: none;
+    z-index: 101;
+}
+
+.halo-product-list-view-popup {
+    opacity: 1;
+}
+
+body.quickshop-list-view-show .background-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.quickshop-list-view-show {
+    overflow-y: hidden;
+}
+
+body.quickshop-list-view-show .halo-product-list-view-popup {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.halo-product-list-view-popup .card-action {
+    position: static;
+    bottom: unset;
+    transform: unset;
+    transition: unset;
+}
+
+.halo-product-list-view-popup .card-product,    
+.halo-product-list-view-popup .card-information .card-information__wrapper,
+.halo-product-list-view-popup .card-information .card-information__wrapper + .card-swatch,
+.halo-product-list-view-popup .card-information .card-information__wrapper + .card-swatch + .card-action:not(.variants-popup-form):not(.halo-popup-content),
+.halo-product-list-view-popup .card-information .card-information__wrapper + .card-swatch + .text-size  {
+    display: none;
+}
+
+.halo-product-list-view-popup .card-action:not(.variants-popup-form):not(.halo-popup-content) {
+    display: none;
+}
+
+
+.halo-product-list-view-popup .card-action .product-card__button2 {
+    position: static;
+}
+
+/* START: Card 5 */
+body.product-card-layout-05 .halo-product-list-view-popup .card-information .card-information__wrapper {
+    display: block;
+}
+  
+body.product-card-layout-05 .halo-product-list-view-popup .card-information .card-information__wrapper > .card-information__group,
+body.product-card-layout-05 .halo-product-list-view-popup .card-information .card-information__wrapper > .card-swatch,
+body.product-card-layout-05 .halo-product-list-view-popup .card-information .card-information__wrapper > .card-title,
+body.product-card-layout-05 .halo-product-list-view-popup .card-information .card-information__wrapper > .card-price {
+    display: none;
+}
+  
+body.product-card-layout-05 .halo-product-list-view-popup .product-card__button2 {
+    position: static;
+}
+  
+/* END: Card 5 */
+
+
+
+.halo-product-list-view-popup .card-action .variants-popup {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    transition: unset;
+}
+
+.halo-product-list-view-popup .card-action .variants-popup-content .variants {
+    max-height: unset;
+}
+
+.halo-product-list-view-popup .card-action .selector-wrapper .swatch-element.unavailable {
+    display: inline-block;
+}
+
+.halo-product-list-view-popup .mobile-popup-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 10px;
+    font-size: calc(var(--font-heading-size) - 2px);
+    font-weight: var(--font-weight-semibold);
+}
+
+.halo-product-list-view-popup .mobile-popup-header .close-modal {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.halo-product-list-view-popup .mobile-popup-header .close-modal svg {
+    width: 40px;
+    height: 40px;
+    padding: 11px;
+    fill: var(--icon);
+    stroke: transparent;
+    padding-right: 0;
+    margin-right: -7px;
+}
+
+.halo-product-list-view-popup .card-action .variants-popup-close svg {
+    display: none;
+}
+
+.halo-product-list-view-popup .card-action .variants-popup-content {
+    padding: 3px 10px 16px;
+    text-align: left !important;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.halo-product-list-view-popup .card-information {
+    padding-top: 0;
+}
+
+.halo-product-list-view-popup .card-information .button {
+    padding-top: 13px !important;
+    padding-bottom: 13px !important;
+}
+
+body:not(.quick_shop_option_2) .halo-product-list-view-popup .card-action .selector-wrapper .form-label {
+    text-align: left;
+    padding-left: 0;
+}
+
+body:not(.quick_shop_option_2) .halo-product-list-view-popup .form-label + .swatch-element {
+    margin-left: -3px;
+}
+
+.halo-product-list-view-popup .card-action .option-color .swatch-element.unavailable .single-label::before,
+.halo-product-list-view-popup .card-action .option-color .swatch-element.soldout .single-label::before {
+    content: "";
+    top: 50%;
+    left: -7px;
+    height: 1px;
+    opacity: 1;
+    z-index: 1;
+    border: none;
+    position: absolute;
+    visibility: visible;
+    width: calc(100% + 14px);
+    background-color: var(--product-sale-price-color);
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.halo-product-list-view-popup  .card-action .option-color .single-label {
+    overflow: visible;
+}
+
+.template-collection .halo-product-list-view-popup.product-list .card-action .variants-popup {
+    visibility: visible;
+}
+
+/* Quickshop Option 2 */
+.quick_shop_option_2 .halo-product-list-view-popup .card-action .variants-popup {
+    transform: none;
+    visibility: visible;
+}
+
+.quick_shop_option_2 .halo-product-list-view-popup .card-action .variants-popup-content .variants {
+    min-height: unset !important;
+    max-height: unset !important;
+}
+
+.quick_shop_option_2 .halo-product-list-view-popup .card-action .selector-wrapper.option-color .single-label {
+    height: var(--h-product-swatch-custom-mb);
+}
+
+.quick_shop_option_2 .halo-product-list-view-popup .card-action .variants-popup-content {
+    text-align: center!important;
+    padding: 14px 10px 14px;
+}
+
+@media (min-width: 1025px) {
+  .halo-product-list-view-popup { 
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+    .halo-product-list-view-popup {
+        --duration-long: 500ms;
+         opacity: 0;
+         visibility: hidden;
+/*          transition: opacity .5s,transform var(--duration-long) ease,visibility var(--duration-long) ease; */
+/*          transform: translate3d(0%,200%,0); */
+    }
+    body.quickshop-list-view-show .halo-product-list-view-popup {
+           --duration-long: 500ms;
+        opacity: 1;
+        visibility: visible;
+/*         transform: translateZ(0); */
+        transition: opacity .5s,transform var(--duration-long) ease,visibility var(--duration-long) ease;
+    }
+}

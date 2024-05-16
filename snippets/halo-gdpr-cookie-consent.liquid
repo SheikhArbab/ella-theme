@@ -1,0 +1,83 @@
+{%- if settings.show_gdpr_cookie_consent -%}
+<link rel="stylesheet" href="{{ 'component-cookie.css' | asset_url }}">
+
+<noscript>{{ 'component-cookie.css' | asset_url | stylesheet_tag }}</noscript>
+
+<style type="text/css" media="screen">
+    {%- liquid
+		assign gdpr_cookie_consent_color = settings.gdpr_cookie_consent_color
+		assign gdpr_cookie_consent_color_privacy = settings.gdpr_cookie_consent_color_privacy
+		assign gdpr_cookie_consent_bg = settings.gdpr_cookie_consent_bg
+		assign gdpr_cookie_consent_bg_gradient = settings.gdpr_cookie_consent_bg_gradient
+	-%}
+
+	{%- if gdpr_cookie_consent_bg_gradient != blank -%}
+        .halo-cookie {
+            background: {{ gdpr_cookie_consent_bg_gradient }};
+        }
+	{%- else -%}
+		{%- if gdpr_cookie_consent_bg != 'rgba(0,0,0,0)' and gdpr_cookie_consent_bg != blank -%}
+			.halo-cookie {
+				background: {{ gdpr_cookie_consent_bg | color_modify: 'alpha', 0.9 }};
+			}
+		{%- else -%}
+			.halo-cookie {
+				background: {{ gdpr_cookie_consent_bg }};
+			}
+		{%- endif -%}
+	{%- endif -%}
+  
+    .halo-cookie__title,
+	.halo-cookie__text,.halo-cookie__action .link {
+		color: {{ gdpr_cookie_consent_color }};
+	}
+  
+    .halo-cookie__action .privacy_policy_link {
+		color: {{ gdpr_cookie_consent_color_privacy }};
+	}
+  
+</style>
+
+{%- liquid
+	assign style = settings.gdpr_cookie_consent_type
+	assign content = settings.gdpr_cookie_consent_content
+	assign btn_1_text = settings.gdpr_cookie_consent_btn_1_text
+	assign btn_1_link = settings.gdpr_cookie_consent_btn_1_link
+	assign btn_2_text = settings.gdpr_cookie_consent_btn_2_text
+-%}
+
+<cookie-consent class="halo-cookie custom-width{% if style == 'left' %} custom-left{% else %} custom-right{% endif %}" style="display: none;">
+	
+        <div class="halo-cookie__block">
+            <div class="halo-cookie__wrapper">
+                <div class="halo-cookie__content">
+                    <div class="halo-cookie__text">
+                    	{%- if content != blank -%}
+                            {{ content }}
+                        {%- else -%}
+                        	The cookie settings on this website are set to "allow all cookies" to give you the very best experience. Please click Accept Cookies to continue to use the site
+                    	{%- endif -%}
+                    </div>
+                </div>
+                {%- if btn_1_text != blank or btn_2_text != blank -%}
+                    <div class="halo-cookie__action clearfix">
+                        {%- if btn_1_text != blank -%}
+                            <a target="_blank"{% if btn_1_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ btn_1_link }}"{% endif %} class="link link-underline privacy_policy_link">
+                                <span class="text">{{ btn_1_text }}</span>
+                            </a>
+                        {%- endif -%}
+                        {%- if btn_2_text != blank -%}
+							<button type="button" title="{{ btn_2_text }}" class="link link-underline accept_cookies_link" data-accept-cookie>
+                                <span class="text">{{ btn_2_text }}</span>
+                                <span class="icon">✔</span>
+                            </button>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+            </div>
+        </div> 
+   
+</cookie-consent>
+
+<script src="{{ 'halo-gdpr-cookie-consent.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

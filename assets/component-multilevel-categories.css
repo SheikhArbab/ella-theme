@@ -1,0 +1,214 @@
+.slideshow-wrapper {
+    position: relative;
+}
+
+.themevale_MultiCategory_wrapper {
+	padding: 30px 15px;
+	text-align: center;
+	margin: 0 auto;
+	background-color: #dddddd;
+    z-index: 3;
+}
+
+.themevale_multilevel-category-filter .form-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+.themevale_multilevel-category-filter .form-field {
+    width: 100%;
+    max-width: 26%;
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    border-right: 1px solid #cbcbcb;
+}
+.themevale_multilevel-category-filter .form-field:first-child span {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.themevale_multilevel-category-filter .form-field.form-field-last {
+    border-right: 0;
+}
+.themevale_multilevel-category-filter .form-field.form-field-last span {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.themevale_multilevel-category-filter .form-field svg {
+    position: absolute;
+    right: 17px;
+    top: 17px;
+    width: 25px;
+    height: 25px;
+    color: var(--color-label-multiLevel-categories);
+    pointer-events: none;
+}
+.themevale_multilevel-category-filter .form-label {
+    display: block;
+    font-size: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+}
+.themevale_multilevel-category-filter .form-select {
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    text-transform: capitalize;
+    background: var(--bg-label-multiLevel-categories);
+    color: var(--color-label-multiLevel-categories);
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 20px 0 30px;
+    cursor: pointer;
+}
+
+.themevale_multilevel-category-filter .dropdown-up {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: auto;
+    min-width: 100%;
+    background: var(--bg-label-multiLevel-categories);
+    border: 1px solid #cbcbcb;
+    z-index: 99;
+}
+.themevale_multilevel-category-filter .dropdown-up.open {
+    display: block;
+}
+.themevale_multilevel-category-filter .dropdown-up.open + svg {
+	transform: rotate(180deg);
+}
+.themevale_multilevel-category-filter .dropdown-up ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+.themevale_multilevel-category-filter .dropdown-up ul > li {
+    cursor: default;
+    color: var(--color-label-multiLevel-categories);
+    line-height: 40px;
+    display: block;
+    padding: 0 10px 0 30px;
+    text-transform: capitalize;
+    white-space: nowrap;
+    width: 100%;
+    margin: 0;
+}
+.themevale_multilevel-category-filter .dropdown-up ul > li:hover {
+    background: #39f;
+    color: #fff;
+}
+.themevale_multilevel-category-filter .group-button {
+    width: 230px;
+    display: flex;
+    justify-content: center;
+    margin-left: 10px;
+    border-radius: 5px;
+    color: var(--color-button-multiLevel-categories);
+    background: var(--bg-button-multiLevel-categories);
+}
+.themevale_multilevel-category-filter .group-button a {
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    font-size: calc(var(--font-body-size) + 1px);
+    text-transform: uppercase;
+    color: inherit;
+    white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.themevale_multilevel-category-filter .group-button a#themevale_clear-select {
+    width: 60px;
+}
+.themevale_multilevel-category-filter .group-button a#themevale_select-browse {
+    width: 170px;
+    border-right: 1px solid var(--border-button-multiLevel-categories);
+}
+.themevale_multilevel-category-filter .group-button svg {
+    fill: var(--color-button-multiLevel-categories);
+    width: 16px;
+    height: 16px;
+}
+.themevale_multilevel-category-filter .group-button:hover {
+	color: var(--hover-color-button-multiLevel-categories);
+    background: var(--hover-bg-button-multiLevel-categories);
+}
+.themevale_multilevel-category-filter .group-button:hover svg {
+	fill: var(--hover-color-button-multiLevel-categories);
+}
+
+@media (max-width: 1024px){
+    .themevale_multilevel-category-filter .form-select{
+        height: 50px;
+        line-height: 50px;
+        padding: 0 20px 0 25px;
+    }
+    .themevale_multilevel-category-filter .form-field svg{
+        top: 12px;
+    }
+    .themevale_multilevel-category-filter .group-button a{
+        height: 50px;
+        line-height: 50px;
+    }
+}
+
+@media (max-width: 767px){
+	.themevale_multilevel-category-filter .form-wrapper {
+		display: block;
+	    letter-spacing: -0.31em;
+	}
+	.themevale_multilevel-category-filter .form-field {
+		width: calc(100% / 3);
+		max-width: unset;
+		letter-spacing: normal;
+	}
+	.themevale_multilevel-category-filter .group-button {
+		margin: 20px auto 0;
+		letter-spacing: normal;
+	}
+	.themevale_multilevel-category-filter .form-select {
+		padding: 0 15px;
+	}
+	.themevale_multilevel-category-filter .form-field svg {
+		right: 10px;
+	}
+	.themevale_multilevel-category-filter .dropdown-up ul>li {
+		padding-left: 15px;
+	}
+}
+
+@media (max-width: 551px){
+	.themevale_multilevel-category-filter .form-field {
+		width: 100%;
+		border: 0;
+		margin-bottom: 10px;
+	}
+	.themevale_multilevel-category-filter .form-select {
+		border-radius: 5px;
+	}
+}
+
+@media (min-width: 1025px){
+    .themevale_MultiCategory_wrapper {
+        bottom: 60px;
+        left: 50%;
+        transform: translatex(-50%);
+        position: absolute;
+        color: #fff;
+        background-color: transparent;
+        z-index: 2;
+        max-width: 1200px;
+        width: 100%;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}

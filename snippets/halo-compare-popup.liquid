@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="{{ 'component-compare-product.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-compare-product.css' | asset_url | stylesheet_tag }}</noscript>
+<div class="halo-compareProduct">
+    <button type="button" class="button button--primary" data-compare-link><span class="text">{{ 'compare.general.title' | t }}</span> (<span class="countPill" data-compare-count></span>)</button>
+</div>
+<div class="halo-popup halo-compare-product-popup customPopup-large" data-compare-product-popup id="halo-compare-product-popup">
+	<div class="halo-popup-wrapper">
+		<div class="halo-popup-header">
+			<button type="button" class="halo-popup-close clearfix" data-close-compare-product-popup aria-label="{{ 'general.common.close' | t }}">{% render 'icon-close' %}{{ 'general.common.close' | t }}</button>
+		    <h5 class="halo-popup-title text-center">{{ 'compare.general.title' | t }}</h5>
+		</div>
+		<div class="halo-popup-content halo-popup-scroll custom-scrollbar">{% render 'halo-compare-product-table' %}</div>
+	</div>
+</div>

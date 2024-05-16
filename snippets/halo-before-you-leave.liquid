@@ -1,0 +1,134 @@
+{%- liquid
+	assign position = settings.before_you_leave_position
+	assign time = settings.before_you_leave_time
+	assign logo = settings.before_you_leave_logo
+	assign background = settings.before_you_leave_bg
+	assign content = settings.before_you_leave_content
+	assign collection = settings.before_you_leave_collection
+	assign limit = settings.before_you_leave_collection_limit
+	assign show_btn = settings.show_before_you_leave_btn
+	assign btn = settings.before_you_leave_btn
+	assign btn_link = settings.before_you_leave_btn_link
+-%}
+<link rel="stylesheet" href="{{ 'component-before-you-leave.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-before-you-leave.css' | asset_url | stylesheet_tag }}</noscript>
+<before-you-leave-component class="halo-sidebar halo-sidebar-{{ position }} halo-leave-sidebar" id="halo-leave-sidebar" data-time="{{ time | times: 60000 }}">
+    <button type="button" class="halo-sidebar-close" data-close-before-you-leave>{% render 'icon-close' %}{{ 'general.common.close' | t }}</button>
+    <div class="halo-sidebar-wrapper custom-scrollbar">
+    	{%- if logo != blank -%}
+			<div class="before-you-leave-header">
+            {%- assign height = logo.width | divided_by: logo.aspect_ratio | round -%}
+            {{ logo | image_url: width: logo.width | image_tag: width: logo.width, height: height, sizes: "100vw", widths: '80, 165, 375' }}
+			</div>
+		{%- endif -%}
+		<div class="before-you-leave-banner">
+			<div class="image{% unless background != blank %} no-image{% endunless %}">
+				{%- if background != blank -%}
+		            {%- assign height_bg = background.width | divided_by: background.aspect_ratio | round -%}
+            		{{ background | image_url: width: 470 | image_tag: height: height_bg, sizes: "100vw", widths: '320, 375, 470' }}
+				{%- endif -%}
+			</div>
+			{%- if content != blank -%}
+				<div class="content">{{ content }}</div>
+			{%- endif -%}
+		</div>
+		{%- if collection != blank -%}
+			{%- liquid
+				assign collection = collections[collection]
+				assign count = collection.products_count
+			-%}
+			{%- if count > limit -%}
+				{% assign count = limit %}
+			{%- endif -%}
+		    <div class="before-you-leave-content">
+		        <div class="before-you-leave-content-title">
+		            <div class="title"><span class="text">{{ 'before_you_leave.general.recommended_product' | t }}</span><span class="count">{{ count }}</span></div>
+		        </div>
+		        <div class="before-you-leave-content-product">
+		            <div class="products-carousel">
+		                {%- for product in collection.products limit: limit -%}
+		                    <div class="product">
+		                        {% render 'product-card-sidebar', product_card_product: product %}
+		                    </div>
+		                {%- else -%}
+		                {%- endfor -%}
+		            </div>
+		        </div>
+		    </div>
+		{%- endif -%}
+		{%- if show_btn -%}
+			<div class="before-you-leave-back">
+				<a class="button button-{{ btn }}"{% if btn_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ btn_link }}"{% endif %}><span class="text">{{ 'before_you_leave.general.continue_shopping' | t }}</span></a>
+			</div>
+		{%- endif -%}
+    </div>
+</before-you-leave-component>
+<script type="text/javascript">
+	class BeforeYouLeave extends HTMLElement {
+		constructor() {
+			super();
+		}
+
+		connectedCallback() {
+			this.time = parseInt(this.dataset.time);
+			this.idleTime = 0;
+			this.productCarousel = this.querySelector('.products-carousel');
+			this.closeButton = this.querySelector('[data-close-before-you-leave]');
+
+			let slickInterval = setInterval(() => {
+				this.timerIncrement();
+			}, this.time);
+			
+			document.addEventListener('mousemove', this.resetTimer.bind(this));
+			document.addEventListener('keydown', this.resetTimer.bind(this));
+			document.addEventListener('scroll', this.resetTimer.bind(this));
+			this.closeButton.addEventListener('click', this.closeBeforeYouLeave.bind(this));
+			document.body.addEventListener('click', this.onBodyClick.bind(this));
+		}
+
+		onBodyClick(e) {
+			if (!document.body.classList.contains('before-you-leave-show') || this.contains(e.target)) return;
+			document.body.classList.remove('before-you-leave-show');
+		}
+
+		resetTimer() {	
+			this.idleTime = -1;
+		}
+
+		timerIncrement() {
+			this.idleTime += 1;
+
+			if (this.idleTime < 1 || document.body.classList.contains('before-you-leave-show')) return;
+			if (!this.productCarousel) return;
+
+			this.initSlickSlider();
+			document.body.classList.add('before-you-leave-show');
+		}
+
+		initSlickSlider() {
+			if(!this.productCarousel.classList.contains('slick-slider')) {
+				$(this.productCarousel).slick({
+					dots: true,
+					arrows: false,
+					slidesToShow: 1,
+					slidesToScroll: 1,
+					slidesPerRow: 1,
+					rows: 3,
+					infinite: false,
+					rtl: window.rtl_slick,
+					nextArrow: window.arrows.icon_next,
+					prevArrow: window.arrows.icon_prev
+				});
+			}
+		}
+
+		closeBeforeYouLeave(e) {
+			e.preventDefault();
+			document.body.classList.remove('before-you-leave-show');
+		}
+	}
+
+	window.addEventListener('load', () => {
+		customElements.define('before-you-leave-component', BeforeYouLeave)
+	})	
+</script>

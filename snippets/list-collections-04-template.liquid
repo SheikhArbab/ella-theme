@@ -1,0 +1,64 @@
+<div class="list-categories list-categories-04{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-limit="{{ limit }}">
+    <div class="halo-row halo-row--grid column-{{ item_per_row }} column-mobile-{{ item_per_row_mb }}">
+        {%- if type == 'all' -%}
+            {%- liquid
+                case sort
+                    when 'products_high' or 'products_low'
+                        assign collections = collections | sort: 'all_products_count'
+                    when 'date' or 'date_reversed'
+                        assign collections = collections | sort: 'published_at'
+                endcase
+
+                if sort == 'products_high' or sort == 'date_reversed' or sort == 'alphabetical_reversed'
+                    assign collections = collections | reverse
+                endif
+            -%}
+            {%- for collection in collections -%}
+                {%- if collection.url != routes.all_products_collection_url -%}
+                    <div class="collection-list-item halo-item{% if forloop.index > limit and infinite_scroll %} d-none{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                        {% render 'list-collection-item',
+                            collection: collection,
+                            type: type,
+                            image_ratio: image_ratio,
+                            portrait_aspect_ratio: portrait_aspect_ratio,
+                            show_collection_title: show_collection_title,
+                            show_collection_product_count: show_collection_product_count,
+                            align: align,
+                            limit_content_des: limit_content_des,
+                            button: button,
+                            button_style: button_style
+                        %}
+                    </div>
+                {%- endif -%}
+            {%- endfor -%}
+        {%- else -%}
+            {%- for block in section.blocks -%}
+                {% if block.type == 'collection' %}
+                    {% assign collection = collections[block.settings.collection] %}
+                    <div class="collection-list-item halo-item{% if forloop.index > limit and infinite_scroll %} d-none{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+                        {% render 'list-collection-item',
+                            collection: collection,
+                            block: block,
+                            type: type,
+                            image_ratio: image_ratio,
+                            portrait_aspect_ratio: portrait_aspect_ratio,
+                            show_collection_title: show_collection_title,
+                            show_collection_product_count: show_collection_product_count,
+                            align: align,
+                            limit_content_des: limit_content_des,
+                            button: button,
+                            button_style: button_style
+                        %}
+                    </div>
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    </div>
+    {%- if infinite_scroll -%}
+        <div class="collection-infinite-scroll text-center{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-collection-infinite>
+            <a class="button button--secondary">
+                <span>{{button_show_more}}</span>
+            </a>
+        </div>
+    {%- endif -%}
+</div>

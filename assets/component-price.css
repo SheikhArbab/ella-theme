@@ -1,0 +1,121 @@
+.price {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.price dl {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.price dd {
+    margin: 0 10px 0 0;
+}
+
+.price .price__last:last-of-type {
+    margin: 0;
+}
+
+.price__availability,
+.price__regular {
+    display: block;
+}
+
+.price__sale,
+.price__availability,
+.price--on-sale .price__regular,
+.price--on-sale .price__availability,
+.price--no-compare .price__compare {
+    display: none;
+}
+
+.price--on-sale .price__sale {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.price--center {
+    display: flex;
+    justify-content: center;
+}
+
+.price-item{
+    font-size: var(--product-price-font-size);
+    letter-spacing: var(--product-price-letter-spacing);
+    font-weight: var(--product-price-font-weight);
+    line-height: var(--product-price-line-height);
+}
+
+.price-item .text{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    color: var(--product-compare-price-color);
+    letter-spacing: 0;
+    line-height: var(--product-price-line-height);
+    margin: -2px 10px 0 0;
+}
+
+.price-item .money{
+    display: inline-block;
+    vertical-align: middle;
+    font-family: var(--product-price-font);
+    font-size: var(--product-price-font-size);
+    font-weight: var(--product-price-font-weight);
+    letter-spacing: var(--product-price-letter-spacing);
+    line-height: var(--product-price-line-height);
+    color: var(--product-price-color);
+}
+
+.unit-price {
+    font-size: calc(var(--font-body-size) - 2px);
+    font-weight: var(--font-weight-normal);
+    color: var(--product-compare-price-color);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: var(--body-line-height);
+    margin-top: 0.2rem;
+    text-transform: uppercase;
+}
+
+.price.price--unavailable {
+    visibility: hidden;
+}
+
+.price.price--end {
+    justify-content: flex-end;
+}
+
+.price-item--sale {
+    color: var(--product-sale-price-color);
+}
+
+.price.price--on-sale .price-item--sale .money{
+    color: var(--product-sale-price-color);
+}
+
+.price.price--on-sale .price-item--regular .money{
+    text-decoration: line-through;
+    /*font-size: calc(var(--font-body-size) + 2px)!important;*/
+    font-weight: var(--font-weight-normal)!important;
+    color: var(--product-compare-price-color);
+}
+
+.price.price--medium .price-item .money{
+    font-size: 18px;
+    letter-spacing: 0;
+}
+
+.price.price--large .price-item .money{
+    font-size: 30px;
+    letter-spacing: -0.04em;
+}
+
+.price.price--large.price--on-sale .price__sale{
+    align-items: center;
+}

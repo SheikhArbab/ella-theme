@@ -1,0 +1,21 @@
+<ul class="list-unstyled clearfix">
+	{%- if type == 'product' -%}
+		{%- for i in (1..4) -%}
+			{% capture image %}trust_image_product_{{ i }}{% endcapture %}
+			{%- if settings[image] != blank -%}
+                <li>
+                    {%- assign img =  settings[image] -%}
+                    <img srcset="{{ img | img_url: 'master' }}" src="{{ img | img_url: 'master' }}" loading="lazy" alt="{{ img.alt | default: shop.name | escape }}"></li>
+            {%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{%- for i in (1..6) -%}
+			{%- capture image -%}trust_image_cart_{{ i }}{%- endcapture -%}
+			{%- if settings[image] != blank -%}
+                <li>
+                    {%- assign img =  settings[image] -%}
+                    <img srcset="{{ img | img_url: 'master' }}" src="{{ img | img_url: 'master' }}" loading="lazy" alt="{{ img.alt | default: shop.name | escape }}"></li>
+            {%- endif -%}
+		{%- endfor -%}
+	{%- endif -%}
+</ul>

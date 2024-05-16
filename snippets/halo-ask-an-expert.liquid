@@ -1,0 +1,82 @@
+<div class="ask-an-expert halo-ask-an-expert{% if product %} has-product{% endif%}">
+    {%- if settings.ask_an_expert_title != blank -%}
+        <h4 class="heading text-center">{{ settings.ask_an_expert_title | escape }}</h4>
+    {%- endif -%}
+
+    {%- if settings.ask_an_expert_desc != blank -%}
+        <span class="text text-center">{{ settings.ask_an_expert_desc | escape }}</span>
+    {%- endif -%}
+
+    {%- if settings.ask_an_expert_questions != blank -%}
+        <div class="intro text-center">{{ settings.ask_an_expert_questions | escape }}</div>
+    {%- endif -%}
+    
+    {%- form 'contact', id: 'ContactForm-ask', class: 'halo-ask-an-expert-form contact-form' -%}
+        <input type="hidden" name="contact[Form]" value="{{ 'ask_an_expert.general.text' | t }}"/>
+        
+        {%- if product -%}
+            <input type="hidden" name="contact[Product Title]" value="{{ product.title }}" />
+            <input type="hidden" name="contact[Product Image]" value="{{ product.featured_image.src | img_url: 'master' }} "/>
+            <input type="hidden" name="contact[Product Link]" value="{{ shop.url | append: product.url }}"/>
+        {%- endif -%}
+
+        <div class="form-field">
+            <label class="form-label hiddenLabels" for="askAnExpertName">{{ 'ask_an_expert.general.name' | t }}</label>
+            <input class="form-input form-input-placeholder" type="text" required id="askAnExpertName" name="contact[Name]" autocapitalize="words" placeholder="{{ 'ask_an_expert.general.name' | t }}">
+        </div>
+        <div class="form-field">
+            <label class="form-label hiddenLabels" for="askAnExpertMail">{{ 'ask_an_expert.general.mail' | t }}</label>
+            <input class="form-input form-input-placeholder" type="email" name="contact[email]" required id="askAnExpertMail" autocorrect="off" autocapitalize="off" placeholder="{{ 'ask_an_expert.general.mail' | t }}">
+        </div>
+        <div class="form-field">
+            <label class="form-label hiddenLabels" for="askAnExpertPhone">{{ 'ask_an_expert.general.phone' | t }}</label>
+            <input class="form-input form-input-placeholder" type="tel" required id="askAnExpertPhone" name="contact[Phone number]" pattern="[0-9]*" placeholder="{{ 'ask_an_expert.general.phone' | t }}">
+        </div>
+        {%- if settings.ask_an_expert_option_1_1 != blank or settings.ask_an_expert_option_1_2 != blank or settings.ask_an_expert_option_1_3 != blank -%}
+            <div class="form-field form-field-radio">
+                {%- if settings.ask_an_expert_option_1 != blank -%}
+                    <label class="form-label">{{ settings.ask_an_expert_option_1 | escape }}</label>
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_1_1 != blank -%}
+                    <input class="form-radio" checked id="askAnExpertRadio1" type="radio" name="contact[{{ settings.ask_an_expert_option_1 | escape | default: 'Option 1'  }}]" value="{{ settings.ask_an_expert_option_1_1 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio1">{{ settings.ask_an_expert_option_1_1 | escape }}</label>
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_1_2 != blank -%}
+                    <input class="form-radio" id="askAnExpertRadio2" type="radio" name="contact[{{ settings.ask_an_expert_option_1 | escape | default: 'Option 1'  }}]" value="{{ settings.ask_an_expert_option_1_2 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio2">{{ settings.ask_an_expert_option_1_2 | escape }}</label>
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_1_3 != blank -%}
+                    <input class="form-radio" id="askAnExpertRadio3" type="radio" name="contact[{{ settings.ask_an_expert_option_1 | escape | default: 'Option 1'  }}]" value="{{ settings.ask_an_expert_option_1_3 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio3">{{ settings.ask_an_expert_option_1_3 | escape }}</label> 
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        <div class="form-field form-field-textarea">
+            <label class="form-label" for="askAnExpertMessage">{{ 'ask_an_expert.general.message' | t }}</label>
+            <textarea class="form-input form-input-placeholder" rows="6" name="contact[{{ 'ask_an_expert.general.message' | t }}]" id="askAnExpertMessage"></textarea>
+        </div>
+        {%- if settings.ask_an_expert_option_2_1 != blank or settings.ask_an_expert_option_2_2 != blank or settings.ask_an_expert_option_2_3 != blank -%}
+            <div class="form-field form-field-radio form-field-radio-2">
+                {%- if settings.ask_an_expert_option_2 != blank -%}
+                    <label class="form-label">{{ settings.ask_an_expert_option_2 | escape }}</label>
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_2_1 != blank -%}
+                    <input class="form-radio" checked id="askAnExpertRadio21" type="radio" name="contact[{{ settings.ask_an_expert_option_2 | escape | default: 'Option 2'  }}]" value="{{ settings.ask_an_expert_option_2_1 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio21">{{ settings.ask_an_expert_option_2_1 | escape }}</label>
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_2_2 != blank -%}
+                    <input class="form-radio" id="askAnExpertRadio22" type="radio" name="contact[{{ settings.ask_an_expert_option_2 | escape | default: 'Option 2'  }}]" value="{{ settings.ask_an_expert_option_2_2 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio22">{{ settings.ask_an_expert_option_2_2 | escape }}</label>  
+                {%- endif -%}
+                {%- if settings.ask_an_expert_option_2_3 != blank -%}
+                    <input class="form-radio" id="askAnExpertRadio23" type="radio" name="contact[{{ settings.ask_an_expert_option_2 | escape | default: 'Option 2'  }}]" value="{{ settings.ask_an_expert_option_2_3 | split: '|' | first }}"/>
+                    <label class="form-label form-label--radio" for="askAnExpertRadio23">{{ settings.ask_an_expert_option_2_3 | escape }}</label> 
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        <div class="form-actions">
+            <button type="submit" class="button button--primary" data-button-message="ask">{{ 'ask_an_expert.general.submit' | t }}</button>
+        </div>
+    {%- endform -%}
+    <div class="message"></div>
+</div>

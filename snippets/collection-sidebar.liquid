@@ -1,0 +1,561 @@
+{%- if sidebar_type == 'vertical' -%}
+    {%- for block in section.blocks -%}
+        {%- if block.type == 'category' -%}
+            {% render 'halo-side-all-categories', block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- if show_filter -%}
+    {{ 'component-filter.css' | asset_url | stylesheet_tag }}
+    <div class="collection-filters" id="main-collection-filters" data-id="{{ section.id }}">
+        <script type="text/javascript">window.show_storefront_filter = true;</script>
+
+        {%- liquid
+            assign file_extension = 'png'
+            assign filter_by_tags = section.blocks | where: "type", "filter"
+            if results.url
+                assign results_url = results.url
+            else
+                assign terms = results.terms | escape
+                assign results_url = '?q=' | append: terms | append: '&type=product&sort_by=' | append: sort_by
+            endif
+            assign total_active_values = 0
+            for filter in results.filters
+                for value in filter.active_values
+                    assign total_active_values = total_active_values | plus: 1
+                endfor
+            endfor
+            assign filter_swatch = filter_swatch | split: "," | strip | downcase | handle
+            assign filter_rectangle = filter_rectangle | split: "," | strip | downcase | handle
+            assign maxItemToShow = section.settings.max_item_per_filter
+        -%}
+        <collection-filters-form class="facets facets-{{ sidebar_type }} filter-display-{{ section.settings.filter_display_type }}" data-filter-display="{{ section.settings.filter_display_type }}">
+            <form id="CollectionFiltersForm" class="facets__form">
+                {%- if results.terms -%}
+                    <input type="hidden" name="q" value="{{ results.terms | escape }}">
+                    <input type="hidden" name="type" value="product">
+                    <input type="hidden" name="options[prefix]" value="last" />
+                {%- endif -%}
+                <div class="sidebarBlock refined-widgets js-filter" {% if total_active_values == 0 %} style="display: none;"{% endif %} data-index="0">
+                    <h2 class="sidebarBlock-heading">
+                        <span class="facets__text">{{ 'sections.collection_template.refined_by' | t }}</span>
+                        <a href="{{ results_url }}" class="active-facets__button facets__clear-all link link-underline js-facet-remove"><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                    </h2>
+                    <div class="results-count"><span class="results" style="display: none;"><span class="count">{{ collection.products_count }}</span> {{ 'sections.collection_template.results' | t }}</span></div>
+                    <div class="sidebarBlock-content sidebarBlock-content--list">
+                        <a href="{{ results_url }}" class="active-facets__button facets__clear-all link link-underline js-facet-remove"><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                        <ul class="facets__list--refined list-unstyled" role="list">
+                            {%- for filter in results.filters -%}
+                                {%- for value in filter.active_values -%}
+                                    <li><facet-remove><a class="active-facets__button js-facet-remove" href="{{ value.url_to_remove }}"><span class="text">{{ value.label | escape }}</span><span class="close"></span></a></facet-remove></li>
+                                {%- endfor -%}
+                                {%- if filter.type == "price_range" -%}
+                                    {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                                        <li>
+                                            <facet-remove>
+                                                <a class="active-facets__button js-facet-remove" href="{{ filter.url_to_remove }}">
+                                                    <span class="text">
+                                                        {%- if filter.min_value.value -%}
+                                                            {{ filter.min_value.value | money }}{% else %}{{ 0 | money }}
+                                                        {%- endif -%}
+                                                        <span class="separate"> - </span>
+                                                        {%- if filter.max_value.value -%}
+                                                            {{ filter.max_value.value | money }}{% else %}{{ filter.range_max | money }}
+                                                        {%- endif -%}
+                                                    </span>
+                                                    <span class="close"></span>
+                                                </a>
+                                            </facet-remove>
+                                        </li>
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        </ul>
+                    </div>                  
+                </div>
+                {%- if results.current_vendor or results.current_type -%}
+                    <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
+                {%- endif -%}
+                <div class="collection-filters__item facets__wrapper">
+                    {%- if sidebar_type == 'horizontal' -%}
+                        <div class="widget_filter" style="display: none;"><span class="icon-filter1">{% render 'icon-filter-2' %}</span><span class="sidebar_more">{{ 'sections.collection_template.refined_by' | t }}</span></div> 
+                    {%- endif -%}
+                    {%- for filter in results.filters -%}
+                        {%- assign total_active_values = total_active_values | plus: filter.active_values.size -%}
+                        {%- case filter.type -%}
+                            {%- when 'list' -%}
+                                {%- liquid
+                                    assign filterLabel = filter.label | escape
+                                    assign filterLabelAll = section.settings.filter_label_all | default: 'More filters'
+                                    
+                                    if filterLabel == filterLabelAll
+                                        assign filter_hidden_tag_list = section.settings.filter_hidden_tag_list | split: ','
+                                    endif
+                                -%}
+                                {%- if filterLabel == filterLabelAll and filter_by_tags.size > 0 -%}
+                                    {%- liquid
+                                        assign countTag = 0
+                                        assign indexTag = forloop.index
+                                        assign listRemainingTags = ''
+                                    -%}
+                                    {%- for block in filter_by_tags -%}
+                                        {%- liquid
+                                            assign listTagHeading = block.settings.heading | default: filterLabel
+                                            assign listTags = block.settings.list_tags | split: ','
+                                            assign listTagsRender = ''
+                                            for value in filter.values
+                                                assign item = value.value
+                                                unless listTagsRender contains item
+                                                    if listTags contains item
+                                                        assign listTagsRender = listTagsRender | append: item | append: ','
+                                                        assign listRemainingTags = listRemainingTags | append: item | append: ','
+                                                    endif
+                                                endunless
+                                            endfor
+                                        -%}
+                                        {%- if listTagsRender != blank -%}
+                                            {%- liquid
+                                                assign countTag = countTag | plus: 1
+                                                assign listTagsRenderSize = listTagsRender | split: ',' | size
+                                                assign listTagsRender = listTagsRender | split: ','
+                                                assign countTagActive = 0
+                                                for value in filter.active_values
+                                                    if listTagsRender contains value.value
+                                                        assign countTagActive = countTagActive | plus: 1
+                                                    endif
+                                                endfor
+                                            -%}
+                                            <div class="sidebarBlock js-filter {{ listTagsRenderSize }}" data-index="{{ indexTag | append: forloop.index }}" data-type-list="true">
+                                                {%- if show_collapse -%}
+                                                    <div class="sidebarBlock-headingWrapper">
+                                                {%- endif -%}
+                                                    <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                                                        <span class="facets__text">{{ listTagHeading | escape }}</span>
+                                                        <span class="facets__count{% if sidebar_type == 'horizontal' %}{% if countTagActive > 0 %} custom-count{% endif %}{% endif %}" aria-hidden="true">{%- if sidebar_type == 'horizontal' -%}{%- if countTagActive > 0 -%}<span>{{ countTagActive }}</span>{%- endif -%}{% elsif sidebar_type == 'vertical' %}{%- if countTagActive > 0 -%}({{ countTagActive }}){%- endif -%}{%- endif -%}</span>
+                                                    </h2>
+                                                {%- if show_collapse -%}
+                                                    </div>
+                                                    <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+                                                {%- endif -%}
+                                                    <div class="sidebarBlock-content sidebarBlock-content--full facets__display">
+                                                        <ul class="facets__list custom-scrollbar list-unstyled" role="list" data-max-items="{{ maxItemToShow }}" data-name="{{ listTagHeading | escape }}">
+                                                            {%- liquid
+                                                                assign label = listTagHeading | downcase | handle
+                                                                assign valueIndex = 0
+                                                            -%}
+                                                            {%- for value in filter.values -%}
+                                                                {%- if listTagsRender contains value.value -%}
+                                                                    {%- assign valueIndex = valueIndex | plus: 1 -%}
+                                                                    <li class="list-menu__item facets__item {% if valueIndex > maxItemToShow and section.settings.filter_display_type == 'show-more' %}d-none{% endif %}{% if filter_swatch contains label %} facets__item--swatch{% elsif filter_rectangle contains label %} facets__item--rectangle{% endif %}">
+                                                                        <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                                                                        {%- if filter_swatch contains label -%}
+                                                                            <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}" title="{{ value.label | escape }}">
+                                                                                <span class="pattern{% if value.value == 'white' or value.value == 'White' %} pattern--white{% endif %}" style="{%- if filter_swatch_type == 'png' %}
+                                                                                    background-color: {{ value.value | split: ' ' | last | handle }};
+                                                                                    background-image: url({{ value.value | strip | handleize | handle | append: '.' | append: file_extension | file_url }})
+                                                                                    {%- else -%}
+                                                                                     background-color: {{ value.value | split: ' ' | last | handle }};
+                                                                                    {% endif %}">
+                                                                                </span><span class="visually-hidden">{{ value.label | escape }}</span>
+                                                                            </label>
+                                                                        {%- elsif filter_rectangle contains label -%}
+                                                                            <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}"><span class="text">{{ value.label | escape }}</span></label>
+                                                                        {%- else -%}
+                                                                            <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %} form-label--checkbox">{{ value.label | escape }} <span class="count">({{ value.count }})</span></label>
+                                                                        {%- endif -%}
+                                                                    </li>
+                                                                {%- endif -%}
+                                                            {%- endfor -%}
+                                                        </ul>
+                                                        <a href="{{ filter.url_to_remove }}" class="facets__reset link link-underline js-facet-remove" data-index="{{ indexTag | append: forloop.index }}" {% if countTagActive == 0 %} style="display: none;"{% endif %}><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                                                        {%- if sidebar_type == 'horizontal' -%}
+                                                            {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                                {%- if listTagsRenderSize > maxItemToShow -%}
+                                                                    <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                        <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                        <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                            {%- endif -%}
+                                                        {%- endif -%}
+                                                    </div>
+                                                {%- if show_collapse -%}
+                                                    </div>
+                                                {%- endif -%}
+                                                {%- unless sidebar_type == 'horizontal' -%}
+                                                    {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                        {%- if listTagsRenderSize > maxItemToShow -%}
+                                                            <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                            </div>
+                                                        {%- endif -%}
+                                                    {%- endif -%}
+                                                {%- endunless -%}
+                                            </div>
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                    {%- if countTag > 0 -%}
+                                        {%- if listRemainingTags != blank -%}
+                                            {%- liquid
+                                                assign listTagsRenderSize = listRemainingTags | split: ',' | size
+                                                assign listTagsRenderSize = filter.values.size | minus: listTagsRenderSize
+                                                assign listRemainingTags = listRemainingTags | split: ','
+                                                assign listAllTags = filter.values | map: 'value'
+                                                assign forloopIndex = countTag | plus: 1
+                                                assign countTagActive = 0
+                                                for value in filter.active_values
+                                                    unless listRemainingTags contains value.value
+                                                        if listAllTags contains value.value
+                                                            assign countTagActive = countTagActive | plus: 1
+                                                        endif
+                                                    endunless
+                                                endfor
+                                            -%}
+                                            <div class="sidebarBlock js-filter {{ filter.label | escape }}" data-index="{{ indexTag | append: forloopIndex }}" data-type-list="true">
+                                                {%- if show_collapse -%}
+                                                    <div class="sidebarBlock-headingWrapper">
+                                                {%- endif -%}
+                                                    <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                                                        <span class="facets__text">{{ filter.label | escape }}</span>
+                                                        <span class="facets__count{% if sidebar_type == 'horizontal' %}{% if countTagActive > 0 %} custom-count{% endif %}{% endif %}" aria-hidden="true">{%- if sidebar_type == 'horizontal' -%}{%- if countTagActive > 0 -%}<span>{{ countTagActive }}</span>{%- endif -%}{% elsif sidebar_type == 'vertical' %}{%- if countTagActive > 0 -%}({{ countTagActive }}){%- endif -%}{%- endif -%}</span>
+                                                    </h2>
+                                                {%- if show_collapse -%}
+                                                    </div>
+                                                    <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+                                                {%- endif -%}
+                                                    <div class="sidebarBlock-content sidebarBlock-content--full facets__display">
+                                                        <ul class="facets__list custom-scrollbar list-unstyled" role="list" data-max-items="{{ maxItemToShow }}">
+                                                            {%- liquid
+                                                                assign label = filter.label | downcase | handle
+                                                                assign valueIndex = 0
+                                                            -%}
+                                                            {%- for value in filter.values -%}
+                                                                {%- unless listRemainingTags contains value.value -%}
+                                                                    {%- if filter_hidden_tag_list == blank -%}
+                                                                        {%- assign valueIndex = valueIndex | plus: 1 -%}
+                                                                        <li class="list-menu__item facets__item {% if valueIndex > maxItemToShow and section.settings.filter_display_type == 'show-more' %}d-none{% endif %}{% if filter_swatch contains label %} facets__item--swatch{% elsif filter_rectangle contains label %} facets__item--rectangle{% endif %}">
+                                                                            <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                                                                            {%- if filter_swatch contains label -%}
+                                                                                <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}" title="{{ value.label | escape }}">
+                                                                                    <span class="pattern{% if value.value == 'white' or value.value == 'White' %} pattern--white{% endif %}" style="{% if filter_swatch_type == 'png' %}background-color: {{ value.value | split: ' ' | last | handle }};background-image: url({{ value.value | strip | handleize | handle | append: '.' | append: file_extension | file_url }}){% else %}background-color: {{ value.value | split: ' ' | last | handle }}{% endif %}"></span>
+                                                                                    <span class="visually-hidden">{{ value.label | escape }}</span>
+                                                                                </label>
+                                                                            {%- elsif filter_rectangle contains label -%}
+                                                                                <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain"
+                                                                                    class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}"><span class="text">{{ value.label | escape }}</span></label>
+                                                                            {%- else -%}
+                                                                                <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %} form-label--checkbox">{{ value.label | escape }}<span class="count">({{ value.count }})</span></label>
+                                                                            {%- endif -%}
+                                                                        </li>
+                                                                    {%- else -%}
+                                                                        {%- unless filter_hidden_tag_list contains value.value -%}
+                                                                            {%- assign valueIndex = valueIndex | plus: 1 -%}
+                                                                            <li class="list-menu__item facets__item {% if valueIndex > maxItemToShow and section.settings.filter_display_type == 'show-more' %}d-none{% endif %}{% if filter_swatch contains label %} facets__item--swatch{% elsif filter_rectangle contains label %} facets__item--rectangle{% endif %}">
+                                                                                <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                                                                                {%- if filter_swatch contains label -%}
+                                                                                    <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain"
+                                                                                        class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}" title="{{ value.label | escape }}">
+                                                                                        <span class="pattern{% if value.value == 'white' or value.value == 'White' %} pattern--white{% endif %}" style="{% if filter_swatch_type == 'png' %}background-color: {{ value.value | split: ' ' | last | handle }};background-image: url({{ value.value | strip | handleize | handle | append: '.' | append: file_extension | file_url }}){% else %}background-color: {{ value.value | split: ' ' | last | handle }}{% endif %}"></span>
+                                                                                        <span class="visually-hidden">{{ value.label | escape }}</span>
+                                                                                    </label>
+                                                                                {%- elsif filter_rectangle contains label -%}
+                                                                                    <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain"
+                                                                                        class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}"><span class="text">{{ value.label | escape }}</span></label>
+                                                                                {%- else -%}
+                                                                                    <label for="Filter-{{ filter.label | escape | handleize }}-{{ indexTag | append: forloop.index }}-remain"
+                                                                                        class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %} form-label--checkbox">{{ value.label | escape }}<span class="count">({{ value.count }})</span></label>
+                                                                                {%- endif -%}
+                                                                            </li>
+                                                                        {%- endunless -%}
+                                                                    {%- endif -%}
+                                                                {%- endunless -%}
+                                                            {%- endfor -%}
+                                                        </ul>
+                                                        <a href="{{ filter.url_to_remove }}" class="facets__reset link link-underline js-facet-remove" data-index="{{ forloop.index }}" {% if countTagActive == 0 %} style="display: none;"{% endif %}><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                                                        {%- if sidebar_type == 'horizontal' -%}
+                                                            {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                                {%- if listTagsRenderSize > maxItemToShow -%}
+                                                                    <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                        <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                        <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                                    </div>
+                                                                {%- endif -%}
+                                                            {%- endif -%}
+                                                        {%- endif -%}
+                                                    </div>
+                                                {%- if show_collapse -%}
+                                                    </div>
+                                                {%- endif -%}
+                                                {%- unless sidebar_type == 'horizontal' -%}
+                                                    {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                        {%- if listTagsRenderSize > maxItemToShow -%}
+                                                            <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                            </div>
+                                                        {%- endif -%}
+                                                    {%- endif -%}
+                                                {%- endunless -%}
+                                            </div>
+                                        {%- endif -%}
+                                    {%- else -%}
+                                        <div class="sidebarBlock js-filter {{ filter.label | escape }}" data-index="{{ forloop.index }}" data-type-list="true">
+                                            {%- if show_collapse -%}
+                                                <div class="sidebarBlock-headingWrapper">
+                                            {%- endif -%}
+                                                <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                                                    <span class="facets__text">{{ filter.label | escape }}</span>
+                                                    <span class="facets__count{% if sidebar_type == 'horizontal' %}{% if filter.active_values.size > 0 %} custom-count{% endif %}{% endif %}" aria-hidden="true">{%- if sidebar_type == 'horizontal' -%}{%- if filter.active_values.size > 0 -%}<span>{{ filter.active_values.size }}</span>{%- endif -%}{% elsif sidebar_type == 'vertical' %}{%- if filter.active_values.size > 0 -%}({{ filter.active_values.size }}){%- endif -%}{%- endif -%}</span>
+                                                </h2>
+                                            {%- if show_collapse -%}
+                                                </div>
+                                                <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+                                            {%- endif -%}
+                                                <div class="sidebarBlock-content sidebarBlock-content--full facets__display">
+                                                    <ul class="facets__list custom-scrollbar list-unstyled" role="list" data-max-items="{{ maxItemToShow }}">
+                                                        {%- liquid
+                                                            assign label = filter.label | downcase | handle
+                                                            assign filter_swatch = filter_swatch | split: "," | strip | downcase | handle
+                                                            assign filter_rectangle = filter_rectangle | split: "," | strip | downcase | handle
+                                                        -%}
+                                                        {%- for value in filter.values -%}
+                                                            <li class="list-menu__item facets__item {% if forloop.index > maxItemToShow and section.settings.filter_display_type == 'show-more' %}d-none{% endif %}{% if filter_swatch contains label %} facets__item--swatch{% elsif filter_rectangle contains label %} facets__item--rectangle{% endif %}">
+                                                                <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape }}-{{ forloop.index }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                                                                {%- if filter_swatch contains label -%}
+                                                                    <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}" title="{{ value.label | escape }}">
+                                                                        <span class="pattern{% if value.value == 'white' or value.value == 'White' %} pattern--white{% endif %}" style="{% if filter_swatch_type == 'png' %}background-color: {{ value.value | split: ' ' | last | handle }};background-image: url({{ value.value | strip | handleize | handle | append: '.' | append: file_extension | file_url }}){% else %}background-color: {{ value.value | split: ' ' | last | handle }}{% endif %}"></span>
+                                                                        <span class="visually-hidden">{{ value.label | escape }}</span>
+                                                                    </label>
+                                                                {%- elsif filter_rectangle contains label -%}
+                                                                    <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}"><span class="text">{{ value.label | escape }}</span></label>
+                                                                {%- else -%}
+                                                                    <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %} form-label--checkbox">{{ value.label | escape }}<span class="count">({{ value.count }})</span></label>
+                                                                {%- endif -%}
+                                                            </li>
+                                                        {%- endfor -%}
+                                                    </ul>
+                                                    <a href="{{ filter.url_to_remove }}" class="facets__reset link link-underline js-facet-remove" data-index="{{ forloop.index }}" {% if filter.active_values.size == 0 %} style="display: none;"{% endif %}><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                                                    {%- if sidebar_type == 'horizontal' -%}
+                                                        {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                            {%- if filter.values.size > maxItemToShow -%}
+                                                                <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                    <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                    <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                                </div>
+                                                            {%- endif -%}
+                                                        {%- endif -%}
+                                                    {%- endif -%}
+                                                </div>
+                                            {%- if show_collapse -%}
+                                                </div>
+                                            {%- endif -%}
+                                            {%- unless sidebar_type == 'horizontal' -%}
+                                                {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                    {%- if filter.values.size > maxItemToShow -%}
+                                                        <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                            <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                            <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                        </div>
+                                                    {%- endif -%}
+                                                {%- endif -%}
+                                            {%- endunless -%}
+                                        </div>
+                                    {%- endif -%}
+                                {%- else -%}
+                                    <div class="sidebarBlock js-filter {{ filter.label | escape }}" data-index="{{ forloop.index }}" data-type-list="true">
+                                        {%- if show_collapse -%}
+                                            <div class="sidebarBlock-headingWrapper">
+                                        {%- endif -%}
+                                            <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                                                <span class="facets__text">{{ filter.label | escape }}</span>
+                                                <span class="facets__count{% if sidebar_type == 'horizontal' %}{% if filter.active_values.size > 0 %} custom-count{% endif %}{% endif %}" aria-hidden="true">{%- if sidebar_type == 'horizontal' -%}{%- if filter.active_values.size > 0 -%}<span>{{ filter.active_values.size }}</span>{%- endif -%}{% elsif sidebar_type == 'vertical' %}{%- if filter.active_values.size > 0 -%}({{ filter.active_values.size }}){%- endif -%}{%- endif -%}</span>
+                                            </h2>
+                                        {%- if show_collapse -%}
+                                            </div>
+                                            <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+                                        {%- endif -%}
+                                            <div class="sidebarBlock-content sidebarBlock-content--full facets__display">
+                                                <ul class="facets__list custom-scrollbar list-unstyled" role="list" data-max-items="{{ maxItemToShow }}">
+                                                    {%- liquid
+                                                        assign label = filter.label | downcase | handle
+                                                    -%}
+                                                    {%- for value in filter.values -%}
+                                                        <li class="list-menu__item facets__item {% if forloop.index > maxItemToShow and section.settings.filter_display_type == 'show-more' %}d-none{% endif %}{% if filter_swatch contains label %} facets__item--swatch{% elsif filter_rectangle contains label %} facets__item--rectangle{% endif %}">
+                                                            <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape }}-{{ forloop.index }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                                                            {%- if filter_swatch contains label -%}
+                                                                <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}" title="{{ value.label | escape }}">
+                                                                    <span class="pattern{% if value.value == 'white' or value.value == 'White' %} pattern--white{% endif %}" style="{% if filter_swatch_type == 'png' %}background-color: {{ value.value | split: ' ' | last | handle }};background-image: url({{ value.value | strip | handleize | handle | append: '.' | append: file_extension | file_url }}){% else %}background-color: {{ value.value | split: ' ' | last | handle }}{% endif %}"></span>
+                                                                    <span class="visually-hidden">{{ value.label | escape }}</span>
+                                                                </label>
+                                                            {%- elsif filter_rectangle contains label -%}
+                                                                <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}"><span class="text">{{ value.label | escape }}</span></label>
+                                                            {%- else -%}
+                                                                <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %} form-label--checkbox">{{ value.label | escape }}<span class="count">({{ value.count }})</span></label>
+                                                            {%- endif -%}
+                                                        </li>
+                                                    {%- endfor -%}
+                                                </ul>
+                                                <a href="{{ filter.url_to_remove }}" class="facets__reset link link-underline js-facet-remove" data-index="{{ forloop.index }}" {% if filter.active_values.size == 0 %} style="display: none;"{% endif %}><span class="text">{{ 'sections.collection_template.clear_all' | t }}</span></a>
+                                                {%- if sidebar_type == 'horizontal' -%}
+                                                    {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                        {%- if filter.values.size > maxItemToShow -%}
+                                                            <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                                <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                                <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                            </div>
+                                                        {%- endif -%}
+                                                    {%- endif -%}
+                                                {%- endif -%}
+                                            </div>
+                                        {%- if show_collapse -%}
+                                            </div>
+                                        {%- endif -%}
+                                        {%- unless sidebar_type == 'horizontal' -%}
+                                            {%- if section.settings.filter_display_type == 'show-more' -%}
+                                                {%- if filter.values.size > maxItemToShow -%}
+                                                    <div class="show-more--list_tags" data-show-more-btn="{{ filter.label | downcase }}">
+                                                        <span class="icon-container">{% render 'icon-show-more' %}</span>
+                                                        <span class="btn-text"><span data-show-more-content>{{ 'sections.collection_template.show_all' | t }}</span></span>
+                                                    </div>
+                                                {%- endif -%}
+                                            {%- endif -%}
+                                        {%- endunless -%}
+                                    </div>
+                                {%- endif -%}
+                            {%- when 'price_range' -%}
+                                {% assign currencies_using_comma_decimals = "ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND" | split: ',' %}
+                                {% assign uses_comma_decimals = false %}
+                                {%- if currencies_using_comma_decimals contains cart.currency.iso_code -%}
+                                    {% assign uses_comma_decimals = true %}
+                                {%- endif -%}
+                                <div class="sidebarBlock js-filter" data-index="{{ forloop.index }}" data-type-price="true">
+                                    {%- if show_collapse -%}
+                                        <div class="sidebarBlock-headingWrapper">
+                                    {%- endif -%}
+                                        <h2 class="sidebarBlock-heading{% if show_collapse %}{% if sidebar_collapse == 'expand' %} is-clicked{% endif %}{% endif %}">
+                                            <span class="facets__text">{{ filter.label | escape }}</span>
+                                            <span class="facets__count" aria-hidden="true">{%- if filter.active_values.size > 0 -%}({{ filter.active_values.size }}){%- endif -%}</span>
+                                        </h2>
+                                    {%- if show_collapse -%}
+                                        </div>
+                                        <div class="sidebarBlock-contentWrapper" {% if sidebar_collapse == 'expand' %} style="display: block;"{% endif %}>
+                                    {%- endif -%}
+                                        <div class="sidebarBlock-content sidebarBlock-content--full facets__display">
+                                            <price-range class="facets__price">
+                                                <div class="facets__price--slider">
+                                                    <div class="facets__price--slide">
+                                                        <input class="filter__price_change filter__price_min" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}" step="1" type="range" 
+                                                            {%- if filter.min_value.value -%}
+                                                                {%- if uses_comma_decimals -%}
+                                                                    value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | replace: '.00', '' }}"
+                                                                {%- else -%}
+                                                                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                                                                {% endif %}
+                                                            {%- else -%}
+                                                                value="0"
+                                                            {%- endif -%}
+                                                            aria-label="Min">
+                                                        <input class="filter__price_change filter__price_max" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}" step="1" type="range" 
+                                                            {%- if filter.max_value.value -%}
+                                                                {%- if uses_comma_decimals -%}
+                                                                    value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | replace: '.00', '' }}"
+                                                                {%- else -%}
+                                                                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                                                                {% endif %}
+                                                            {%- else -%}
+                                                                value="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                                                            {%- endif -%}
+                                                            aria-label="Max">
+                                                    </div>
+                                                    <div class="facets__price--box price-slider clearfix">
+                                                        <div class="form-field">
+                                                            <span class="field__currency format-currency">{{ cart.currency.symbol }}</span>
+                                                            <span class="money format-money-input money--current-min hidden">{% if filter.min_value.value %}{{ filter.min_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}{% else %}0{% endif %}</span>
+                                                            <label class="form-label hiddenLabels" for="Filter-Min-{{ filter.label | escape }}-{{ forloop.index }}">{{ 'sections.collection_template.min' | t }}</label>
+                                                            <input class="form-input field__input filter__price filter__price--min" name="{{ filter.min_value.param_name }}" id="Filter-Min-{{ filter.label | escape }}-{{ forloop.index }}" 
+                                                                {%- if filter.min_value.value -%}
+                                                                    {%- if uses_comma_decimals -%}
+                                                                        value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | replace: '.00', '' }}"
+                                                                    {%- else -%}
+                                                                        value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                                                                    {% endif %}
+                                                                {%- endif -%}
+                                                                type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}" placeholder="0">
+                                                        </div>
+                                                        <span class="price-to-price">{{ 'sections.collection_template.to' | t }}</span>
+                                                        <div class="form-field">
+                                                            <span class="field__currency format-currency">{{ cart.currency.symbol }}</span>
+                                                            <span class="money format-money-input money--current-max hidden">{% if filter.max_value.value %}{{ filter.max_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}{% else %}{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}{% endif %}</span>
+                                                            <span class="money format-money-input money--max hidden" data-default-max="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}">{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}</span>
+                                                            <label class="form-label hiddenLabels" for="Filter-Max-{{ filter.label | escape }}-{{ forloop.index }}">{{ 'sections.collection_template.max' | t }}</label>
+                                                            <input class="form-input field__input filter__price filter__price--max" name="{{ filter.max_value.param_name }}" id="Filter-Max-{{ filter.label | escape }}-{{ forloop.index }}" 
+                                                                {%- if filter.max_value.value -%}
+                                                                    {%- if uses_comma_decimals -%}
+                                                                        value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | replace: '.00', '' }}"
+                                                                    {%- else -%}
+                                                                        value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                                                                    {% endif %}
+                                                                {%- endif -%}
+                                                                type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-actions">
+                                                        <input class="button button--primary filter__price--apply" type="button" id="filter__price--apply" value="{{ 'sections.collection_template.apply' | t }}">
+                                                    </div>
+                                                </div>
+                                            </price-range>
+                                        </div>
+                                    {%- if show_collapse -%}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                        {%- endcase -%}
+                    {%- endfor -%}
+                    <noscript>
+                        <button type="submit" class="facets__button button">{{ 'sections.collection_template.filter_button' | t }}</button>
+                    </noscript>
+                </div>
+                {%- if show_sorting -%}
+                    <div class="collection-filters__item sorting" style="display: none;">
+                        <div class="collection-filters__field">
+                            <label class="collection-filters__label" for="SortBy">{{ 'sections.collection_template.sort_by_label' | t }}</label>
+                            <div class="select">
+                                {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+                                <select name="sort_by" class="select__select collection-filters__sort" id="SortBy" aria-describedby="a11y-refresh-page-message">
+                                    {%- for option in results.sort_options -%}
+                                        <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                                    {%- endfor -%}
+                                </select>
+                                {% render 'icon-caret' %}
+                            </div>
+                        </div>
+                        <noscript><button type="submit" class="button button--small">{{ 'sections.collection_template.sort_button' | t }}</button></noscript>
+                    </div>
+                {%- endif -%}
+            </form>
+        </collection-filters-form>
+    </div>
+{%- endif -%}
+{%- if sidebar_type == 'vertical' -%}
+    {%- for block in section.blocks -%}
+        {%- if block.type == 'recent_post' -%}
+            {% render 'halo-side-recent-post', block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse %}
+        {%- elsif block.type == 'recent_tag' -%}
+            {% render 'halo-side-recent-tag', block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse %}
+        {%- elsif block.type == 'product_block' -%}
+            {%- assign position = block.settings.position -%}
+            {%- if position != 'content' -%}
+                {% render 'halo-side-product-block',
+                    block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse, position: position %}
+            {%- endif -%}
+        {%- elsif block.type == 'image' -%}
+            {% render 'halo-side-image', block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse %}
+        {%- elsif block.type == 'text' -%}
+            {% render 'halo-side-custom-text', block: block, show_collapse: show_collapse, sidebar_collapse: sidebar_collapse %}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- if show_filter -%}
+    <script src="{{ 'collection-filters-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

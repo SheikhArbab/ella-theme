@@ -1,0 +1,28 @@
+<div class="product-item{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"{% if settings.banner_animation == 'effect_fade_up' %} data-cascade style="--animation-order: {{ forloop.index }};"{% endif %}>
+    <div class="card">
+        <div class="card-product">
+            <div class="card-product__wrapper">
+                {%- liquid
+                    assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+                    if product_card_product.featured_media.aspect_ratio == nil
+                        assign featured_media_aspect_ratio = 1
+                    endif
+                -%}
+                <div class="card-media animated-loading"{% if product_card_product.featured_media %}{% if media_size == 'adapt' %} style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"{% elsif media_size == 'square' %} style="padding-bottom: 100%;"{% elsif media_size == 'portrait' %}{% if portrait_aspect_ratio != blank %} style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }};"{% endif %}{% endif %}
+                    {%- else -%} style="padding-bottom: 100%;"{%- endif -%}>
+                </div>
+            </div>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-{{ settings.product_content_text_align }}">
+                {%- if settings.show_vendor -%}
+                    <div class="card-information__group card-information__group-2">
+                      <div class="card-vendor">{{ product_card_product.vendor | link_to_vendor }}</div>
+                    </div>
+                {%- endif -%}
+                <a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}" href="{{ product_card_product.url | within: collection }}">{{ product_card_product.title | escape }}</a>
+                <div class="card-price">{% render 'price', product: product_card_product %}</div>
+            </div>
+        </div>
+    </div>
+</div>

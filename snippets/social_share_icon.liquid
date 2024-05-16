@@ -1,0 +1,38 @@
+{%- liquid
+    assign _permalink_share = product.url |default:article.url |default:page.url
+    assign _permalink_share2 = shop.url | append:_permalink_share
+    assign perLinkURL = permalink_share |default:_permalink_share2
+    unless share_title
+        assign share_title = product.title |default:article.title |default:page.title |default:shop.name
+    endunless
+        assign perTitle = share_title | url_param_escape
+    unless share_image
+        assign share_image = product.featured_image |default:article.image |default:settings.share_image | default: page_image | default: settings.logo
+    endunless
+    assign perImage = share_image | image_url: width: 1024, height: 1024
+-%}
+<ul class="social-share">
+    {%- if settings.share_facebook -%}
+        <li class="social-share__item"><a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ perLinkURL }}" title='{{ 'general.social.links.facebook' | t }}' data-no-instant rel="noopener noreferrer nofollow" target="_blank">{%- render 'icon-facebook' -%} </a></li>
+    {%- endif -%}
+    {%- if settings.share_twitter -%}
+        <li class="social-share__item"><a class="twitter" href="http://twitter.com/share?text={{ perTitle }}&amp;url={{ perLinkURL }}" title='{{ 'general.social.links.twitter' | t }}' data-no-instant rel="noopener noreferrer nofollow" target="_blank">{%- render 'icon-twitter' -%}</a></li>
+    {%- endif -%}
+    {%- if perImage != blank -%}
+        {%- if settings.share_pinterest -%}
+            <li class="social-share__item"><a class="pinterest" href="http://pinterest.com/pin/create/button/?url={{ perLinkURL }}&amp;media=http:{{perImage}}&amp;description={{ perTitle }}" title='{{ 'general.social.links.pinterest' | t }}' data-no-instant rel="noopener noreferrer nofollow" target="_blank">{%- render 'icon-pinterest' -%}</a></li>
+        {%- endif -%}
+        {%- if settings.share_tumblr -%}
+            <li class="social-share__item"><a class="tumblr" href="//tumblr.com/widgets/share/tool?canonicalUrl={{ perLinkURL }}" title='{{ 'general.social.links.tumblr' | t }}' data-no-instant rel="noopener noreferrer nofollow" data-content="http:{{perImage}}" target="_blank">{%- render 'icon-tumblr' -%}</a></li>
+        {%- endif -%}
+    {%- endif -%}
+    {%- if settings.share_telegram -%}
+        <li class="social-share__item"><a class="telegram" href="https://telegram.me/share/url?url={{ perLinkURL }}" title='{{ 'general.social.links.telegram' | t }}' data-no-instant rel="nofollow" target="_blank">{%- render 'icon-telegram' -%}</a></li>
+    {%- endif -%}
+    {%- if settings.share_email -%}
+        <li class="social-share__item"><a class="email" href="mailto:?subject={{ perTitle }}&amp;body={{ perLinkURL }}" title='{{ 'general.social.links.email' | t }}' data-no-instant rel="noopener noreferrer nofollow" target="_blank">{%- render 'icon-mail' -%}</a></li>
+    {%- endif -%}
+    {%- if settings.share_whatsapp -%}
+        <li class="social-share__item"><a class="whatsapp" href="https://wa.me/?text={{ perTitle }}&#x20;{{ perLinkURL }}" title='{{ 'general.social.links.whatsapp' | t }}' data-no-instant rel="nofollow" target="_blank">{%- render 'icon-whatsapp' -%}</a></li>
+    {%- endif -%}
+</ul>

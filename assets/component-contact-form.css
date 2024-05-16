@@ -1,0 +1,59 @@
+.contact-form{
+    margin: 22px 0 0 0;
+}
+
+.contact-form .form-message {
+    margin-bottom: 22px;
+}
+
+.contact-form .form-input{
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.contact-form .form-field + .form-field{
+    margin-top: 17px;
+}
+
+.contact-form .form-actions{
+    margin: 23px 0 0 0;
+}
+
+.contact-form .form-actions .button {
+    border-radius: 0;
+    margin-top: 5px;
+    width: 227px;
+    display: block;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.skin-3 .contact-form .form-actions .button{
+	border-radius: var(--btn-border-radius);
+    letter-spacing: .02em;
+}
+
+.skin-4 .contact-form .form-actions .button{
+    padding-top: calc(var(--btn-padding-top) + 5px);
+    padding-bottom: calc(var(--btn-padding-bottom) + 5px);
+}
+
+.skin-5 .contact-form .form-actions .button{
+    padding-top: calc(var(--btn-padding-top) + 10px);
+    padding-bottom: calc(var(--btn-padding-bottom) + 10px);
+}
+
+.skin-6 .contact-form .form-actions .button{
+	padding-top: calc(var(--btn-padding-top) + 4px);
+    padding-bottom: calc(var(--btn-padding-bottom) + 5px);
+}
+
+.contact-form textarea{
+    min-height: 216px;
+    resize: vertical;
+}
+
+.red-asterisk {
+    color: #f1152f;
+    margin-left: 0;
+}

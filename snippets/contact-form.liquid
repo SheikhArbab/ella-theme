@@ -1,0 +1,95 @@
+{%- assign contact_form_id = 'ContactForm-' | append: section.id -%}
+
+{%- form 'contact', id: contact_form_id, class: 'contact-form' -%}
+    {%- if form.posted_successfully? -%}
+        <div class="form-message hidden" data-form-message="contact">
+            <div class="alertBox alertBox--success">
+                <p class="alertBox-message">
+                    {{ 'templates.contact.form.post_success' | t }}
+                </p>
+            </div>
+        </div>
+    {%- elsif form.errors -%}
+        <div class="form-message hidden" data-form-message="contact">
+            <div class="alertBox alertBox--error">
+                <p class="alertBox-message">
+                    <ul>
+                        {% for field in form.errors %}
+                            <li>
+                                {{ form.errors.translated_fields[field] | capitalize }} - {{ form.errors.messages[field] }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            </div>
+        </div>
+    {%- endif -%}
+    <div class="form-field{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <label class="form-label" for="contactFormName-{{ section.id }}">
+            {{ 'templates.contact.form.name' | t }}
+        </label>
+        <input class="form-input form-input-placeholder"
+            type="text"
+            id="contactFormName-{{ section.id }}"
+            name="contact[name]"
+            autocomplete="name"
+            autocapitalize="words"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+            {% comment %} placeholder="{{ 'templates.contact.form.name' | t }}" {% endcomment %}
+            aria-required="false"
+        >
+    </div>
+    <div class="form-field{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <label class="form-label" for="ContactFormPhone-{{ section.id }}">
+            {{ 'templates.contact.form.phone' | t }}
+        </label>
+        <input class="form-input form-input-placeholder"
+            type="tel"
+            id="ContactFormPhone-{{ section.id }}"
+            name="contact[phone]"
+            autocomplete="tel"
+            pattern="[0-9]*"
+            value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+            {% comment %} placeholder="{{ 'templates.contact.form.phone' | t }}" {% endcomment %}
+            aria-required="false"
+        >
+    </div>
+    <div class="form-field{% if form.errors contains "email" %} form-field--error{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <label class="form-label" for="contactFormEmail-{{ section.id }}">
+            {{ 'templates.contact.form.email' | t }} <span class="red-asterisk">*</span>
+        </label>
+        <input class="form-input form-input-placeholder{% if form.errors contains "email" %} error{% endif %}"
+            type="email"
+            name="contact[email]"
+            id="contactFormEmail-{{ section.id }}"
+            spellcheck="false"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            aria-required="true"
+            {% if form.errors contains 'email' %}
+                aria-invalid="true"
+                aria-describedby="ContactForm-email-error"
+            {% endif %}
+            {% comment %} placeholder="{{ 'templates.contact.form.email' | t }}" {% endcomment %}
+            required
+        >
+    </div>
+    <div class="form-field{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <label class="form-label" for="contactFormMessage-{{ section.id }}">
+            {{ 'templates.contact.form.comment' | t }}  <span class="red-asterisk">*</span>
+        </label>
+        <textarea class="form-input form-input-hiddenPlaceholder" rows="8" name="contact[body]" id="contactFormMessage-{{ section.id }}" 
+            {% comment %} placeholder="{{ 'templates.contact.form.comment' | t }}"  {% endcomment %}
+            aria-required="true"
+            aria-invalid="true"
+            required
+        >
+            {{- form.body -}}
+        </textarea>
+    </div>
+    <div class="form-actions{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+        <input type="submit" class="button button--primary" value="{{ 'templates.contact.form.send' | t }}" role="button" data-button-message="contact">
+    </div>
+{%- endform -%}

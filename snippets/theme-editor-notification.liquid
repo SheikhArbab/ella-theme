@@ -1,0 +1,210 @@
+{%- if request.design_mode -%}
+	<style type="text/css" media="screen">
+		.admin-popup-iframe{
+		    border-radius: 8px;
+		    box-shadow: 0 0 3px rgba(0,0,0,.1), 0 4px 20px rgba(0,0,0,.15);
+		    color: var(--color-white);
+		    position: fixed;
+		    right: 1rem;
+		    bottom: 7rem;
+		    transform: scale(.95);
+		    transform-origin: bottom right;
+		    z-index: 1000;
+		    max-width: 295px;
+		    background-color: var(--bg-black);
+		    overflow: hidden;
+		}
+
+		.admin-popup-btn{
+			-webkit-appearance: none;
+		    appearance: none;
+		    background: none;
+		    border: none;
+		    color: inherit;
+		    cursor: pointer;
+		    display: flex;
+		    font-family: var(--font-body-family);
+		    font-size: var(--font-body-size);
+		    font-weight: var(--font-weight-normal);
+		    justify-content: space-between;
+		    align-items: center;
+		    line-height: inherit;
+		    margin: 0;
+		    padding: 0;
+		    position: relative;
+		    text-align: left;
+		}
+
+		.admin-popup-btn .text{
+			display: block;
+		    margin-left: 0.5rem;
+		    margin-right: 0.5rem;
+		}
+
+		.admin-popup-btn .icon{
+			display: inline-block;
+		    vertical-align: top;
+		    position: relative;
+		    line-height: 1;
+		    font-size: 0;
+    		letter-spacing: 0;
+		}
+
+		.admin-popup-btn .icon svg{
+			display: block;
+		    width: 20px;
+		    height: 20px;
+		    transition: unset!important;
+		}
+
+		.admin-popup-btn .icon:before{
+			content: '';
+			display: none;
+			background-color: #303036;
+		    border-radius: 50%;
+		    height: 32px;
+		    width: 32px;
+		}
+
+		.admin-popup-iframe:not(.is-active) .admin-popup-btn{
+			padding: 10px 8px;
+    		width: 100%;
+		}
+
+		.admin-popup-iframe:not(.is-active):hover{
+			background-color: #303036;
+		}
+
+		.admin-popup-iframe.is-active .admin-popup-btn{
+			font-size: calc(var(--font-size) + 4px);
+		    padding: 20px 20px 0 20px;
+		    margin-bottom: 12px;
+		    width: 100%;
+		}
+
+		.admin-popup-iframe.is-active .admin-popup-btn .text{
+			margin-left: 0;
+		}
+
+		.admin-popup-iframe.is-active .admin-popup-btn .icon svg{
+			position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%) rotate(180deg);
+		}
+
+		.admin-popup-iframe.is-active .admin-popup-btn .icon:before{
+			display: block;
+		}
+
+		.admin-popup-btn:after{
+			border-radius: 5px;
+		    bottom: -0.0625rem;
+		    box-shadow: 0 0 0 -0.0625rem rgb(69, 143, 255);
+		    content: "";
+		    display: block;
+		    left: -0.0625rem;
+		    pointer-events: none;
+		    position: absolute;
+		    right: -0.0625rem;
+		    top: -0.0625rem;
+		    transition: box-shadow .1s cubic-bezier(0.25, 0.1, 0.2);
+		    z-index: 1;
+		}
+
+		.admin-popup-btn:focus-visible:after{
+		    box-shadow: 0 0 0 0.125rem rgb(69, 143, 255);
+			outline: 0.0625rem solid rgba(0,0,0,0);
+		}
+
+		.admin-popup-content{
+			opacity: 0;
+		    pointer-events: none;
+		    position: relative;
+		    transform: translateY(50%);
+		    visibility: hidden;
+		    height: 0;
+		    width: 0;
+		}
+
+		.admin-popup-content .content{
+			display: inline-block;
+			vertical-align: top;
+			margin: 0 0 20px 0;
+			font-size: var(--font-size);
+		    font-weight: var(--font-weight-normal);
+		}
+
+		.admin-popup-content .link{
+			display: block;
+			width: 100%;
+			text-align: center;
+		    position: relative;
+		    background-image: linear-gradient(to right, #2e1dd3 0%, #5d2eee 51%, #6a33f5 100%);
+		    box-shadow: 0px 3px 10px 0px rgb(35, 25, 204, .3);
+		    border-radius: 4px;
+    		transition: 0.5s;
+    		color: var(--color-white);
+    		padding: 7px 16px;
+		}
+
+		.admin-popup-content .link:hover{
+			background-position: right center;
+    		background-image: linear-gradient(to right, #2e1dd3 0%, #2e1dd3 100%);
+		}
+
+		.admin-popup-iframe.is-active .admin-popup-content{
+			display: flex;
+		    flex-direction: column;
+		    padding: 0 20px 20px 20px;
+		    pointer-events: auto;
+		    visibility: visible;
+		    width: 100%;
+		    height: auto;
+		    opacity: 1;
+    		transform: translateY(0);
+		}
+
+		@media (prefers-reduced-motion: no-preference) {
+			.admin-popup-iframe {
+			    transition: .2s;
+			}
+
+			.admin-popup-content{
+				transition-delay: .2s,.1s,.2s;
+			    transition-duration: .3s,.4s,.45s;
+			    transition-property: visibility,transform,opacity;
+			}
+		}
+	</style>
+    <div class="admin-popup-iframe">
+        <button class="admin-popup-btn">
+        	<span class="text">
+        		View documentation
+        	</span>
+        	<span class="icon">
+        		<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" role="presentation">
+        			<path d="M6.902 12h6.196c.751 0 1.172-.754.708-1.268l-3.098-3.432c-.36-.399-1.055-.399-1.416 0l-3.098 3.433c-.464.513-.043 1.267.708 1.267Z"></path>
+        		</svg>
+        	</span>
+        </button>
+        <div class="admin-popup-content">
+        	<span class="content">Get <strong>step-by-step</strong> guidance on how to best set up your theme online.</span>
+	        <a href="https://halosoft.gitbook.io/ella-documentation/" class="link" target="_blank">
+    			<span class="text">Get Started</span>
+    		</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+    	(() =>{
+    		var element = document.querySelector('.admin-popup-btn');
+
+            element.addEventListener('click', (event) => {
+            	event.preventDefault();
+            	event.stopPropagation();
+
+            	event.currentTarget.closest('.admin-popup-iframe').classList.toggle('is-active');
+            });
+        })();
+    </script>
+{%- endif -%}

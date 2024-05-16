@@ -1,0 +1,28 @@
+.product__xr-button[data-shopify-xr-hidden] {
+    visibility: hidden;
+}
+
+@media screen and (max-width: 550px) {
+    slider-component .product__xr-button:not([data-shopify-xr-hidden]) {
+        display: none;
+    }
+
+    .active .product__xr-button:not([data-shopify-xr-hidden]) {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 551px) {
+    .product__media-wrapper>.button.product__xr-button {
+        display: none;
+    }
+
+    .product__xr-button[data-shopify-xr-hidden] {
+        display: none;
+    }
+}
+
+.product__xr-button .icon {
+    width: 1.4rem;
+    margin-right: 1rem;
+}

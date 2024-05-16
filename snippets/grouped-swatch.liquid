@@ -1,0 +1,40 @@
+{%- assign file_extension = 'png' -%}
+{%- for product_option in pro.options_with_values -%}
+    {% assign is_color = false %}
+    {% assign option_index = 0 %}
+    {% assign option_index = forloop.index0 %}
+    <div class="swatch{% if settings.swatch_size_color == 'large' %} swatch_size_large{% endif %}" data-option-idx="{{ option_index | plus: 1 }}">
+        <div class="header">{{ product_option.name }}: <span data-option-select>{{ swatch.selected_value }}</span></div>
+        {%- assign options_color =  settings.option_color_swatch | downcase -%}
+        {%- assign downcased_option_1 = product_option.name | downcase -%}
+        {%- if options_color contains downcased_option_1 -%}
+            {% assign is_color = true %}
+        {%- endif -%}
+        {%- assign values = '' -%}
+        {%- for variant in pro.variants -%}
+            {%- assign current_variant = pro.selected_or_first_available_variant -%}
+            {%- assign value = variant.options[option_index] -%}
+            {%- unless values contains value -%}
+                {% assign values = values | join: ';' %}
+                {% assign values = values | append: ';' | append: value %}
+                {% assign values = values | split: ';' %}
+
+                <div data-popup-bundle-product-id="{{ pro.id }}" {{is_color}} data-value="{{ value | escape }}" class="swatch-element{% if is_color %} color{% endif %} {{ value | handle }}">
+                    {%- if is_color -%}
+                        <div class="tooltip">{{ value }}</div>
+                    {%- endif -%}
+                    <input data-variant="{{ variant.id }}" {% if variant == current_variant %}checked {% endif %}id="grouped-swatch-{{ option_index }}-{{ value | handle }}-{{ pro.id }}" type="radio" name="option-{{ option_index }}-{{ pro.id }}" value="{{ value | escape }}"/>
+                    {%- if is_color -%}
+                        {%- if settings.color_swatch_style == 'normal' -%}
+                            <label for="grouped-swatch-{{ option_index }}-{{ value | handle }}-{{ pro.id }}"><span class="bgImg" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | file_url }})"></span></label>
+                        {%- else -%}
+                            <label class="swatch_variant_img" for="grouped-swatch-{{ option_index }}-{{ value | handle }}-{{ pro.id }}"><span class="bgImg" {% if variant.image.src != blank %}style="background-image: url({{ variant.image.src | product_img_url: '100x' }}); background-size: contain;"{% else %}style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | file_url }})"{% endif %}></span></label>
+                        {%- endif -%}
+                    {%- else -%}
+                        <label for="grouped-swatch-{{ option_index }}-{{ value | handle }}-{{ pro.id }}">{{ value }}</label>
+                    {%- endif -%}
+                </div>
+            {%- endunless -%}
+        {%- endfor -%}
+    </div>
+{%- endfor -%}

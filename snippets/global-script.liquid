@@ -1,0 +1,279 @@
+{{ 'vendor.js' | asset_url | script_tag }}
+{{ 'global.js' | asset_url | script_tag }}
+{{ 'lazysizes.min.js' | asset_url | script_tag }}
+
+{%- if settings.show_quick_search -%}
+    <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if settings.banner_animation == 'effect_fade_up' -%}
+    <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% liquid
+    if settings.enable_currencies
+        if settings.currency_type == 'shopify_payment'
+            assign enable_shopify_payments_currencies = true
+            assign enable_multiple_currencies = false
+            assign enable_auto_currency = false 
+        elsif settings.currency_type == 'multiple_currencies'
+            assign enable_shopify_payments_currencies = false
+            assign enable_multiple_currencies = true
+            assign enable_auto_currency = false 
+        elsif settings.currency_type == 'auto_currencies'
+            assign enable_shopify_payments_currencies = false
+            assign enable_multiple_currencies = false
+            assign enable_auto_currency = true 
+        endif
+    else 
+        assign enable_shopify_payments_currencies = false
+        assign enable_multiple_currencies = false
+        assign enable_auto_currency = false 
+    endif
+
+    if settings.enable_layout_rtl
+        if settings.list_iso_rtl != blank
+            assign locale_iso_code = request.locale.iso_code
+            assign arr_list_rtl = settings.list_iso_rtl | remove:' ' | split:',' 
+            if arr_list_rtl contains locale_iso_code
+                assign enable_iso_rtl = true
+            else
+                assign enable_iso_rtl = false
+            endif
+        endif
+    else 
+        assign enable_iso_rtl = false
+    endif
+%}
+
+<script>
+    window.lazySizesConfig = window.lazySizesConfig || {};
+    lazySizesConfig.loadMode = 1;
+    window.lazySizesConfig.init = false;
+    lazySizes.init();
+
+    window.rtl_slick = {{ enable_iso_rtl }};
+    window.mobile_menu = '{{ settings.mobile_menu }}';
+    window.money_format = '{{ shop.money_format }}';
+    window.shop_currency = '{{ shop.currency }}';
+    window.currencySymbol ="{{ cart.currency.symbol }}";
+    window.show_multiple_currencies = {{ enable_multiple_currencies }};
+    window.routes = {
+        root: '{{  routes.cart_url | split: "/cart" | first }}',
+        cart: '{{ routes.cart_url }}',
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        collection_all: '{{ routes.all_products_collection_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+        search_url: '{{ routes.search_url }}'
+    }; 
+    window.button_load_more = {
+        default: `{{ 'general.button_load_more.default' | t }}`,
+        loading: `{{ 'general.button_load_more.loading' | t }}`,
+        view_all: `{{ 'general.button_load_more.view_all' | t }}`,
+        no_more: `{{ 'general.button_load_more.no_more' | t }}`
+    };
+    window.after_add_to_cart = {
+        type: '{{ settings.after_add_to_cart }}',
+        message: `{{ 'products.product.add_to_cart_success_message' | t : name : '[name]' }}`
+    };
+    window.variant_image_group_quick_view = {{ settings.show_quick_view_variant_image_group }};
+    window.quick_view = {
+        show: {{ settings.show_quick_view }},
+        show_mb: {{ settings.show_quick_view_mb }}
+    };
+    window.quick_shop = {
+        show: {{ settings.show_quick_shop }},
+        see_details: `{{ 'products.product.see_details' | t }}`,
+    };
+    window.quick_cart = {
+        show: {{ settings.show_quick_cart }}
+    };
+    window.cartStrings = {
+        error: `{{ 'sections.cart.cart_error' | t }}`,
+        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`,
+        addProductOutQuantity: `{{ 'sections.cart.cart_quantity_error_alert' | t : maxQuantity: '[maxQuantity]'}}`,
+        addProductOutQuantity2: `{{ 'sections.cart.cart_quantity_error_alert_2' | t }}`,
+        cartErrorMessage: `{{ 'sections.cart.cart_quantity_error_prefix' | t }}`,
+        soldoutText: `{{ 'general.cart.soldout_text' | t }}`,
+        alreadyText: `{{ 'general.cart.already_text' | t }}`,
+    };
+    window.variantStrings = {
+        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+        addingToCart: `{{ 'products.product.adding_to_cart' | t }}`,
+        addedToCart: `{{ 'products.product.added_to_cart' | t }}`,
+        submit: `{{ 'products.product.submit' | t }}`,
+        soldOut: `{{ 'products.product.sold_out' | t }}`,
+        unavailable: `{{ 'products.product.unavailable' | t }}`,
+        soldOut_message: `{{ 'products.product.sold_out_message' | t }}`,
+        unavailable_message: `{{ 'products.product.unavailable_message' | t }}`,
+        addToCart_message: `{{ 'products.product.add_to_cart_message' | t }}`,
+        select: `{{ 'products.product.select_variant' | t }}`,
+        preOrder: `{{ 'products.product.pre_order' | t }}`,
+        add: `{{ 'products.product.add.label__2' | t }}`,
+        unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
+        hide_variants_unavailable: {{ settings.hide_variants_unavailable }}
+    };
+    window.inventory_text = {
+        hotStock: `{{ 'products.product.hot_stock' | t : inventory: '[inventory]' }}`,
+        hotStock2: `{{ 'products.product.hot_stock_2' | t : inventory: '[inventory]' }}`,
+        warningQuantity: `{{ 'products.product.warning_quantity' | t : inventory: '[inventory]' }}`,
+        inStock: `{{ 'products.product.in_stock' | t : inventory: '[inventory]' }}`,
+        outOfStock: `{{ 'products.product.out_of_stock' | t : inventory: '[inventory]' }}`,
+        manyInStock: `{{ 'products.product.many_in_stock' | t : inventory: '[inventory]' }}`,
+        show_options: `{{ 'products.product.show_options' | t }}`,
+        hide_options: `{{ 'products.product.hide_options' | t }}`,
+        adding : `{{ 'products.product.adding' | t }}`,
+        thank_you : `{{ 'products.product.thank_you' | t }}`,
+        add_more : `{{ 'products.product.add_more' | t }}`,
+        cart_feedback : `{{ 'products.product.cart_feedback' | t }}`
+    };
+    {% if settings.show_calculator_free_shipping_message %}
+        {% if settings.calculator_free_shipping_message_price != blank %}
+            window.free_shipping_price = {{ settings.calculator_free_shipping_message_price }};
+        {% else %}
+            window.free_shipping_price = 0;
+        {% endif %}
+        window.free_shipping_text = {
+            free_shipping_message: `{{ 'calculator_free_shipping_message.general.free_shipping_message' | t }}`,
+            free_shipping_message_1: `{{ 'calculator_free_shipping_message.general.free_shipping_message_1' | t }}`,
+            free_shipping_message_2:`{{ 'calculator_free_shipping_message.general.free_shipping_message_2' | t }}`,
+            free_shipping_message_3: `{{ 'calculator_free_shipping_message.general.free_shipping_message_3' | t }}`,
+            free_shipping_message_4: `{{ 'calculator_free_shipping_message.general.free_shipping_message_4' | t }}`,
+            free_shipping_1: `{{ 'calculator_free_shipping_message.general.free_shipping_1' | t }}`,
+            free_shipping_2: `{{ 'calculator_free_shipping_message.general.free_shipping_2' | t }}`
+        };
+    {% endif %}
+    {% if settings.show_notify_form %}
+        window.notify_me = {
+            show: {{ settings.show_notify_form }},
+            mail: `{{ settings.notify_form_mail }}`,
+            subject: `{{ settings.notify_form_subject }}`,
+            label: `{{ settings.notify_form_label }}`,
+            success: `{{ 'notify_form.general.success' | t }}`,
+            error: `{{ 'notify_form.general.error' | t }}`,
+            button: `{{ 'notify_form.general.label' | t }}`
+        };
+    {% else %}
+        window.notify_me = {
+            show: {{ settings.show_notify_form }}
+        };
+    {% endif %}
+    {% if settings.show_ask_an_expert %}
+        window.ask_an_expert = {
+            customer_name: "{{ 'ask_an_expert.general.customer_name' | t }}",
+            customer_mail: "{{ 'ask_an_expert.general.customer_mail' | t }}",
+            customer_phone: "{{ 'ask_an_expert.general.customer_phone' | t }}",
+            customer_message: "{{ 'ask_an_expert.general.customer_message' | t }}",
+            type_radio1: "{{ settings.ask_an_expert_option_1 }}",
+            type_radio2: "{{ settings.ask_an_expert_option_2 }}",
+            subject: "{{ settings.ask_an_expert_subject }}",
+            label: "{{ settings.ask_an_expert_label }}",
+            success: "{{ 'ask_an_expert.general.success' | t }}",
+            error_1: "{{ 'ask_an_expert.general.error_1' | t }}",
+            error_2: "{{ 'ask_an_expert.general.error_2' | t }}"
+        };
+    {% endif %}
+    window.compare = {
+        show: {{ settings.show_compare }},
+        add: `{{ 'compare.general.add' | t }}`,
+        added: `{{ 'compare.general.added' | t }}`,
+        message: `{{ 'compare.general.message' | t }}`
+    };
+    window.wishlist = {
+        show: {{ settings.show_wishlist }},
+        add: `{{ 'wishlist.general.add' | t }}`,
+        added: `{{ 'wishlist.general.added' | t }}`,
+        empty: `{{ 'wishlist.general.empty' | t }}`,
+        continue_shopping: `{{ 'wishlist.general.continue_shopping' | t }}`
+    };
+    window.pagination = {
+        style: {{ settings.pagination_style }},
+        next: `{{ 'general.pagination.next' | t}}`,
+        prev: `{{ 'general.pagination.previous' | t}}`
+    }
+    window.review = {
+        show: {{ settings.show_review }},
+        show_quick_view: {{ settings.show_quick_view_review }}
+    };
+    window.countdown = {
+        text: `{{ settings.countdown_text }}`,
+        day: `{{ 'countdown.general.day' | t }}`,
+        hour: `{{ 'countdown.general.hour' | t }}`,
+        min: `{{ 'countdown.general.min' | t }}`,
+        sec: `{{ 'countdown.general.sec' | t }}`,
+        day_2: `{{ 'countdown.general.day_2' | t }}`,
+        hour_2: `{{ 'countdown.general.hour_2' | t }}`,
+        min_2: `{{ 'countdown.general.min_2' | t }}`,
+        sec_2: `{{ 'countdown.general.sec_2' | t }}`,
+        days: `{{ 'countdown.general.days' | t }}`,
+        hours: `{{ 'countdown.general.hours' | t }}`,
+        mins: `{{ 'countdown.general.mins' | t }}`,
+        secs: `{{ 'countdown.general.secs' | t }}`,
+        d: `{{ 'countdown.general.d' | t }}`,
+        h: `{{ 'countdown.general.h' | t }}`,
+        m: `{{ 'countdown.general.m' | t }}`,
+        s: `{{ 'countdown.general.s' | t }}`
+    };
+    window.customer_view = {
+        text: `{{ 'customer_viewing.general.text' | t : number : '[number]' }}`
+    };
+
+    {% if settings.style_arrows == '02' %}
+        window.arrows = {
+            icon_next: `{{ '<button type="button" class="slick-next" aria-label="Next" role="button"><svg role="img" viewBox="0 0 50 50"><path d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z"></path></svg></button>' }}`,
+            icon_prev: `{{ '<button type="button" class="slick-prev" aria-label="Previous" role="button"><svg role="img" viewBox="0 0 50 50"><path d="M 11.957031 13.988281 C 11.699219 14.003906 11.457031 14.117188 11.28125 14.308594 L 1.015625 25 L 11.28125 35.691406 C 11.527344 35.953125 11.894531 36.0625 12.242188 35.976563 C 12.589844 35.890625 12.867188 35.625 12.964844 35.28125 C 13.066406 34.933594 12.972656 34.5625 12.71875 34.308594 L 4.746094 26 L 48 26 C 48.359375 26.003906 48.695313 25.816406 48.878906 25.503906 C 49.058594 25.191406 49.058594 24.808594 48.878906 24.496094 C 48.695313 24.183594 48.359375 23.996094 48 24 L 4.746094 24 L 12.71875 15.691406 C 13.011719 15.398438 13.09375 14.957031 12.921875 14.582031 C 12.753906 14.203125 12.371094 13.96875 11.957031 13.988281 Z"></path></svg></button>' }}`
+        }
+    {% elsif settings.style_arrows == '03' %}
+        window.arrows = {
+            icon_next: `{{ '<button type="button" class="slick-next" aria-label="Next" role="button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"></path></svg></button>' }}`,
+            icon_prev: `{{ '<button type="button" class="slick-prev" aria-label="Previous" role="button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"></path></svg></button>' }}`
+        }
+    {% elsif settings.style_arrows == '04' %}
+        window.arrows = {
+            icon_next: `{{ '<button type="button" class="slick-next" aria-label="Next" role="button"><svg role="img" data-name="Layer 1" id="Layer_1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><polygon points="150.46 478 129.86 456.5 339.11 256 129.86 55.49 150.46 34 382.14 256 150.46 478"/></svg></button>' }}`,
+            icon_prev: `{{ '<button type="button" class="slick-prev" aria-label="Previous" role="button"><svg role="img" data-name="Layer 1" id="Layer_1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><polygon points="150.46 478 129.86 456.5 339.11 256 129.86 55.49 150.46 34 382.14 256 150.46 478"/></svg></button>' }}`
+        }
+    {% elsif settings.style_arrows == '05' %}
+        window.arrows = {
+            icon_next: `{{ '<button type="button" class="slick-next" aria-label="Next" role="button"><svg role="img" viewBox="0 0 280.66 62.99"><g id="Layer_1-2" data-name="Layer 1"><polygon points="280.66 55.65 225.01 0 219.82 5.19 270.27 55.65 0 55.65 0 62.99 280.66 62.99 280.66 55.65 280.66 55.65 280.66 55.65"/></g></svg></button>' }}`,
+            icon_prev: `{{ '<button type="button" class="slick-prev" aria-label="Previous" role="button"><svg role="img" viewBox="0 0 280.66 62.99"><g id="Layer_1-2" data-name="Layer 1"><polygon points="280.66 55.65 225.01 0 219.82 5.19 270.27 55.65 0 55.65 0 62.99 280.66 62.99 280.66 55.65 280.66 55.65 280.66 55.65"/></g></svg></button>' }}`
+        }
+    {% else %}
+        window.arrows = {
+            icon_next: `{{ '<button type="button" class="slick-next" aria-label="Next" role="button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></button>' }}`,
+            icon_prev: `{{ '<button type="button" class="slick-prev" aria-label="Previous" role="button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M 7.75 1.34375 L 6.25 2.65625 L 14.65625 12 L 6.25 21.34375 L 7.75 22.65625 L 16.75 12.65625 L 17.34375 12 L 16.75 11.34375 Z"></path></svg></button>' }}`
+        }
+    {% endif %}
+
+    window.dynamic_browser_title = {
+        show: {{ settings.show_dynamic_browser_title }},
+        text: '{{ settings.dynamic_browser_title_content | replace: "'","\'" }}'
+    };
+    
+    window.show_more_btn_text = {
+        show_more: `{{ 'sections.collection_template.show_more' | t }}`,
+        show_less: `{{ 'sections.collection_template.show_less' | t }}`,
+        show_all: `{{ 'sections.collection_template.show_all' | t }}`,
+    };
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+    }
+    
+    const cookieAnnouncemenClosed = getCookie('announcement');
+    window.announcementClosed = cookieAnnouncemenClosed === 'closed'
+</script>

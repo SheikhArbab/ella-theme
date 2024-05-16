@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="{{ 'component-size-chart.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-size-chart.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="halo-popup halo-size-chart-popup customPopup-large" data-size-chart-popup id="halo-size-chart-popup">
+	<div class="halo-popup-wrapper">
+		<div class="halo-popup-header">
+			<button type="button" class="halo-popup-close clearfix" data-close-size-chart-popup aria-label="{{ 'general.common.close' | t }}">
+		        {% render 'icon-close' %}
+		       	{{ 'general.common.close' | t }}
+		    </button>
+		    <h5 class="halo-popup-title text-center">
+	            {{ 'size_chart.general.title' | t }}
+	        </h5>
+		</div>
+		<div class="halo-popup-content halo-popup-scroll custom-scrollbar">
+			<div class="halo-size-chart text-center {{ product.metafields.c_f.size_chart }}">
+				{%- if size_chart_type == 'metafield' -%}
+					{% assign img = product.metafields.c_f.size_chart %}
+					<img srcset="{{ img }}"
+		                src="{{ img }}"
+		                loading="lazy"
+		                alt="{{ shop.name | escape }}"
+		            >
+				{%- elsif size_chart_type == 'product_type' -%}
+					{% assign img = size_chart_image | file_url %}
+					<img srcset="{{ img }}"
+		                src="{{ img }}"
+		                loading="lazy"
+		                alt="{{ shop.name | escape }}"
+		            >
+				{%- elsif size_chart_type == 'product_vendor' -%}
+					{% assign img = size_chart_image | file_url %}
+					<img srcset="{{ img }}"
+		                src="{{ img }}"
+		                loading="lazy"
+		                alt="{{ shop.name | escape }}"
+		            >
+				{%- elsif size_chart_type == 'custom_image' -%}
+					{% assign img = size_chart_image %}
+	                <img srcset="{{ img | img_url: 'master' }}"
+		                src="{{ img | img_url: 'master' }}"
+		                loading="lazy"
+		                alt="{{ img.alt | default: shop.name | escape }}"
+		            >
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</div>

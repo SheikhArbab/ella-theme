@@ -1,0 +1,159 @@
+{% comment %}
+    This template will be automatically generated for you if the file doesn't exist,
+    but where's the fun in having no control? Define your layout below.
+
+    The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+    Your theme's settings determine to use the 'default' or 'theme' customer templates.
+    More info:
+    - http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+    Template note:
+        - All IDs on this template are required to make the form(s) submit properly
+
+    For all available customer liquid tags:
+     - http://docs.shopify.com/themes/liquid-variables/customer
+{% endcomment %}
+
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+
+<div class="account-page my-account-page">
+    <div class="container">
+        <h1 class="page-header">
+            {{ 'customer.account.my_account' | t }}
+        </h1>
+        <div class="halo-page-content">
+            <div class="account">
+                <div class="account-body">
+                    <div class="account-item">
+                        <h2 class="account-title text-left">
+                            {{ 'customer.orders.title' | t }}
+                        </h2>
+                        <div class="account-content">
+                            {% paginate customer.orders by 20 %}
+                                {%- if customer.orders.size > 0 -%}
+                                    <table role="table" class="order-history">
+                                        <caption class="visually-hidden">{{ 'customer.orders.title' | t }}</caption>
+                                        <thead role="rowgroup">
+                                            <tr role="row">
+                                                <th id="ColumnOrder" scope="col" role="columnheader">
+                                                    {{ 'customer.orders.order_number' | t }}
+                                                </th>
+                                                <th id="ColumnDate" scope="col" role="columnheader">
+                                                    {{ 'customer.orders.date' | t }}
+                                                </th>
+                                                <th id="ColumnPayment" scope="col" role="columnheader">
+                                                    {{ 'customer.orders.payment_status' | t }}
+                                                </th>
+                                                <th id="ColumnFulfillment" scope="col" role="columnheader">
+                                                    {{ 'customer.orders.fulfillment_status' | t }}
+                                                </th>
+                                                <th id="ColumnTotal" scope="col" role="columnheader">
+                                                    {{ 'customer.orders.total' | t }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody role="rowgroup">
+                                            {%- for order in customer.orders -%}
+                                                <tr role="row">
+                                                    <td
+                                                        id="RowOrder"
+                                                        role="cell"
+                                                        headers="ColumnOrder"
+                                                        data-label="{{ 'customer.orders.order_number' | t }}"
+                                                    >
+                                                        <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
+                                                            {{ order.name }}
+                                                        </a>
+                                                    </td>
+                                                    <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
+                                                        {{ order.created_at | time_tag: format: 'date' }}
+                                                    </td>
+                                                    <td headers="RowOrder ColumnPayment" role="cell" data-label="{{ 'customer.orders.payment_status' | t }}">
+                                                        {{ order.financial_status_label }}
+                                                    </td>
+                                                    <td headers="RowOrder ColumnFulfillment" role="cell" data-label="{{ 'customer.orders.fulfillment_status' | t }}">
+                                                        {{ order.fulfillment_status_label }}
+                                                    </td>
+                                                    <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
+                                                        {{ order.total_price | money_with_currency }}
+                                                    </td>
+                                                </tr>
+                                            {%- endfor -%}
+                                        </tbody>
+                                    </table>
+                                {%- else -%}
+                                    <div class="account-desc text-left">
+                                        <svg enable-background="new 0 0 50 50" height="50px" id="Layer_1" version="1.1" viewBox="0 0 50 50" width="50px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="25" cy="25" fill="none" r="24" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><rect fill="none" height="50" width="50"/><path d="M23.779,16.241c-0.216,0-0.357-0.144-0.357-0.359v-2.618c0-0.215,0.142-0.359,0.357-0.359h2.439  c0.215,0,0.359,0.144,0.359,0.359v2.618c0,0.215-0.145,0.359-0.359,0.359H23.779z M23.852,37.293c-0.215,0-0.358-0.143-0.358-0.358  V20.473c0-0.215,0.144-0.359,0.358-0.359h2.295c0.216,0,0.359,0.144,0.359,0.359v16.462c0,0.216-0.144,0.358-0.359,0.358H23.852z"/></svg> {{ 'customer.orders.none' | t }}
+                                    </div>
+                                {%- endif -%}
+                                {%- if paginate.pages > 1 -%}
+                                    {% render 'pagination', paginate: paginate, anchor: '', class: 'order-pagination pagination-wrapper text-center' %}
+                                {%- endif -%}
+                            {% endpaginate %}
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <h2 class="account-title text-left">
+                            {{ 'customer.addresses.title' | t }}
+                        </h2>
+                        <div class="account-content">
+                            {%- if customer.addresses.size > 0 -%}
+                                <ul class="account-list list-unstyled clearfix">
+                                    {%- for address in customer.addresses limit: 2 -%}
+                                        <li class="account-listItem">
+                                            <div class="account-product">
+                                                <h3 class="account-product-title">
+                                                    {{ address.first_name | capitalize }} {{ address.last_name | capitalize }}
+                                                    {%- if address == customer.default_address -%}
+                                                        <span class="account-product-text">
+                                                            {{ 'customer.addresses.default' | t }}
+                                                        </span>
+                                                    {%- endif -%}
+                                                </h3>
+                                                <ul class="account-product-detail list-unstyled">
+                                                    <li>{{ address.address1 }}</li>
+                                                    <li>{{ address.address2 }}</li>
+                                                </ul>
+                                                {%- if address.zip or address.country -%}
+                                                    <ul class="account-product-detail list-unstyled">
+                                                        <li>
+                                                            <span class="account-product-label">{{ 'customer.addresses.zip' | t }}: </span>
+                                                            {{ address.zip | upcase }}
+                                                        </li>
+                                                        <li>
+                                                            <span class="account-product-label">{{ 'customer.addresses.country' | t }}: </span>
+                                                            {{ address.country }}
+                                                        </li>
+                                                    </ul>
+                                                {%- endif -%}
+                                                {%- if address.phone -%}
+                                                    <ul class="account-product-detail list-unstyled">
+                                                        <li>{{ address.phone }}</li>
+                                                    </ul>
+                                                {%- endif -%}
+                                            </div>
+                                        </li>
+                                    {%- endfor -%}
+                                </ul>
+                                <div class="account-action">
+                                    <a href="{{ routes.account_addresses_url }}" class="button button--primary">
+                                        <span class="text">{{ 'customer.account.view_addresses' | t }} <span class="count">{{ customer.addresses_count }}</span></span>
+                                    </a>
+                                </div>
+                            {%- else -%}
+                                <div class="account-desc text-left">
+                                    <svg enable-background="new 0 0 50 50" height="50px" id="Layer_1" version="1.1" viewBox="0 0 50 50" width="50px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="25" cy="25" fill="none" r="24" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><rect fill="none" height="50" width="50"/><path d="M23.779,16.241c-0.216,0-0.357-0.144-0.357-0.359v-2.618c0-0.215,0.142-0.359,0.357-0.359h2.439  c0.215,0,0.359,0.144,0.359,0.359v2.618c0,0.215-0.145,0.359-0.359,0.359H23.779z M23.852,37.293c-0.215,0-0.358-0.143-0.358-0.358  V20.473c0-0.215,0.144-0.359,0.358-0.359h2.295c0.216,0,0.359,0.144,0.359,0.359v16.462c0,0.216-0.144,0.358-0.359,0.358H23.852z"/></svg> {{ 'customer.addresses.none' | t }}
+                                </div>
+                                <div class="account-action">
+                                    <a href="{{ routes.account_addresses_url }}" class="button button--primary">
+                                      {{ 'customer.account.view_addresses' | t }} <span class="count">{{ customer.addresses_count }}</span>
+                                    </a>
+                                </div>
+                            {%- endif -%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

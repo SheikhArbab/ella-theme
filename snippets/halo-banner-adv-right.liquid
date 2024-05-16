@@ -1,0 +1,16 @@
+{%- if settings.layout_body == 'boxed' -%}
+    {%- if settings.banner_adv_left != blank or settings.banner_adv_right != blank -%}
+    <div class="halo-widget-banner">
+        {%- if settings.banner_adv_right != blank -%}
+        <div class="halo-banner-image" style="max-width: {{settings.banner_adv_right.width}}px; margin: 0 auto;">
+            {%- liquid
+                assign image_right = settings.banner_adv_right
+                assign link_right = settings.link_right
+            -%}
+            <a class="image image-adapt adaptive_height"{% if link_right == blank %} role="link" aria-disabled="true"{% else %} href="{{ link_right }}"{% endif %} style="padding-top: {{ 1 | divided_by: image_right.aspect_ratio | times: 100 | append: '%' }}" title="{{ image.alt | default: shop.name | escape }}">
+                <img {% if settings.enable_lazyload %}data-{% endif %}srcset="{{ image_right | img_url: 'master'}}" {% unless settings.enable_lazyload %}src="{{ image_right | img_url: 'master' }}"{% endunless %} alt="{{ image.alt | default: shop.name | escape }}" loading="lazy" {% if settings.enable_lazyload %}class="lazyload"{% endif %}>{% if settings.enable_lazyload %}<span class="data-lazy-loading"></span>{% endif %}</a>
+        </div>
+        {%- endif -%}
+    </div>
+    {%- endif -%}
+{%- endif -%}

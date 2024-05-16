@@ -1,0 +1,24 @@
+<div class="halo-top-language">
+    <div class="btn-group disclosure">
+        {% assign logoActive = '' %}
+        {% for i in (1..6) %}
+        {% capture lang_unit %}lange_{{ i }}{% endcapture %}
+        {% capture i-lang_unit %}i-lang-{{ i }}{% endcapture %}
+        {% assign currency_length = settings[i-lang_unit] | size %}
+        {% if settings[lang_unit] == localization.language.iso_code %}
+        {% assign logoActive = settings[i-lang_unit] %}
+        {% endif %}
+        {% endfor %}
+        <button type="button" class="disclosure__button dropdown-toggle dropdown-label localization-form__select localization-selector link link--text caption-large" aria-controls="HeaderLanguageList" aria-describedby="HeaderLanguageLabel" aria-label="{{ localization.language.iso_code }}">
+            <span class="icon">{{ logoActive }}</span> <span class="text text-language">{{ localization.language.iso_code }}</span>
+            {%- if localization.available_languages.size > 1 -%}
+                {%- if icon == 'sort' -%}
+                    {% render 'icon-sort-down' %}
+                {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" id="Capa_1" enable-background="new 0 0 551.13 551.13" height="512" viewBox="0 0 551.13 551.13" width="512"><path d="m275.565 361.679-223.897-223.896h-51.668l275.565 275.565 275.565-275.565h-51.668z"/></svg>
+                {%- endif -%}
+            {%- endif -%}
+        </button>
+    </div>
+    <div class="dropdown-language">{% if settings.enable_multilang_shopify %}{% render 'halo-language' %}{% endif %}</div>
+</div>

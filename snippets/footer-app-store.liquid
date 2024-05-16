@@ -1,0 +1,22 @@
+{%- liquid
+    assign app_store_heading = block.settings.app_store_heading
+    assign app_store_img_1 = block.settings.app_store_img_1
+    assign app_store_link_1 = block.settings.app_store_link_1
+    assign app_store_img_2 = block.settings.app_store_img_2
+    assign app_store_link_2 = block.settings.app_store_link_2
+-%}
+<div class="footer-block__app-store">
+    {%- if app_store_heading != blank -%}
+        <h2 class="footer-block__heading">{{- app_store_heading | escape -}}</h2>       
+    {%- endif -%}
+    <div class="item clearfix">
+        {%- if app_store_img_1 != blank -%}
+            {%- assign preview_img_1 = app_store_img_1 -%}
+            <a {% if app_store_link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ app_store_link_1 }}" target="_blank"{% endif %}><img srcset="{{ preview_img_1 | img_url: '140x', crop: 'center' }}" src="{{ preview_img_1 | img_url: '140x', crop: 'center' }}" alt="{{ preview_img_1.alt | default: shop.name | escape }}" loading="lazy"></a>
+        {%- endif -%}
+        {%- if app_store_img_2 != blank -%}
+            {%- assign preview_img_2 = app_store_img_2 -%}
+            <a {% if app_store_link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ app_store_link_2 }}" target="_blank"{% endif %}><img srcset="{{ preview_img_2 | img_url: '140x', crop: 'center' }}" src="{{ preview_img_2 | img_url: '140x', crop: 'center' }}" alt="{{ preview_img_2.alt | default: shop.name | escape }}" loading="lazy"></a>
+        {%- endif -%}
+    </div>  
+</div>

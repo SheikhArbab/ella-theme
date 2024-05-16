@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="{{ 'component-sticky-add-to-cart-mobile.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-sticky-add-to-cart-mobile.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="productView-options{% if enable_border_top %} has-border-top{% endif %}{% if enable_border_bottom %} has-border-bottom{% endif %}" style="--color-border: {{ color_border }}">
+    {%- if variantCount > 0  and product.has_only_default_variant != true  -%}
+        <div class="productView-variants halo-productOptions" id="product-option-{{ product.id }}">
+            {%- if picker_type == 'button' -%}
+                {%- assign product_swatch_option = settings.swatch | downcase -%}
+                <variant-sticky-radios class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                    {%- for option in product.options_with_values -%}
+                        {%- liquid
+                            assign is_swatch = false
+                            assign option_name = option.name | downcase
+                            if product_swatch_option contains option_name
+                                assign is_swatch = true
+                            endif
+                            assign swatch_type = settings.swatch_type
+                            assign option_index = forloop.index0
+                        -%}
+                        <fieldset class="js product-form__input mobile{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ forloop.index0 }}">
+                            <legend class="form__label">
+                                {{ option.name | append: ':' }}
+                                <span data-header-option>
+                                    {{ option.selected_value }}
+                                </span>
+                            </legend>
+                            {%- assign values = '' -%}
+                            {%- for variant in product.variants -%}
+                                {%- assign value = variant.options[option_index] -%}
+                                {%- unless values contains value -%}
+                                    {%- liquid
+                                        assign values = values | join: ';'
+                                        assign values = values | append: ';' | append: value
+                                        assign values = values | split: ';'
+                                    -%}
+                                    <input class="product-form__radio mobile" type="radio" id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-mobile"
+                                        name="{{ option.name }}-mobile"
+                                        value="{{ value | escape }}"
+                                        {% if option.selected_value == value %}checked{% endif %}
+                                        data-variant-id="{{ variant.id }}"
+                                    >
+                                    {%- if is_swatch -%}
+                                        {%- liquid
+                                            assign enable_variant_image = false
+                                            case swatch_type
+                                                when 'variant_image'
+                                                    assign background_image = variant.image.src | product_img_url: '40x'
+                                                    if variant.image
+                                                        assign enable_variant_image = true
+                                                    endif
+                                                when 'color'
+                                                    assign background_image = value | handle | append: '.png' | file_url
+                                                    assign enable_variant_image = true
+                                                when 'metafields'
+                                                    assign variant_color = variant.metafields.custom.variant_color
+                                                    assign color_codes = false
+                    
+                                                    if variant_color
+                                                        assign enable_variant_image = true
+                                                    
+                                                        if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                                            assign color_codes = true
+                                                            assign background_color = variant_color
+                                                        else
+                                                            assign background_image = variant_color | append: '.png' | file_url
+                                                        endif
+                                                    elsif variant.image
+                                                        assign enable_variant_image = true
+                                                        assign background_image = variant.image.src | product_img_url: '40x'
+                                                    endif
+                                            endcase
+                                        -%}
+                                        <label class="product-form__label mobile{% if variant.available %} available{% else %} soldout{% endif %}" name="{{ option.name }}-mobile" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-mobile" data-variant-id="{{ variant.id }}">
+                                            <span
+                                                class="pattern"
+                                                style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                            ></span>
+                                            {% if swatch_type == 'variant_image' and variant.image %}
+                                                <span class="expand">
+                                                    <img srcset="{{ variant.image.src | product_img_url: '75x'}}" src="{{ variant.image.src | product_img_url: '75x'}}" sizes="auto" loading="lazy">
+                                                </span>
+                                            {% endif %}
+                                        </label>
+                                    {%- else -%}   
+                                        <label class="product-form__label mobile{% if variant.available %} available{% else %} soldout{% endif %}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-mobile" data-variant-id="{{ variant.id }}">
+                                            <span class="text">{{ value }}</span>
+                                        </label>
+                                    {%- endif -%}
+                                {%- endunless -%}
+                            {%- endfor -%}
+                        </fieldset>
+                    {%- endfor -%}
+                    <script type="application/json">
+                        {{ product.variants | json }}
+                    </script>
+                </variant-sticky-radios>
+            {%- else -%}
+                <variant-selects class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                    {%- for option in product.options_with_values -%}
+                        <div class="product-form__input mobile product-form__input--dropdown" data-product-attribute="set-select" data-option-index="{{ forloop.index0 }}">
+                            <label class="form__label" for="option-{{ forloop.index0 }}">
+                                {{ option.name | append: ':' }}
+                                <span data-header-option>
+                                    {{ option.selected_value }}
+                                </span>
+                            </label>
+                            <div class="form__select select">
+                                <select id="option-{{ forloop.index0 }}"
+                                    class="select__select"
+                                    name="options[{{ option.name | escape }}]"
+                                >
+                                    {%- for value in option.values -%}
+                                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                    <script type="application/json">
+                        {{ product.variants | json }}
+                    </script>
+                </variant-selects>
+            {%- endif -%}
+        </div>
+        <noscript>
+            <div class="product-form__input mobile{% if product.has_only_default_variant %} hidden{% endif %}">
+                <label class="form__label" for="Variants-{{ section.id }}">
+                    {{ 'products.product.product_variants' | t }}
+                </label>
+                <div class="select">
+                <select name="id" id="Variants-{{ section.id }}" class="select__select" form="product-form">
+                    {%- for variant in product.variants -%}
+                        <option
+                            {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                            {% if variant.available == false %}disabled{% endif %}
+                            value="{{ variant.id }}"
+                        >
+                            {{ variant.title }}
+                            {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                            - {{ variant.price | money | strip_html }}
+                        </option>
+                    {%- endfor -%}
+              </select>
+            </div>
+          </div>
+        </noscript>
+    {%- endif -%}
+</div>

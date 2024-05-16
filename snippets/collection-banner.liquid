@@ -1,0 +1,18 @@
+<div class="collection-banner{% if show_image_parallax %} collection-banner--parallax{% endif %}{% if show_bg_overlay %} collection-banner--overlay{% endif %}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" {% if show_image_parallax %} style="background-image: url({{ image | img_url: '1920x' }});"{% endif %}>
+    {%- if image != blank -%}
+        <div class="image image-adapt" style="padding-top: {% unless image.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image.aspect_ratio | times: 120 | append: '%' }};{% else %}{{ 1 | divided_by: image.aspect_ratio | times: 100 | append: '%' }};{% endunless %}">
+            <img srcset="{{ image | img_url: '1920x' }}" src="{{ image | img_url: '1920x', crop: 'center' }}" alt="{{ image.alt | default: shop.name | escape }}" loading="lazy" {% unless image.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image.presentation.focal_point }}"{% endunless %}>
+        </div>
+    {%- endif -%}
+    {%- if image_mobile != blank -%}
+        <div class="image image-mobile image-adapt" style="padding-top: {% unless image_mobile.presentation.focal_point == '50.0% 50.0%' %}{{ 1 | divided_by: image_mobile.aspect_ratio | times: 120 | append: '%' }};{% else %}{{ 1 | divided_by: image_mobile.aspect_ratio | times: 100 | append: '%' }};{% endunless %}">
+            <img srcset="{{ image_mobile | img_url: 'master' }}" src="{{ image_mobile | img_url: 'master' }}" alt="{{ image_mobile.alt | default: shop.name | escape }}" loading="lazy" {% unless image_mobile.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image_mobile.presentation.focal_point }}"{% endunless %}>
+        </div>
+    {%- else -%}
+        {%- if image != blank -%}
+            <div class="image image-mobile image-adapt from-desktop" style="padding-top: 55%">
+                <img srcset="{{ image | img_url: '420x', crop: 'center' }}" src="{{ image | img_url: '420x', crop: 'center' }}" alt="{{ image.alt | default: shop.name | escape }}" loading="lazy" {% unless image.presentation.focal_point == '50.0% 50.0%' %}style="object-position: {{ image.presentation.focal_point }}"{% endunless %}>
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+</div>

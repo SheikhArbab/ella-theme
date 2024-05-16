@@ -1,0 +1,171 @@
+{%- if section.settings.show_product_bundle -%}
+    {% if product.metafields.c_f.grouped_sub_product %}
+        {%- assign handle_metafields =  product.metafields.c_f.grouped_sub_product | split: ',' -%}
+        {%- assign handle_size =  handle_metafields | size -%}
+
+        <link rel="stylesheet" href="{{ 'component-product-bundle.css' | asset_url }}" media="print" onload="this.media='all'">
+        <noscript>{{ 'component-product-bundle.css' | asset_url | stylesheet_tag }}</noscript>
+
+        {%- liquid
+            assign padding_top = section.settings.padding_top | append: 'px'
+            assign padding_bottom = section.settings.padding_bottom | append: 'px'
+            assign padding_top_tablet = section.settings.padding_top_tablet | append: 'px'
+            assign padding_bottom_tablet = section.settings.padding_bottom_tablet | append: 'px'
+            assign padding_top_mobile = section.settings.padding_top_mobile | append: 'px'
+            assign padding_bottom_mobile = section.settings.padding_bottom_mobile | append: 'px'
+            assign container = section.settings.container
+            assign background_color = section.settings.background_color
+            assign block_title = section.settings.block_title
+            assign block_title_align = section.settings.block_title_align
+            assign block_dots = section.settings.block_dots
+            assign block_arrows = section.settings.block_arrows
+            assign product_style = section.settings.product_style
+            assign image_ratio = section.settings.block_image_ratio
+            assign portrait_aspect_ratio = 148
+            assign handle_metafields = product.metafields.c_f.grouped_sub_product | split: ','
+            assign bundle_discount = section.settings.bundle_discount
+
+            if bundle_discount
+                assign bundle_discount_rate = product.metafields.c_f.bundle_discount_rate | plus: 0 | divided_by: 100.00
+                assign bundle_discount_text = section.settings.bundle_discount_text
+                assign bundle_discount_text_color =  section.settings.bundle_discount_text_color
+            endif
+
+            
+            assign total_btn_color = section.settings.total_btn_color
+            assign total_btn_border = section.settings.total_btn_border
+            assign total_btn_bg = section.settings.total_btn_bg
+            assign total_btn_bg_gradient = section.settings.total_btn_bg_gradient
+            
+            assign total_btn_color_hover = section.settings.total_btn_color_hover
+            assign total_btn_border_hover = section.settings.total_btn_border_hover
+            assign total_btn_bg_hover = section.settings.total_btn_bg_hover
+            assign total_btn_bg_gradient_hover = section.settings.total_btn_bg_gradient_hover
+        -%}
+        <style type="text/css" media="screen">
+            #halo-product-bundle{
+                padding-top: {{ padding_top }};
+                padding-bottom: {{ padding_bottom }};
+                background: {{ background_color }};
+            }
+
+            #halo-product-bundle .bundle-product-text{
+                color: {{ bundle_discount_text_color }};
+            }
+
+            #halo-product-bundle .bundle-product-action .button{
+                background: {% if total_btn_bg_gradient != blank %}{{ total_btn_bg_gradient }}{% else %}{{ total_btn_bg }}{% endif %};
+                color: {{ total_btn_color }};
+                border-color: {{ total_btn_border }};
+            }
+
+            @media (max-width: 1024px) {
+                #halo-product-bundle{
+                    padding-top: {{ padding_top_tablet }};
+                    padding-bottom: {{ padding_bottom_tablet }};
+                }
+            }
+
+            @media (max-width: 550px) {
+                #halo-product-bundle{
+                    padding-top: {{ padding_top_mobile }};
+                    padding-bottom: {{ padding_bottom_mobile }};
+                }
+            }
+
+            @media (min-width: 1025px) {
+                #halo-product-bundle .bundle-product-action .button:hover{
+                    background: {% if total_btn_bg_gradient_hover != blank %}{{ total_btn_bg_gradient_hover }}{% else %}{{ total_btn_bg_hover }}{% endif %};
+                    color: {{ total_btn_color_hover }};
+                    border-color: {{ total_btn_border_hover }};
+                }
+            }
+        </style>
+
+        <script>
+            window.total_btn = {
+                add_item: `{{ 'products.product.bundle_block.add_item_to_cart' | t }}`,
+                add_items: `{{ 'products.product.bundle_block.add_items_to_cart' | t }}`,
+                add_all_item: `{{ 'products.product.bundle_block.add_all_to_cart' | t }}`
+            }
+        </script>
+
+        <product-bundle class="halo-block halo-product-bundle frequently-bought-together-block{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" data-product-bundle id="halo-product-bundle">
+            <div class="container container-{{ container }}">
+                {%- if block_title != blank -%}
+                    <div class="halo-block-header text-{{ block_title_align }}">
+                        <h3 class="title text-{{ block_title_align }}">
+                            <span class="text text-{{ block_title_align }}">
+                                {{ block_title | escape }}
+                            </span>
+                        </h3>
+                    </div>
+                {%- endif -%}
+                <div class="halo-block-content">
+                    <div class="bundle-product">
+                        {%- assign product_form_bundle_id = 'product-form-bundle-' | append: product.id -%}
+                        {%- form 'product', product, id: product_form_bundle_id, class: 'frequently-bought-together-form' -%}
+                            <div class="bundle-product-wrapper has-halo-block-loader">
+                                <div class="halo-block-loader"></div>
+                                <div class="bundle-product-left">
+                                    <div class="bundle-product-list" data-bundle-slider data-dots="{{ block_dots }}" data-arrows="{{ block_arrows }}">
+                                        {%- render 'product-bundle-item',
+                                            product: product,
+                                            product_style: product_style,
+                                            image_ratio: image_ratio,
+                                            portrait_aspect_ratio: portrait_aspect_ratio,
+                                            first: true
+                                        -%}
+                                        {%- for handle in handle_metafields limit: 10 -%}
+                                            {%- liquid
+                                                assign handle_bundle = handle | strip
+                                                assign product = all_products[handle_bundle]
+                                            -%}
+                                            {%- render 'product-bundle-item',
+                                                product: product,
+                                                product_style: product_style,
+                                                image_ratio: image_ratio,
+                                                portrait_aspect_ratio: portrait_aspect_ratio,
+                                                first: false
+                                            -%}
+                                        {%- endfor -%}
+                                    </div>
+                                </div>
+                                <div class="bundle-product-right">
+                                    <div class="bundle-product-total">
+                                        <div class="bundle-product-totalPrice">
+                                            <span class="text">
+                                                {{ 'products.product.bundle_block.total_price' | t }}
+                                            </span>
+                                            {%- if bundle_discount_rate > 0 -%}
+                                                <span class="old-price bundle-old-price">
+                                                    {{ cart.total_price | money }}
+                                                </span>
+                                                <span class="bundle-price" data-bundle-product-price data-bundle-discount-rate="{{ bundle_discount_rate }}">
+                                                    {%- assign compensation = 1 | minus: bundle_discount_rate -%}
+                                                    {{ cart.total_price | times: compensation | money }}
+                                                </span>
+                                            {%- endif -%}
+                                            <span class="price" data-bundle-product-total>
+                                                {{ cart.total_price | money }}
+                                            </span>
+                                        </div>
+                                        <div class="bundle-product-action">
+                                            <input data-bundle-addToCart type="submit" name="add" data-form-id="{{ product_form_bundle_id | prepend : '#' }}" class="button button--primary button-bundle style-{{ total_btn_style }}" value="{{ 'products.product.bundle_block.add_all_to_cart' | t }}">
+                                        </div>
+                                        {%- if bundle_discount_rate > 0 -%}
+                                            <div class="bundle-product-text">
+                                                {{ bundle_discount_text }}
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            </div>
+                        {%- endform -%}
+                    </div>
+                </div>
+            </div>
+        </product-bundle>
+        <script src="{{ 'product-bundle.js' | asset_url }}" defer></script>
+    {% endif %}
+{% endif %}

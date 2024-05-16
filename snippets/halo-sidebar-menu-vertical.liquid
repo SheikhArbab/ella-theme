@@ -1,0 +1,58 @@
+<div class="halo-sidebar halo-sidebar-left halo-sidebar_menu halo-sidebar_menu_vertical" id="navigation-mobile">
+    <button type="button" class="halo-sidebar-close" data-menu-close-sidebar aria-label="{{ 'general.common.close' | t }}">
+      {% render 'icon-close' %}
+      {{ 'general.common.close' | t }}
+    </button>
+    <div class="halo-sidebar-wrapper custom-scrollbar">
+      <div class="nav-tabs-mb">
+          <div class="nav-tabs-title nav-main-tabs{% unless settings.enable_tab_categories %} no-tab-categories{% endunless %}">
+              <a href="#tab-menu-main">{{ 'general.common.menu' | t }}</a>
+          </div>
+          {% if settings.enable_tab_categories %}
+            <div class="nav-tabs-title">
+               <a href="#tab-menu-vertical">{{ 'general.common.categories' | t }}</a>
+            </div>
+          {% endif %}
+      </div>
+      <div class="nav-tabs-content">
+        <div class="wrapper-nav-tab" id="tab-menu-main">
+        	<div class="site-nav-mobile nav">
+        	</div>
+        	<div class="site-nav-mobile nav-account">
+      			{%- if shop.customer_accounts_enabled -%}
+      			    <div class="customer-links {% if customer %}customer-login{% endif %}">
+                        	{% if customer %}
+                            <a class="header__link--account customer_logount" id="customer_logout_link" href="{{ routes.account_logout_url }}">
+                              {{ 'customer.log_out' | t }}
+                            </a>
+                            <span>/</span>
+                            <a class="header__link--account customer_acc" href="{{ routes.account_url }}">
+                              {{ 'customer.account.my_account' | t }}
+                            </a>
+                        	{% else %}  
+                            <a class="header__link--account" id="customer_login_link" href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}">
+                              {{ 'customer.sign_in' | t }}
+                            </a>
+                            <a class="header__link--account" id="customer_register_link" href="{{ routes.account_register_url }}">
+                              {{ 'customer.create_account' | t }}
+                            </a>
+                        	{% endif %}                                   
+                      </div>
+      			{%- endif -%}
+      			{%- if settings.show_wishlist -%}
+      			    <a href="{{ pages['wish-list'].url }}" class="header__icon header__icon--wishlist link link--text focus-inset">
+      			        <span class="title">
+      			            {{ 'wishlist.general.title' | t }}
+      			        </span>
+      			    </a>
+      			{%- endif -%}
+    			  <div class="wrapper-links"></div>
+        	</div>
+        	<div class="site-nav-mobile nav-currency-language">
+          </div>
+        </div>
+        <div class="wrapper-nav-tab site-nav-mobile" id="tab-menu-vertical">
+        </div>
+      </div>
+    </div>
+</div>

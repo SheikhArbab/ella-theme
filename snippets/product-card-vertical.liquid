@@ -1,0 +1,21 @@
+{%- assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio -%}
+<div class="card-vertical__image">
+    <a class="card-media" href="{{ product_card_product.url | within: collection }}"{% if product_card_product.featured_media %} style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"{% endif %}>
+    {%- if product_card_product.featured_media -%}
+        <img {% render 'lazyload',preview_img: product_card_product.featured_media, class: true  %} />
+        {%- if settings.enable_lazyload -%}<span class="data-lazy-loading"></span>{%- endif -%}
+    {%- else -%}
+        {%- capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture -%}
+        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+    </a>
+</div>
+<div class="card-vertical__information text-left">
+    {%- if settings.show_vendor -%}
+        <div class="card-information__group">
+            <div class="card-vendor"><span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span> {{ product_card_product.vendor | link_to_vendor }}</div>
+        </div>
+    {%- endif -%}
+    <h3 class="card__heading"><a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}" href="{{ product_card_product.url | within: collection }}" data-product-title="{{ product_card_product.title | escape }}" data-product-url="{{ product_card_product.url | within: collection }}">{{ product_card_product.title | escape }}</a></h3>
+    <div class="card-price">{% render 'price', product: product_card_product, price_class: '' %}</div>
+</div>

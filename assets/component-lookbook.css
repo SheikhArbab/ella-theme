@@ -1,0 +1,18 @@
+.lookbook-container .breadcrumb {
+    padding-top: 10px;
+    margin-top: 8px;
+    padding-bottom: 10px;
+    margin-bottom: -2px;
+}
+
+.lookbook-container .breadcrumb + .page-header {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    margin-bottom: -2px;
+}
+
+@media (max-width: 1024px) {
+    .lookbook-container .breadcrumb {
+        margin-top: 0;
+    }
+}

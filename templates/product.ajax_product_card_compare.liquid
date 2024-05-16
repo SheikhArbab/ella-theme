@@ -1,0 +1,9 @@
+{% layout none %}
+
+{% render 'product-card-compare',
+    product_card_product: product,
+    portrait_aspect_ratio: '125',
+    serial: forloop.index,
+    sectionId: sectionId,
+    loading: true
+%}

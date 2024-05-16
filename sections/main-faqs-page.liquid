@@ -1,0 +1,715 @@
+<link rel="stylesheet" href="{{ 'component-faqs.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-faqs.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+    assign show_faqs_filter = section.settings.show_faqs_filter
+    assign faqs_text = section.settings.faqs_text
+    assign faqs_message_heading = section.settings.faqs_message_heading
+    assign faqs_message_text = section.settings.faqs_message_text
+    assign message_method_icon_1 = section.settings.message_method_icon_1
+    assign message_method_link_1 = section.settings.message_method_link_1
+    assign message_method_text_1 = section.settings.message_method_text_1
+    assign message_method_icon_2 = section.settings.message_method_icon_2
+    assign message_method_link_2 = section.settings.message_method_link_2
+    assign message_method_text_2 = section.settings.message_method_text_2
+
+    assign contact_content_text = section.settings.contact_content_text
+    assign contact_text = section.settings.contact_text
+    assign contact_link = section.settings.contact_link
+
+    assign contact_color = section.settings.contact_color
+    assign contact_color_border = section.settings.contact_color_border
+    assign contact_color_bg = section.settings.contact_color_bg
+    assign contact_color_bg_gradient = section.settings.contact_color_bg_gradient
+
+    assign contact_color_hover = section.settings.contact_color_hover
+    assign contact_color_border_hover = section.settings.contact_color_border_hover
+    assign contact_color_bg_hover = section.settings.contact_color_bg_hover
+    assign contact_color_bg_gradient_hover = section.settings.contact_color_bg_gradient_hover
+-%}
+
+<faqs-item data-section-id="{{ section.id }}" data-section-type="faqs" id="FaqsSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="faq-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+        {%- if show_breadcrumb -%}
+            {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+        {%- endif -%}
+        {%- if show_page_title -%}
+            <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                {{ page.title | escape }}
+            </h1>
+        {%- endif -%}
+        <div class="halo-page-content halo-faqs-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+            {%- if section.blocks.size > 0 -%}
+                <div class="faqs">
+                    {%- if faqs_text != blank -%}
+                        <div class="faqs-desc{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {{ faqs_text }}
+                        </div>
+                    {%- endif -%}
+                    {%- if show_faqs_filter -%}
+                        <div class="faqs-filter clearfix{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}" id="haloFAQsFilter">
+                            <span class="faqs-filterLabel">{{ 'faqs.general.filter' | t }}</span>
+                            <div class="faqs-filterDropdown">
+                                <div class="faqs-filterDropdown-text" data-faqs-filter role="button" tabindex="0">
+                                    <span class="text">{{ 'faqs.general.all' | t }}</span>
+                                    <div class="halo-icon-dropdown icon-dropdown" data-dropdown-arrow role="none"></div>
+                                </div>
+                                <ul class="faqs-filterDropdown-menu clearfix">
+                                    <li class="is-active">
+                                        <span class="text">{{ 'faqs.general.all' | t }}</span>
+                                    </li>
+                                    {%- for block in section.blocks -%}
+                                        {%- liquid
+                                            assign title = block.settings.title
+                                        -%}
+                                        {%- if title != blank -%}
+                                            <li data-value="paragraph-{{ title | handleize }}">
+                                                <span class="text">{{ title | escape }}</span>
+                                            </li>
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                </ul>
+                            </div>
+                        </div>
+                    {%- endif -%}
+                    <div class="faqs-message-and-questions">
+                        <div class="faqs-message{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {% if faqs_message_heading != blank %}
+                                <h3 class="faqs-title faqs-message-heading page-subheader">
+                                    {{ faqs_message_heading | escape }}
+                                </h3>
+                            {% endif %}
+                            {% if faqs_message_text != blank %}
+                                <p class="faqs-text">
+                                    {{ faqs_message_text }}
+                                </p>
+                            {% endif %}
+                            {% if message_method_icon_1 != blank or message_method_icon_2 != blank %}
+                                <div class="faqs-icon-container">
+                                    {% if message_method_icon_1 != blank %}
+                                        <{% if message_method_link_1 != blank %}a href={{ message_method_link_1.url }}{% else %}div{% endif %} class='message-icon-1 message-icon'>
+                                            <img src="{{ message_method_icon_1 | image_url }}" width="{{ message_method_icon_1.width }}" height="{{ message_method_icon_2.height }}" loading="lazy"/>
+                                            {% if message_method_text_1 != blank %}
+                                                <span class="message-icon-text-1">{{ message_method_text_1 }}</span>
+                                            {% endif %}
+                                        </{% if message_method_link_1 != blank %}a{% else %}div{% endif %}>                                      
+                                    {% endif %}
+                                    {% if message_method_icon_2 != blank %}
+                                        <{% if message_method_link_2 != blank %}a href={{ message_method_link_2.url }}{% else %}div{% endif %} class='message-icon-2 message-icon'>
+                                            <img src="{{ message_method_icon_2 | image_url }}" width="{{ message_method_icon_1.width }}" height="{{ message_method_icon_2.height }}" loading="lazy"/>
+                                            {% if message_method_text_2 != blank %}
+                                                <span class="message-icon-text-2">{{ message_method_text_2 }}</span>
+                                            {% endif %}
+                                        </{% if message_method_link_2 != blank %}a{% else %}div{% endif %}>                                      
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="faqs-questions-and-answers{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                        {%- for block in section.blocks -%}
+                            {%- liquid
+                                assign title = block.settings.title
+                            -%}
+                            <div class="faqs-paragraph" id="paragraph-{{ title | handleize }}">
+                                    {%- if title != blank -%}
+                                        <h3 class="faqs-title page-subheader{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                            {{ title | escape }}
+                                        </h3>
+                                    {%- endif -%}
+                                    <div class="faqs-body">
+                                        <div class="faqs-row">
+                                            {%- for i in (1..10) -%}
+                                                {% capture cap_question %}question_{{ i }}{% endcapture %}
+                                                {% capture cap_answer %}answer_{{ i }}{% endcapture %}
+
+                                                {%- liquid
+                                                    assign question = block.settings[cap_question]
+                                                    assign answer = block.settings[cap_answer]
+                                                -%}
+
+                                                {%- if question != blank -%}
+                                                    <div class="faqs-item{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                                                        <div class="card" id="#accordion-{{ block.id }}-{{ forloop.index }}">
+                                                            <div class="card-header collapsed" id="question-{{ block.id }}-{{ forloop.index }}" data-toggle="collapse" data-target="#collapse-{{ block.id }}-{{ forloop.index }}" aria-expanded="true" aria-controls="collapse-{{ block.id }}-{{ forloop.index }}">
+                                                                <div class="title" role="button" tabindex="0">
+                                                                    {{ question }}
+                                                                </div>
+                                                                <span class="icon-plus arrow" role="none"></span>
+                                                            </div>
+                                                            <div id="collapse-{{ block.id }}-{{ forloop.index }}" class="collapse" data-parent="#accordion">
+                                                                <div class="card-body" id="answer-{{ block.id }}-{{ forloop.index }}">
+                                                                    <div class="">
+                                                                        {{ answer }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        </div>
+                                    </div>
+                                </div>
+                        {%- endfor -%}
+                        </div>
+                    </div>
+                </div>
+            {%- endif -%}
+        </div>
+        {% if contact_text != blank %}
+            <div class="contact-support-button-wrapper{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                <span class="contact-support-text">{{ contact_content_text }}</span>
+                <a {% if contact_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ contact_link }}"{% endif %} class="contact-support-btn" style="--button-color-style: {{ contact_color }};
+                                                                                --button-border-color-style: {{ contact_color_border }};
+                                                                                --button-bg-color-style: {% if contact_color_bg_gradient != blank %}{{ contact_color_bg_gradient }}{% else %}{{ contact_color_bg }}{% endif %};
+                                                                                --button-color-hover-style: {{ contact_color_hover }};
+                                                                                --button-border-color-hover-style: {{ contact_color_border_hover }};
+                                                                                --button-bg-color-hover-style: {% if contact_color_bg_gradient_hover != blank %}{{ contact_color_bg_gradient_hover }}{% else %}{{ contact_color_bg_hover }}{% endif %}">
+                    {{ contact_text }}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</faqs-item>
+
+<script src="{{ 'halo-faqs.js' | asset_url }}" defer></script>
+
+<style type="text/css" media="screen">
+    #FaqsSection-{{ section.id }}{
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+
+    @media (max-width: 1024px) {
+        #FaqsSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+
+        #FaqsSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+
+    @media (max-width: 550px) {
+        #FaqsSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #FaqsSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+        
+        #FaqsSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+{% schema %}
+    {
+        "name": "t:sections.main_faqs.name",
+        "settings":
+        [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.breadcrumb.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.breadcrumb.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.breadcrumb.options__3"
+                }],
+                "default": "left"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.page-title.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.page-title.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.page-title.options__3"
+                }],
+                "default": "left"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_faqs.settings.header__2"
+            },
+            {
+                "type" : "checkbox",
+                "id" : "show_faqs_filter",
+                "label" : "t:sections.main_faqs.settings.faqs.label__1",
+                "default": true
+            },
+            {
+                "type" : "textarea",
+                "id" : "faqs_text",
+                "label" : "t:sections.image-banner.blocks.image.settings.content.label__16",
+                "default": "Below FAQ are some common concerns of our clients before purchasing the theme, if you have other questions, please just send it to example@domain.com."
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_faqs.settings.header__3"
+            },
+            {
+                "type": "text",
+                "id": "faqs_message_heading",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                "default": "Need Help?"
+            },
+            {
+                "type": "textarea",
+                "id": "faqs_message_text",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+            },
+            {
+                "type": "image_picker",
+                "id": "message_method_icon_1",
+                "label": "t:sections.main_faqs.settings.faqs.label__6"
+            },
+            {
+                "type": "url",
+                "id": "message_method_link_1",
+                "label": "t:sections.main_faqs.settings.faqs.label__7"
+            },
+            {
+                "type": "text",
+                "id": "message_method_text_1",
+                "label": "t:sections.main_faqs.settings.faqs.label__10"
+            },
+            {
+                "type": "image_picker",
+                "id": "message_method_icon_2",
+                "label": "t:sections.main_faqs.settings.faqs.label__8"
+            },
+            {
+                "type": "url",
+                "id": "message_method_link_2",
+                "label": "t:sections.main_faqs.settings.faqs.label__9"
+            },
+            {
+                "type": "text",
+                "id": "message_method_text_2",
+                "label": "t:sections.main_faqs.settings.faqs.label__11"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_faqs.settings.header__4"
+            },
+            {
+                "type": "text",
+                "id": "contact_content_text",
+                "label": "t:sections.main_faqs.settings.contact_button.label__11",
+                "default": "Unable to find satisfactory answers ?"
+            },
+            {
+                "type": "text",
+                "id": "contact_text",
+                "label": "t:settings_schema.typography.settings.typography.button_text",
+                "default": "Contact Support"
+            },
+            {
+                "type": "url",
+                "id": "contact_link",
+                "label": "t:settings_schema.typography.settings.typography.button_link"
+            },
+            {
+                "type": "color",
+                "id": "contact_color",
+                "label": "t:settings_schema.typography.settings.typography.button_color",
+                "default": "#ffffff"
+            },
+            {
+                "type": "color",
+                "id": "contact_color_border",
+                "label": "t:sections.main_faqs.settings.contact_button.label__4",
+                "default": "#ef6454"
+            },
+            {
+                "type": "color",
+                "id": "contact_color_bg",
+                "label": "t:sections.main_faqs.settings.contact_button.label__5",
+                "default": "#ef6454"
+            },
+            {
+                "type": "color_background",
+                "id": "contact_color_bg_gradient",
+                "label": "t:sections.main_faqs.settings.contact_button.label__6"
+            },
+            {
+                "type": "color",
+                "id": "contact_color_hover",
+                "label": "t:sections.main_faqs.settings.contact_button.label__7",
+                "default": "#ffffff"
+            },
+            {
+                "type": "color",
+                "id": "contact_color_border_hover",
+                "label": "t:sections.main_faqs.settings.contact_button.label__8",
+                "default": "#ef6454"
+            },
+            {
+                "type": "color",
+                "id": "contact_color_bg_hover",
+                "label": "t:sections.main_faqs.settings.contact_button.label__9",
+                "default": "#ef6454"
+            },
+            {
+                "type": "color_background",
+                "id": "contact_color_bg_gradient_hover",
+                "label": "t:sections.main_faqs.settings.contact_button.label__10"
+            }
+        ],
+        "blocks": [
+            {
+                "type" : "paragraph",
+                "name" : "t:sections.main_faqs.blocks.paragraph.name",
+                "settings":
+                [
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__1"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "title",
+                        "label" : "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "Presale"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__2"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_1",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_1",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__3"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_2",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_2",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__4"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_3",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_3",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__5"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_4",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_4",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__6"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_5",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_5",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__7"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_6",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_6",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__8"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_7",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_7",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__9"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_8",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_8",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__10"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_9",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_9",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main_faqs.blocks.paragraph.settings.header__11"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "question_10",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__1",
+                        "default": "Question"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "answer_10",
+                        "label" : "t:sections.main_faqs.blocks.paragraph.settings.question.label__2",
+                        "default": "<p>Use overlay text to give your customers insight into your brand. Select image and text that relates to your style and story.</p>"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

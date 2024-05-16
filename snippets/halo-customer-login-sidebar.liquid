@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="{{ 'component-auth.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-auth.css' | asset_url | stylesheet_tag }}</noscript>
+
+<customer-auth class="halo-sidebar halo-sidebar-right halo-auth-sidebar" data-auth-sidebar id="halo-auth-sidebar">
+    <div class="halo-sidebar-header text-left">
+		<span class="title">{%- if customer -%}{{ 'customer.account.welcome' | t : name : customer.name }}{%- else -%}{{ 'customer.login_page.sign_in' | t }}{%- endif -%}</span>
+        <button type="button" class="halo-sidebar-close button-effect" data-close-auth-sidebar title="{{ 'general.common.close' | t }}">{% render 'icon-close' %}{{ 'general.common.close' | t }}</button>
+	</div>
+    <div class="halo-sidebar-wrapper custom-scrollbar">
+    	{%- if customer -%}
+            <ul class="account-dropdown list-unstyled">
+                <li class="account-item"><a class="link account-action" href="{{ routes.account_url }}"><span class="text">{{ 'customer.account.details' | t }}</span></a></li>
+                <li class="account-item"><a class="link account-action" href="{{ routes.account_addresses_url }}"><span class="text">{{ 'customer.addresses.title' | t }}</span></a></li>
+                <li class="account-item"><a class="link account-action" href="{{ routes.account_login_url }}#recover"><span class="text">{{ 'customer.recover_password.title' | t }}</span></a></li>
+                <li class="account-item"><a class="link account-action" href="{{ routes.account_logout_url }}"><span class="text">{{ 'customer.log_out' | t }}</span></a></li>
+            </ul>
+        {%- else -%}
+            <form accept-charset="UTF-8" action="{{ routes.account_login_url }}" method="post" class="auth-form auth-form-2">
+                <input name="form_type" type="hidden" value="customer_login" />
+                <input name="utf8" type="hidden" value="✓" />
+                <div class="form-field">
+                    <label class="form-label" for="customer_email">{{ 'customer.login_page.email' | t }} <em>*</em></label>
+                    <input id="customer_email" class="form-input form-input-placeholder text-left" type="email" value="" name="customer[email]" required placeholder="{{ 'customer.login_page.email' | t }}">
+                </div>
+                <div class="form-field">
+                    <label class="form-label" for="customer_password">{{ 'customer.login_page.password' | t }} <em>*</em></label>
+                    <input id="customer_password" class="form-input form-input-placeholder text-left" type="password" value="" required placeholder="{{ 'customer.login_page.password' | t }}" name="customer[password]">
+                </div>
+                <div class="form-actions auth-actions text-center">
+                    <input type="submit" class="button button-{{ settings.customer_login_btn_1 }} button-login text-center" value="{{ 'customer.log_in' | t }}">
+                     <a class="auth-link link link-underline" href="{{ routes.account_login_url }}#recover"><span class="text">{{ 'customer.forgot_password' | t }}</span></a>
+                    <a href="{{ routes.account_register_url }}" class="button button-{{ settings.customer_login_btn_2 }} button-register">{{ 'customer.register.title' | t }}</a>
+                </div>
+            </form>
+        {%- endif -%}
+    </div>
+</customer-auth>
+<script src="{{ 'halo-customer-login.js' | asset_url }}" defer="defer"></script>

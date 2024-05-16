@@ -1,0 +1,11 @@
+{% liquid
+    assign variantCount = product.variants | size
+%}
+
+{%- if variantCount > 0  and product.has_only_default_variant != true -%}
+      quick_view_inven_array_{{ product.id }}={
+          {%- for variant in product.variants -%}
+              "{{ variant.id }}": "{{ variant.inventory_quantity }}"{%- if forloop.last == false -%},{%-  endif -%}
+          {%- endfor -%}
+      }
+{%- endif %}

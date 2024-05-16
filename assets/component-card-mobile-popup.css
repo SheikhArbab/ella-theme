@@ -1,0 +1,70 @@
+#halo-card-mobile-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-47%, -50%);
+  background-color: white;
+  width: 70vw;
+  min-width: 300px;
+  max-width: 450px;
+  height: max-content;
+  max-height: 550px;
+  
+  opacity: 0;
+  pointer-events: none;
+  z-index: 200;
+
+  transition: all 250ms ease-in-out;
+}
+
+#halo-card-mobile-popup.show {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#halo-card-mobile-popup .halo-popup-wrapper {
+  padding: 8px; 
+}
+
+body.product-card-layout-07 #halo-card-mobile-popup .halo-popup-wrapper {
+  padding: 0;
+  padding-bottom: 15px;
+}
+
+#halo-card-mobile-popup .card-media,
+#halo-card-mobile-popup .card-information,
+#halo-card-mobile-popup .button-ATC,
+#halo-card-mobile-popup .card__badge {
+  display: none;
+  pointer-events: none;
+}
+
+#halo-card-mobile-popup .card-action .variants-popup {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  transform: translate(0, 0);
+  position: relative;
+}
+
+#halo-card-mobile-popup.show .card-action .variants-popup {
+  pointer-events: auto;
+}
+
+#halo-card-mobile-popup .card-action .variants-popup-content .variants {
+  max-height: 100%;
+  height: max-content;  
+}
+
+@media (max-width: 551px) {
+  #halo-card-mobile-popup {
+    min-width: 95%;
+  }
+
+  #halo-card-mobile-popup .card-action-bottom.has-wishlist,
+  #halo-card-mobile-popup .card-wishlist {
+    display: none !important;
+  }
+}

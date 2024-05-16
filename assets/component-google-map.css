@@ -1,0 +1,35 @@
+.custom-map .map-btn {
+    border-radius: 0;
+    margin-top: 32px;
+    margin-bottom: 57px;
+}
+
+.custom-map .block-header .map-btn.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-map .block-header .map-btn.align-left {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.custom-map .block-header .map-btn.align-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.custom-map .block-header {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.custom-map iframe{
+    width: 100%!important;
+    max-height: 365px;
+}
+
+.custom-map .block-header .desc {
+    margin-top: 26px;
+    margin-bottom: 40px;
+}

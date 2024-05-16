@@ -1,0 +1,338 @@
+<div class="" id="NotFoundSection-{{ section.id }}">
+  <div class="template-404 page-width page-margin center">
+    <div class="background-image">
+      {% if section.settings.background_image != blank %}
+        <img class="{% if section.settings.background_image_mb != blank %} has-image-mb{% else %} no-image-mb{% endif %}" src="{{section.settings.background_image | img_url:'master'}}">
+      {% endif %}
+      {% if section.settings.background_image_mb != blank %}
+        <img class="image-mb" src="{{section.settings.background_image_mb | img_url:'master'}}">
+      {% endif %}
+    </div>
+    <div class="content">
+      <h1 class="subtext">
+        {{ 'templates.404.subtext' | t }}
+      </h1>
+      <h2 class="title">
+        {{ 'templates.404.title' | t }}
+      </h2>
+      <p class="page-desc">{{ 'templates.404.description' | t }}</p>
+
+      <a href="{{ routes.all_products_collection_url }}" class="link body-large">
+        {{ 'templates.404.button' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  {%- liquid
+    assign padd_top = section.settings.padd_top
+    assign padd_bottom = section.settings.padd_bottom
+
+    assign mg_top_desktop = section.settings.mg_top_desktop
+    assign mg_top_tablet = section.settings.mg_top_tablet
+    assign mg_top_mobile = section.settings.mg_top_mobile
+
+    assign mg_bottom_desktop = section.settings.mg_bottom_desktop
+    assign mg_bottom_tablet = section.settings.mg_bottom_tablet
+    assign mg_bottom_mobile = section.settings.mg_bottom_mobile
+
+  -%}  
+
+  #NotFoundSection-{{ section.id }} .title + * {
+    margin-top: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    #NotFoundSection-{{ section.id }} .title + * {
+      margin-top: 2rem;
+    }
+  }
+  .template-404 #MainContent {
+    padding: 15px;
+  }
+
+  #NotFoundSection-{{ section.id }} {
+    margin-bottom: {{ mg_bottom_mobile | append: 'px' }};
+    margin-top: {{ mg_top_mobile | append: 'px' }};
+  }
+
+  #NotFoundSection-{{ section.id }} .content .title {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    padding: 0 10px;
+    line-height: 1;
+    font-size: calc(var(--font-page-title-size) - 5px);
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: {{ section.settings.text_color }};
+  }
+
+  #NotFoundSection-{{ section.id }} .content .title:after {
+    content: "";
+    position: absolute;
+    background: {{section.settings.border_color}};
+    width: 100%;
+    height: calc(50% + 2px);
+    top: calc(50% + 2px);
+    left: 0;
+    z-index: -1
+  }
+
+  #NotFoundSection-{{ section.id }} .content .subtext {
+    font-size: calc(var(--font-page-title-size) + 20px);
+    display: block;
+    margin-bottom: 15px;
+    margin-top: 0;
+    line-height: 1;
+    color: {{ section.settings.text_color }};
+  }
+
+  #NotFoundSection-{{ section.id }} .content .page-desc {
+    margin-bottom: 18px;
+    font-size: 14px;
+    color: {{ section.settings.text_color }};
+  }
+
+  #NotFoundSection-{{ section.id }} .content .link {
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .template-404 .content {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .template-404 .background-image img {
+    margin: 0 auto;
+  }
+
+  {% if section.settings.background_image != blank %}
+    .template-404 {
+      position: relative;
+    }
+    .template-404 .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -moz-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -webkit-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+    }
+  {% else %}
+    #NotFoundSection-{{ section.id }} .template-404 {
+      padding-top: 100px;
+      padding-bottom: 100px;
+      background: {{section.settings.background_color}}
+    }
+  {% endif %}
+
+  @media (max-width: 767px) {
+    #NotFoundSection-{{ section.id }} .background-image img.has-image-mb {
+      display: none;
+    }
+    #NotFoundSection-{{ section.id }} .background-image .no-image-mb {
+      min-height: 300px;
+      object-fit: cover;
+    }
+  }
+
+  @media (min-width: 360px) {
+    #NotFoundSection-{{ section.id }} .content .title {
+      font-size: var(--font-page-title-size);
+    }
+
+    #NotFoundSection-{{ section.id }} .content .subtext {
+      font-size: calc(var(--font-page-title-size) + 26px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .template-404 #MainContent {
+      padding: 15px;
+    }
+
+    #NotFoundSection-{{ section.id }} .template-404 {
+      {% if section.settings.background_image == blank %}
+        padding-top: 120px;
+        padding-bottom: 120px;
+      {% endif %}
+    }
+
+    #NotFoundSection-{{ section.id }} .content .title {
+      font-size: calc(var(--font-page-title-size) + 6px);
+    }
+
+    #NotFoundSection-{{ section.id }} .content .subtext {
+      font-size: calc(var(--font-page-title-size) + 36px);
+    }
+
+    #NotFoundSection-{{ section.id }} {
+      margin-bottom: {{ mg_bottom_tablet | append: 'px' }};
+      margin-top: {{ mg_top_tablet | append: 'px' }};
+    }
+    .template-404 .content {
+      width: 60%;
+    }
+
+    {% if section.settings.background_image != blank %}
+      .template-404 .content {
+        left: {{section.settings.alignment | append: '%'}};
+        -moz-transform: translate(-{{section.settings.alignment | append: '%'}},-50%);
+        -o-transform: translate(-{{section.settings.alignment | append: '%'}},-50%);
+        -ms-transform: translate(-{{section.settings.alignment | append: '%'}},-50%);
+        -webkit-transform: translate(-{{section.settings.alignment | append: '%'}},-50%);
+        transform: translate(-{{section.settings.alignment | append: '%'}},-50%);
+      }
+    {% endif %}
+
+    #NotFoundSection-{{ section.id }} .background-image .image-mb {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    #NotFoundSection-{{ section.id }} .template-404 {
+      margin-bottom: {{ mg_bottom_desktop | append: 'px' }};
+      margin-top: {{ mg_top_desktop | append: 'px' }};
+      {% if section.settings.background_image == blank %}
+        padding-top: 150px;
+        padding-bottom: 150px;
+      {% endif %}
+    }
+
+    .template-404 .content {
+      width: 50%;
+    }
+
+    #NotFoundSection-{{ section.id }} .content .title {
+      font-size: calc(var(--font-page-title-size) + 16px);
+    }
+
+    #NotFoundSection-{{ section.id }} .content .subtext {
+      font-size: calc(var(--font-page-title-size) + 56px);
+    }
+  }
+</style>
+
+{% schema %}
+  {
+   "name": "t:sections.main-404.name",
+    "settings": [
+      {
+          "type": "header",
+          "content": "t:settings_schema.general.name"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "t:sections.image-banner.blocks.image.settings.image.label__1"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image_mb",
+        "label": "t:sections.image-banner.blocks.image.settings.image.label__2"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "t:settings_schema.typography.settings.typography.text_color",
+        "default": "#eeeeee"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "t:settings_schema.typography.settings.typography.icon_color",
+        "default": "#232323"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "t:settings_schema.colors.settings.colors_name.border_color",
+        "default": "#efc3c0"
+      },
+      {
+        "type": "text",
+        "id": "alignment",
+        "label": "t:sections.general.settings.alignment.label__1",
+        "info": "t:sections.general.settings.alignment.unit",
+        "default": "40"
+      },
+      {
+          "type": "header",
+          "content": "t:sections.layout.margin_top"
+      },
+      {
+          "type": "range",
+          "id": "mg_top_desktop",
+          "label": "t:sections.layout.mg_desktop.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      },
+      {
+          "type": "range",
+          "id": "mg_top_tablet",
+          "label": "t:sections.layout.mg_tablet.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      },
+      {
+          "type": "range",
+          "id": "mg_top_mobile",
+          "label": "t:sections.layout.mg_mobile.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      },
+      {
+          "type": "header",
+          "content": "t:sections.layout.margin_bottom"
+      },
+      {
+          "type": "range",
+          "id": "mg_bottom_desktop",
+          "label": "t:sections.layout.mg_desktop.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      },
+      {
+          "type": "range",
+          "id": "mg_bottom_tablet",
+          "label": "t:sections.layout.mg_tablet.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      },
+      {
+          "type": "range",
+          "id": "mg_bottom_mobile",
+          "label": "t:sections.layout.mg_mobile.label",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "t:sections.layout.mg_desktop.unit",
+          "default": 20
+      }
+    ]
+  }
+{% endschema %}

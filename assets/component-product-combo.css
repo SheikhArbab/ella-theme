@@ -1,0 +1,523 @@
+.product-combo-image .combo-option-content {
+    padding: 0 !important;
+}
+
+.combo-product-wrapper,
+.combo-product-checkbox,
+.combo-product-left{
+    position: relative;
+}
+
+[data-has-combo="true"] .productView-product {
+    width: 100%;
+}
+
+[data-has-combo="true"] .productView-moreItem {
+    width: 100%;
+}
+
+product-combo.halo-product-combo {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+product-combo .combo-item-list {
+    width: 100%;
+    max-height: 507px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    scroll-snap-type: y mandatory;
+}
+
+.container-default product-combo .combo-item-list {
+    width: calc(100% + 10px);
+}
+
+product-combo .bundle-product-item.combo-item {
+    opacity: 1 !important;
+    visibility: visible !important; 
+    width: 100% !important;
+    padding: 0 !important;
+    scroll-snap-align: start;
+}
+
+product-combo .combo-item-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+product-combo .combo-item-list::-webkit-scrollbar-track {
+    background: var(--border-global);
+}
+
+product-combo .combo-item-list::-webkit-scrollbar-thumb {
+    background: var(--color-text);
+}
+
+product-combo .bundle-product-price {
+    display: none;
+}
+
+product-combo .bundlePdItem-container {
+    display: flex;
+    border-bottom: 1px solid var(--border-global);
+}
+
+product-combo .bundle-product-item:first-child .bundlePdItem-container {
+    border-top: 1px solid var(--border-global); 
+}
+
+product-combo .bundle-product-image {
+    width: 145px;
+}
+
+product-combo .bundle-product-image a img {
+    padding-right: 25px;
+}
+
+product-combo .bundle-product-information .card-title {
+    font-size: calc(var(--font-body-size) + 2px);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 2px;
+}
+
+product-combo .bundle-product-information .bundle-product-content {
+    padding: 0;
+}
+
+product-combo .bundle-product-options {
+    position: relative;
+    display: block;
+}
+
+product-combo .combo-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 12px;
+    row-gap: 16px;
+    column-gap: 24px;
+}
+
+product-combo .combo-options .color-swatches-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+product-combo .bundle-product-information {
+    width: calc(100% - 145px);
+    padding-right: 15px;
+}
+
+product-combo [data-option-name] {
+    order: 2;
+}
+
+product-combo [data-option-name="size"] {
+    order: 1;
+} 
+
+product-combo [data-option-name="color"] {
+    order: 3;
+} 
+
+product-combo .swatch.swatch-label-color:not([data-picker-type="dropdown"])  {
+    display: block;
+    margin-left: -7px;
+    width: 100%;
+    margin-bottom: -8px;
+}
+
+product-combo .swatch-label-color {
+    margin-bottom: 6px;
+}
+
+product-combo .swatch:not([data-picker-type="dropdown"]) > .swatch-label-color {
+    padding-left: 7px;
+    margin-bottom: 11px;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element {
+    display: inline-block;
+    margin-left: 7px;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element.color .label {
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    font-size: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--swatch-border);
+    background: 0 0;
+    cursor: pointer;
+    padding: 3px;
+    opacity: 1;
+    overflow: hidden;
+}
+
+product-combo .swatch-label {
+    font-size: var(--font-body-size);
+    display: block;
+    text-transform: capitalize;
+    color: var(--color-text2);
+}
+
+product-combo .swatch-element .label .pattern {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0;
+    letter-spacing: 0;
+    position: relative;
+    background-size: cover;
+}
+
+product-combo .swatch-element .label .expand {
+    display: none;
+}
+
+product-combo .swatch.swatch-label-color .select-container  .swatch-element {
+    display: block;
+    margin-left: 0;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element.soldout {
+    position: relative;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element.soldout::before {
+    content: "";
+    top: 37%;
+    left: -5px;
+    height: 1px;
+    opacity: 1;
+    z-index: 1;
+    border: none;
+    position: absolute;
+    visibility: visible;
+    width: calc(100% + 11px);
+    background-color: var(--product-sale-price-color);
+    transform: translateY(-50%) rotate(-45deg);
+    cursor: not-allowed;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element.soldout .label,
+product-combo .swatch.swatch-label-color .swatch-element.soldout .label .pattern {
+    cursor: not-allowed;
+}
+
+product-combo .select-container [data-header-option] {
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--body-letter-spacing);
+    line-height: var(--body-line-height);
+    text-transform: capitalize;
+    text-align: left;
+    color: var(--form-label);
+}
+
+product-combo .normal-style {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+product-combo .normal-style .swatch-label {
+    width: 100%;
+}
+
+product-combo .normal-style .swatch-element {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0;
+    margin: 5px 10px 10px 0;
+    position: relative;
+}
+
+product-combo .normal-style .swatch-element .label {
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+product-combo .normal-style .swatch-element .option:checked + .label .text {
+    color: var(--variant-color-active);
+    background-color: var(--variant-bg-active);
+    border-color: var(--swatch-border-active);
+}
+
+product-combo .normal-style .swatch-element .text {
+    display: block;
+    width: auto;
+    min-width: 40px;
+    height: 30px;
+    line-height: 28px;
+    border-radius: 20px;
+    padding: 0 10px;
+    font-size: var(--font-body-size);
+    font-weight: var(--font-weight-normal);
+    text-transform: capitalize;
+    color: var(--variant-color);
+    background-color: var(--variant-bg);
+    border: 1px solid var(--swatch-border);
+    text-align: center;
+    transition: var(--anchor-transition);
+}
+
+product-combo .select-container {
+    width: 135px;
+    margin-top: 8px;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--color-text2);
+    position: relative;   
+    cursor: pointer;
+}
+
+product-combo .half-line .select-container {
+    width: 135px;
+}
+
+product-combo .select-container::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform 270ms ease-in-out;
+}
+
+product-combo .select-container.active::after {
+    transform: rotate(-180deg);
+}
+
+product-combo .select-container .select-options {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    background-color: white;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(-5px);
+    pointer-events: none;
+    box-shadow: 0 1px 10px 2px rgba(0, 0, 0, 0.1);
+    transition: all 150ms ease-in-out;
+    max-height: 95px;
+    overflow-y: auto;
+}
+
+product-combo .select-container.active .select-options {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+product-combo .select-container .select-options::-webkit-scrollbar {
+    width: 2px;
+}
+
+product-combo .select-container .select-options::-webkit-scrollbar-track {
+    background: var(--border-global);
+}
+
+product-combo .select-container .select-options::-webkit-scrollbar-thumb {
+    background: var(--color-text);
+}
+
+product-combo .select-container .select-options .swatch-element .combo-item-label {
+    padding: 0.7rem 1rem;
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+}
+
+product-combo .select-container .select-options .swatch-element.soldout {
+    pointer-events: none;
+    background-color: #eee;
+}
+
+product-combo .select-container .select-options .swatch-element .combo-item-label:hover {
+    background-color: #f0f0f0;
+}
+
+product-combo .select-container .select-options .swatch-element .option:checked + .label {
+    background-color: #e4e4e4;
+}
+
+product-combo .select-container .select-options .swatch-element input:disabled + label {
+    display: none;
+}
+
+product-combo .bundle-product-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+product-combo .bundle-product-checkbox .spr-badge {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0;
+    line-height: 1;
+    position: relative;
+    width: max-content !important;
+    margin-left: -2px;
+}
+
+product-combo .bundle-product-checkbox .spr-badge .spr-icon-star {
+    font-size: 12px;
+    color: var(--color-text);
+}
+
+product-combo .bundle-product-right {
+    width: 100% !important;
+    padding-left: 0 !important;
+    margin-top: 25px;
+}
+
+product-combo .combo-product-actions {
+    display: flex;
+    margin-top: 0px;
+}
+
+product-combo .swatch.swatch-label-color .swatch-element.color .option:checked + .label {
+    border-color: var(--swatch-border-active);
+}
+
+product-combo .rating-loading {
+    position: absolute;
+}
+
+product-combo .productView-perks + .combo-product-actions {
+    margin-top: 25px;
+}
+
+product-combo .combo-product-actions .combo-product-action {
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+product-combo .combo-product-actions .productView-action {
+    width: 100%;
+    height: 100%;
+    color: var(--atc-color);
+    background: var(--atc-bg-color);
+}
+
+product-combo .combo-product-actions .productView-action {
+    background: var(--atc-bg-color);
+    border: 1px solid var(--atc-border-color);
+    color: var(--atc-color);
+    margin: 0px;
+    width: 100%;
+}
+
+product-combo .combo-product-actions .productView-action:hover {
+    color: var(--atc-color-hover);
+    background: var(--atc-bg-color-hover);
+    border-color: var(--atc-border-color-hover);
+}
+
+product-combo .productView-askAnExpert,
+product-combo .productView-compareColor.style-1 {
+    margin-left: 0px;
+}
+
+product-combo .productView-sizeChart + .productView-askAnExpert,
+product-combo .productView-compareColor.style-1 + .productView-askAnExpert,
+product-combo .productView-sizeChart + .productView-compareColor.style-1 {
+    margin-left: 20px;
+}
+
+product-combo .bundle-product-wrapper {
+    pointer-events: all;
+}
+
+product-combo .bundle-product-wrapper.has-halo-block-loader {
+    pointer-events: none;
+}
+
+.bundle-old-price-in-main {
+    vertical-align: middle;
+    font-size: calc(var(--font-body-size) + 6px);
+    font-weight: var(--font-body-weight);
+    color: var(--color-text2);
+    margin: 0 10px 0 0;
+    text-decoration: line-through;
+}
+
+.bundle-price-in-main {
+    vertical-align: middle;
+    font-size: calc(var(--font-body-size) + 6px);
+    font-weight: var(--font-weight-semibold);
+    color: var(--product-sale-price-color);
+}
+
+.price-in-main {
+    font-size: 30px;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing);
+    line-height: var(--line-height);
+    color: var(--color-text);
+    padding: 0 0 5px;
+}
+
+@media screen and (max-width: 1024px) {
+    product-combo .bundlePdItem-container {
+        padding: 15px 0;
+    }
+    
+    product-combo .bundle-product-image a img {
+        padding-right: 15px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    product-combo .bundlePdItem-container {
+        padding: 10px 0;
+    }
+
+    product-combo .bundle-product-image a img {
+        padding-right: 10px;
+    }
+
+    /* product-combo .half-line .select-container {
+        width: 180px;
+    } */
+
+    product-combo .combo-item-list {
+        max-width: 100%;
+    }
+} 
+
+@media (max-width: 550px) {
+    product-combo .combo-product-actions .button {
+        padding-top: 13px!important;
+        padding-bottom: 13px!important;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    product-combo .bundlePdItem-container {
+        padding: 25px 0;
+    }
+}
+

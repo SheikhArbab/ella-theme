@@ -1,0 +1,234 @@
+<div class="bundle-product-item style-{{ product_style }}{% if first %} bundle-product-itemFirst{% endif %}{% if product.available %} isChecked{% endif %}" data-bundle-product-item-id="{{ product.id }}">
+    <div class="bundlePdItem-container">
+        <script>
+            window.productVariants = window.productVariants || {};
+            window.productVariants[{{ product.id }}] = {{ product.variants | json }};
+            {% if settings.show_hot_stock %}
+                window.bundle_inven_array_{{ product.id }} = {
+                    {% for variant in product.variants %}
+                        '{{ variant.id }}': '{{ variant.inventory_quantity }}',
+                    {%endfor%}
+                };
+            {% endif %}
+        </script>
+        {%- liquid
+            assign current_variant = product.selected_or_first_available_variant
+            assign variantCount = product.variants | size
+            assign featured_media_aspect_ratio = product.featured_media.aspect_ratio
+
+            if product.featured_media.aspect_ratio == nil
+                assign featured_media_aspect_ratio = 1
+            endif
+        -%}
+        {%- if product_style == '3' -%}
+            <div class="bundle-product-checkbox">
+                <input type="checkbox" value="{{ product.title | split: '|' | first | handleize }}" checked autocomplete="off" id="bundle-product-item-{{ product.id }}" />
+                <label class="form-label--checkbox" for="bundle-product-item-{{ product.id }}" data-bundle-checkbox data-bundle-include="{{ 'products.product.bundle_block.include' | t }}" data-bundle-included="{{ 'products.product.bundle_block.included' | t }}">
+                    {{ 'products.product.bundle_block.included' | t }}
+                </label>
+            </div>
+        {%- endif -%}
+        <div class="bundle-product-image">
+            <a href="{{ product.url | within: collection }}" class="bundle-product-media bundle-product-media--{{ image_ratio }}"
+                {% if product.featured_media %}
+                    {% if image_ratio == 'adapt' %}
+                        style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                    {% elsif image_ratio == 'square' %}
+                        style="padding-bottom: 100%;"
+                    {% elsif image_ratio == 'portrait' %}
+                        {% if portrait_aspect_ratio != blank %}
+                            style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }};"
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            >
+                {%- if product.featured_media -%}
+                    <img srcset="
+                        {%- if product.featured_media.width >= 165 -%}
+                            {{ product.featured_media | img_url: '165x' }} 165w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 360 -%}
+                            {{ product.featured_media | img_url: '360x' }} 360w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 533 -%}
+                            {{ product.featured_media | img_url: '533x' }} 533w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 534 -%}
+                            {{ product.featured_media | img_url: '534x' }} 534w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 720 -%}
+                            {{ product.featured_media | img_url: '720x' }} 720w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 940 -%}
+                            {{ product.featured_media | img_url: '940x' }} 940w,
+                        {%- endif -%}
+                        {%- if product.featured_media.width >= 1066 -%}
+                            {{ product.featured_media | img_url: '1066x' }} 1066w
+                        {%- endif -%}"
+                        src="{{ product.featured_media | img_url: '533x' }}"
+                        sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                        alt="{{ product.featured_media.alt | escape }} {{product.featured_media.width}}"
+                        loading="lazy"
+                        class="motion-reduce"
+                    >
+                {%- else -%}
+                    {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                    {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+            </a>
+            {%- if product_style == '1' -%}
+                {%- if variantCount > 1 -%}
+                    <a href="#" class="button bundle-product-toogle button-2" role="button" tabindex="0">
+                        {{ 'products.product.select_options' | t }}
+                    </a>
+                {%- endif -%}
+            {%- endif -%}
+        </div>
+        <div class="bundle-product-content">
+            {%- if product_style == '3' -%}
+                {%- if settings.show_vendor -%}
+                    <div class="bundle-product-vendor">
+                        <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                        {{ product.vendor | link_to_vendor }}
+                    </div>
+                {%- endif -%}
+            {%- endif -%}
+            {%- if product_style != '3' -%}
+                <div class="bundle-product-checkbox{% if settings.show_review %} halo-productReview{% endif %}">
+                    <input type="checkbox" value="{{ product.title | split: '|' | first | handleize }}" checked autocomplete="off" id="bundle-product-item-{{ product.id }}" />
+                    <label class="form-label--checkbox product-title" for="bundle-product-item-{{ product.id }}" data-bundle-checkbox>
+                        {{ product.title | split: '|' | first }}
+                        {%- if variantCount > 1 and settings.enable_swatch_name -%}
+                            <span data-bundle-product-title> - {{ current_variant.title }}</span>
+                        {%- endif -%}
+                    </label>
+                    {%- if product_style == '1' -%}
+                        {%- if settings.show_vendor -%}
+                            <div class="bundle-product-vendor">
+                                <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                                {{ product.vendor | link_to_vendor }}
+                            </div>
+                        {%- endif -%}
+                    {%- endif -%}
+                    {%- if settings.show_review -%}
+                        {%- liquid
+                            assign average = product.metafields.reviews.rating.value
+                            assign rating = average | replace: '', '' | plus : 0 | round
+                        -%}
+                        <span class="spr-badge" id="spr_badge_{{ product.id }}" data-rating="{{ average }}">
+                            <span class="spr-starrating spr-badge-starrating">
+                                {%- for review in (1..5) -%}
+                                    {%- if rating >= forloop.index -%}
+                                        <i class="spr-icon spr-icon-star" role="none"></i>
+                                    {%- else -%}
+                                        <i class="spr-icon spr-icon-star-empty" role="none"></i>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </span>
+                        </span>
+                    {%- endif -%}
+                </div>
+            {%- else -%}
+                <div class="bundle-product-title">
+                    <a class="product-title" href="{{ product.url | within: collection }}">
+                        {{ product.title | split: '|' | first }}
+                        {%- if variantCount > 1 and settings.enable_swatch_name -%}
+                            <span data-bundle-product-title> - {{ current_variant.title }}</span>
+                        {%- endif -%}
+                    </a>
+                </div>
+                {%- if settings.show_review -%}
+                    <div class="bundle-product-review halo-productReview">
+                        {%- liquid
+                            assign average = product.metafields.reviews.rating.value
+                            assign rating = average | replace: '', '' | plus : 0 | round
+                        -%}
+                        <span class="spr-badge" id="spr_badge_{{ product.id }}" data-rating="{{ average }}">
+                            <span class="spr-starrating spr-badge-starrating">
+                                {%- for review in (1..5) -%}
+                                    {%- if rating >= forloop.index -%}
+                                        <i class="spr-icon spr-icon-star" role="none"></i>
+                                    {%- else -%}
+                                        <i class="spr-icon spr-icon-star-empty" role="none"></i>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </span>
+                        </span>
+                    </div>
+                {%- endif -%}
+            {%- endif -%}
+            <div class="bundle-product-price">
+                <div class="price-box card-price">
+                    {%- if product.compare_at_price > product.price -%}
+                        <div class="price-sale clearfix">
+                            <span class="old-price">
+                                {{ product.variants[0].compare_at_price | money }}
+                            </span>
+                            <span class="special-price" data-bundle-product-price>
+                                {{ product.variants[0].price | money }}
+                            </span>
+                        </div>
+                    {%- else -%}
+                        <div class="price-regular">
+                            <span data-bundle-product-price>
+                                {{ product.variants[0].price | money }}
+                            </span>
+                        </div>
+                    {%- endif -%}
+                </div>
+            </div>
+            {%- if product_style == '2' or product_style == '3' -%}
+                {%- if variantCount > 1 -%}
+                    <a href="#" class="button bundle-product-toogle button-2" role="button" tabindex="0">
+                        {{ 'products.product.select_options' | t }}
+                    </a>
+                {%- endif -%}
+            {%- endif -%}
+        </div>
+        {%- if variantCount > 1 -%}
+            <select id="product-variants-{{ product.id }}" name="group_id" style="display: none;" autocomplete="off">
+                {%- for variant in product.variants -%}
+                    {%- if variant.available -%}
+                        <option {% if variant == current_variant %} selected="selected" {% endif %} value="{{ variant.id }}" data-price="{{ variant.price }}" {% if variant.image.src != blank %}data-image="{{ variant.image.src | product_img_url: 'master' }}"{% endif %}>
+                            {{ variant.title }} - {{ variant.price | money }}
+                        </option>
+                    {%- else -%}
+                        <option disabled="disabled" data-price="{{ variant.price }}">
+                            {{ variant.title }} - {{ variant.price | money }}
+                        </option>
+                    {%- endif -%}
+                {%- endfor -%}
+            </select>
+            <div class="bundle-product-options halo-popup customPopup-small halo-popup-LeftRight isChecked" data-product-option-id="{{ product.id }}">
+                <div class="halo-popup-wrapper">
+                    <div class="halo-popup-header customPopup-header">
+                        <button type="button" class="bundle-option-close halo-popup-close clearfix" aria-label="{{ 'general.common.close' | t }}">
+                            <span class="visually-hidden">{{ 'general.common.close' | t }}</span>
+                            {% render 'icon-close' %}
+                        </button>
+                        <h5 class="bundle-option-title halo-popup-title customPopup-title text-center">
+                            {{ 'products.product.select_options' | t }}
+                        </h5>
+                    </div>
+                    <div class="bundle-option-content halo-popup-content custom-scrollbar">
+                        {% render 'product-bundle-swatch',
+                            product: product
+                        %}
+                        {%- if settings.show_hot_stock -%}
+                            {% assign productMaxStock = settings.hot_stock_limit | plus: 0 %}
+                            <div class="bundle-hotStock" data-bundle-hot-stock="{{ productMaxStock }}">
+                                {%- if current_variant.inventory_management -%}
+                                    {%- if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= productMaxStock -%}
+                                        {{ 'products.product.hot_stock' | t : inventory: current_variant.inventory_quantity }}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            </div>
+                        {%- endif -%}
+                    </div>
+                </div>
+            </div>
+        {%- else -%}
+            <input type="hidden" name="group_id"  value="{{ product.variants[0].id }}" data-price="{{ product.variants[0].price }}"/>
+        {%- endif -%}
+    </div>
+</div>

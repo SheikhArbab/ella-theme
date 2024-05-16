@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="{{ 'component-language-currency.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-language-currency.css' | asset_url | stylesheet_tag }}</noscript>
+
+<customer-language-currency class="halo-sidebar halo-sidebar-right halo-language-currency-sidebar" data-lang-currency-sidebar id="halo-language-currency-sidebar">
+    <div class="halo-sidebar-content">
+        <div class="halo-sidebar-header text-left">
+            <button type="button" class="halo-sidebar-close button-effect" data-close-lang-currency-sidebar title="{{ 'general.common.close' | t }}">
+                {% render 'icon-close' %}
+                {{ 'general.common.close' | t }}
+            </button>
+        </div>
+        <div class="halo-sidebar-wrapper custom-scrollbar p-relative">
+            <div class="wrapper-language-currency">
+                {% if settings.enable_multilang_shopify %}
+                    <p class="title text-left">{{ 'localization.language_label' | t }}</p>
+                    {% render 'halo-top-language' %}
+                {% endif %}
+                {% if settings.enable_currencies %}
+                    <p class="title text-left">{{ 'currency.currency' | t }}</p>
+                    {% render 'halo-top-currency' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</customer-language-currency>
+<div class="background-overlay1">
+    {%- if settings.show_effect_close -%}
+        <div class="background-cursor-wrapper">
+            <div class="background-cursor-wrapper_outer">
+                <div class="background-cursor-wrapper_inner"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20"><g class="nc-icon-wrapper" fill="#ffffff" transform="translate(0.5, 0.5)"><line fill="none" stroke-width="6" x1="46" y1="2" x2="2" y2="46"/> <line fill="none" stroke-width="6" x1="46" y1="46" x2="2" y2="2"/></g></svg></div>
+            </div>
+        </div>
+    {%- endif -%}
+</div>
+<script src="{{ 'halo-customer-language-currency.js' | asset_url }}" defer="defer"></script>

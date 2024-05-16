@@ -1,0 +1,34 @@
+<div class="productView-perks">
+    {%- if show_size_chart and has_size_chart -%}
+        <div class="productView-sizeChart">
+            <a class="link link-underline" href="javascript:void(0)" data-open-size-chart-popup>
+                {% render 'icon-size-chart-2' %}
+                <span class="text">
+                    {{ 'size_chart.general.text' | t }}
+                </span>
+            </a>
+        </div>
+    {%- endif -%}
+    {%- if show_compare_color and isColor and compare_layout == '1' -%}
+        <div class="productView-compareColor style-{{ compare_layout }}">
+            <button type="button" class="link link-underline" aria-label="{{ 'compare_color.general.title' | t }}" data-open-compare-color-popup>
+                {% render 'icon-compare-color-2' %}
+                <span class="text">
+                    {{ 'compare_color.general.title' | t }}
+                </span>
+            </button>
+        </div>
+    {%- endif -%}
+    {%- if settings.show_ask_an_expert -%}
+        <div class="productView-askAnExpert">
+            <a class="link link-underline" href="javascript:void(0)" data-open-ask-an-expert>
+                {%- if settings.ask_an_expert_icon != blank -%}
+                    {{ settings.ask_an_expert_icon }}
+                {%- endif -%}
+                <span class="text">
+                    {{ 'ask_an_expert.general.text' | t}}
+                </span>
+            </a>
+        </div>
+    {%- endif -%}
+</div>

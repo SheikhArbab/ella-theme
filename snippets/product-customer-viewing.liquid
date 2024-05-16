@@ -1,0 +1,8 @@
+{%- liquid 
+    assign customer_viewing_number = block.settings.customer_viewing_number
+    assign customer_viewing_time = block.settings.customer_viewing_time
+-%}
+<div class="productView-ViewingProduct" data-customer-view="{{ customer_viewing_number }}" data-customer-view-time="{{ customer_viewing_time }}">
+    {% render 'icon-eyes-2' %}
+    <span class="text">{{ 'customer_viewing.general.text' | t: number : '10' }}</span>
+</div>

@@ -1,0 +1,537 @@
+<link rel="stylesheet" href="{{ 'component-about.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-about.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+    assign side_padding_full_width = section.settings.side_padding_full_width
+    assign show_about_info = false
+    if section.blocks.size > 0
+        assign show_about_info = true
+    endif
+-%}
+
+<div data-section-id="{{ section.id }}" data-section-type="about" id="AboutSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%}container-full{% else %}container{% endif %}">
+        {%- if show_breadcrumb -%}
+            {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+        {%- endif -%}
+        {%- if show_page_title -%}
+            <h1 class="page-header text-{{ page_title_alignment }}">
+                {{ page.title | escape }}
+            </h1>
+        {%- endif -%}
+        <div class="halo-page-content halo-about-content">
+        	<div class="about about-1">
+        		{%- if show_about_info -%}
+    				{%- for block in section.blocks -%}
+        				<div class="about-item item-{{ block.id }}">
+        					{%- liquid
+                                assign title = block.settings.title
+                                assign content_text_color = block.settings.content_text_color
+                                if block.type == 'content'
+                                	assign content = block.settings.content
+                                	assign align = block.settings.align
+                                elsif block.type == 'image'
+                                	assign style = block.settings.style
+                                	assign image_1 = block.settings.image_1
+                                	assign link_1 = block.settings.link_1
+                                	assign image_2 = block.settings.image_2
+                                	assign link_2 = block.settings.link_2
+                                	assign image_3 = block.settings.image_3
+                                	assign link_3 = block.settings.link_3
+                             	endif
+                            -%}
+                            {%- if title != blank -%}
+                            	<h2 class="page-subheader about-title text-center" style="color: {{ content_text_color }};">
+                            		{{ title | escape }}
+                            	</h2>
+                            {%- endif -%}
+                            {%- if block.type == 'content' -%}
+                            	<div class="about-content halo-text-format text-{{ align }}" style="max-width: {{ block.settings.content_max_width | append: 'px' }}; color: {{ content_text_color }}; margin-left: auto; margin-right: auto;">
+                            		{{ content }}
+                            	</div>
+                            {%- elsif block.type == 'image' -%}
+                            	<div class="about-row style-{{ style }}">
+	                            	<div class="about-row-item about-row-itemFirst">
+	                            		<div class="item">
+		                            		{%- if image_1 != blank -%}
+			                            		{%- if link_1 != blank -%}
+			                            			<a class="image image-zoom"{% if link_1 == blank %} role="link" aria-disabled="true"{% else %} href="{{ link_1 }}"{% endif %} style="padding-top: {{ 1 | divided_by: image_1.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- else -%}
+			                            			<div class="image image-zoom" style="padding-top: {{ 1 | divided_by: image_1.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- endif -%}
+			                            			<img srcset="{{ image_1 | img_url: 'master' }}"
+										                src="{{ image_1 | img_url: 'master' }}"
+										                loading="lazy"
+										                alt="{{ image_1.alt | default: shop.name | escape }}"
+                                                        width="{{ image_1.width }}"
+                                                        height="{{ image_1.height }}"
+                                                    >
+			                            		{%- if link_1 != blank -%}
+			                            			</a>
+			                            		{%- else -%}
+			                            			</div>
+			                            		{%- endif -%}
+			                            	{%- else -%}
+			                            		<div class="image">
+			                            			{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+			                            		</div>
+			                            	{%- endif -%}
+	                            		</div>
+	                            	</div>
+	                            	<div class="about-row-item about-row-itemSecond">
+	                            		<div class="item">
+		                            		{%- if image_2 != blank -%}
+			                            		{%- if link_2 != blank -%}
+			                            			<a class="image image-zoom"{% if link_2 == blank %} role="link" aria-disabled="true"{% else %} href="{{ link_2 }}"{% endif %} style="padding-top: {{ 1 | divided_by: image_2.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- else -%}
+			                            			<div class="image image-zoom" style="padding-top: {{ 1 | divided_by: image_2.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- endif -%}
+			                            			<img srcset="{{ image_2 | img_url: 'master' }}"
+										                src="{{ image_2 | img_url: 'master' }}"
+										                loading="lazy"
+										                alt="{{ image_2.alt | default: shop.name | escape }}"
+                                                        width="{{ image_2.width }}"
+                                                        height="{{ image_2.height }}"
+                                                    >
+			                            		{%- if link_2 != blank -%}
+			                            			</a>
+			                            		{%- else -%}
+			                            			</div>
+			                            		{%- endif -%}
+			                            	{%- else -%}
+			                            		<div class="image">
+			                            			{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+			                            		</div>
+			                            	{%- endif -%}
+			                            </div>
+			                            <div class="item">
+			                            	{%- if image_3 != blank -%}
+			                            		{%- if link_3 != blank -%}
+			                            			<a class="image image-zoom"{% if link_3 == blank %} role="link" aria-disabled="true"{% else %} href="{{ link_3 }}"{% endif %} style="padding-top: {{ 1 | divided_by: image_3.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- else -%}
+			                            			<div class="image image-zoom" style="padding-top: {{ 1 | divided_by: image_3.aspect_ratio | times: 100 | append: '%' }}">
+			                            		{%- endif -%}
+			                            			<img srcset="{{ image_3 | img_url: 'master' }}"
+										                src="{{ image_3 | img_url: 'master' }}"
+										                loading="lazy"
+										                alt="{{ image_3.alt | default: shop.name | escape }}"
+                                                        width="{{ image_3.width }}"
+                                                        height="{{ image_3.height }}"
+                                                    >
+			                            		{%- if link_3 != blank -%}
+			                            			</a>
+			                            		{%- else -%}
+			                            			</div>
+			                            		{%- endif -%}
+			                            	{%- else -%}
+			                            		<div class="image">
+			                            			{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+			                            		</div>
+			                            	{%- endif -%}
+			                            </div>
+	                            	</div>
+                            	</div>
+                            {%- endif -%}
+        				</div>
+    				{%- endfor -%}
+        		{%- endif -%}
+        	</div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css" media="screen">
+    #AboutSection-{{ section.id }} {
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+        margin-left: auto;
+        margin-right: auto;
+
+        {% if container == 'full' %}
+            padding-left: {{ side_padding_full_width | append: 'px' }};
+            padding-right: {{ side_padding_full_width | append: 'px' }};
+        {% endif %}
+    }
+
+    #AboutSection-{{ section.id }} .breadcrumb + .page-header {
+        font-size: 24px;
+        padding-bottom: 35px;
+    }
+
+    #AboutSection-{{ section.id }}  .breadcrumb {
+        margin-top: 7px;
+    }
+
+    @media (max-width: 1024px) {
+        #AboutSection-{{ section.id }} {
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+
+        #AboutSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+
+    @media (max-width: 550px) {
+        #AboutSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #AboutSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+
+        #AboutSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+{% schema %}
+    {
+        "name": "t:sections.main-about-page.name",
+        "settings":
+        [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": false
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.breadcrumb.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.breadcrumb.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.breadcrumb.options__3"
+                }],
+                "default": "center"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": false
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                {
+                    "value": "left",
+                    "label": "t:sections.general.settings.page-title.options__1"
+                },
+                {
+                    "value": "center",
+                    "label": "t:sections.general.settings.page-title.options__2"
+                },
+                {
+                    "value": "right",
+                    "label": "t:sections.general.settings.page-title.options__3"
+                }],
+                "default": "center"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "side_padding_full_width",
+                "label": "t:sections.general.settings.container.padding_full",
+                "info": "t:sections.general.settings.container.padding_full_info",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "default": 0,
+                "unit": "t:sections.general.settings.padding.unit"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            }
+        ],
+        "blocks": [
+            {
+                "type" : "content",
+                "name" : "t:sections.main-about-page.blocks.content.name",
+                "settings":
+                [
+                    {
+                        "type": "header",
+                        "content": "t:sections.main-about-page.blocks.content.settings.header__1.content"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "title",
+                        "label" : "t:sections.image-banner.blocks.image.settings.content.label__19",
+                        "default": "About HALO"
+                    },
+                    {
+                        "type" : "html",
+                        "id" : "content",
+                        "label" : "t:sections.main-about-page.blocks.content.settings.information.label__2"
+                    },
+                    {
+                        "type": "range",
+                        "id": "content_max_width",
+                        "label": "t:sections.main-about-page.blocks.content.settings.content_max_width",
+                        "min": 100,
+                        "max": 2000,
+                        "step": 50,
+                        "default": 700,
+                        "unit": "t:sections.general.settings.padding.unit"
+                    },
+                    {
+                        "type": "select",
+                        "id": "align",
+                        "label": "t:sections.general.settings.aligmnent.label__1",
+                        "options": [
+                        {
+                            "value": "left",
+                            "label": "t:sections.general.settings.aligmnent.options__1"
+                        },
+                        {
+                            "value": "center",
+                            "label": "t:sections.general.settings.aligmnent.options__2"
+                        },
+                        {
+                            "value": "right",
+                            "label": "t:sections.general.settings.aligmnent.options__3"
+                        },
+                        {
+                            "value": "justify",
+                            "label": "t:sections.general.settings.aligmnent.options__4"
+                        }],
+                        "default": "center"
+                    },
+                    {
+                        "type": "color",
+                        "id": "content_text_color",
+                        "label": "t:sections.main-about-page.blocks.content.settings.text_color"
+                    }
+                ]
+            },
+            {
+                "type" : "image",
+                "name" : "t:sections.main-about-page.blocks.image.name",
+                "settings":
+                [
+                    {
+                        "type": "header",
+                        "content": "t:settings_schema.general.name"
+                    },
+                    {
+                        "type" : "text",
+                        "id" : "title",
+                        "label" : "t:sections.main-about-page.blocks.image.settings.general.label__1",
+                        "default": "About HALO"
+                    },
+                    {
+                        "type" : "select",
+                        "id" : "style",
+                        "label" : "t:sections.main-about-page.blocks.image.settings.general.label__2",
+                        "default": "1",
+                        "options": [
+                        {
+                            "value": "1",
+                            "label": "1"
+                        },
+                        {
+                            "value": "2",
+                            "label": "2"
+                        }]
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main-about-page.blocks.image.settings.header__2.content"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image_1",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link_1",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__2"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main-about-page.blocks.image.settings.header__3.content"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image_2",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link_2",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__2"
+                    },
+                    {
+                        "type": "header",
+                        "content": "t:sections.main-about-page.blocks.image.settings.header__4.content"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image_3",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__1"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link_3",
+                        "label": "t:sections.main-about-page.blocks.image.settings.image.label__2"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

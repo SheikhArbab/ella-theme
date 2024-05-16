@@ -1,0 +1,388 @@
+<link rel="stylesheet" href="{{ 'component-contact.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-contact-form.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-contact.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-contact-form.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- liquid
+    assign padding_top = section.settings.mg_top_desktop | append: 'px'
+    assign padding_bottom = section.settings.mg_bottom_desktop | append: 'px'
+    assign padding_top_tablet = section.settings.mg_top_tablet | append: 'px'
+    assign padding_bottom_tablet = section.settings.mg_bottom_tablet | append: 'px'
+    assign padding_top_mobile = section.settings.mg_top_mobile | append: 'px'
+    assign padding_bottom_mobile = section.settings.mg_bottom_mobile | append: 'px'
+    assign show_breadcrumb = section.settings.show_breadcrumb
+    assign breadcrumb_alignment = section.settings.breadcrumb_alignment
+    assign breadcrumb_bg = section.settings.breadcrumb_bg
+    assign breadcrumb_gradient = section.settings.breadcrumb_gradient
+    assign breadcrumb_bg_mb = section.settings.breadcrumb_bg_mb
+    assign breadcrumb_gradient_mb = section.settings.breadcrumb_gradient_mb
+    assign show_page_title = section.settings.show_page_title
+    assign page_title_alignment = section.settings.page_title_alignment
+    assign container = section.settings.container
+    assign contact_form_title = section.settings.contact_form_title
+    assign contact_form_text = section.settings.contact_form_text
+    assign show_contact_info = section.settings.show_contact_info
+    if show_contact_info
+        assign has_contact_info = false
+        assign contact_info_title = section.settings.contact_info_title
+        assign contact_info_text = section.settings.contact_info_text
+        assign contact_info_address = section.settings.contact_info_address
+        assign contact_info_content_1 = section.settings.contact_info_content_1
+        assign contact_info_content_2 = section.settings.contact_info_content_2
+        assign enable_border_top = section.settings.enable_border_top
+        if contact_info_title != blank or contact_info_text != blank or contact_info_address != blank or contact_info_content_1 != blank or contact_info_content_2 != blank
+            assign has_contact_info = true
+        endif
+    endif
+-%}
+
+<div data-section-id="{{ section.id }}" data-section-type="contact" id="ContactSection-{{ section.id }}" data-section="{{ section.id }}">
+    <div class="contact-container {% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%} container-full{% else %}container{% endif %}">
+        {%- if show_breadcrumb -%}
+            {% render 'breadcrumb', alignment: breadcrumb_alignment %}
+        {%- endif -%}
+        {%- if show_page_title -%}
+            <h1 class="page-header text-{{ page_title_alignment }}{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                {{ page.title | escape }}
+            </h1>
+        {%- endif -%}
+        <div class="page-content contact-content{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+            <div class="contact contact-1">
+                <div class="contact-item {% if show_contact_info %}{% if has_contact_info %}contact-itemLeft{% endif %}{% endif %}">
+                    {%- if contact_form_title != blank -%}
+                        <h2 class="page-subheader contact-title{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {{ contact_form_title | escape }}
+                        </h2>
+                    {%- endif %}
+                    {%- if contact_form_text != blank -%}
+                        <div class="contact-text{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {{ contact_form_text }}
+                        </div>
+                    {%- endif %}
+                    {% render 'contact-form',
+                        section: section
+                    %}
+                </div>
+                {%- if show_contact_info -%}
+                    {%- if has_contact_info -%}
+                        <div class="contact-item contact-itemRight{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}">
+                            {%- if contact_info_title != blank -%}
+                                <h2 class="page-subheader contact-title">
+                                    {{ contact_info_title | escape }}
+                                </h2>
+                            {%- endif %}
+                            {%- if contact_info_text != blank -%}
+                                <div class="contact-text">
+                                    {{ contact_info_text | escape }}
+                                </div>
+                            {%- endif %}
+                            {%- if contact_info_address != blank or contact_info_content_1 != blank or contact_info_content_2 != blank -%}
+                                <div class="contact-info">
+                                    {%- if contact_info_content_1 != blank -%}
+                                        <div class="contact-store">
+                                            {{ contact_info_content_1 }}
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if contact_info_address != blank -%}
+                                        <div class="contact-address">
+                                            <address>
+                                                {{ contact_info_address }}
+                                            </address>
+                                        </div>
+                                    {%- endif -%}
+                                    {%- if contact_info_content_2 != blank -%}
+                                        <div class="contact-store">
+                                            {{ contact_info_content_2 }}
+                                        </div>
+                                    {%- endif -%}
+                                </div>
+                            {%- endif %}
+                        </div>
+                    {%- endif %}
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css" media="screen">
+    #ContactSection-{{ section.id }}{
+        padding-top: {{ padding_top }};
+        padding-bottom: {{ padding_bottom }};
+    }
+
+    #ContactSection-{{ section.id }} .contact.contact-1 .contact-address + .contact-store {
+        {% if enable_border_top %}
+            border-top: 1px solid #dedede;
+            padding-top: 5px;
+        {% else %}
+            padding-top: 0;
+        {% endif %}
+        
+        margin-top: 15px;
+    }
+    
+    @media (max-width: 1024px) {
+        #ContactSection-{{ section.id }}{
+            padding-top: {{ padding_top_tablet }};
+            padding-bottom: {{ padding_bottom_tablet }};
+        }
+
+        #ContactSection-{{ section.id }} .breadcrumb {
+            background: {% if breadcrumb_gradient_mb != blank and breadcrumb_gradient_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient_mb }}{% elsif breadcrumb_bg_mb != blank and breadcrumb_bg_mb != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg_mb }}{% endif %};
+        }
+    }
+    
+    @media (max-width: 550px) {
+        #ContactSection-{{ section.id }}{
+            padding-top: {{ padding_top_mobile }};
+            padding-bottom: {{ padding_bottom_mobile }};
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #ContactSection-{{ section.id }} .breadcrumb-container {
+            position: relative;
+        }
+
+        #ContactSection-{{ section.id }} .breadcrumb::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {% if breadcrumb_gradient != blank and breadcrumb_gradient != 'rgba(0,0,0,0)' %}{{ breadcrumb_gradient }}{% elsif breadcrumb_bg != blank and breadcrumb_bg != 'rgba(0,0,0,0)' %}{{ breadcrumb_bg }}{% endif %};
+            z-index: -1;
+        }
+    }
+</style>
+
+{% schema %}
+	{
+		"name": "t:sections.main_contact.name",
+        "settings": [
+            {
+                "type": "header",
+                "content": "t:settings_schema.general.name"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_breadcrumb",
+                "label": "t:sections.general.settings.breadcrumb.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "breadcrumb_alignment",
+                "label": "t:sections.general.settings.breadcrumb.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.breadcrumb.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.breadcrumb.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.breadcrumb.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_gradient"
+            },
+            { 
+                "type": "color",
+                "id": "breadcrumb_bg_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_color_mobile",
+                "default": "#f6f6f6"
+            },
+            {
+                "type": "color_background",
+                "id": "breadcrumb_gradient_mb",
+                "label": "t:settings_schema.colors.settings.colors_name.background_gradient_mobile"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_page_title",
+                "label": "t:sections.general.settings.page-title.label__1",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "page_title_alignment",
+                "label": "t:sections.general.settings.page-title.label__2",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "t:sections.general.settings.page-title.options__1"
+                    },
+                    {
+                        "value": "center",
+                        "label": "t:sections.general.settings.page-title.options__2"
+                    },
+                    {
+                        "value": "right",
+                        "label": "t:sections.general.settings.page-title.options__3"
+                    }
+                ],
+                "default": "left"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "t:sections.layout.container.option",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "t:sections.layout.container.option1"
+                    },
+                    {
+                        "value": "1170",
+                        "label": "t:sections.layout.container.option4"
+                    },
+                    {
+                        "value": "fullwidth",
+                        "label": "t:sections.layout.container.option2"
+                    },
+                    {
+                        "value": "1770",
+                        "label": "t:sections.layout.container.option3"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_top"
+            },
+            {
+                "type": "range",
+                "id": "mg_top_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_top_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.layout.margin_bottom"
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_desktop",
+                "label": "t:sections.layout.mg_desktop.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_tablet",
+                "label": "t:sections.layout.mg_tablet.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "mg_bottom_mobile",
+                "label": "t:sections.layout.mg_mobile.label",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "t:sections.layout.mg_desktop.unit",
+                "default": 50
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_contact.settings.header__2"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_form_text",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__16"
+            },
+            {
+                "type": "header",
+                "content": "t:sections.main_contact.settings.header__3"
+            },
+            {
+                "type": "checkbox",
+                "id": "show_contact_info",
+                "label": "t:sections.main_contact.settings.contact_info.label__1",
+                "default": true 
+            },
+            {
+                "type": "text",
+                "id": "contact_info_title",
+                "label": "t:sections.image-banner.blocks.image.settings.content.label__19",
+                "default": "Contact Information"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_text",
+                "label": "t:sections.main_contact.settings.contact_info.label__3",
+                "default": "We'd love to hear from you - please use the form to send us your message or ideas. Or simply pop in for a cup of fresh tea and a cookie:"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_address",
+                "label": "t:sections.main_contact.settings.contact_info.label__4"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_content_1",
+                "label": "t:sections.main_contact.settings.contact_info.label__5"
+            },
+            {
+                "type": "textarea",
+                "id": "contact_info_content_2",
+                "label": "t:sections.main_contact.settings.contact_info.label__6"
+            },
+            {
+                "type": "checkbox",
+                "id": "enable_border_top",
+                "label": "t:sections.main_contact.settings.contact_info.label__10",
+                "default": true
+            }
+        ]
+	}
+{% endschema %}
